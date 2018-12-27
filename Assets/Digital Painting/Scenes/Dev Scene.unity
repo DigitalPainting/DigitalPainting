@@ -1105,15 +1105,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1372618687}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a410d8f3e5d3fe4aadf8621c9a316a2, type: 3}
+  m_Script: {fileID: 11500000, guid: fa6c6c092b84ff8468c3f99ef2097313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalMovementSpeed: 6
-  FastMovementFactor: 4
-  SlowMovementFactor: 0.2
-  ClimbSpeed: 4
-  RotationSpeed: 90
-  rotationSensitivity: 5
+  normalMovementSpeed: 2
+  fastMovementFactor: 4
+  slowMovementFactor: 0.2
+  climbSpeed: 1
+  rotationSpeed: 90
+  mouseLookSensitivity: 100
+  allowManual: 1
 --- !u!1 &1374169895
 GameObject:
   m_ObjectHideFlags: 0
