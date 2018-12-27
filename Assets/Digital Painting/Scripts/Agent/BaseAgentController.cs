@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace wizardscode.agent
 {
+    /// <summary>
+    /// BaseAgentController provides the core parameters and a very basic manual controller for agents.
+    /// 
+    /// WASD provide forward/backward and strafe left/right
+    /// QE provide up and down
+    /// Right mouse button _ mouse provides look
+    /// </summary>
     public class BaseAgentController : MonoBehaviour
     {
         [Header("Movement")]
@@ -20,22 +27,26 @@ namespace wizardscode.agent
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
 
-        [Header("Controls")]
+        [Header("Manual Controls")]
+        [Tooltip("Allow mouse look?")]
+        public bool allowMouseLook = true;
         [Tooltip("Mouse look sensitivity.")]
         public float mouseLookSensitivity = 100;
 
         float rotationX = 0;
         float rotationY = 0;
 
-
         internal virtual void Update()
         {
             // Look with the mouse
-            rotationX += Input.GetAxis("Mouse X") * mouseLookSensitivity * Time.deltaTime;
-            rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
-            rotationY = Mathf.Clamp(rotationY, -90, 90);
-            transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
-            transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
+            if (allowMouseLook)
+            {
+                rotationX += Input.GetAxis("Mouse X") * mouseLookSensitivity * Time.deltaTime;
+                rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
+                rotationY = Mathf.Clamp(rotationY, -90, 90);
+                transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
+                transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
+            }
 
             // Move with the keyboard controls 
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
