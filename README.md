@@ -19,7 +19,12 @@ Install these packages using Window -> Package Manager in Unity.
 
     * Cinemachine
 
-## Features of the Digital Painting 
+## Features of the Digital Painting
+
+## Developing Digital Painting
+
+All the assets for the Digital Painting project are in the `Digital Painting` folder. There is a `Scenes/Dev Scene` which is intended to be used to build and test new features.
+
 
 
 
