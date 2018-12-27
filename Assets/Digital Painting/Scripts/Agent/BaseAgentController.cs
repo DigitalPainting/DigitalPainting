@@ -15,6 +15,8 @@ namespace wizardscode.agent
         public float slowMovementFactor = 0.2f;
         [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
         public float climbSpeed = 1;
+        [Tooltip("The height above the terrain this agent should be.")]
+        public float heightOffset = 0;
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
 
@@ -54,12 +56,12 @@ namespace wizardscode.agent
 
             if (Input.GetKey(KeyCode.Q))
             {
-                transform.position += transform.up * climbSpeed * Time.deltaTime;
+                heightOffset += climbSpeed * Time.deltaTime;
             }
 
             if (Input.GetKey(KeyCode.E))
             {
-                transform.position -= transform.up * climbSpeed * Time.deltaTime;
+                heightOffset -= climbSpeed * Time.deltaTime;
             }
         }
     }

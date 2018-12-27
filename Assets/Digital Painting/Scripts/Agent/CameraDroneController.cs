@@ -9,7 +9,7 @@ namespace wizardscode.agent
         [Header("Camera Drone Controls")]
         [Tooltip("Allow manual control to override automated control?")]
         public bool allowManual = true;
-
+        
         internal override void Update()
         {
             Vector3 position = transform.position;
@@ -17,6 +17,7 @@ namespace wizardscode.agent
             if (allowManual)
             {
                 base.Update();
+                SetHeight();
             }
 
             if (position == transform.position && rotation == transform.rotation)
@@ -31,6 +32,22 @@ namespace wizardscode.agent
         private void FlyByWire()
         {
             transform.position += transform.forward * normalMovementSpeed * Time.deltaTime;
+            SetHeight();
+        }
+
+        /// <summary>
+        /// Set the current height of the drone based on the terrain height.
+        /// </summary>
+        private void SetHeight()
+        {
+            // get the current position and height above the terrain
+            Vector3 position = transform.position;
+            
+            // calculate the new position and height 
+            position.y = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
+
+            // reposition the camera 
+            transform.position = position;
         }
     }
 }
