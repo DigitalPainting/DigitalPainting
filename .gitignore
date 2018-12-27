@@ -34,3 +34,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# 3rd Party Assets
+Assets/FantasyEnvironments.meta
+Assets/FantasyEnvironments/
