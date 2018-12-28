@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Cinemachine;
+using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.environment;
 
@@ -32,8 +33,8 @@ namespace wizardscode.agent
 
         [Header("Overrides")]
         [Tooltip("Collider within which the drone must stay. If null an object called 'SafeArea' is used.")]
-
         public Collider safeAreaCollider;
+
         internal Quaternion targetRotation;
         private float timeToNextPathChange = 3;
         private float timeLeftLookingAtObject;
@@ -49,7 +50,6 @@ namespace wizardscode.agent
         
         internal override void Update()
         {
-
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
             if (!isAutomatedMovement)
@@ -113,7 +113,7 @@ namespace wizardscode.agent
             }
             else if (thingOfInterest != null)
             {
-                Cinemachine.CinemachineVirtualCamera virtualCamera = thingOfInterest.virtualCamera;
+                CinemachineVirtualCamera virtualCamera = thingOfInterest.virtualCamera;
                 virtualCamera.enabled = true;
 
                 timeLeftLookingAtObject -= Time.deltaTime;
