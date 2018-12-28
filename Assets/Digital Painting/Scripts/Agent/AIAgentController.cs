@@ -119,7 +119,13 @@ namespace wizardscode.agent
                 timeLeftLookingAtObject -= Time.deltaTime;
                 if (timeLeftLookingAtObject < 0)
                 {
+                    // Remember we have been here so we don't come again
                     visitedThings.Add(thingOfInterest);
+
+                    // when we start moving again move away from the object as we are pretty close by now and might move into it
+                    targetRotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
+
+                    // we no longer care about this thing so turn the camera off and don't focus on it anymore
                     thingOfInterest = null;
                     virtualCamera.enabled = false;
                 }
