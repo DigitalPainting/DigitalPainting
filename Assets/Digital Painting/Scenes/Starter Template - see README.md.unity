@@ -159,7 +159,7 @@ MonoBehaviour:
   maxTimeBetweenRandomPathChanges: 15
   minAngleOfRandomPathChange: -25
   maxAngleOfRandomPathChange: 25
-  safeAreaCollider: {fileID: 0}
+  safeArea: {fileID: 0}
 --- !u!54 &293228378
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -16,10 +16,21 @@ namespace wizardscode.digitalpainting.environment
         [Tooltip("Distance at which to switch to the viewing camera")]
         public float distanceToTriggerViewingCamera = 10;
         [Tooltip("Time camera should spend paused looking at an object of interest when within range.")]
-        public float timeToLookAtObject = 30;
+        public float timeToLookAtObject = 15;
         [Tooltip("Virtual camera to use when viewing this thing. If null an attempt will be made to automatically place one in a sensible position.")]
         public CinemachineVirtualCamera virtualCamera;
-        
+
+        private void Awake()
+        {
+            if (GetComponent<Collider>() == null)
+            {
+                SphereCollider collider = gameObject.AddComponent<SphereCollider>();
+                // TODO: if this object has a mesh then get bounds of the mesh and create a more accurate collider which is used for sizing
+                // TODO: if this object has children make the collider encompass them too
+                collider.radius = 0.3f;
+            }
+        }
+
         private void Start()
         {
             ConfigureVirtualCamera();
@@ -53,7 +64,7 @@ namespace wizardscode.digitalpainting.environment
             transposer.m_FollowOffset.y = bounds.extents.y + (bounds.extents.y * 2);
             transposer.m_FollowOffset.z = bounds.extents.z + (bounds.extents.z * 2);
 
-            CinemachineComposer composer = virtualCamera.AddCinemachineComponent<CinemachineComposer>();
+            virtualCamera.AddCinemachineComponent<CinemachineComposer>();
 
             camera.transform.parent = gameObject.transform;
 
