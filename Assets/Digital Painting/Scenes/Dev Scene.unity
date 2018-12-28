@@ -139,8 +139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1 &30023743 stripped
 GameObject:
@@ -158,8 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1001 &43025617
 Prefab:
@@ -855,8 +855,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!4 &809334421 stripped
 Transform:
@@ -885,7 +885,7 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 848551554}
-  m_LocalRotation: {x: 0.064004116, y: -0.9201982, z: 0.16980305, w: 0.34685123}
+  m_LocalRotation: {x: 0.06400409, y: -0.92019814, z: 0.16980302, w: 0.34685117}
   m_LocalPosition: {x: 14.314278, y: 8.285397, z: 16.290182}
   m_LocalScale: {x: 0.47619015, y: 0.4761904, z: 0.47619027}
   m_Children:
@@ -1003,8 +1003,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1 &960670127
 GameObject:
@@ -1043,8 +1043,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 293228382}
   m_Follow: {fileID: 293228382}
   m_ShowDebugText: 0
-  m_ChildCameras:
-  - {fileID: 1336205233}
+  m_ChildCameras: []
   m_ActivateAfter: 0
   m_MinDuration: 0
   m_RandomizeChoice: 0
@@ -1117,8 +1116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 848551556}
 --- !u!1 &970556038
 GameObject:
@@ -1275,8 +1274,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1 &1024619871
 GameObject:
@@ -1420,8 +1419,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 1403239035}
 --- !u!1 &1336205232
 GameObject:
@@ -1505,8 +1504,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1 &1372618687
 GameObject:
@@ -1595,8 +1594,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1372618687}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 250, y: 5, z: 240}
+  m_LocalRotation: {x: 0.17774463, y: 0.19811098, z: -0.036557246, w: 0.96323544}
+  m_LocalPosition: {x: 237.42761, y: 18.489332, z: 98.15646}
   m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1762,8 +1761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1 &1418457612 stripped
 GameObject:
@@ -1781,8 +1780,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea68adf1cfcca47981eaa9b2f657df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceToTriggerViewingCamera: 8
-  timeToLookAtObject: 30
+  distanceToTriggerViewingCamera: 10
+  timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!1 &1476230808
 GameObject:

@@ -70,7 +70,7 @@ namespace wizardscode.agent
             }
 
             // Look for points of interest
-            if (Random.value <= 0.001)
+            if (thingOfInterest == null && Random.value <= 0.001)
             {
                 Thing poi = FindPointOfInterest();
                 if (poi != null)
