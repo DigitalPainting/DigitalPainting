@@ -12,8 +12,6 @@ namespace wizardscode.agent
     /// </summary>
     public class DroneController : AIAgentController
     {
-        
-
         internal override void Update()
         {
             base.Update();
