@@ -1685,8 +1685,8 @@ MonoBehaviour:
   m_WorldUpOverride: {fileID: 0}
   m_UpdateMethod: 2
   m_DefaultBlend:
-    m_Style: 1
-    m_Time: 6
+    m_Style: 2
+    m_Time: 8
     m_CustomCurve:
       serializedVersion: 2
       m_Curve: []
