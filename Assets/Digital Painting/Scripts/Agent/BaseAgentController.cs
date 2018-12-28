@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.agent
+namespace wizardscode.digitalpainting.agent
 {
     /// <summary>
     /// BaseAgentController provides the core parameters and a very basic manual controller for agents.

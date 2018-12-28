@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.agent
+namespace wizardscode.digitalpainting.agent
 {
     /// <summary>
     /// DroneController is a FlyByWire or manual controller for a drone.

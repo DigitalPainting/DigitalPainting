@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.environment
+namespace wizardscode.digitalpainting.environment
 {
     /// <summary>
     /// This captures information about a thing in the world. 
