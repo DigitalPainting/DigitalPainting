@@ -1,6 +1,6 @@
 # DigitalPainting
-A Unity project that provides a "Digital Painting", a scene that is automatically explored 
-by the camera. It provides a framework in which digital art can be created.
+
+A Unity project that provides a "Digital Painting", a scene that is automatically explored by the camera. It provides a framework in which digital art can be created.
 
 ## Features of the Digital Painting
 

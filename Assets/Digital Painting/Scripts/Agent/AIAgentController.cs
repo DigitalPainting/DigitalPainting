@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.environment;
 
-namespace wizardscode.agent
+namespace wizardscode.digitalpainting.agent
 {
     public class AIAgentController : BaseAgentController
     {
