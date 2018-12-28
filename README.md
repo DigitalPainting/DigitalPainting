@@ -21,9 +21,12 @@ Install these packages using Window -> Package Manager in Unity.
 
 ## Features of the Digital Painting
 
+    * Automated Drone Navigation - see `Scripts/Agent/DroneController`
+    * Mark Interesting Things in the scene to be explored by the drone - see `Scripts/Environment/Thing`
+
 ## Developing Digital Painting
 
-All the assets for the Digital Painting project are in the `Digital Painting` folder. There is a `Scenes/Dev Scene` which is intended to be used to build and test new features.
+All the assets for the Digital Painting project are in the `Digital Painting` folder. Be sure to import the above listed required assets and packages. There is a `Scenes/Dev Scene` which is intended to be used to build and test new features.
 
 
 
