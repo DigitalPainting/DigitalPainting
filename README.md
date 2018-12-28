@@ -11,18 +11,18 @@ However, just because they are zero cost it doesn't mean that we can distribute 
 
 Download and import the following assets:
 
-    * [Fantasy Landscape](https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573)
+  * [Fantasy Landscape](https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573)
 
 ### Required Packages
 
 Install these packages using Window -> Package Manager in Unity.
 
-    * Cinemachine
+  * Cinemachine
 
 ## Features of the Digital Painting
 
-    * Automated Drone Navigation - see `Scripts/Agent/DroneController`
-    * Mark Interesting Things in the scene to be explored by the drone - see `Scripts/Environment/Thing`
+  * Automated Drone Navigation - see `Scripts/Agent/DroneController`
+  * Mark Interesting Things in the scene to be explored by the drone - see `Scripts/Environment/Thing`
 
 ## Developing Digital Painting
 
