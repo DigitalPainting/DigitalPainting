@@ -22,18 +22,20 @@ namespace wizardscode.environment
         
         private void Start()
         {
-            AddVirtualCamera();
+            ConfigureVirtualCamera();
         }
 
         /// <summary>
         /// Add a virtual camera for viewing this object if there isn't one 
-        /// already assigned to `virtualCamera`. Called during startup.
+        /// already assigned to `virtualCamera`. If one is assigned prepare it
+        /// for the scene. Called during startup.
         /// </summary>
-        private void AddVirtualCamera()
+        private void ConfigureVirtualCamera()
         {
 
             if (virtualCamera != null)
             {
+                virtualCamera.enabled = false;
                 return;
             }
 
