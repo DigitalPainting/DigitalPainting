@@ -29,8 +29,9 @@ be used instead of the automated one. This allows you to frame the picture corre
   * Select the scene view and hit `f` to focus on the object
   * Position the view as you want it in game (right click and use WASDQE to move the scene)
   * Cinemachine -> Add Virtual Camera
-  * Move the created camera to be in a sensible place in your hierarchy (I make them a child of the interesting thing)
-  * Give the camera a good name
+  * Move the created virtual camera to be in a sensible place in your hierarchy (I make them a child of the interesting thing)
+  * Give the virtual camera a good name
+  * Drag the virtual camera into the `Virtual Camera` field of the Interesting Thing
   * Drag the InterestingThing into the `Follow` and `Look At fields` of the virtual camera
   * Set the `Follow Offset` of the virtual camera to give the same results as seen in the scene window
     * Note, I've not figured out an easy way to do this, I look at the orientation of the xyz axis in the scene view and play with the values until the Camera view looks as I want it. Don't forget to account for different screen resolutions.
