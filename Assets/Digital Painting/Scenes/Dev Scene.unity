@@ -396,12 +396,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa6c6c092b84ff8468c3f99ef2097313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalMovementSpeed: 2
+  normalMovementSpeed: 1
   fastMovementFactor: 4
   slowMovementFactor: 0.2
   climbSpeed: 1
   heightOffset: 1.8
-  rotationSpeed: 0.5
+  rotationSpeed: 90
   allowMouseLook: 1
   mouseLookSensitivity: 100
   isAutomatedMovement: 1
@@ -411,7 +411,7 @@ MonoBehaviour:
   maxTimeBetweenRandomPathChanges: 15
   minAngleOfRandomPathChange: -25
   maxAngleOfRandomPathChange: 25
-  safeAreaCollider: {fileID: 0}
+  safeArea: {fileID: 0}
 --- !u!54 &293228378
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -923,7 +923,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceToTriggerViewingCamera: 10
   timeToLookAtObject: 15
-  virtualCamera: {fileID: 270861881}
+  virtualCamera: {fileID: 0}
 --- !u!4 &809334421 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4243724423293762, guid: c07f24e35f07ce74ba43afa35d48adf7,
@@ -1185,7 +1185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceToTriggerViewingCamera: 10
   timeToLookAtObject: 15
-  virtualCamera: {fileID: 848551556}
+  virtualCamera: {fileID: 0}
 --- !u!1 &970556038
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,7 +1488,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distanceToTriggerViewingCamera: 10
   timeToLookAtObject: 15
-  virtualCamera: {fileID: 1403239035}
+  virtualCamera: {fileID: 0}
 --- !u!1 &1336205232
 GameObject:
   m_ObjectHideFlags: 0
