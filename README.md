@@ -22,7 +22,7 @@ Install these packages using Window -> Package Manager in Unity.
 ## Features of the Digital Painting
 
   * Automated Drone Navigation - see `Scripts/Agent/DroneController`
-  * [Mark Interesting Things](./Assets/Digital%2CPainting/Docs/InterestingThings.md) in the scene to be explored by the drone
+  * [Mark Interesting Things](./Assets/Digital+Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
 
 ## Developing Digital Painting
 
