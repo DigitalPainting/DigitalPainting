@@ -20,3 +20,12 @@ improve the positioning of the camera (preferable) or add a `CinemachineVirtualC
 at an ideal position to view the object and attach this to `Viewing Camera` property of
 the `Thing` component.
 
+### Size of Things
+
+For some activities it is important to have a collider attached to the `Thing`. For example,
+when deciding where to place the viewing camera, the bounds of the collider are used. Ideally,
+therefore, your `Thing` will have an appropriate collider attached. However, if there isn't
+one the engine will attempt to create one. This may be wildly inaccurate, especially if your
+thing is actually an empty game object marking a position (e.g. a view) rather than a physical 
+thing (e.g. a bird).
+

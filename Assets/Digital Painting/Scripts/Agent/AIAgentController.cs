@@ -32,22 +32,41 @@ namespace wizardscode.agent
         public float maxAngleOfRandomPathChange = 25;
 
         [Header("Overrides")]
-        [Tooltip("Collider within which the drone must stay. If null an object called 'SafeArea' is used.")]
-        public Collider safeAreaCollider;
+        [Tooltip("Collider within which the agent must stay. If null an object called 'SafeArea' is used.")]
+        public GameObject safeArea;
 
         internal Quaternion targetRotation;
         private float timeToNextPathChange = 3;
         private float timeLeftLookingAtObject;
         private List<Thing> visitedThings = new List<Thing>();
+        private Collider safeAreaCollider;
 
         private void Awake()
         {
-            if (safeAreaCollider == null)
+            ConfigureSafeArea();
+        }
+
+        /// <summary>
+        /// A safe area is a game object with a collider that is used to keep agents within a defined area.
+        /// Agents will not stay outside their safe area.
+        /// </summary>
+        private void ConfigureSafeArea()
+        {
+            if (safeArea == null)
             {
-                safeAreaCollider = GameObject.Find("SafeArea").GetComponent<Collider>();
+                GameObject safeArea = GameObject.Find("SafeArea");
+                if (safeArea == null)
+                {
+                    Debug.LogError("No SafeArea to contain the AI Agents found. Either create an object called 'SafeArea' and attach a collider or drag one into the `SafeArea` field.");
+                }
+                safeAreaCollider = safeArea.GetComponent<Collider>();
+                if (safeAreaCollider == null)
+                {
+                    Debug.LogError("Found a SafeArea to contain the AI Agents but it does not have a collider.");
+                }
             }
         }
-        
+
         internal override void Update()
         {
             Vector3 position = transform.position;
