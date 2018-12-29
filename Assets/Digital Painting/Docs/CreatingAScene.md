@@ -27,7 +27,7 @@ That's all you need to get started. Hit play and see what happens.
 
 ## Next Steps
 
-  * Mark some [Interesting Things](./InterestingThings.md) for the camera to invetigate
+  * Mark some [Interesting Things](./InterestingThings.md) for the camera to investigate
 
 
 
