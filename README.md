@@ -1,4 +1,4 @@
-# DigitalPainting
+# The Digital Painting
 
 A Unity project that provides a "Digital Painting", a scene that is automatically explored by the camera. It provides a framework in which digital art can be created.
 
@@ -37,6 +37,9 @@ only the assets and packages listed below are included.
 
 Download and import the following assets:
 
+  * Unity Environment Assets (Assets -> Import Package -> Environment)
+    * You only need the Environment
+    * You'll need to regenerate the SpeedTree assets (click the error then click `Apply & Generate Materials` in the inspector)
   * [Fantasy Landscape](https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573)
 
 
