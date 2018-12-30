@@ -32,7 +32,7 @@ namespace wizardscode.digitalpainting.agent
         public float maxAngleOfRandomPathChange = 25;
 
         [Header("Overrides")]
-        [Tooltip("Collider within which the agent must stay. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
+        [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
         public GameObject barriers;
 
         private const string DEFAULT_BARRIERS_NAME = "AI Barriers";
