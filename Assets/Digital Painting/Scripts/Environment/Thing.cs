@@ -52,6 +52,7 @@ namespace wizardscode.digitalpainting.environment
 
             Bounds bounds = this.GetComponent<Collider>().bounds;
 
+            // TODO: Make a prefab and instantiate from that rather than creating at runtime
             GameObject camera = new GameObject();
             camera.name = "Virtual Camera for " + this.name;
             virtualCamera = camera.AddComponent<CinemachineVirtualCamera>();
