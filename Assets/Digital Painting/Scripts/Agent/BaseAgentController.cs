@@ -33,8 +33,23 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Mouse look sensitivity.")]
         public float mouseLookSensitivity = 100;
 
+
+        [Header("Overrides")]
+        [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
+        public GameObject home;
+
         float rotationX = 0;
         float rotationY = 0;
+
+        virtual internal void Awake()
+        {
+            if (home == null)
+            {
+                home = new GameObject("Home for " + gameObject.name);
+                home.transform.position = transform.position;
+                home.transform.rotation = transform.rotation;
+            }
+        }
 
         internal virtual void Update()
         {

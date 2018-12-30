@@ -32,37 +32,33 @@ namespace wizardscode.digitalpainting.agent
         public float maxAngleOfRandomPathChange = 25;
 
         [Header("Overrides")]
-        [Tooltip("Collider within which the agent must stay. If null an object called 'SafeArea' is used.")]
-        public GameObject safeArea;
+        [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
+        public GameObject barriers;
+
+        private const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
         internal Quaternion targetRotation;
         private float timeToNextPathChange = 3;
         private float timeLeftLookingAtObject;
         private List<Thing> visitedThings = new List<Thing>();
-        private Collider safeAreaCollider;
 
-        private void Awake()
+        override internal void Awake()
         {
-            ConfigureSafeArea();
+            base.Awake();
+            ConfigureBarriers();
         }
 
         /// <summary>
-        /// A safe area is a game object with a collider that is used to keep agents within a defined area.
-        /// Agents will not stay outside their safe area.
+        /// Barriers are a group of colliders that are used to keep agents within a defined area.
         /// </summary>
-        private void ConfigureSafeArea()
+        private void ConfigureBarriers()
         {
-            if (safeArea == null)
+            if (barriers == null)
             {
-                GameObject safeArea = GameObject.Find("SafeArea");
-                if (safeArea == null)
+                GameObject barriers = GameObject.Find(DEFAULT_BARRIERS_NAME);
+                if (barriers == null)
                 {
-                    Debug.LogError("No SafeArea to contain the AI Agents found. Either create an object called 'SafeArea' and attach a collider or drag one into the `SafeArea` field.");
-                }
-                safeAreaCollider = safeArea.GetComponent<Collider>();
-                if (safeAreaCollider == null)
-                {
-                    Debug.LogError("Found a SafeArea to contain the AI Agents but it does not have a collider.");
+                    Debug.LogError("No `"+ DEFAULT_BARRIERS_NAME + "` to contain the AI Agents found. Create an empty object with children that enclose the area your AI should move within (the children need non-kinematic rigid bodies and colliders). If you If you call it `" + DEFAULT_BARRIERS_NAME + "` then the agent will automatically pick it up, if you need to use a different name drag it into the `Barriers` field of the controller component on your agent.");
                 }
             }
         }
@@ -77,17 +73,7 @@ namespace wizardscode.digitalpainting.agent
             }
             else
             {
-
-                if (!safeAreaCollider.bounds.Contains(transform.position))
-                {
-                    targetRotation = Quaternion.LookRotation(safeAreaCollider.bounds.center - transform.position, Vector3.up);
-                    timeToNextPathChange = 15;
-                    MakeNextMove();
-                }
-                else
-                {
-                    MakeNextMove();
-                }
+                MakeNextMove();
             }
 
             // Look for points of interest
@@ -181,6 +167,11 @@ namespace wizardscode.digitalpainting.agent
                 }
             }
             return null;
+        }
+
+        void OnCollisionEnter(Collision collision)
+        {
+            targetRotation = Quaternion.LookRotation(home.transform.position - transform.position, Vector3.up);
         }
     }
 }
