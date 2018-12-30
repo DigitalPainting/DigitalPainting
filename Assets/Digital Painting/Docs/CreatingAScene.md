@@ -20,14 +20,18 @@ For now this is a manual process, but someone could submit a patch to automate i
 
   * Export the Digital Painting asset from Unity (we should make releases so this is not necessary)
   * Import the Digital Painting asset into your project
+  * Create your terrain
   * Open the `Scenes/Starter Template` and drag its contents into your scene.
-  * Add a Game Object called 'SafeArea' (it must have a collider) and adjust its size so that it will keep your AI agents within a sensible area.
+    * Ensure your drone is at a sensible starting position and about 2 meters above the terrain
+  * Add a Game Object called 'SafeArea' (it must have a collider that is set as a Trigger) and adjust its size so that it will keep your AI agents within a sensible area.
 
 That's all you need to get started. Hit play and see what happens.
 
 ## Next Steps
 
-  * Mark some [Interesting Things](./InterestingThings.md) for the camera to invetigate
+  * Add a [Day Night Cycle](./DayNightCycle.md)
+  * Mark some [Interesting Things](./InterestingThings.md) for the camera to investigate
+  
 
 
 

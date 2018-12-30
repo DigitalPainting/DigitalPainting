@@ -1,4 +1,4 @@
-# DigitalPainting
+# The Digital Painting
 
 A Unity project that provides a "Digital Painting", a scene that is automatically explored by the camera. It provides a framework in which digital art can be created.
 
@@ -6,6 +6,7 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
   * Automated Drone Navigation - see `Scripts/Agent/DroneController`
   * [Mark Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
+  * Basic Day Night Cycle support
   * Easily add the Digital Painting asset to your own scene 
 
 ## Getting Started
@@ -37,6 +38,9 @@ only the assets and packages listed below are included.
 
 Download and import the following assets:
 
+  * Unity Environment Assets (Assets -> Import Package -> Environment)
+    * You only need the `Environment` and `Effects/LightFlares`
+    * You'll need to regenerate the SpeedTree assets (click the error then click `Apply & Generate Materials` in the inspector)
   * [Fantasy Landscape](https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573)
 
 
