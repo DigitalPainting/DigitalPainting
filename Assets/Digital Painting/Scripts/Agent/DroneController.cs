@@ -7,8 +7,6 @@ namespace wizardscode.digitalpainting.agent
     /// <summary>
     /// DroneController is a FlyByWire or manual controller for a drone.
     /// 
-    /// When using FlyByWire it flies randomly around a scene, but will 
-    /// never stay outside of the bounding box of the 'safeAreaCollider'.
     /// </summary>
     public class DroneController : AIAgentController
     {
