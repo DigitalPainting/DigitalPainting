@@ -81,6 +81,8 @@ namespace wizardscode.digitalpainting.agent
                 if (!safeAreaCollider.bounds.Contains(transform.position))
                 {
                     targetRotation = Quaternion.LookRotation(safeAreaCollider.bounds.center - transform.position, Vector3.up);
+                    timeToNextPathChange = 15;
+                    MakeNextMove();
                 }
                 else
                 {
