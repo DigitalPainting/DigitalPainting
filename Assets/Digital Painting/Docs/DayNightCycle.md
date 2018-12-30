@@ -6,20 +6,23 @@ It is intended that the Digital Painting will use other assets to deliver a day 
 
 At present The Digital Painting supports the following assets available:
 
-  * Very Simple Day Night Cycle (Built In - See `Environment/VerySimpleDayNightCycle` script)
+  * Simple Day Night Cycle (Built In - See `Environment/SimpleDayNightCycle` script)
 
 ## Adding A Day Night Cycle to Your Digital Painting
 
+  * Create a configuration file using `Assets -> Create -> Wizards Code ... `
+    * Note that there are predefined configuration files in `Prefabs/Data`
+  * Add the `DayNightCycle` component to your `managers` game object
+  * Add a Configuration file to the `DayNightCycle` component
 
-### Very Simple Day Night Cycle (Built In)
+## Adding Support for a new Day Night Cycle Asset
 
-This is about as simple as a day night cycle can get - and it's pretty ugly too. The Sun rises and sets at exactly the same time at exactly the simple place. We will gladly accept pull requests to improve this, but in reality we expect most users to use a specialist Asset.
+Use `Scenes/DevTest/DayNightCycle` to test your scene in a game environment.
 
-  * Create an empty object called `Managers`
-  * Drop the `Environment/DayNightCycle` script onto the `Managers` object
-  * Add a directional light (if you don't have one already) and rename it to Sun.
+The interface between The Digital Painting and your chosen Day Night Cycle asset is provided by a 
+ scriptable object that inherits from `AbstractDayNightCycle`. To add support for a new Day Night Cycle asset you will need to create an instance of this Scriptable Object. Once created you can provide this scriptable object to the configuration field of the `DayNightCycle` component as described above.
 
-## Possible Future Supported Assets
+### Possible Future Supported Assets
 
 Patches are welcome to add support for any Day Night Cycle solution. Here are a few that might be interesting.
 
