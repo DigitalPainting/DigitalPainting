@@ -8,6 +8,8 @@ namespace wizardscode.digitalpainting.devtest {
     public class DayNightCycleUI : MonoBehaviour {
         [Tooltip("Text label to display name of the Day Night Cycle Implementation being used.")]
         public Text implementatioNameLabel;
+        [Tooltip("Slider to set current time of day.")]
+        public Slider timeOfDaySlider;
         [Tooltip("Time of Day text object.")]
         public Text timeOfDayLabel;
         [Tooltip("Label for speed of day.")]
@@ -15,11 +17,11 @@ namespace wizardscode.digitalpainting.devtest {
 
         [Header("Overrides")]
         [Tooltip("The DayNightCycle object that we are using. If null then the first one found in the scene will be used. This is usually sufficient.")]
-        public DayNightCycle dayNightCycle;
+        public DayNightCycleManager dayNightCycle;
 
         private void Start()
         {
-            dayNightCycle = GameObject.FindObjectOfType<DayNightCycle>();
+            dayNightCycle = GameObject.FindObjectOfType<DayNightCycleManager>();
         }
 
         private void Update()
@@ -27,6 +29,11 @@ namespace wizardscode.digitalpainting.devtest {
             implementatioNameLabel.text = dayNightCycle.ImplementationName;
             timeOfDayLabel.text = "Time: " + dayNightCycle.CurrentTimeAsLabel;
             dayLengthLabel.text = "Minutes per sim. day: " + dayNightCycle.DayCycleInMinutes;
+        }
+        
+        public void OnTimeOfDayChanged()
+        {
+            dayNightCycle.configuration.SetTime(timeOfDaySlider.value);
         }
     }
 }

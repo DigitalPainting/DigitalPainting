@@ -48,7 +48,13 @@ namespace wizardscode.environment
             InitializeLighting();
         }
 
-        abstract internal float GetCurrentTimeInSeconds();
+        /// <summary>
+        /// Get the current time.
+        /// </summary>
+        /// <returns>Current time in seconds.</returns>
+        abstract internal float GetTime();
+
+        abstract internal void SetTime(float timeInSeconds);
 
         abstract internal void InitializeCamera();
 

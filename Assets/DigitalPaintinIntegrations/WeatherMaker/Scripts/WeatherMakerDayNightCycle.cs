@@ -16,7 +16,7 @@ namespace wizardscode.environment.WeatherMaker
 
         private WeatherMakerDayNightCycleManagerScript manager;
 
-        internal override float GetCurrentTimeInSeconds()
+        internal override float GetTime()
         {
             return manager.TimeOfDay;
         }
@@ -70,6 +70,11 @@ namespace wizardscode.environment.WeatherMaker
 
             manager.DayNightProfile = weatherMakerProfile;
             manager.DayNightProfile.UpdateFromProfile(true);
+        }
+
+        internal override void SetTime(float timeInSeconds)
+        {
+            manager.TimeOfDay = timeInSeconds;
         }
 
         internal override void Update()
