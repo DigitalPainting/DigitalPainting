@@ -46,6 +46,21 @@ namespace wizardscode.digitalpainting.agent
         {
             base.Awake();
             ConfigureBarriers();
+
+            bool hasCollider = false;
+            Collider[] colliders = gameObject.GetComponents<Collider>();
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (!colliders[i].isTrigger)
+                {
+                    hasCollider = true;
+                    break;
+                }
+            }
+            if (!hasCollider)
+            {
+                Debug.LogWarning(gameObject.name + " is an AI Agent, but it does not have a collider that is not a trigger. This means the agent will not be contained contained by the '" + DEFAULT_BARRIERS_NAME + "'");
+            }
         }
 
         /// <summary>
