@@ -19,6 +19,31 @@ namespace wizardscode.environment
         [Tooltip("The Day Night Cycle configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
         public AbstractDayNightCycle configuration;
 
+        public float DayCycleInMinutes
+        {
+            get { return configuration.dayCycleInMinutes; }
+        }               
+
+        public string ImplementationName
+        {
+            get { return configuration.name; }
+        }
+
+        /// <summary>
+        /// Get the current time as a human readable string.
+        /// </summary>
+        public string CurrentTimeAsLabel
+        {
+            get {
+                TimeSpan t = TimeSpan.FromSeconds(configuration.GetCurrentTimeInSeconds());
+                string result = string.Format("{0:D2}:{1:D2}",
+                                        t.Hours,
+                                        t.Minutes);
+                return result;
+            }
+        }
+
+
         private void Start()
         {
             if (configuration == null)
@@ -27,7 +52,7 @@ namespace wizardscode.environment
             }
             configuration.Initialize(startTime);
         }
-
+        
         private void Update()
         {
             configuration.Update();

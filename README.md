@@ -6,7 +6,8 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
   * Automated Drone Navigation - see `Scripts/Agent/DroneController`
   * [Mark Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
-  * Basic Day Night Cycle support
+  * Pluggable Day Night Cycle support
+    * Basic Day Night Cycle included
   * Easily add the Digital Painting asset to your own scene 
 
 ## Getting Started
