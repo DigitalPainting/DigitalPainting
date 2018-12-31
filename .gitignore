@@ -36,7 +36,7 @@ sysinfo.txt
 *.unitypackage
 
 # 3rd Party Assets
-Assets/FantasyEnvironments.meta
-Assets/FantasyEnvironments/
 Assets/Standard Assets.meta
 Assets/Standard Assets/
+Assets/WeatherMaker.meta
+Assets/WeatherMaker/

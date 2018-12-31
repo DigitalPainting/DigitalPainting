@@ -7,7 +7,7 @@ namespace wizardscode.environment
     public abstract class AbstractDayNightCycle : ScriptableObject
     {
         [Header("Timing")]
-        [Tooltip("The speed at which a game day passes in realtime.")]
+        [Tooltip("The speed at which a game day passes in real-time.")]
         public float dayCycleInMinutes = 1;
 
         [Header("Sun settings")]
@@ -23,9 +23,7 @@ namespace wizardscode.environment
         public const float HOUR_AS_SECONDS = 60 * MINUTE_AS_SECONDS;
         public const float DAY_AS_SECONDS = 24 * HOUR_AS_SECONDS;
         public const float DEGREES_PER_SECOND = 360 / DAY_AS_SECONDS;
-
-        protected float currentTimeOfDay;
-
+        
         private Light _sun;
         internal Light Sun
         {
@@ -33,21 +31,41 @@ namespace wizardscode.environment
             set { _sun = value; }
         }
 
+        protected float startTime;
 
         /// <summary>
         /// Initialize the Day Night Cycle to start at the given time.
         /// </summary>
         /// <param name="startTime">Start time in seconds.</param>
-        internal void Initialize(float startTime)
+        virtual internal void Initialize(float startTime)
         {
-            currentTimeOfDay = startTime;
+            this.startTime = startTime;
+
+            InitializeTiming();
+            InitializeCamera();
             InitializeSun();
             InitializeSkybox();
+            InitializeLighting();
         }
+
+        abstract internal float GetCurrentTimeInSeconds();
+
+        abstract internal void InitializeCamera();
+
+        abstract internal void InitializeLighting();
+
+        abstract internal void InitializeTiming();
 
         abstract internal void InitializeSun();
 
-        abstract internal void InitializeSkybox();
+        virtual internal void InitializeSkybox()
+        {
+            if (skyboxMaterial == null)
+            {
+                Debug.LogError("You have not defined a skybox material in your SimpleDayNightCycle Configuration");
+            }
+            RenderSettings.skybox = skyboxMaterial;
+        }
 
         abstract internal void Update();
     }

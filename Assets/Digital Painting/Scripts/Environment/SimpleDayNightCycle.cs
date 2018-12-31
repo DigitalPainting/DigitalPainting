@@ -4,10 +4,16 @@ using UnityEngine;
 
 namespace wizardscode.environment
 {
-    [CreateAssetMenu(fileName = "Simple Day Night Cycle Config", menuName = "Wizards Code/Simple Day Night Cycle", order = 1)]
+    [CreateAssetMenu(fileName = "SimpleDayNightCycleConfig", menuName = "Wizards Code/Day night Cycle/Simple Day Night Cycle", order = 1)]
     public class SimpleDayNightCycle : AbstractDayNightCycle
     {
-        
+        protected float currentTimeOfDay;
+
+        internal override void InitializeTiming()
+        {
+            currentTimeOfDay = startTime;
+        }
+
         override internal void InitializeSun()
         {
             if (sunPrefab == null)
@@ -15,15 +21,6 @@ namespace wizardscode.environment
                 Debug.LogError("You have not defined a sun in your SimpleDayNightCycle Configuration");
             }
             Sun = Instantiate(sunPrefab).GetComponent<Light>();
-        }
-
-        override internal void InitializeSkybox()
-        {
-            if (skyboxMaterial == null)
-            {
-                Debug.LogError("You have not defined a skybox material in your SimpleDayNightCycle Configuration");
-            }
-            RenderSettings.skybox = skyboxMaterial;
         }
 
         override internal void Update()
@@ -45,6 +42,21 @@ namespace wizardscode.environment
         private void UpdateSunPosition()
         {
             Sun.transform.rotation = Quaternion.Euler(new Vector3((currentTimeOfDay - (DAY_AS_SECONDS / 4)) / DAY_AS_SECONDS * 360, 0, 0));
+        }
+
+        internal override float GetCurrentTimeInSeconds()
+        {
+            return currentTimeOfDay;
+        }
+
+        internal override void InitializeCamera()
+        {
+            // Nothing special to do here
+        }
+
+        internal override void InitializeLighting()
+        {
+            // Nothing special to do here
         }
     }
 }
