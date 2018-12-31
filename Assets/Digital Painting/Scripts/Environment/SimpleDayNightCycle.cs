@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace wizardscode.environment
 {
-    [CreateAssetMenu(fileName = "SimpleDayNightCycleConfig", menuName = "Wizards Code/Day night Cycle/Simple Day Night Cycle", order = 1)]
+    [CreateAssetMenu(fileName = "SimpleDayNightCycleConfig", menuName = "Wizards Code/Day Night Cycle/Simple Day Night Cycle")]
     public class SimpleDayNightCycle : AbstractDayNightCycle
     {
         protected float currentTimeOfDay;
