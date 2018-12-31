@@ -26,6 +26,10 @@ namespace wizardscode.environment.WeatherMaker
             base.Initialize(startTime);
 
             manager = WeatherMakerDayNightCycleManagerScript.Instance;
+            if (manager == null)
+            {
+                Debug.LogError("Cannot find the Weather Maker Manager Script, please place the `WeatherMakerPrefab` into your scene. See the `DigitalPaintingIntegrations/README.md` for more details.");
+            }
             manager.DayNightProfile = weatherMakerProfile;
         }
 
