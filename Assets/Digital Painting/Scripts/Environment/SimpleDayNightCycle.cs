@@ -44,7 +44,7 @@ namespace wizardscode.environment
             Sun.transform.rotation = Quaternion.Euler(new Vector3((currentTimeOfDay - (DAY_AS_SECONDS / 4)) / DAY_AS_SECONDS * 360, 0, 0));
         }
 
-        internal override float GetCurrentTimeInSeconds()
+        internal override float GetTime()
         {
             return currentTimeOfDay;
         }
@@ -57,6 +57,11 @@ namespace wizardscode.environment
         internal override void InitializeLighting()
         {
             // Nothing special to do here
+        }
+
+        internal override void SetTime(float timeInSeconds)
+        {
+            currentTimeOfDay = timeInSeconds;
         }
     }
 }
