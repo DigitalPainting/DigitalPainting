@@ -27,12 +27,12 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
 
+        public enum MouseLookModeType { Never, Always, WithRightMouseButton }
         [Header("Manual Controls")]
-        [Tooltip("Allow mouse look?")]
-        public bool allowMouseLook = true;
+        [Tooltip("Allow mouse look with no button")]
+        public MouseLookModeType mouseLookMode = MouseLookModeType.WithRightMouseButton;
         [Tooltip("Mouse look sensitivity.")]
         public float mouseLookSensitivity = 100;
-
 
         [Header("Overrides")]
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
@@ -53,16 +53,21 @@ namespace wizardscode.digitalpainting.agent
 
         internal virtual void Update()
         {
-            // Look with the mouse
-            if (allowMouseLook)
-            {
-                rotationX += Input.GetAxis("Mouse X") * mouseLookSensitivity * Time.deltaTime;
-                rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
-                rotationY = Mathf.Clamp(rotationY, -90, 90);
-                transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
-                transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
+            // Mouse Look
+            switch (mouseLookMode) {
+                case MouseLookModeType.Always:
+                    MouseLook();
+                    break;
+                case MouseLookModeType.WithRightMouseButton:
+                    if (Input.GetMouseButton(1))
+                    {
+                        MouseLook();
+                    }
+                    break;
+                default:
+                    break;
             }
-
+            
             // Move with the keyboard controls 
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
@@ -89,6 +94,15 @@ namespace wizardscode.digitalpainting.agent
             {
                 heightOffset -= climbSpeed * Time.deltaTime;
             }
+        }
+
+        private void MouseLook()
+        {
+            rotationX += Input.GetAxis("Mouse X") * mouseLookSensitivity * Time.deltaTime;
+            rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
+            rotationY = Mathf.Clamp(rotationY, -90, 90);
+            transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
+            transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);
         }
     }
 }
