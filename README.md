@@ -13,8 +13,9 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 ## Getting Started
 
 To create your own Digital Painting scene you should start with the `Starter Template`. Open it 
-and save it as a new scene. Then add your terrain and objects to it. Alternatively,
-move the objects in the starter scene into your existing scene. For more details see
+and save it as a new scene. Add your terrain and objects to it. Finally, add the `Digital Painting/Prefabs/DigitalPaintingManager` prefab. You are now ready to go, hit play.
+
+For more details see
 the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/InterestingThings.md).
 
 ### Required Packages (for use)
