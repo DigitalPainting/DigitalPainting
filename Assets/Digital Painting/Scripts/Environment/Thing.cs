@@ -1,9 +1,10 @@
 ﻿using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.digitalpainting.environment
+namespace wizardscode.environment
 {
     /// <summary>
     /// This captures information about a thing in the world. 
@@ -19,6 +20,20 @@ namespace wizardscode.digitalpainting.environment
         public float timeToLookAtObject = 15;
         [Tooltip("Virtual camera to use when viewing this thing. If null an attempt will be made to automatically place one in a sensible position.")]
         public CinemachineVirtualCamera virtualCamera;
+
+        [SerializeField]
+        private Guid _guid;
+        public Guid Guid
+        {
+            get
+            {
+                if (_guid == null)
+                {
+                    _guid = new Guid();
+                }
+                return _guid;
+            }
+        }
 
         private void Awake()
         {

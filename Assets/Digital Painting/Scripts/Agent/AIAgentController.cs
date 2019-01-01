@@ -1,7 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.digitalpainting.environment;
+using wizardscode.environment;
 
 namespace wizardscode.digitalpainting.agent
 {

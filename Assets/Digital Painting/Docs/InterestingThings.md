@@ -3,12 +3,17 @@
 Interesting Things are items of interest in the scene. In a Digital Painting they may be, for example, 
 a scenic view that automated cameras go an view.
 
-## Creating an Interesting Thing
+## Creating an Interesting Thing at Design Time
 
-Simply add the `Thing` component to any game object. The default settings for the `Thing` 
-are usually reasonable.
+Simply add the `Thing` component to any game object. The default settings for the `Thing` are usually reasonable. The most common customization that is done is to change the Virtual Camera used for viewing this Thing. See below for more details.
 
-### Viewing Camera
+## Creating an Interesting Thing at Runtime
+
+This feature is in development at the time of writing. How it works can be seen in the `InterestingThingsUI` which provides a button that adds an object at the location of the drone.
+
+Note that things added in play mode in the editor are not persisted in the scene. If you want them to be persisted you need to copy the objects before stopping the scene and then paste them in when in the editor. This can provide a way if identifying good places for an interesting thing.
+
+## Specifying a Virtual Camera
 
 Things will have a virtual camera attached automatically when they are created. However, 
 it will be disabled and this will have minimal impact (other than memory) on your scenes
@@ -20,7 +25,7 @@ improve the positioning of the camera (preferable) or add a `CinemachineVirtualC
 at an ideal position to view the object and attach this to `Viewing Camera` property of
 the `Thing` component.
 
-#### Adding a Dedicated Virtual Camera
+### Adding a Dedicated Virtual Camera
 
 For better positioning of the viewing camera you can create a fixed virtual camera that will
 be used instead of the automated one. This allows you to frame the picture correctly.
