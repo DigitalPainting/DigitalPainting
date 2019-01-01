@@ -2564,7 +2564,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Toggle
+  m_Text: Fly By Wire
 --- !u!114 &114931146359163554
 MonoBehaviour:
   m_ObjectHideFlags: 1
