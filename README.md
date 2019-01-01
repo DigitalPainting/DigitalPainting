@@ -17,7 +17,7 @@ and save it as a new scene. Then add your terrain and objects to it. Alternative
 move the objects in the starter scene into your existing scene. For more details see
 the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/InterestingThings.md).
 
-### Required Packages (for development and use)
+### Required Packages (for use)
 
 Install these packages using Window -> Package Manager in Unity.
 
@@ -35,14 +35,15 @@ assets from the Unity Asset store and packages from Unity itself. Any features t
 dependent on other assets must be optional and must degrade gracefully in this scene when 
 only the assets and packages listed below are included.
 
-### Required Assets for Development Work (all zero cost)
+### Required Assets and Packages for Development Work (all zero cost)
 
 Download and import the following assets:
 
-  * Unity Environment Assets (Assets -> Import Package -> Environment)
+  * Unity Environment Standard Assets (Assets -> Import Package -> Environment)
     * You only need the `Environment` and `Effects/LightFlares`
     * You'll need to regenerate the SpeedTree assets (click the error then click `Apply & Generate Materials` in the inspector)
-  * [Fantasy Landscape](https://assetstore.unity.com/packages/3d/environments/fantasy-landscape-103573)
+  * ProBuilder Package (install using Package Manager)
+  * TextMesh Pro  (install using Package Manager)
 
 
 

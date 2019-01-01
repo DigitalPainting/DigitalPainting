@@ -1,7 +1,7 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.digitalpainting.environment;
+using wizardscode.environment;
 
 namespace wizardscode.digitalpainting.agent
 {
@@ -9,7 +9,7 @@ namespace wizardscode.digitalpainting.agent
     {
         [Header("AI Controller")]
         [Tooltip("Is the agent automated or manual movement?")]
-        public bool isAutomatedMovement = true;
+        public bool isFlyByWire = true;
 
         [Header("Objects of Interest")]
         [Tooltip("Current thing of interest. The agent will move to and around the object until it is no longer interested, then it will make this parameter null. When null the agent will move according to other algorithms.")]
@@ -82,7 +82,7 @@ namespace wizardscode.digitalpainting.agent
         {
             Vector3 position = transform.position;
             Quaternion rotation = transform.rotation;
-            if (!isAutomatedMovement)
+            if (!isFlyByWire)
             {
                 base.Update();
             }

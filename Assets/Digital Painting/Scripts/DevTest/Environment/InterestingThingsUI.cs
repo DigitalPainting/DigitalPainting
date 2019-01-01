@@ -3,64 +3,108 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using wizardscode.digitalpainting.agent;
-using wizardscode.digitalpainting.environment;
+using wizardscode.environment;
 
-public class InterestingThingsUI : MonoBehaviour {
-    [Tooltip("The thing that the agent is currently interested in")]
-    public Dropdown thingOfInterestDropdown;
-    [Tooltip("Text object to display distance to current thing of interest.")]
-    public Text distanceToThingOfInterestText;
-
-    AIAgentController agent;
-    List<Thing> things;
-
-    private void Start()
+namespace wizardscode.devtest
+{
+    public class InterestingThingsUI : MonoBehaviour
     {
-        agent = GameObject.FindObjectOfType<AIAgentController>();
+        [Header("User Interface)")]
+        [Tooltip("The thing that the agent is currently interested in")]
+        public Dropdown thingOfInterestDropdown;
+        [Tooltip("Text object to display distance to current thing of interest.")]
+        public Text distanceToThingOfInterestText;
+        [Tooltip("List of addable things")]
+        public Dropdown addableThingDropdown;
+        [Tooltip("Interesting thing prefabs that can be added to the scene.")]
+        public Thing[] addableThings;
 
-        thingOfInterestDropdown.ClearOptions();
-        things = new List<Thing>(GameObject.FindObjectsOfType<Thing>());
-        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-        options.Add(new Dropdown.OptionData("Wander"));
-        for (int i = 0; i < things.Count; i++)
-        {
-            options.Add(new Dropdown.OptionData(things[i].name));
-        }
-        thingOfInterestDropdown.AddOptions(options);
-    }
+        private ThingsManager thingsManager;
+        AIAgentController agent;
 
-    private void Update()
-    {
-        if (agent.thingOfInterest != null)
+        private void Start()
         {
-            distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.thingOfInterest.transform.position).ToString();
-        } else
-        {
-            distanceToThingOfInterestText.text = "Wandering";
+            thingsManager = FindObjectOfType<ThingsManager>();
+            agent = GameObject.FindObjectOfType<AIAgentController>();
+            PopulateInterestingThingsDropdown();
+            PopulateAddableThingsDropdown();
         }
-    }
 
-    private void LateUpdate()
-    {
-        if (agent.thingOfInterest != null)
+        private void PopulateInterestingThingsDropdown()
         {
-            thingOfInterestDropdown.value = things.FindIndex(x => x == agent.thingOfInterest) + 1;
+            thingOfInterestDropdown.ClearOptions();
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+            options.Add(new Dropdown.OptionData("Wander"));
+            for (int i = 0; i < thingsManager.allTheThings.Count; i++)
+            {
+                options.Add(new Dropdown.OptionData(thingsManager.allTheThings[i].name));
+            }
+            thingOfInterestDropdown.AddOptions(options);
         }
-        else
-        {
-            thingOfInterestDropdown.value = 0;
-        }
-    }
 
-    public void OnThingSelectionChanged()
-    {
-        if (thingOfInterestDropdown.value == 0)
+        private void PopulateAddableThingsDropdown()
         {
-            agent.thingOfInterest = null;
+            addableThingDropdown.ClearOptions();
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+            for (int i = 0; i < addableThings.Length; i++)
+            {
+                options.Add(new Dropdown.OptionData(addableThings[i].name));
+            }
+            addableThingDropdown.AddOptions(options);
         }
-        else
+
+        private void Update()
         {
-            agent.thingOfInterest = things[thingOfInterestDropdown.value - 1];
+            PopulateInterestingThingsDropdown();
+
+            if (agent.thingOfInterest != null)
+            {
+                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.thingOfInterest.transform.position).ToString();
+            }
+            else
+            {
+                distanceToThingOfInterestText.text = "Wandering";
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (agent.thingOfInterest != null)
+            {
+                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.thingOfInterest) + 1;
+            }
+            else
+            {
+                thingOfInterestDropdown.value = 0;
+            }
+        }
+
+        public void OnThingSelectionChanged()
+        {
+            if (thingOfInterestDropdown.value == 0)
+            {
+                agent.thingOfInterest = null;
+            }
+            else
+            {
+                agent.thingOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
+            }
+        }
+
+        public void OnAddThingClicked()
+        {
+            Thing newThing = GameObject.Instantiate<Thing>(addableThings[0]);
+            newThing.name = "This is " + transform.position.ToString();
+            Vector3 position = agent.transform.position;
+            position.y = Terrain.activeTerrain.SampleHeight(position) - 0.1f;
+            position.x -= 0.1f;
+            position.z -= 0.1f;
+            newThing.transform.position = position;
+
+            Vector3 lookAt = Camera.main.transform.position;
+            newThing.transform.LookAt(new Vector3(lookAt.x, newThing.transform.position.y, lookAt.z));
+
+            thingsManager.allTheThings.Add(newThing);
         }
     }
 }
