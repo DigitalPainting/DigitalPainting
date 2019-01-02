@@ -21,9 +21,12 @@ the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/Interest
 
 ### Required Packages (for use)
 
-Install these packages using Window -> Package Manager in Unity.
+These packages will be imported for you when you install the Digital Painting asset. However, some of the them require manual steps to finalize the setup.
 
   * Cinemachine
+    * No manual steps required
+  * TextMesh Pro
+    * Window -> TextMeshPro -> Import TMP Essential Resources
 
 ## Development
 
