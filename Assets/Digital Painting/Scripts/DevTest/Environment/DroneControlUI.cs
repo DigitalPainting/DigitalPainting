@@ -10,14 +10,10 @@ public class DroneControlUI : MonoBehaviour {
     public Toggle flyByWireToggle;
 
     private DroneController droneController;
-
-    private void Awake()
-    {
-        droneController = FindObjectOfType<DroneController>();
-    }
-
+    
     private void Start()
     {
+        droneController = FindObjectOfType<DroneController>();
         flyByWireToggle.isOn = droneController.isFlyByWire;
     }
 
