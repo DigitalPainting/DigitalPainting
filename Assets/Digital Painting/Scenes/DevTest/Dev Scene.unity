@@ -113,11 +113,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: b99d6091bb94b9849bf5e45e54fc0116, type: 2}
---- !u!4 &181176429 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d,
-    type: 2}
-  m_PrefabInternal: {fileID: 870504894}
 --- !u!1 &867764106
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,52 +139,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2023246023}
-  - {fileID: 181176429}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &870504894
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 867764107}
-    m_Modifications:
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4148079187078878, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0b73c1519a8c3c441abcf140f317fb9d, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &1372618687
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +352,7 @@ TerrainCollider:
   m_GameObject: {fileID: 2023246022}
   m_Material: {fileID: 0}
   m_Enabled: 1
-  m_TerrainData: {fileID: 15600000, guid: dcc31d13768d50c4a9dd8dd1ad1ecdd4, type: 2}
+  m_TerrainData: {fileID: 15600000, guid: cb6c6acfa064b924b9c8156f6978833a, type: 2}
   m_EnableTreeColliders: 1
 --- !u!218 &2023246025
 Terrain:
