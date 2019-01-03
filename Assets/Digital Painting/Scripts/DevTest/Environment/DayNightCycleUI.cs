@@ -26,9 +26,16 @@ namespace wizardscode.digitalpainting.devtest {
 
         private void Update()
         {
-            implementatioNameLabel.text = dayNightCycle.ImplementationName;
-            timeOfDayLabel.text = "Time: " + dayNightCycle.CurrentTimeAsLabel;
-            dayLengthLabel.text = "Minutes per sim. day: " + dayNightCycle.DayCycleInMinutes;
+            if (dayNightCycle != null && dayNightCycle.enabled) { 
+                implementatioNameLabel.text = dayNightCycle.ImplementationName;
+                timeOfDayLabel.text = "Time: " + dayNightCycle.CurrentTimeAsLabel;
+                dayLengthLabel.text = "Minutes per sim. day: " + dayNightCycle.DayCycleInMinutes;
+            } else
+            {
+                implementatioNameLabel.text = "Day Night Cycle disabled";
+                timeOfDayLabel.text = "Time: N/A";
+                dayLengthLabel.text = "Minutes per sim. day: N/A";
+            }
         }
         
         public void OnTimeOfDayChanged()
