@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.digitalpainting.agent;
@@ -11,6 +12,8 @@ namespace wizardscode.digitalpainting
         public Cinemachine.CinemachineClearShot cameraRigPrefab;
         [Tooltip("The Agent prefab to use as the primary character - that is the one the camera will follow.")]
         public BaseAgentController agentPrefab;
+        [Tooltip("The Camera prefab to use if no main camera exists in the scene.")]
+        public Camera cameraPrefab;
 
         private Cinemachine.CinemachineClearShot _clearshot;
 
@@ -37,11 +40,36 @@ namespace wizardscode.digitalpainting
         }
 
         /// <summary>
-        /// Create the default camera rig.
+        /// Create the default camera rig. If there is a Main Camera in the scene it will be configured appropriately,
+        /// otherwise a camera will be added to the scene.
         /// </summary>
         private void CreateCamera()
         {
             _clearshot = GameObject.Instantiate(cameraRigPrefab);
+            Camera camera = Camera.main;
+            if (camera == null)
+            {
+                camera = Instantiate(cameraPrefab);
+                return;
+            }
+            
+            if (camera.GetComponent<CinemachineBrain>() == null)
+            {
+                Debug.LogWarning("Camera did not have a Cinemachine brain, adding one. You should probably add one to your camera in the scene.");
+                camera.gameObject.AddComponent<CinemachineBrain>();
+            }
+
+            if (camera.GetComponent<AudioListener>() == null)
+            {
+                Debug.LogWarning("Camera did not have an audio listener, adding one. You should probably add one to your camera in the scene.");
+                camera.gameObject.AddComponent<AudioListener>();
+            }
+
+            if (camera.GetComponent<FlareLayer>() == null)
+            {
+                Debug.LogWarning("Camera did not have an Flare Layer, adding one. You should probably add one to your camera in the scene.");
+                camera.gameObject.AddComponent<FlareLayer>();
+            }
         }
 
         /// <summary>
