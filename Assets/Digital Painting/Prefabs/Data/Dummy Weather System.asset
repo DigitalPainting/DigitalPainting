@@ -11,8 +11,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a57eb467788ced40b82ace5861e7d60, type: 3}
   m_Name: Dummy Weather System
   m_EditorClassIdentifier: 
-  currentPrecipitationType: 0
-  intensity: 0
+  isAuto: 1
+  precipitationType: 1
+  precipitationIntensity: 20.417538
+  cloudType: 2
+  cloudIntensity: 100
   WeatherUpdateFrequency: 2
   chanceOfRain: 0.3
   chanceOfSleet: 0.09
