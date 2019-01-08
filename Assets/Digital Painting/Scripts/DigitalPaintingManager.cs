@@ -79,7 +79,17 @@ namespace wizardscode.digitalpainting
         private BaseAgentController CreateAgent()
         {
             GameObject agent = GameObject.Instantiate(agentPrefab).gameObject;
-            return agent.GetComponent<BaseAgentController>();
+            BaseAgentController controller = agent.GetComponent<BaseAgentController>();
+
+            float x = Terrain.activeTerrain.terrainData.size.x / 2;
+            float z = Terrain.activeTerrain.terrainData.size.z / 2;
+            Vector3 position = new Vector3(x, 0, z);
+
+            float y = Terrain.activeTerrain.SampleHeight(position);
+            position.y = y + controller.heightOffset;            
+            agent.transform.position = position;
+
+            return controller;
         }
 
         /// <summary>

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4451654348586044}
   - component: {fileID: 114192318843746294}
   - component: {fileID: 114104959585131336}
+  - component: {fileID: 114805408651030032}
   - component: {fileID: 114467244445007254}
   - component: {fileID: 114430713918459818}
   m_Layer: 0
@@ -71,6 +72,8 @@ MonoBehaviour:
     type: 2}
   agentPrefab: {fileID: 114899539620475532, guid: 5faf501b6facca94f875ec6b6ea698be,
     type: 2}
+  cameraPrefab: {fileID: 20085759441192012, guid: 1a97a61a83f662b4489e298cb2027fc5,
+    type: 2}
 --- !u!114 &114430713918459818
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,3 +98,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allTheThings: []
+--- !u!114 &114805408651030032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1163264246283250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc654920ebc82a438d5840e53f96d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  implementation: {fileID: 11400000, guid: 391203896cefa3e458358467f3c126dc, type: 2}
