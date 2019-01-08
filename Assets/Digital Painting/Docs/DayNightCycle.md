@@ -11,10 +11,10 @@ At present The Digital Painting supports the following assets available:
 
 ### Using a Day Night Cycle in Your Digital Painting
 
-  * Create a configuration file using `Assets -> Create -> Wizards Code ... `
-    * Note that there are predefined configuration files in `Prefabs/Data`
-  * Add the `DayNightCycle` component to your `managers` game object
-  * Drag the configuration file created above to the `DayNightCycle` component
+  * Create a configuration file using `Assets -> Create -> Wizards Code/Day Night Cycle ... `
+    * There will be entries in this folder for each of the supported assets you have added plugins for, The Digital Painting provides a Simple Day Night solution, so you will at least have this
+  * Drag the configuration file created above into the `Configuration` field of the `Day Night Cycle Manager` component
+    * Note if this field is null then no DayNightCycle will be active.
 
 ## Adding Support for a new Day Night Cycle Asset
 

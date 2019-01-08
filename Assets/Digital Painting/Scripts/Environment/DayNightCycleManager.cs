@@ -19,6 +19,15 @@ namespace wizardscode.environment
         [Tooltip("The Day Night Cycle configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
         public AbstractDayNightCycle configuration;
 
+        private void Awake()
+        {
+            if (configuration == null)
+            {
+                Debug.LogWarning("No configuration provided for the Day Night Cycle, disabling the `DayNightCycleManager` component. Consider removing, or disabling it permenantly.");
+                enabled = false;
+            }
+        }
+
         public float DayCycleInMinutes
         {
             get { return configuration.dayCycleInMinutes; }
