@@ -4,17 +4,21 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
 ## Features of the Digital Painting
 
-  * Automated Drone Navigation - see `Scripts/Agent/DroneController`
+  * Automated Drone Exploration - see `Scripts/Agent/DroneController`
   * [Mark Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
-  * Pluggable Day Night Cycle support
+  * [Pluggable Day Night Cycle](./Assets/Digital%20Painting/Docs/DayNightCycle.md)
     * Basic Day Night Cycle included
-  * Easily add the Digital Painting asset to your own scene 
+    * [Plugin](https://github.com/DigitalPainting/WeatherMakerPlugin) for [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-clouds-and-light-60955) 
+  * [Pluggable Weather System](./Assets/Digital%20Painting/Docs/Weather.md)
+    * [Plugin](https://github.com/DigitalPainting/RainMakerPlugin) for [Digital Ruby's Rain Maker (Free)](https://assetstore.unity.com/packages/vfx/particles/environment/rain-maker-2d-and-3d-rain-particle-system-for-unity-34938)
+  * Easily add the Digital Painting asset to your own scene
+    * Standard Assets example scene
 
 ## Getting Started
 
 To create your own Digital Painting scene you can start with any Unity scene that has a terrain. Simply add the `Digital Painting/Prefabs/DigitalPaintingManager` prefab to it. You are now ready to go, hit play.
 
-This prefab will try to configure your scene to work with the Digital Painting. However, there are a few things you should be aware of, for example, if you plan to use the Day Night Cycle then your scene should not have any lighting that will intefere with the sun(s) provided by the cycle. 
+This prefab will try to configure your scene to work with the Digital Painting. However, there are a few things you should be aware of, for example, if you plan to use the Day Night Cycle then your scene should not have any lighting that will interfere with the sun(s) provided by the cycle. 
 
 For more details see
 the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/InterestingThings.md).
