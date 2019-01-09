@@ -2,17 +2,10 @@
 
 It is intended that the Digital Painting will use other assets to deliver a day night cycle. The idea is that users select an implementation that delivers the right atmosphere for their scene. However, it's obviously not possible to provide automatic support for other assets. Someone needs to integrate the solution first and even before that we need a way to abstract the settings needed by different assets. The first section of this document talks about which assets are supported and how to use them. The second half talks about how to add support for new Day Night assets.
 
-## Supported Day/Night Assets
-
-At present The Digital Painting supports the following assets available:
-
-  * Simple Day Night Cycle (Built In - See `Environment/SimpleDayNightCycle` script)
-  * [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-light-60955)
-
 ### Using a Day Night Cycle in Your Digital Painting
 
   * Create a configuration file using `Assets -> Create -> Wizards Code/Day Night Cycle ... `
-    * There will be entries in this folder for each of the supported assets you have added plugins for, The Digital Painting provides a Simple Day Night solution, so you will at least have this
+    * There will be entries in this folder for each of the supported assets you have added [plugins](../plugins/README.md) for, The Digital Painting provides a Simple Day Night solution, so you will at least have this
   * Drag the configuration file created above into the `Configuration` field of the `Day Night Cycle Manager` component
     * Note if this field is null then no DayNightCycle will be active.
 

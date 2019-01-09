@@ -11,6 +11,7 @@ In this folder you will find a number of plugins that add functionality to The D
   4. Drag the generated configuration file into the `Configuration` field of the `PLUGIN Manager` component attached to the `DigitalPaintingManager` game object
   5. Double click the configuration file and configure as appropriate
   6. Check the README.md in the root of the plugin directory for more information about each specific plugin. It will be called 'Assets/DigitalPainting/Plugin/PLUGINTYPE_PLUGINNAME'
+  7. Most plugins will have at least a `Scenes/DevTest/DevTest` scene, but they may include other demo scenes
 
 Be aware that any dependencies must be installed first if you want to avoid build errors. Don't worry though, you can install the dependencies afterwards and the errors should be resolved.
 

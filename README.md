@@ -5,7 +5,7 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 ## Features of the Digital Painting
 
   * Automated Drone Exploration - see `Scripts/Agent/DroneController`
-  * [Mark Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
+  * Designate items as [Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
   * [Pluggable Day Night Cycle](./Assets/Digital%20Painting/Docs/DayNightCycle.md)
     * Basic Day Night Cycle included
     * [Plugin](https://github.com/DigitalPainting/WeatherMakerPlugin) for [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-clouds-and-light-60955) 
