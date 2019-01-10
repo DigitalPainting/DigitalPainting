@@ -41,6 +41,8 @@ Assets/Digital Painting/Plugins/*
 !Assets/Digital Painting/Plugins/README.md.meta
 !Assets/Digital Painting/Plugins/*.unitypackage
 !Assets/Digital Painting/Plugins/*.unitypackage.meta
+!Assets/Digital Painting/Plugins/Scenes/
+!Assets/Digital Painting/Plugins/Scenes.meta
 
 # 3rd Party Assets
 Assets/Standard Assets.meta
