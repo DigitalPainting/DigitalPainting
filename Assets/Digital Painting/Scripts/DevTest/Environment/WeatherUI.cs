@@ -23,8 +23,8 @@ namespace wizardscode.environment.test
             precipitationTypeDropdown.ClearOptions();
 
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-            Array types = Enum.GetValues(typeof(AbstractWeatherSystem.PrecipitationType));
-            foreach (AbstractWeatherSystem.PrecipitationType type in types)
+            Array types = Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum));
+            foreach (WeatherProfile.PrecipitationTypeEnum type in types)
             {
                 options.Add(new Dropdown.OptionData(type.ToString()));
             }
@@ -34,12 +34,12 @@ namespace wizardscode.environment.test
         private void Update()
         {
             isAuto.isOn = manager.implementation.AutomaticUpdates;
-            precipitationTypeDropdown.value = (int)manager.implementation.precipitationType;
+            precipitationTypeDropdown.value = (int)manager.implementation.currentProfile.precipitationType;
         }
 
         public void OnPrecipitationIntensityChanged(float newValue)
         {
-            manager.implementation.PrecipitationIntensity = newValue;
+            manager.implementation.currentProfile.PrecipitationIntensity = newValue;
         }
 
         public void OnIsAutoEnabledChanged(bool newValue)
@@ -49,7 +49,7 @@ namespace wizardscode.environment.test
 
         public void OnPrecipitationTypeChanged(int typeIndex)
         {
-            manager.implementation.precipitationType = (AbstractWeatherSystem.PrecipitationType)Enum.GetValues(typeof(AbstractWeatherSystem.PrecipitationType)).GetValue(typeIndex);
+            manager.implementation.currentProfile.precipitationType = (WeatherProfile.PrecipitationTypeEnum)Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum)).GetValue(typeIndex);
         }
     }
 }

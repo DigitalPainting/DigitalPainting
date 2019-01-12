@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,35 +7,12 @@ namespace wizardscode.environment
 {
     public abstract class AbstractWeatherSystem : ScriptableObject
     {
-
-        public enum PrecipitationType { Clear, Rain, Snow, Sleet, Hail }
-        public enum CloudType { Clear, Light, Heavy, Storm }
+        public WeatherProfile currentProfile;
 
         [Header("General Weather System")]
         [Tooltip("Enable automatic updates.")]
         public bool isAuto = true; 
-
-        [Tooltip("Type of current precipitation.")]
-        public PrecipitationType precipitationType;
-        [Tooltip("Intensity of current precipiitation in mm per hour")]
-        [Range(0, 100)]
-        public float precipitationIntensity;
-
-        [Tooltip("Type of current cloud cover.")]
-        public CloudType cloudType;
-        [Tooltip("Intensity of current cloud cover as a % of cover.")]
-        [Range(0,100)]
-        public float cloudIntensity;
-
-        public float PrecipitationIntensity
-        {
-            get { return precipitationIntensity; }
-            set
-            {
-                precipitationIntensity = value;
-            }
-        }
-
+        
         public bool AutomaticUpdates
         {
             get { return isAuto; }
@@ -55,5 +33,63 @@ namespace wizardscode.environment
         /// Update the Weather. This is called by the WeatherManager Update method.
         /// </summary>
         abstract internal void Update();
+    }
+
+    [Serializable]
+    public class WeatherProfile
+    {
+        public enum PrecipitationTypeEnum { Clear, Rain, Snow, Sleet, Hail }
+        public enum CloudTypeEnum { Clear, Light, Heavy, Storm }
+
+        [Tooltip("Type of current precipitation.")]
+        public PrecipitationTypeEnum precipitationType;
+        [Tooltip("Intensity of current precipitation in mm per hour")]
+        public float precipitationIntensity;
+
+        [Tooltip("Type of current cloud cover.")]
+        public CloudTypeEnum cloudType;
+        [Tooltip("Intensity of current cloud as a % of cover.")]
+        [Range(0, 100)]
+        public float cloudIntensity;
+
+        public PrecipitationTypeEnum PrecipitationType
+        {
+            get { return precipitationType; }
+            set
+            {
+                precipitationType = value;
+                if (value == PrecipitationTypeEnum.Clear)
+                {
+                    PrecipitationIntensity = 0;
+                }
+            }
+        }
+        public CloudTypeEnum CloudType
+        {
+            get { return cloudType; }
+            set
+            {
+                cloudType = value;
+                if (value == CloudTypeEnum.Clear)
+                {
+                    cloudIntensity = 0;
+                }
+            }
+        }
+
+        public WeatherProfile(PrecipitationTypeEnum precipType, CloudTypeEnum cloudType)
+        {
+            PrecipitationType = precipType;
+            CloudType = cloudType;
+        }
+
+        public float PrecipitationIntensity
+        {
+            get { return precipitationIntensity; }
+            set
+            {
+                precipitationIntensity = value;
+            }
+        }
     }
 }

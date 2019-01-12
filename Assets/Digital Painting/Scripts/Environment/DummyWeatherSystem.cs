@@ -38,110 +38,110 @@ namespace wizardscode.environment
                     float value = Random.value;
                     if (value <= chanceOfRain)
                     {
-                        precipitationType = PrecipitationType.Rain;
-                        precipitationIntensity = (Random.value * 25) + (Random.value * 25);
+                        currentProfile.precipitationType = WeatherProfile.PrecipitationTypeEnum.Rain;
+                        currentProfile.precipitationIntensity = (Random.value * 25) + (Random.value * 25);
 
-                        if (precipitationIntensity <= 10)
+                        if (currentProfile.precipitationIntensity <= 10)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = (Random.value * 10) + (Random.value * 10);
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = (Random.value * 10) + (Random.value * 10);
                         }
-                        else if (precipitationIntensity <= 17)
+                        else if (currentProfile.precipitationIntensity <= 17)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 100;
                         }
                         else
                         {
-                            cloudType = CloudType.Heavy;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Heavy;
+                            currentProfile.cloudIntensity = 100;
                         }
                     }
                     else if (value <= chanceOfRain + chanceOfSleet)
                     {
-                        precipitationType = PrecipitationType.Sleet;
-                        precipitationIntensity = (Random.value * 10) + (Random.value * 10);
+                        currentProfile.precipitationType = WeatherProfile.PrecipitationTypeEnum.Sleet;
+                        currentProfile.precipitationIntensity = (Random.value * 10) + (Random.value * 10);
 
-                        if (precipitationIntensity <= 5)
+                        if (currentProfile.precipitationIntensity <= 5)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 50 + (Random.value * 25) + (Random.value * 25);
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 50 + (Random.value * 25) + (Random.value * 25);
                         }
-                        else if (precipitationIntensity <= 10)
+                        else if (currentProfile.precipitationIntensity <= 10)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 100;
                         }
                         else
                         {
-                            cloudType = CloudType.Heavy;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Heavy;
+                            currentProfile.cloudIntensity = 100;
                         }
                     }
                     else if (value <= chanceOfRain + chanceOfSleet + chanceOfSnow)
                     {
-                        precipitationType = PrecipitationType.Snow;
-                        precipitationIntensity = (Random.value * 5) + (Random.value * 5);
+                        currentProfile.precipitationType = WeatherProfile.PrecipitationTypeEnum.Snow;
+                        currentProfile.precipitationIntensity = (Random.value * 5) + (Random.value * 5);
 
-                        if (precipitationIntensity <= 4)
+                        if (currentProfile.precipitationIntensity <= 4)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 50 + (Random.value * 25) + (Random.value * 25);
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 50 + (Random.value * 25) + (Random.value * 25);
                         }
-                        else if (precipitationIntensity <= 7)
+                        else if (currentProfile.precipitationIntensity <= 7)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 100;
                         }
                         else
                         {
-                            cloudType = CloudType.Heavy;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Heavy;
+                            currentProfile.cloudIntensity = 100;
                         }
                     }
                     else if (value <= chanceOfRain + chanceOfSleet + chanceOfSnow + chanceOfHail)
                     {
-                        precipitationType = PrecipitationType.Hail;
-                        precipitationIntensity = (Random.value * 5) + (Random.value * 5);
+                        currentProfile.precipitationType = WeatherProfile.PrecipitationTypeEnum.Hail;
+                        currentProfile.precipitationIntensity = (Random.value * 5) + (Random.value * 5);
 
-                        if (precipitationIntensity <= 1)
+                        if (currentProfile.precipitationIntensity <= 1)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 70 + (Random.value * 15) + (Random.value * 15);
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 70 + (Random.value * 15) + (Random.value * 15);
                         }
-                        else if (precipitationIntensity <= 3)
+                        else if (currentProfile.precipitationIntensity <= 3)
                         {
-                            cloudType = CloudType.Light;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Light;
+                            currentProfile.cloudIntensity = 100;
                         }
                         else
                         {
-                            cloudType = CloudType.Heavy;
-                            cloudIntensity = 100;
+                            currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Heavy;
+                            currentProfile.cloudIntensity = 100;
                         }
                     }
                     else
                     {
-                        precipitationType = PrecipitationType.Clear;
-                        precipitationIntensity = 0;
+                        currentProfile.precipitationType = WeatherProfile.PrecipitationTypeEnum.Clear;
+                        currentProfile.precipitationIntensity = 0;
 
-                        cloudType = CloudType.Clear;
-                        cloudIntensity = 0;
+                        currentProfile.cloudType = WeatherProfile.CloudTypeEnum.Clear;
+                        currentProfile.cloudIntensity = 0;
                     }
                 }
 
-                string summary = precipitationType + ". Time since start: " + Time.realtimeSinceStartup;
+                string summary = currentProfile.precipitationType + ". Time since start: " + Time.realtimeSinceStartup;
                 string report;
-                if (precipitationType != PrecipitationType.Clear)
+                if (currentProfile.precipitationType != WeatherProfile.PrecipitationTypeEnum.Clear)
                 {
-                    report = precipitationType + "(" + precipitationIntensity + " mm/h)";
+                    report = currentProfile.precipitationType + "(" + currentProfile.precipitationIntensity + " mm/h)";
                 } else
                 {
                     report = "No rain";
                 }
-                if (cloudType != CloudType.Clear)
+                if (currentProfile.cloudType != WeatherProfile.CloudTypeEnum.Clear)
                 {
-                    report += " with " + cloudIntensity + "% " + cloudType + " clouds.";
+                    report += " with " + currentProfile.cloudIntensity + "% " + currentProfile.cloudType + " clouds.";
                 } else
                 {
                     report += " and no clouds.";
