@@ -5,7 +5,7 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 ## Features of the Digital Painting
 
   * Automated Drone Exploration - see `Scripts/Agent/DroneController`
-  * [Mark Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
+  * Designate items as [Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
   * [Pluggable Day Night Cycle](./Assets/Digital%20Painting/Docs/DayNightCycle.md)
     * Basic Day Night Cycle included
     * [Plugin](https://github.com/DigitalPainting/WeatherMakerPlugin) for [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-clouds-and-light-60955) 
@@ -15,6 +15,8 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
     * Standard Assets example scene
 
 ## Getting Started
+
+The Digital Painting asset comes with functional scenes that are designed for development and demonstration use. These scenes are very basic in their nature, using only primitives that comes with Unity by default. They are not designed to be pretty. There are some additional [demo scenes](./Assets/Digital%20Painting/Plugins/Scenes/README.md) included that are prettier, in some cases beautiful, though each of these has some additional dependencies that must be installed - some of which are not free. The [demo scenes](./Assets/Digital%20Painting/Plugins/Scenes/README.md) document details these.
 
 To create your own Digital Painting scene you can start with any Unity scene that has a terrain. Simply add the `Digital Painting/Prefabs/DigitalPaintingManager` prefab to it. You are now ready to go, hit play.
 

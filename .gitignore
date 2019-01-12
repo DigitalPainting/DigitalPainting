@@ -33,7 +33,18 @@ sysinfo.txt
 
 # Builds
 *.apk
-*.unitypackage
+#*.unitypackage
+
+# Digital Painting files
+Assets/Digital Painting/Plugins/*
+!Assets/Digital Painting/Plugins/README.md
+!Assets/Digital Painting/Plugins/README.md.meta
+!Assets/Digital Painting/Plugins/*.unitypackage
+!Assets/Digital Painting/Plugins/*.unitypackage.meta
+!Assets/Digital Painting/Plugins/Scenes/*
+!Assets/Digital Painting/Plugins/Scenes.meta
+!Assets/Digital Painting/Plugins/Scenes/*.unitypackage
+!Assets/Digital Painting/Plugins/Scenes/*.unitypackage.meta
 
 # 3rd Party Assets
 Assets/Standard Assets.meta

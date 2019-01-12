@@ -42,10 +42,18 @@ namespace wizardscode.environment
         }
 
         /// <summary>
-        /// Initialize the Weahter system.
+        /// Initialize the Weather system. This is called by the WeatherManager Awake method.
         /// </summary>
         abstract internal void Initialize();
 
+        /// <summary>
+        /// Start the Weather System. This is called by the WeatherManager Start method.
+        /// </summary>
+        abstract internal void Start();
+
+        /// <summary>
+        /// Update the Weather. This is called by the WeatherManager Update method.
+        /// </summary>
         abstract internal void Update();
     }
 }

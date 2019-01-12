@@ -16,8 +16,13 @@ namespace wizardscode.environment
         public float chanceOfHail = 0.01f;
 
         private float timeToNextUpdate = 0;
-
+        
         internal override void Initialize()
+        {
+            // Nothing to do here
+        }
+
+        internal override void Start()
         {
             // Nothing to do here
         }
