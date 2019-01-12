@@ -13,11 +13,11 @@ It is intended that the Digital Painting will use other assets to deliver a day 
 
 In its simplest form integration doesn't require any significant work. If you simply want your Day Night Cycle to run independent of the control of your Digital Painting you can simply add it to your application as normal and it should work. However, if you want other inhabitants of your Digital Painting to be aware of the Day Night Cycle then you will need to do some work. Below we describe the steps for what is typically required, in this case we are adding support for [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-light-60955) which does much more than simply add a day night cycle, but here we are only concerning ourselves with the Day Night Cycle components.
 
-  * Create a folder for your integration at `DigitalPaintingsIntegrations/WeatherMaker/`
-  * Create a folder for your test scene at `DigitalPaintingsIntegrations/WeatherMaker/Scenes/DevTest`
-  * Make a copy of the `DigitalPaintings/Scenes/DevTest/DayNightCycle` in your `DigitalPaintingsIntegrations/WeatherMaker/Scenes/DevTest` folder
+  * Create a folder for your integration at `Digital Paintings/Plugins/DayNightCycle_WeatherMaker/`
+  * Create a folder for your test scene at `Digital Paintings/Plugins/DayNightCycle_WeatherMaker/Scenes/DevTest`
+  * Make a copy of the `Digital Paintings/Scenes/DevTest/DayNightCycle` in your `Digital Paintings/Plugins/DayNightCycle_WeatherMaker/Scenes/DevTest` folder
   * Open this scene
-  * Create a folder for your code at `DigitalPaintingsIntegrations/WeatherMaker/Scripts`
+  * Create a folder for your code at `Digital Paintings/Plugins/DayNightCycle_WeatherMaker/Scripts`
   * Create a script in that folder called `WeatherMakerDayNightCycle` which inherits from `wizardscode.environment.AbstractDayNightCycle`
   * Implement the methods in this script (this is the hard part that will vary from asset to asset)
     * Have a line such as `[CreateAssetMenu(fileName = "WeatherMakerDayNightCycleConfig", menuName = "Wizards Code/Day Night Cycle/Weather Maker Day Night Cycle Config")]` before your class definition to make your implementation appear in the menus.

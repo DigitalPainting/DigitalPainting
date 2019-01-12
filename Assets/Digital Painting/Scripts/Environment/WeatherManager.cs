@@ -17,9 +17,14 @@ namespace wizardscode.environment
         [Tooltip("The Weather configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
         public AbstractWeatherSystem implementation;
 
-        private void Start()
+        private void Awake()
         {
             implementation.Initialize();
+        }
+
+        private void Start()
+        {
+            implementation.Start();
         }
 
         private void Update()

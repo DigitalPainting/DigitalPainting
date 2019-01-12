@@ -31,8 +31,7 @@ namespace wizardscode.digitalpainting
             }
         }
 
-        // Use this for initialization
-        void Start()
+        void Awake()
         {
             SetupBarriers();
             CreateCamera();
