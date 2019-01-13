@@ -14,10 +14,6 @@ namespace wizardscode.environment
         [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
         public Light sunPrefab;
 
-        [Header("Lighting Settings")]
-        [Tooltip("Skybox material")]
-        public Material skyboxMaterial;
-
         public const float SECOND = 1;
         public const float MINUTE_AS_SECONDS = 60 * SECOND;
         public const float HOUR_AS_SECONDS = 60 * MINUTE_AS_SECONDS;
@@ -44,7 +40,6 @@ namespace wizardscode.environment
             InitializeTiming();
             InitializeCamera();
             InitializeSun();
-            InitializeSkybox();
             InitializeLighting();
         }
 
@@ -63,15 +58,6 @@ namespace wizardscode.environment
         abstract internal void InitializeTiming();
 
         abstract internal void InitializeSun();
-
-        virtual internal void InitializeSkybox()
-        {
-            if (skyboxMaterial == null)
-            {
-                Debug.LogError("You have not defined a skybox material in your SimpleDayNightCycle Configuration");
-            }
-            RenderSettings.skybox = skyboxMaterial;
-        }
 
         abstract internal void Update();
     }

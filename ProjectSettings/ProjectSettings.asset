@@ -578,7 +578,7 @@ PlayerSettings:
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 0
   additionalIl2CppArgs: 
-  scriptingRuntimeVersion: 0
+  scriptingRuntimeVersion: 1
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
@@ -650,7 +650,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 0ea5eac3-319f-4cc9-9ec1-4d32b08162d7
   projectName: DigitalPaintingn
   organizationId: fgardler

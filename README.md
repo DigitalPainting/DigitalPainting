@@ -11,6 +11,7 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
     * [Plugin](https://github.com/DigitalPainting/WeatherMakerPlugin) for [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-clouds-and-light-60955) 
   * [Pluggable Weather System](./Assets/Digital%20Painting/Docs/Weather.md)
     * [Plugin](https://github.com/DigitalPainting/RainMakerPlugin) for [Digital Ruby's Rain Maker (Free)](https://assetstore.unity.com/packages/vfx/particles/environment/rain-maker-2d-and-3d-rain-particle-system-for-unity-34938)
+  * Pull current or forecasted weather ([powered by Dark Sky](https://darksky.net/poweredby/)) and reflect it in the Digital Painting
   * Easily add the Digital Painting asset to your own scene
     * Standard Assets example scene
 

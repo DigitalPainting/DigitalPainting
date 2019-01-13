@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,39 +7,21 @@ namespace wizardscode.environment
 {
     public abstract class AbstractWeatherSystem : ScriptableObject
     {
-
-        public enum PrecipitationType { Clear, Rain, Snow, Sleet, Hail }
-        public enum CloudType { Clear, Light, Heavy, Storm }
-
         [Header("General Weather System")]
-        [Tooltip("Enable automatic updates.")]
-        public bool isAuto = true; 
-
-        [Tooltip("Type of current precipitation.")]
-        public PrecipitationType precipitationType;
-        [Tooltip("Intensity of current precipiitation in mm per hour")]
-        [Range(0, 100)]
-        public float precipitationIntensity;
-
-        [Tooltip("Type of current cloud cover.")]
-        public CloudType cloudType;
-        [Tooltip("Intensity of current cloud cover as a % of cover.")]
-        [Range(0,100)]
-        public float cloudIntensity;
-
-        public float PrecipitationIntensity
+        [Tooltip("Skybox material")]
+        public Material skyboxMaterial;
+        
+        private WeatherProfile _currentProfile;
+        public virtual WeatherProfile CurrentProfile
         {
-            get { return precipitationIntensity; }
+            get { return _currentProfile; }
             set
             {
-                precipitationIntensity = value;
+                if (_currentProfile != value)
+                {
+                    _currentProfile = value;
+                }
             }
-        }
-
-        public bool AutomaticUpdates
-        {
-            get { return isAuto; }
-            set { isAuto = value; }
         }
 
         /// <summary>
@@ -55,5 +38,92 @@ namespace wizardscode.environment
         /// Update the Weather. This is called by the WeatherManager Update method.
         /// </summary>
         abstract internal void Update();
+    }
+
+    [Serializable]
+    public class WeatherProfile
+    {
+        public enum PrecipitationTypeEnum { Clear, Rain, Snow, Sleet, Hail }
+        public enum CloudTypeEnum { Clear, Light, Heavy, Storm }
+
+        [Tooltip("Intensity of current precipitation in mm per hour")]
+        public float precipitationIntensity;
+
+        [Tooltip("Type of current cloud cover.")]
+        public CloudTypeEnum cloudType;
+        [Tooltip("Intensity of current cloud as a % of cover.")]
+        [Range(0, 100)]
+        public float cloudIntensity;
+
+        internal bool isDirty = false;
+
+        private PrecipitationTypeEnum _precipitationType;
+        public PrecipitationTypeEnum PrecipitationType
+        {
+            get { return _precipitationType; }
+            set
+            {
+                if (_precipitationType != value)
+                {
+                    _precipitationType = value;
+                    if (value == PrecipitationTypeEnum.Clear)
+                    {
+                        PrecipitationIntensity = 0;
+                    }
+                    isDirty = true;
+                }
+            }
+        }
+
+        public CloudTypeEnum CloudType
+        {
+            get { return cloudType; }
+            set
+            {
+                cloudType = value;
+                if (value == CloudTypeEnum.Clear)
+                {
+                    cloudIntensity = 0;
+                }
+            }
+        }
+
+        public WeatherProfile(PrecipitationTypeEnum precipType, CloudTypeEnum cloudType)
+        {
+            PrecipitationType = precipType;
+            CloudType = cloudType;
+        }
+
+        public float PrecipitationIntensity
+        {
+            get { return precipitationIntensity; }
+            set
+            {
+                precipitationIntensity = value;
+            }
+        }
+
+        public override string ToString()
+        {
+            string report;
+            if (_precipitationType != WeatherProfile.PrecipitationTypeEnum.Clear)
+            {
+                report = _precipitationType + "(" + precipitationIntensity + " mm/h)";
+            }
+            else
+            {
+                report = "No rain";
+            }
+            if (cloudType != WeatherProfile.CloudTypeEnum.Clear)
+            {
+                report += " with " + cloudIntensity + "% " + cloudType + " clouds.";
+            }
+            else
+            {
+                report += " and no clouds.";
+            }
+
+            return report;
+        }
     }
 }
