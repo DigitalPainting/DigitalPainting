@@ -19,6 +19,11 @@ namespace wizardscode.environment.test
         void Start()
         {
             manager = GameObject.FindObjectOfType<WeatherManager>();
+            if (manager == null)
+            {
+                gameObject.SetActive(false);
+                return;
+            }
 
             precipitationTypeDropdown.ClearOptions();
 
@@ -33,23 +38,23 @@ namespace wizardscode.environment.test
 
         private void Update()
         {
-            isAuto.isOn = manager.implementation.AutomaticUpdates;
-            precipitationTypeDropdown.value = (int)manager.implementation.currentProfile.precipitationType;
+            isAuto.isOn = manager.isAuto;
+            precipitationTypeDropdown.value = (int)manager.configuration.CurrentProfile.PrecipitationType;
         }
 
         public void OnPrecipitationIntensityChanged(float newValue)
         {
-            manager.implementation.currentProfile.PrecipitationIntensity = newValue;
+            manager.configuration.CurrentProfile.PrecipitationIntensity = newValue;
         }
 
         public void OnIsAutoEnabledChanged(bool newValue)
         {
-            manager.implementation.AutomaticUpdates = newValue;
+            manager.isAuto = newValue;
         }
 
         public void OnPrecipitationTypeChanged(int typeIndex)
         {
-            manager.implementation.currentProfile.precipitationType = (WeatherProfile.PrecipitationTypeEnum)Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum)).GetValue(typeIndex);
+            manager.configuration.CurrentProfile.PrecipitationType = (WeatherProfile.PrecipitationTypeEnum)Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum)).GetValue(typeIndex);
         }
     }
 }

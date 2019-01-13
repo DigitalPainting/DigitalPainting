@@ -7,16 +7,21 @@ namespace wizardscode.environment
 {
     public abstract class AbstractWeatherSystem : ScriptableObject
     {
-        public WeatherProfile currentProfile;
-
         [Header("General Weather System")]
-        [Tooltip("Enable automatic updates.")]
-        public bool isAuto = true; 
+        [Tooltip("Skybox material")]
+        public Material skyboxMaterial;
         
-        public bool AutomaticUpdates
+        private WeatherProfile _currentProfile;
+        public virtual WeatherProfile CurrentProfile
         {
-            get { return isAuto; }
-            set { isAuto = value; }
+            get { return _currentProfile; }
+            set
+            {
+                if (_currentProfile != value)
+                {
+                    _currentProfile = value;
+                }
+            }
         }
 
         /// <summary>
@@ -41,8 +46,6 @@ namespace wizardscode.environment
         public enum PrecipitationTypeEnum { Clear, Rain, Snow, Sleet, Hail }
         public enum CloudTypeEnum { Clear, Light, Heavy, Storm }
 
-        [Tooltip("Type of current precipitation.")]
-        public PrecipitationTypeEnum precipitationType;
         [Tooltip("Intensity of current precipitation in mm per hour")]
         public float precipitationIntensity;
 
@@ -52,18 +55,26 @@ namespace wizardscode.environment
         [Range(0, 100)]
         public float cloudIntensity;
 
+        internal bool isDirty = false;
+
+        private PrecipitationTypeEnum _precipitationType;
         public PrecipitationTypeEnum PrecipitationType
         {
-            get { return precipitationType; }
+            get { return _precipitationType; }
             set
             {
-                precipitationType = value;
-                if (value == PrecipitationTypeEnum.Clear)
+                if (_precipitationType != value)
                 {
-                    PrecipitationIntensity = 0;
+                    _precipitationType = value;
+                    if (value == PrecipitationTypeEnum.Clear)
+                    {
+                        PrecipitationIntensity = 0;
+                    }
+                    isDirty = true;
                 }
             }
         }
+
         public CloudTypeEnum CloudType
         {
             get { return cloudType; }
@@ -90,6 +101,29 @@ namespace wizardscode.environment
             {
                 precipitationIntensity = value;
             }
+        }
+
+        public override string ToString()
+        {
+            string report;
+            if (_precipitationType != WeatherProfile.PrecipitationTypeEnum.Clear)
+            {
+                report = _precipitationType + "(" + precipitationIntensity + " mm/h)";
+            }
+            else
+            {
+                report = "No rain";
+            }
+            if (cloudType != WeatherProfile.CloudTypeEnum.Clear)
+            {
+                report += " with " + cloudIntensity + "% " + cloudType + " clouds.";
+            }
+            else
+            {
+                report += " and no clouds.";
+            }
+
+            return report;
         }
     }
 }
