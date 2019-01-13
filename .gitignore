@@ -46,6 +46,9 @@ Assets/Digital Painting/Plugins/*
 !Assets/Digital Painting/Plugins/Scenes/*.unitypackage
 !Assets/Digital Painting/Plugins/Scenes/*.unitypackage.meta
 
+# Files with keys or other private info
+PRIVATE_**
+
 # 3rd Party Assets
 Assets/Standard Assets.meta
 Assets/Standard Assets/

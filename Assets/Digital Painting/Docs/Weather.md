@@ -1,13 +1,21 @@
 # Weather in The Digital Painting
 
+The Digital Painting can display various weather conditions that are managed by a variety of weather plugins, or it can use the Dark Sky service to get current or future weather for many places on the planet.
+
 As with other parts of The Digital Painting we try to make the weather system pluggable, but also like other parts this plugability has to grow with the needs of the developers working on the code. In other words, if we don't yet support the weather feature or asset you need we welcome your patches.
 
 ## Adding a Weather Cycle to a Digital Painting
 
   * Create a Weather System file using `Assets -> Create -> Wizards Code -> Weather ... `
-    * There will be entries in this folder for each of the supported assets you have added [plugins](../plugins/README.md) for, if you have not added any plugins only the supplied Dummy Weather System will be available, this simply logs weather to the console
+    * There will be entries in this folder for each of the supported assets you have added [plugins](../plugins/README.md) for.
   * Add the `WeatherManager` component to your `managers` game object
   * Drag the Weather System file created above to the `Implementation` field of the WeatherManager component
+
+## Using the Dark Sky Weather System
+
+The Dark Sky Weather System will pull current or future data from the Dark Sky service. For this to work you will need a [Dark Sky API key](https://darksky.net/dev/register) and the latitude and longitude of the location you want to pull the weather data for.
+
+You can also instruct the Dark Sky Weather System to use another Weather System to display this weather in the painting. If you don't delegate to a Weather System then the weather will simply be logged to the consoler.
 
 ## Developing a Weather Implementation
 
