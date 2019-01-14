@@ -6,11 +6,11 @@ We don't currently do formal releases, but we are preparing to do so. This docum
 
 When you have configured your developer machine to work with The Digital Painting asset you will have imported a number of assets we do not have the authority to redistribute. It is therefore very important to ensure the package does not include any of these resources. Following these steps, precisely should produce a releasable asset package.
 
-  1. Check the ClearShot camera does not have debug or Game Window Guides turned on
-  2. Right Click on the "Digital Painting" scene and select `Export Package...`
-  3. Verify that there are no assets to be packaged that are not in the `DigitalPaintings` folder (including the `DigitalPaintingIntegrations` folder)
-  4. Pay particular attention to the `DigitalPainting/Plugins` - you should include the `*.unitypackage` files and the `README.md` but nothing else
-  4. Click Export and select your preferred save location
+  1. Check the ClearShot camera prefab does not have debug or Game Window Guides turned on
+  2. Right Click on the "Digital Painting" root and select `Export Package...`
+  3. Uncheck any assets that are outside of the `Digital Painting` folder
+  4. Ensure that only `*.unitypackage` files, the `Scenes` folder and the `README.md` are checked in the `DigitalPainting/Plugins`
+  5. Click Export and select your preferred save location
 
 ## Validating the Package
 
