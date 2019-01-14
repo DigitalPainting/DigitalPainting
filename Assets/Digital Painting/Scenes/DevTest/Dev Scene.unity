@@ -204,48 +204,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1099016699
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 48.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 8.632518
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 58.416473
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0.006052227
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0.96418035
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: -0.26425758
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: -0.02208289
-      objectReference: {fileID: 0}
-    - target: {fileID: 4849826937429272, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1001 &1701752665
 Prefab:
   m_ObjectHideFlags: 0
@@ -327,7 +285,7 @@ Prefab:
         type: 2}
       propertyPath: cameraPrefab
       value: 
-      objectReference: {fileID: 20734418272137298, guid: 9ef0907d022a3d944b14397983c7fa58,
+      objectReference: {fileID: 20085759441192012, guid: 1a97a61a83f662b4489e298cb2027fc5,
         type: 2}
     - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 2}
