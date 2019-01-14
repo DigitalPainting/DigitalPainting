@@ -334,6 +334,11 @@ Prefab:
       propertyPath: WeatherUpdateFrequency
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 114192318843746294, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 2}
+      propertyPath: renderAgent
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 892bb710e0f33aa468c5f743c6ab07dc, type: 2}
   m_IsPrefabAsset: 0

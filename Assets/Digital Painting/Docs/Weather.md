@@ -8,7 +8,8 @@ As with other parts of The Digital Painting we try to make the weather system pl
 
   * Create a Weather System file using `Assets -> Create -> Wizards Code -> Weather ... `
     * There will be entries in this folder for each of the supported assets you have added [plugins](../plugins/README.md) for.
-  * Add the `WeatherManager` component to your `managers` game object
+    * Configure the resulting file in the editor (All fields have tooltips, for more information consult the documentation of the plugin and the specific Weather asset being used)
+  * If not already present, add the `WeatherManager` component to your `managers` game object
   * Drag the Weather System file created above to the `Implementation` field of the WeatherManager component
 
 ## Using the Dark Sky Weather System
