@@ -18,6 +18,7 @@ namespace wizardscode.environment
         public const float MINUTE_AS_SECONDS = 60 * SECOND;
         public const float HOUR_AS_SECONDS = 60 * MINUTE_AS_SECONDS;
         public const float DAY_AS_SECONDS = 24 * HOUR_AS_SECONDS;
+        public const float QUARTER_DAY_AS_SECONDS = DAY_AS_SECONDS / 4;
         public const float DEGREES_PER_SECOND = 360 / DAY_AS_SECONDS;
         
         private Light _sun;
