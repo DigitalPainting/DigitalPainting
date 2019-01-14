@@ -12,6 +12,8 @@ namespace wizardscode.environment.test
         public Toggle isAuto;
         [Tooltip("Dropdown for choosing precipitation type.")]
         public Dropdown precipitationTypeDropdown;
+        [Tooltip("The panel containing the manual weather controls")]
+        public GameObject controlsPanel;
 
         WeatherManager manager;
 
@@ -39,7 +41,12 @@ namespace wizardscode.environment.test
         private void Update()
         {
             isAuto.isOn = manager.isAuto;
-            precipitationTypeDropdown.value = (int)manager.configuration.CurrentProfile.PrecipitationType;
+            controlsPanel.SetActive(!isAuto);
+            if (!isAuto.isOn)
+            {
+                controlsPanel.SetActive(true);
+                precipitationTypeDropdown.value = (int)manager.configuration.CurrentProfile.PrecipitationType;
+            }
         }
 
         public void OnPrecipitationIntensityChanged(float newValue)
