@@ -41,6 +41,14 @@ namespace wizardscode.environment
             configuration.Start();
         }
 
+        /// <summary>
+        /// Force an update of the weather immediately. This is useful when the change is created through player interaction or similar.
+        /// </summary>
+        internal void UpdateNow()
+        {
+            timeToNextUpdate = 0;
+        }
+
         private void Update()
         {
             timeToNextUpdate -= Time.deltaTime;

@@ -12,6 +12,8 @@ namespace wizardscode.environment.test
         public Toggle isAuto;
         [Tooltip("Dropdown for choosing precipitation type.")]
         public Dropdown precipitationTypeDropdown;
+        [Tooltip("The UI elements to disable when Is Auto is on (checked).")]
+        public GameObject manualControls;
 
         WeatherManager manager;
 
@@ -38,13 +40,19 @@ namespace wizardscode.environment.test
 
         private void Update()
         {
-            isAuto.isOn = manager.isAuto;
-            precipitationTypeDropdown.value = (int)manager.configuration.CurrentProfile.PrecipitationType;
+            isAuto.isOn = manager.isAuto;            
+            manualControls.SetActive(!isAuto.isOn);
+
+            if (!isAuto.isOn)
+            {
+                precipitationTypeDropdown.value = (int)manager.configuration.CurrentProfile.PrecipitationType;
+            }
         }
 
         public void OnPrecipitationIntensityChanged(float newValue)
         {
             manager.configuration.CurrentProfile.PrecipitationIntensity = newValue;
+            manager.UpdateNow();
         }
 
         public void OnIsAutoEnabledChanged(bool newValue)
@@ -55,6 +63,7 @@ namespace wizardscode.environment.test
         public void OnPrecipitationTypeChanged(int typeIndex)
         {
             manager.configuration.CurrentProfile.PrecipitationType = (WeatherProfile.PrecipitationTypeEnum)Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum)).GetValue(typeIndex);
+            manager.UpdateNow();
         }
     }
 }
