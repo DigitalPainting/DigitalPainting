@@ -59,8 +59,10 @@ namespace wizardscode.digitalpainting.agent
             }
             if (!hasCollider)
             {
-                Debug.LogWarning(gameObject.name + " is an AI Agent, but it does not have a collider that is not a trigger. This means the agent will not be contained contained by the '" + DEFAULT_BARRIERS_NAME + "'");
+                Debug.LogWarning(gameObject.name + " is an AI Agent, but it does not have a collider that is not a trigger. This means the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'");
             }
+
+            Random.InitState((int)System.DateTime.Now.Ticks);
         }
 
         /// <summary>
