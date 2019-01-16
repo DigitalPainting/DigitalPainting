@@ -70,7 +70,7 @@ namespace wizardscode.environment
 
         public void UpdateTime()
         {
-            float dayCycleInSeconds = dayCycleInMinutes * 60;
+            float dayCycleInSeconds = manager.DayCycleInMinutes * 60;
             currentTimeOfDay += Time.deltaTime * (DAY_AS_SECONDS / dayCycleInSeconds);
             if (currentTimeOfDay > DAY_AS_SECONDS)
             {

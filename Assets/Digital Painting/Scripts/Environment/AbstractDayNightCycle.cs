@@ -6,10 +6,6 @@ namespace wizardscode.environment
 {
     public abstract class AbstractDayNightCycle : ScriptableObject
     {
-        [Header("Timing")]
-        [Tooltip("The speed at which a game day passes in real-time.")]
-        public float dayCycleInMinutes = 1;
-
         [Header("Sun settings")]
         [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
         public Light sunPrefab;
@@ -28,6 +24,8 @@ namespace wizardscode.environment
             set { _sun = value; }
         }
 
+        protected DayNightCycleManager manager;
+
         protected float startTime;
 
         /// <summary>
@@ -36,6 +34,8 @@ namespace wizardscode.environment
         /// <param name="startTime">Start time in seconds.</param>
         virtual internal void Initialize(float startTime)
         {
+            manager = FindObjectOfType<DayNightCycleManager>();
+
             this.startTime = startTime;
 
             InitializeTiming();

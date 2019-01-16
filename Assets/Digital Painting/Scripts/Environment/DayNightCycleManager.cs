@@ -12,6 +12,9 @@ namespace wizardscode.environment
     [AddComponentMenu("Wizards Code/Environment/Day Night Cycle")]
     public class DayNightCycleManager : MonoBehaviour
     {
+        [Header("Timing")]
+        [Tooltip("The speed at which a game day passes in real-time.")]
+        public float _dayCycleInMinutes = 1;
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]
         [Range(0, 86400)]
         public float startTime = 5 * 60 * 60; // (5 AM)
@@ -30,7 +33,7 @@ namespace wizardscode.environment
 
         public float DayCycleInMinutes
         {
-            get { return configuration.dayCycleInMinutes; }
+            get { return _dayCycleInMinutes; }
         }               
 
         public string ImplementationName
