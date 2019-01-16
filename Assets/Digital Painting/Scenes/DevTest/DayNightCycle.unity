@@ -1260,6 +1260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b734a48009a61b47aa78c2cb2073e12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dayCycleInMinutes: 1
   startTime: 18000
   configuration: {fileID: 11400000, guid: 96a5d14ec4ca7c3488ce2ba2ca207b7d, type: 2}
 --- !u!4 &678054004
