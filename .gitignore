@@ -36,6 +36,7 @@ sysinfo.txt
 #*.unitypackage
 
 # Digital Painting files
+DigitalPainting.unitypackage
 Assets/Digital Painting/Plugins/*
 !Assets/Digital Painting/Plugins/README.md
 !Assets/Digital Painting/Plugins/README.md.meta

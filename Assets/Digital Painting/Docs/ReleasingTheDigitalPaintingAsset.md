@@ -1,16 +1,10 @@
 ﻿# Releasing The Digital Painting Asset
 
-We don't currently do formal releases, but we are preparing to do so. This document describes the process as it is currently defined as we refine it.
+This document describes the release process for The Digital Painting asset.
 
 ## Building the Main Package
 
-When you have configured your developer machine to work with The Digital Painting asset you will have imported a number of assets we do not have the authority to redistribute. It is therefore very important to ensure the package does not include any of these resources. Following these steps, precisely should produce a releasable asset package.
-
-  1. Check the ClearShot camera prefab does not have debug or Game Window Guides turned on
-  2. Right Click on the "Digital Painting" root and select `Export Package...`
-  3. Uncheck any assets that are outside of the `Digital Painting` folder
-  4. Ensure that only `*.unitypackage` files, the `Scenes` folder and the `README.md` are checked in the `DigitalPainting/Plugins`
-  5. Click Export and select your preferred save location
+  1. `Digital Painting -> Build -> Build Core Package` - deletes all unpacked assets from plugins and packages up the Digital Painting assets
 
 ## Validating the Package
 
