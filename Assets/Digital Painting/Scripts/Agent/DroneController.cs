@@ -27,7 +27,6 @@ namespace wizardscode.digitalpainting.agent
             // calculate the new position and height 
             position.y = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
 
-            // reposition the camera 
             transform.position = position;
         }
     }
