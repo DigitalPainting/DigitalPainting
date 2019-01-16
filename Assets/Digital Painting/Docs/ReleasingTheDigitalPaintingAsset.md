@@ -4,7 +4,7 @@ This document describes the release process for The Digital Painting asset.
 
 ## Building the Main Package
 
-  1. `Digital Painting -> Build -> Build [Package Name] Package` - builds the package selected in the menu. Note that only options for currently imported or open plugins will appear
+  1. `Digital Painting -> Build -> Build Core Package` - deletes all unpacked assets from plugins and packages up the Digital Painting assets
 
 ## Validating the Package
 
@@ -18,4 +18,5 @@ We should never release a package without verifying that it works. These steps a
   4. Play the Demo scene
   7. Ensure there are no errors during the run
  
+
 
