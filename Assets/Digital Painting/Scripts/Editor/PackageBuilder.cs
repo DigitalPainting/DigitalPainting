@@ -17,34 +17,62 @@ public class PackageBuilder {
     [MenuItem("Digital Painting/Build/Build Core Package")]
     public static void Build()
     {
-        string rootDir = "Assets/Digital Painting";
+        string rootDir = "Assets\\Digital Painting";
         string excludeSubDir = "Plugins";
         string packageName = "DigitalPainting.unitypackage";
 
         // Delete everything in plugins directory except *.unitypackage and *.md (and matching .meta)
-        RemoveDirs(rootDir + "/" + excludeSubDir);
+        MoveExludedFiles(rootDir + "\\" + excludeSubDir);
         AssetDatabase.Refresh();
 
         AssetDatabase.ExportPackage(rootDir, packageName, ExportPackageOptions.Interactive | ExportPackageOptions.Recurse);
+
+        RecoverExcludedFiles(rootDir + "\\" + excludeSubDir);
+        AssetDatabase.Refresh();
+
         Debug.Log("Exported " + packageName);
     }
 
-    private static void RemoveDirs(string dir)
+    private static void MoveExludedFiles(string dir)
     {
         string[] subdirectoryEntries = Directory.GetDirectories(dir);
         foreach (string subdirectory in subdirectoryEntries)
         {
             if (Path.GetFileName(subdirectory) != "Scenes")
             {
-                Debug.Log("Deleting " + subdirectory + " and associated `.meta` file.");
-                Directory.Delete(subdirectory, true);
-                File.Delete(subdirectory + ".meta");
+                Debug.Log("Moving to safety: " + subdirectory);
+                string copyPath = "Temp" + Path.DirectorySeparatorChar + subdirectory;
+                Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
+                Directory.Move(subdirectory, copyPath);
+                File.Move(subdirectory + ".meta", copyPath + ".meta");
             }
             else
             {
-                RemoveDirs(subdirectory);
+                MoveExludedFiles(subdirectory);
             }
         }
+    }
+
+    private static void RecoverExcludedFiles(string dir)
+    {
+        string copyPath = "Temp" + Path.DirectorySeparatorChar + dir;
+        string[] subdirectoryEntries = Directory.GetDirectories(copyPath);
+        foreach (string subdirectory in subdirectoryEntries)
+        {
+            if (Path.GetFileName(subdirectory) != "Scenes")
+            {
+                string targetPath = subdirectory.Substring(subdirectory.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
+                Debug.Log("Moving back to project from: " + subdirectory + " to " + targetPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+                Directory.Move(subdirectory, targetPath);
+                File.Move(subdirectory + ".meta", targetPath + ".meta");
+            }
+            else
+            {
+                MoveExludedFiles(subdirectory);
+            }
+        }
+        Directory.Delete(copyPath, true);
     }
 
 }
