@@ -12,7 +12,8 @@ using UnityEngine;
 /// Run from the command line with:
 ///   `"C:\Program Files\Unity\Editor\Unity.exe" -executeMethod PackageBuilder.Build`
 /// </summary>
-public class PackageBuilder {
+public class PackageBuilder
+{
 
     [MenuItem("Digital Painting/Build/Build Core Package")]
     public static void Build()
@@ -22,18 +23,17 @@ public class PackageBuilder {
         string packageName = "DigitalPainting.unitypackage";
 
         // Delete everything in plugins directory except *.unitypackage and *.md (and matching .meta)
-        MoveExludedFiles(rootDir + "\\" + excludeSubDir);
+        MoveExcludedFiles(rootDir + "\\" + excludeSubDir);
         AssetDatabase.Refresh();
 
         AssetDatabase.ExportPackage(rootDir, packageName, ExportPackageOptions.Interactive | ExportPackageOptions.Recurse);
+        Debug.Log("Exported " + packageName);
 
         RecoverExcludedFiles(rootDir + "\\" + excludeSubDir);
         AssetDatabase.Refresh();
-
-        Debug.Log("Exported " + packageName);
     }
 
-    private static void MoveExludedFiles(string dir)
+    protected static void MoveExcludedFiles(string dir)
     {
         string[] subdirectoryEntries = Directory.GetDirectories(dir);
         foreach (string subdirectory in subdirectoryEntries)
@@ -48,12 +48,12 @@ public class PackageBuilder {
             }
             else
             {
-                MoveExludedFiles(subdirectory);
+                MoveExcludedFiles(subdirectory);
             }
         }
     }
 
-    private static void RecoverExcludedFiles(string dir)
+    protected static void RecoverExcludedFiles(string dir)
     {
         string copyPath = "Temp" + Path.DirectorySeparatorChar + dir;
         string[] subdirectoryEntries = Directory.GetDirectories(copyPath);
@@ -69,7 +69,7 @@ public class PackageBuilder {
             }
             else
             {
-                MoveExludedFiles(subdirectory);
+                MoveExcludedFiles(subdirectory);
             }
         }
         Directory.Delete(copyPath, true);
