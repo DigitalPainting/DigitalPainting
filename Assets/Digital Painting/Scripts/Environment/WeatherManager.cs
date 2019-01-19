@@ -32,6 +32,12 @@ namespace wizardscode.environment
 
         private void Awake()
         {
+            if (configuration == null)
+            {
+                Debug.LogWarning("No configuration provided for the WeatherManager, either remove the component or provide a configuration. For now the component is being disabled.");
+                this.enabled = false;
+                return;
+            }
             configuration.Initialize();
             timeToNextUpdate = 0;
         }
