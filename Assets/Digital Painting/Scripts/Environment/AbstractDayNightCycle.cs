@@ -10,7 +10,9 @@ namespace wizardscode.environment
         [Tooltip("The speed at which a game day passes in real-time.")]
         public float dayCycleInMinutes = 1;
 
-        [Header("Sun settings")]
+        [Header("Environment settings")]
+        [Tooltip("Skybox materials to use.")]
+        public Material skybox;
         [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
         public Light sunPrefab;
 
@@ -25,7 +27,14 @@ namespace wizardscode.environment
         internal Light Sun
         {
             get { return _sun; }
-            set { _sun = value; }
+            set
+            {
+                if (value != _sun)
+                {
+                    _sun = value;
+                    RenderSettings.sun = _sun;
+                }
+            }
         }
 
         protected float startTime;
