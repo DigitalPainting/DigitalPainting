@@ -20,7 +20,7 @@ public class PackageBuilder
     {
         string rootDir = "Assets\\Digital Painting";
         string excludeSubDir = "Plugins";
-        string packageName = "DigitalPainting.unitypackage";
+        string packageName = @"..\DigitalPainting.unitypackage";
 
         // Delete everything in plugins directory except *.unitypackage and *.md (and matching .meta)
         MoveExcludedFiles(rootDir + "\\" + excludeSubDir);
@@ -38,25 +38,25 @@ public class PackageBuilder
         string[] subdirectoryEntries = Directory.GetDirectories(dir);
         foreach (string subdirectory in subdirectoryEntries)
         {
+            string targetPath = subdirectory.Substring(subdirectory.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
             if (Path.GetFileName(subdirectory) != "Scenes")
             {
-                Debug.Log("Moving to safety: " + subdirectory);
-                string copyPath = "Temp" + Path.DirectorySeparatorChar + subdirectory;
-                Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
-                Directory.Move(subdirectory, copyPath);
-                File.Move(subdirectory + ".meta", copyPath + ".meta");
+                Debug.Log("Moving back to project from: " + subdirectory + " to " + targetPath);
+                Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+                Directory.Move(subdirectory, targetPath);
+                File.Move(subdirectory + ".meta", targetPath + ".meta");
             }
             else
             {
-                MoveExcludedFiles(subdirectory);
+                RecoverExcludedFiles(targetPath);
             }
         }
     }
 
     protected static void RecoverExcludedFiles(string dir)
     {
-        string copyPath = "Temp" + Path.DirectorySeparatorChar + dir;
-        string[] subdirectoryEntries = Directory.GetDirectories(copyPath);
+        string copyFromPath = "Temp" + Path.DirectorySeparatorChar + dir;
+        string[] subdirectoryEntries = Directory.GetDirectories(copyFromPath);
         foreach (string subdirectory in subdirectoryEntries)
         {
             if (Path.GetFileName(subdirectory) != "Scenes")
@@ -69,10 +69,10 @@ public class PackageBuilder
             }
             else
             {
-                MoveExcludedFiles(subdirectory);
+                RecoverExcludedFiles(subdirectory);
             }
         }
-        Directory.Delete(copyPath, true);
+        Directory.Delete(copyFromPath, true);
     }
 
 }
