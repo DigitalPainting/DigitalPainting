@@ -5,7 +5,9 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Build the package for release.
+/// Build the package for release. Grabs all the available plugin packages
+/// and puts them in the `plugins` folder then builds the Unity Package
+/// for The Digital Painting.
 /// 
 /// Run from Unity with `Digital Painting -> Build -> Build Core Package`
 /// 
@@ -21,6 +23,9 @@ public class PackageBuilder
         string rootDir = "Assets\\Digital Painting";
         string excludeSubDir = "Plugins";
         string packageName = @"..\DigitalPainting.unitypackage";
+
+        // Collect available plugins
+        GetPlugins();
 
         // Delete everything in plugins directory except *.unitypackage and *.md (and matching .meta)
         MoveExcludedFiles(rootDir + "\\" + excludeSubDir);
@@ -45,6 +50,7 @@ public class PackageBuilder
                 Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
                 Directory.Move(subdirectory, copyPath);
                 File.Move(subdirectory + ".meta", copyPath + ".meta");
+                Debug.Log("Temporarily moved " + subdirectory);
             }
             else
             {
@@ -56,23 +62,44 @@ public class PackageBuilder
     protected static void RecoverExcludedFiles(string dir)
     {
         string copyPath = "Temp" + Path.DirectorySeparatorChar + dir;
-        string[] subdirectoryEntries = Directory.GetDirectories(copyPath);
-        foreach (string subdirectory in subdirectoryEntries)
+        if (File.Exists(copyPath))
         {
-            string targetPath = subdirectory.Substring(subdirectory.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
-            if (Path.GetFileName(subdirectory) != "Scenes")
+            string[] subdirectoryEntries = Directory.GetDirectories(copyPath);
+            foreach (string subdirectory in subdirectoryEntries)
             {
-                Debug.Log("Moving back to project from: " + subdirectory + " to " + targetPath);
-                Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
-                Directory.Move(subdirectory, targetPath);
-                File.Move(subdirectory + ".meta", targetPath + ".meta");
+                string targetPath = subdirectory.Substring(subdirectory.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
+                if (Path.GetFileName(subdirectory) != "Scenes")
+                {
+                    Debug.Log("Moving back to project from: " + subdirectory + " to " + targetPath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
+                    Directory.Move(subdirectory, targetPath);
+                    File.Move(subdirectory + ".meta", targetPath + ".meta");
+                    Debug.Log("Moved back " + targetPath);
+                }
+                else
+                {
+                    RecoverExcludedFiles(targetPath);
+                }
             }
-            else
-            {
-                RecoverExcludedFiles(targetPath);
+            Directory.Delete(copyPath, true);
+        }
+    }
+
+    protected static void GetPlugins()
+    {
+        string[] files =  Directory.GetFiles("..", "*.unitypackage");
+        foreach (string file in files)
+        {
+            if (file != "..\\DigitalPainting.unitypackage") {
+                string targetPath = "Assets\\Digital Painting\\Plugins\\" + file.Substring(file.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
+                if (File.Exists(targetPath))
+                {
+                    File.Delete(targetPath);
+                }
+                File.Move(file, targetPath);
+                Debug.Log("Imported plugin package " + file + " to " + targetPath);
             }
         }
-        Directory.Delete(copyPath, true);
     }
 
 }
