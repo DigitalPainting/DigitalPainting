@@ -22,15 +22,15 @@ namespace wizardscode.environment
         protected float currentTimeOfDay;
         private float sunInitialIntensity;
         private Phase currentPhase;
-
+        
         internal override void InitializeTiming()
         {
             currentTimeOfDay = startTime;
 
             dawnTime = 0;
-            dayTime = dawnTime + QUARTER_DAY_AS_SECONDS;
-            duskTime = dayTime + QUARTER_DAY_AS_SECONDS;
-            nightTime = duskTime + QUARTER_DAY_AS_SECONDS;
+            dayTime = dawnTime + DayNightCycleManager.QUARTER_DAY_AS_SECONDS;
+            duskTime = dayTime + DayNightCycleManager.QUARTER_DAY_AS_SECONDS;
+            nightTime = duskTime + DayNightCycleManager.QUARTER_DAY_AS_SECONDS;
 
             if (currentTimeOfDay > nightTime)
             {
@@ -52,11 +52,11 @@ namespace wizardscode.environment
 
         override internal void InitializeSun()
         {
-            if (sunPrefab == null)
+            if (manager.sunPrefab == null)
             {
                 Debug.LogError("You have not defined a sun in your SimpleDayNightCycle Configuration");
             }
-            Sun = Instantiate(sunPrefab).GetComponent<Light>();
+            Sun = Instantiate(manager.sunPrefab).GetComponent<Light>();
             sunInitialIntensity = Sun.intensity;
         }
 
@@ -70,11 +70,11 @@ namespace wizardscode.environment
 
         public void UpdateTime()
         {
-            float dayCycleInSeconds = dayCycleInMinutes * 60;
-            currentTimeOfDay += Time.deltaTime * (DAY_AS_SECONDS / dayCycleInSeconds);
-            if (currentTimeOfDay > DAY_AS_SECONDS)
+            float dayCycleInSeconds = manager.dayCycleInMinutes * 60;
+            currentTimeOfDay += Time.deltaTime * (DayNightCycleManager.DAY_AS_SECONDS / dayCycleInSeconds);
+            if (currentTimeOfDay > DayNightCycleManager.DAY_AS_SECONDS)
             {
-                currentTimeOfDay -= DAY_AS_SECONDS;
+                currentTimeOfDay -= DayNightCycleManager.DAY_AS_SECONDS;
             }
 
             if (currentTimeOfDay > nightTime && currentPhase == Phase.Dusk)
@@ -97,7 +97,7 @@ namespace wizardscode.environment
 
         private void UpdateSunPosition()
         {
-            Sun.transform.rotation = Quaternion.Euler(new Vector3((currentTimeOfDay - (QUARTER_DAY_AS_SECONDS)) / DAY_AS_SECONDS * 360, 0, 0));
+            Sun.transform.rotation = Quaternion.Euler(new Vector3((currentTimeOfDay - (DayNightCycleManager.QUARTER_DAY_AS_SECONDS)) / DayNightCycleManager.DAY_AS_SECONDS * 360, 0, 0));
         }
 
         private void UpdateSunIntensity()
@@ -108,7 +108,7 @@ namespace wizardscode.environment
                 //RenderSettings.ambientLight = Color.Lerp(fullNightAmbientLight, fullDayAmbientLight, relativeTime / (QUARTER_DAY_AS_SECONDS));
                 if (Sun != null)
                 {
-                    Sun.intensity = sunInitialIntensity * (relativeTime / (QUARTER_DAY_AS_SECONDS));
+                    Sun.intensity = sunInitialIntensity * (relativeTime / (DayNightCycleManager.QUARTER_DAY_AS_SECONDS));
                 }
             }
             else if (currentPhase == Phase.Dusk)
@@ -117,7 +117,7 @@ namespace wizardscode.environment
                 //RenderSettings.ambientLight = Color.Lerp(fullNightAmbientLight, fullDayAmbientLight, relativeTime / (QUARTER_DAY_AS_SECONDS));
                 if (Sun != null)
                 {
-                    Sun.intensity = sunInitialIntensity * (((QUARTER_DAY_AS_SECONDS) - relativeTime) / (QUARTER_DAY_AS_SECONDS));
+                    Sun.intensity = sunInitialIntensity * (((DayNightCycleManager.QUARTER_DAY_AS_SECONDS) - relativeTime) / (DayNightCycleManager.QUARTER_DAY_AS_SECONDS));
                 }
             }
         }
@@ -127,22 +127,22 @@ namespace wizardscode.environment
             if (currentPhase == Phase.Dawn)
             {
                 float relativeTime = currentTimeOfDay - dawnTime;
-                RenderSettings.fogColor = Color.Lerp(dawnDuskFog, dayFog, relativeTime / (QUARTER_DAY_AS_SECONDS));
+                RenderSettings.fogColor = Color.Lerp(dawnDuskFog, dayFog, relativeTime / (DayNightCycleManager.QUARTER_DAY_AS_SECONDS));
             }
             else if (currentPhase == Phase.Day)
             {
                 float relativeTime = currentTimeOfDay - dayTime;
-                RenderSettings.fogColor = Color.Lerp(dayFog, dawnDuskFog, relativeTime / (QUARTER_DAY_AS_SECONDS));
+                RenderSettings.fogColor = Color.Lerp(dayFog, dawnDuskFog, relativeTime / (DayNightCycleManager.QUARTER_DAY_AS_SECONDS));
             }
             else if (currentPhase == Phase.Dusk)
             {
                 float relativeTime = currentTimeOfDay - duskTime;
-                RenderSettings.fogColor = Color.Lerp(dawnDuskFog, nightFog, relativeTime / (QUARTER_DAY_AS_SECONDS));
+                RenderSettings.fogColor = Color.Lerp(dawnDuskFog, nightFog, relativeTime / (DayNightCycleManager.QUARTER_DAY_AS_SECONDS));
             }
             else if (currentPhase == Phase.Night)
             {
                 float relativeTime = currentTimeOfDay - nightTime;
-                RenderSettings.fogColor = Color.Lerp(nightFog, dawnDuskFog, relativeTime / (QUARTER_DAY_AS_SECONDS));
+                RenderSettings.fogColor = Color.Lerp(nightFog, dawnDuskFog, relativeTime / (DayNightCycleManager.QUARTER_DAY_AS_SECONDS));
             }
         }
 

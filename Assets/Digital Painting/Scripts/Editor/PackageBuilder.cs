@@ -38,6 +38,27 @@ public class PackageBuilder
         string[] subdirectoryEntries = Directory.GetDirectories(dir);
         foreach (string subdirectory in subdirectoryEntries)
         {
+            if (Path.GetFileName(subdirectory) != "Scenes")
+            {
+                Debug.Log("Moving to safety: " + subdirectory);
+                string copyPath = "Temp" + Path.DirectorySeparatorChar + subdirectory;
+                Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
+                Directory.Move(subdirectory, copyPath);
+                File.Move(subdirectory + ".meta", copyPath + ".meta");
+            }
+            else
+            {
+                MoveExcludedFiles(subdirectory);
+            }
+        }
+    }
+
+    protected static void RecoverExcludedFiles(string dir)
+    {
+        string copyPath = "Temp" + Path.DirectorySeparatorChar + dir;
+        string[] subdirectoryEntries = Directory.GetDirectories(copyPath);
+        foreach (string subdirectory in subdirectoryEntries)
+        {
             string targetPath = subdirectory.Substring(subdirectory.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
             if (Path.GetFileName(subdirectory) != "Scenes")
             {
@@ -51,28 +72,7 @@ public class PackageBuilder
                 RecoverExcludedFiles(targetPath);
             }
         }
-    }
-
-    protected static void RecoverExcludedFiles(string dir)
-    {
-        string copyFromPath = "Temp" + Path.DirectorySeparatorChar + dir;
-        string[] subdirectoryEntries = Directory.GetDirectories(copyFromPath);
-        foreach (string subdirectory in subdirectoryEntries)
-        {
-            if (Path.GetFileName(subdirectory) != "Scenes")
-            {
-                string targetPath = subdirectory.Substring(subdirectory.IndexOf(Path.DirectorySeparatorChar, 1) + 1);
-                Debug.Log("Moving back to project from: " + subdirectory + " to " + targetPath);
-                Directory.CreateDirectory(Path.GetDirectoryName(targetPath));
-                Directory.Move(subdirectory, targetPath);
-                File.Move(subdirectory + ".meta", targetPath + ".meta");
-            }
-            else
-            {
-                RecoverExcludedFiles(subdirectory);
-            }
-        }
-        Directory.Delete(copyFromPath, true);
+        Directory.Delete(copyPath, true);
     }
 
 }

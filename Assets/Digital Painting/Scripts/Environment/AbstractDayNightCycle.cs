@@ -6,23 +6,8 @@ namespace wizardscode.environment
 {
     public abstract class AbstractDayNightCycle : ScriptableObject
     {
-        [Header("Timing")]
-        [Tooltip("The speed at which a game day passes in real-time.")]
-        public float dayCycleInMinutes = 1;
+        protected DayNightCycleManager manager;
 
-        [Header("Environment settings")]
-        [Tooltip("Skybox materials to use.")]
-        public Material skybox;
-        [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
-        public Light sunPrefab;
-
-        public const float SECOND = 1;
-        public const float MINUTE_AS_SECONDS = 60 * SECOND;
-        public const float HOUR_AS_SECONDS = 60 * MINUTE_AS_SECONDS;
-        public const float DAY_AS_SECONDS = 24 * HOUR_AS_SECONDS;
-        public const float QUARTER_DAY_AS_SECONDS = DAY_AS_SECONDS / 4;
-        public const float DEGREES_PER_SECOND = 360 / DAY_AS_SECONDS;
-        
         private Light _sun;
         internal Light Sun
         {
@@ -46,6 +31,13 @@ namespace wizardscode.environment
         virtual internal void Initialize(float startTime)
         {
             this.startTime = startTime;
+
+            manager = GameObject.FindObjectOfType<DayNightCycleManager>();
+            if (manager == null)
+            {
+                Debug.LogError("Cannot find DayNightCycleManager.");
+                return;
+            }
 
             InitializeTiming();
             InitializeCamera();

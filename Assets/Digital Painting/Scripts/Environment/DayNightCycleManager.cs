@@ -12,25 +12,41 @@ namespace wizardscode.environment
     [AddComponentMenu("Wizards Code/Environment/Day Night Cycle")]
     public class DayNightCycleManager : MonoBehaviour
     {
+        [Header("Timing")]
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]
         [Range(0, 86400)]
         public float startTime = 5 * 60 * 60; // (5 AM)
+        [Tooltip("The speed at which a game day passes in real-time.")]
+        public float dayCycleInMinutes = 1;
+
+        [Header("Environment settings")]
+        [Tooltip("Skybox materials to use.")]
+        public Material skybox;
+        [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
+        public Light sunPrefab;
 
         [Tooltip("The Day Night Cycle configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
         public AbstractDayNightCycle configuration;
+
+        public const float SECOND = 1;
+        public const float MINUTE_AS_SECONDS = 60 * SECOND;
+        public const float HOUR_AS_SECONDS = 60 * MINUTE_AS_SECONDS;
+        public const float DAY_AS_SECONDS = 24 * HOUR_AS_SECONDS;
+        public const float QUARTER_DAY_AS_SECONDS = DAY_AS_SECONDS / 4;
+        public const float DEGREES_PER_SECOND = 360 / DAY_AS_SECONDS;
 
         private void Awake()
         {
             if (configuration == null)
             {
-                Debug.LogWarning("No configuration provided for the Day Night Cycle, disabling the `DayNightCycleManager` component. Consider removing, or disabling it permenantly.");
+                Debug.LogWarning("No configuration provided for the Day Night Cycle, disabling the `DayNightCycleManager` component. Consider removing, or disabling it permanently.");
                 enabled = false;
             }
         }
 
         public float DayCycleInMinutes
         {
-            get { return configuration.dayCycleInMinutes; }
+            get { return dayCycleInMinutes; }
         }               
 
         public string ImplementationName
@@ -65,6 +81,12 @@ namespace wizardscode.environment
         private void Update()
         {
             configuration.Update();
+        }
+
+        public float GameSecondsToRealSeconds(float gameSeconds)
+        {
+            float realSecondsPerGameSecond = DAY_AS_SECONDS / (DayCycleInMinutes * MINUTE_AS_SECONDS);
+            return gameSeconds / realSecondsPerGameSecond;
         }
     }
 }
