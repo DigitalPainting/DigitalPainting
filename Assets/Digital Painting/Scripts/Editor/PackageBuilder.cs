@@ -20,7 +20,7 @@ public class PackageBuilder
     [MenuItem("Digital Painting/Build/Build Core Package")]
     public static void Build()
     {
-        string rootDir = "Assets\\Digital Painting";
+        string[] rootDirs = { "Assets\\Digital Painting", "Assets\\Gizmos\\DigitalPainting" };
         string excludeSubDir = "Plugins";
         string packageName = @"..\DigitalPainting.unitypackage";
 
@@ -28,33 +28,41 @@ public class PackageBuilder
         GetPlugins();
 
         // Delete everything in plugins directory except *.unitypackage and *.md (and matching .meta)
-        MoveExcludedFiles(rootDir + "\\" + excludeSubDir);
+        foreach (string rootDir in rootDirs) {
+            MoveExcludedFiles(rootDir + "\\" + excludeSubDir);
+        }
         AssetDatabase.Refresh();
 
-        AssetDatabase.ExportPackage(rootDir, packageName, ExportPackageOptions.Interactive | ExportPackageOptions.Recurse);
+        AssetDatabase.ExportPackage(rootDirs, packageName, ExportPackageOptions.Interactive | ExportPackageOptions.Recurse);
         Debug.Log("Exported " + packageName);
 
-        RecoverExcludedFiles(rootDir + "\\" + excludeSubDir);
+        foreach (string rootDir in rootDirs)
+        {
+            RecoverExcludedFiles(rootDir + "\\" + excludeSubDir);
+        }
         AssetDatabase.Refresh();
     }
 
     protected static void MoveExcludedFiles(string dir)
     {
-        string[] subdirectoryEntries = Directory.GetDirectories(dir);
-        foreach (string subdirectory in subdirectoryEntries)
+        if (File.Exists(dir))
         {
-            if (Path.GetFileName(subdirectory) != "Scenes")
+            string[] subdirectoryEntries = Directory.GetDirectories(dir);
+            foreach (string subdirectory in subdirectoryEntries)
             {
-                Debug.Log("Moving to safety: " + subdirectory);
-                string copyPath = "Temp" + Path.DirectorySeparatorChar + subdirectory;
-                Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
-                Directory.Move(subdirectory, copyPath);
-                File.Move(subdirectory + ".meta", copyPath + ".meta");
-                Debug.Log("Temporarily moved " + subdirectory);
-            }
-            else
-            {
-                MoveExcludedFiles(subdirectory);
+                if (Path.GetFileName(subdirectory) != "Scenes")
+                {
+                    Debug.Log("Moving to safety: " + subdirectory);
+                    string copyPath = "Temp" + Path.DirectorySeparatorChar + subdirectory;
+                    Directory.CreateDirectory(Path.GetDirectoryName(copyPath));
+                    Directory.Move(subdirectory, copyPath);
+                    File.Move(subdirectory + ".meta", copyPath + ".meta");
+                    Debug.Log("Temporarily moved " + subdirectory);
+                }
+                else
+                {
+                    MoveExcludedFiles(subdirectory);
+                }
             }
         }
     }

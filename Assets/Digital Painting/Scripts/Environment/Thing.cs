@@ -101,5 +101,17 @@ namespace wizardscode.environment
 
             // TODO: verify the object is in full view of the camera, if not try a different position
         }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 position = transform.position;
+            position.y = transform.position.y + transform.localScale.y;
+            Gizmos.DrawIcon(position, "DigitalPainting/Thing.png", true);
+            if (virtualCamera != null)
+            {
+                Gizmos.DrawIcon(transform.position, "DigitalPainting/VirtualCamera.png", true);
+            }
+        }
     }
 }

@@ -57,10 +57,11 @@ Download and import the following assets:
   * ProBuilder Package (install using Package Manager)
   * TextMesh Pro  (install using Package Manager)
 
-### Included Textures
+### Credits
 
 All textures included with this package are available from [opengameart.org](https://opengameart.org/textures/all) under either a [CC0 license](https://creativecommons.org/share-your-work/public-domain/) and can therefore be reused without restriction. 
 
+All icons provided in this asset are available from [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
 
 
 
