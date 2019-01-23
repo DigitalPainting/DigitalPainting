@@ -173,7 +173,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &867764106
 GameObject:
@@ -246,6 +246,34 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ef0907d022a3d944b14397983c7fa58, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1551222117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1099016699}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1551222118}
+  m_Layer: 0
+  m_Name: Missing Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1551222118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1099016699}
+  m_GameObject: {fileID: 1551222117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1701752665
 Prefab:
   m_ObjectHideFlags: 0
@@ -295,7 +323,7 @@ Prefab:
         type: 2}
       propertyPath: configuration
       value: 
-      objectReference: {fileID: 11400000, guid: a7c6f71f175a0634dbfd4ee7d73558a3,
+      objectReference: {fileID: 11400000, guid: 96a5d14ec4ca7c3488ce2ba2ca207b7d,
         type: 2}
     - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 2}
@@ -306,7 +334,7 @@ Prefab:
         type: 2}
       propertyPath: configuration
       value: 
-      objectReference: {fileID: 11400000, guid: 5b4533fed0ddbe2428b71b0c2e37bee2,
+      objectReference: {fileID: 11400000, guid: 391203896cefa3e458358467f3c126dc,
         type: 2}
     - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 2}
@@ -327,13 +355,24 @@ Prefab:
         type: 2}
       propertyPath: cameraPrefab
       value: 
-      objectReference: {fileID: 20734418272137298, guid: 9ef0907d022a3d944b14397983c7fa58,
+      objectReference: {fileID: 20085759441192012, guid: 1a97a61a83f662b4489e298cb2027fc5,
         type: 2}
     - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 2}
       propertyPath: WeatherUpdateFrequency
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 2}
+      propertyPath: sunPrefab
+      value: 
+      objectReference: {fileID: 108792081150906930, guid: 935ed1b2f6a62904888782218dd03f07,
+        type: 2}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 2}
+      propertyPath: skybox
+      value: 
+      objectReference: {fileID: 2100000, guid: 4074ef2f68c9e1e4ebeb126f0af53116, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 892bb710e0f33aa468c5f743c6ab07dc, type: 2}
   m_IsPrefabAsset: 0
