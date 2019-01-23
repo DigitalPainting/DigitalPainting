@@ -131,8 +131,6 @@ namespace wizardscode.digitalpainting.agent
             if (thingOfInterest != null && Vector3.Distance(position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
             {
                 position += transform.forward * normalMovementSpeed * Time.deltaTime;
-                position.y -= (position.y - thingOfInterest.transform.position.y) * climbSpeed * Time.deltaTime;
-
                 timeLeftLookingAtObject = thingOfInterest.timeToLookAtObject;
             }
             else if (thingOfInterest != null)

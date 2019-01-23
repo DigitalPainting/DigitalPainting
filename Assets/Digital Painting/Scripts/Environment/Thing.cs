@@ -13,6 +13,12 @@ namespace wizardscode.environment
     /// </summary>
     public class Thing : MonoBehaviour
     {
+        [Header("Positioning")]
+        [Tooltip("Should the object be grounded? If set to true the object will be placed on the ground when it is created.")]
+        public bool isGrounded = true;
+        [Tooltip("Y offset to be used when positioning the thing automatically.")]
+        public float yOffset = 0;
+
         [Header("Viewing")]
         [Tooltip("Distance at which to switch to the viewing camera")]
         public float distanceToTriggerViewingCamera = 10;
@@ -43,6 +49,13 @@ namespace wizardscode.environment
                 // TODO: if this object has a mesh then get bounds of the mesh and create a more accurate collider which is used for sizing
                 // TODO: if this object has children make the collider encompass them too
                 collider.radius = 0.3f;
+            }
+
+            if (isGrounded)
+            {
+                Vector3 position = gameObject.transform.position;
+                position.y = Terrain.activeTerrain.SampleHeight(position) + yOffset;
+                gameObject.transform.position = position;
             }
         }
 

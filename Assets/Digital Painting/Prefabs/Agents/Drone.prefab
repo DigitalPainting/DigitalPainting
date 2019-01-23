@@ -115,7 +115,7 @@ MonoBehaviour:
   normalMovementSpeed: 1
   fastMovementFactor: 4
   slowMovementFactor: 0.2
-  climbSpeed: 1
+  climbSpeed: 3
   heightOffset: 1.8
   rotationSpeed: 0.2
   mouseLookMode: 2
