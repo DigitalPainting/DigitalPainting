@@ -24,8 +24,11 @@ namespace wizardscode.digitalpainting.agent
             // get the current position and height above the terrain
             Vector3 position = transform.position;
             
-            // calculate the new position and height 
-            position.y = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
+            // calculate the new height 
+            float newY = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
+            float oldY = position.y;
+            float diffY = newY - oldY;
+            position.y += diffY * Time.deltaTime;
 
             transform.position = position;
         }
