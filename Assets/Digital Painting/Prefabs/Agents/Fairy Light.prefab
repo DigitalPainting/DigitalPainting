@@ -54,6 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4004592835009960}
   - component: {fileID: 114301072202632092}
+  - component: {fileID: 114743800790520494}
   m_Layer: 0
   m_Name: Fairy Light
   m_TagString: Untagged
@@ -199,6 +200,20 @@ MonoBehaviour:
   minAngleOfRandomPathChange: -25
   maxAngleOfRandomPathChange: 25
   barriers: {fileID: 0}
+--- !u!114 &114743800790520494
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1544121714815300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1606de656873c4841b18ae7c1e381890, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lights:
+  - {fileID: 108403865705279864}
+  maxIntensity: []
 --- !u!198 &198454006445575648
 ParticleSystem:
   m_ObjectHideFlags: 1

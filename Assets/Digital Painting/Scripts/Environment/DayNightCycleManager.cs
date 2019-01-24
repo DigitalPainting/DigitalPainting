@@ -35,6 +35,23 @@ namespace wizardscode.environment
         public const float QUARTER_DAY_AS_SECONDS = DAY_AS_SECONDS / 4;
         public const float DEGREES_PER_SECOND = 360 / DAY_AS_SECONDS;
 
+        internal float dawnStartTime;
+        internal float dayStartTime;
+        internal float duskStartTime;
+        internal float nightStartTime;
+        public enum Phase { Night, Dawn, Day, Dusk }
+        private Phase _currentPhase;
+        public Phase CurrentPhase
+        {
+            get { return _currentPhase; }
+            set { _currentPhase = value; }
+        }
+
+        public float CurrentTime
+        {
+            get { return configuration.GetTime();  }
+        }
+
         private void Awake()
         {
             if (configuration == null)
@@ -42,6 +59,22 @@ namespace wizardscode.environment
                 Debug.LogWarning("No configuration provided for the Day Night Cycle, disabling the `DayNightCycleManager` component. Consider removing, or disabling it permanently.");
                 enabled = false;
             }
+        }
+
+        private void Start()
+        {
+            if (configuration == null)
+            {
+                Debug.LogError("You have not configured the Day Night Cycle.");
+            }
+            configuration.Initialize(startTime);
+
+            dawnStartTime = 0;
+            dayStartTime = dawnStartTime + DayNightCycleManager.QUARTER_DAY_AS_SECONDS;
+            duskStartTime = dayStartTime + DayNightCycleManager.QUARTER_DAY_AS_SECONDS;
+            nightStartTime = duskStartTime + DayNightCycleManager.QUARTER_DAY_AS_SECONDS;
+
+            SetPhase();
         }
 
         public float DayCycleInMinutes
@@ -67,20 +100,31 @@ namespace wizardscode.environment
                 return result;
             }
         }
-
-
-        private void Start()
-        {
-            if (configuration == null)
-            {
-                Debug.LogError("You have not configured the Day Night Cycle.");
-            }
-            configuration.Initialize(startTime);
-        }
         
         private void Update()
         {
             configuration.Update();
+            SetPhase();
+        }
+
+        private void SetPhase()
+        {
+            if (CurrentTime >= nightStartTime)
+            {
+                CurrentPhase = Phase.Night;
+            }
+            else if (CurrentTime >= duskStartTime && CurrentTime < nightStartTime)
+            {
+                CurrentPhase = Phase.Dusk;
+            }
+            else if (CurrentTime >= dayStartTime && CurrentTime < duskStartTime)
+            {
+                CurrentPhase = Phase.Day;
+            }
+            else if (CurrentTime >= dawnStartTime && CurrentTime < dayStartTime)
+            {
+                CurrentPhase = Phase.Dawn;
+            }
         }
 
         public float GameSecondsToRealSeconds(float gameSeconds)
