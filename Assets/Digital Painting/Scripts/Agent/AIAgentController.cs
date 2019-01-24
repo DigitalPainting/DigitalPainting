@@ -59,7 +59,20 @@ namespace wizardscode.digitalpainting.agent
             }
             if (!hasCollider)
             {
-                Debug.LogWarning(gameObject.name + " is an AI Agent, but it does not have a collider that is not a trigger. This means the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'");
+                Collider collider = gameObject.AddComponent<SphereCollider>();
+                collider.isTrigger = false;
+
+                Debug.LogWarning(gameObject.name + " is an AI Agent, but it did not have a collider that is not a trigger. One has been added automatically so that the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'. Consider adding one.");
+            }
+
+            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
+            if (rigidbody == null)
+            {
+                rigidbody = gameObject.AddComponent<Rigidbody>();
+                rigidbody.useGravity = false;
+                rigidbody.isKinematic = false;
+
+                Debug.LogWarning(gameObject.name + " is an AI Agent, but it did not have rigidbody. One has been added automatically so that the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'. Consider adding one.");
             }
 
             Random.InitState((int)System.DateTime.Now.Ticks);
