@@ -45,10 +45,9 @@ namespace wizardscode.environment
         {
             if (GetComponent<Collider>() == null)
             {
-                SphereCollider collider = gameObject.AddComponent<SphereCollider>();
-                // TODO: if this object has a mesh then get bounds of the mesh and create a more accurate collider which is used for sizing
-                // TODO: if this object has children make the collider encompass them too
-                collider.radius = 0.3f;
+                BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+                Bounds bounds = GetChildRendererBounds(gameObject);
+                collider.size = bounds.size;
             }
 
             if (isGrounded)
@@ -111,6 +110,28 @@ namespace wizardscode.environment
             if (virtualCamera != null)
             {
                 Gizmos.DrawIcon(transform.position, "DigitalPainting/VirtualCamera.png", true);
+            }
+
+            Bounds bounds = GetChildRendererBounds(gameObject);
+            Gizmos.DrawWireCube(bounds.center, bounds.size);
+        }
+
+        Bounds GetChildRendererBounds(GameObject go)
+        {
+            Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
+
+            if (renderers.Length > 0)
+            {
+                Bounds bounds = renderers[0].bounds;
+                for (int i = 1, ni = renderers.Length; i < ni; i++)
+                {
+                    bounds.Encapsulate(renderers[i].bounds);
+                }
+                return bounds;
+            }
+            else
+            {
+                return new Bounds();
             }
         }
     }
