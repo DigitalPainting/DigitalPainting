@@ -83,7 +83,7 @@ public class RobotMovementController : MonoBehaviour
 
         var curPath = Path;
 
-        if (!curPath.isCalculating && curPath != null && curPath.Path.Count > 0)
+        if (curPath != null && !curPath.isCalculating && curPath.Path.Count > 0)
         {
             if (Vector3.Distance(transform.position, target.position) < minFollowDistance && CanSeePlayer())
             {

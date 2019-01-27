@@ -22,16 +22,11 @@ namespace wizardscode.digitalpainting.agent
 
         internal override void Update()
         {
-            timeToNextWanderPathChange -= Time.deltaTime;
-            if (timeToNextWanderPathChange <= 0)
-            {
-            }
-
             if (isFlyByWire)
             {
                 if (thingOfInterest != null)
                 {
-                    if (thingOfInterest != null && Vector3.Distance(transform.position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
+                    if (Vector3.Distance(transform.position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
                     {
                         pathfinding.Target = thingOfInterest.gameObject;
                     } else
