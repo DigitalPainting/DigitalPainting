@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 114743800790520494}
   - component: {fileID: 114665674840848990}
   - component: {fileID: 54869636479982310}
+  - component: {fileID: 114236293622097422}
   - component: {fileID: 135805775664490126}
   m_Layer: 0
   m_Name: Fairy Light
@@ -190,6 +191,24 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114236293622097422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1544121714815300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b899585cecf9a74f8405f4f8c3c8405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headingController:
+    pFactor: 9.244681
+    iFactor: 0
+    dFactor: 0.06382979
+  playerHead: {fileID: 0}
+  physicsRotation: 0
+  rotationEasing: 1
 --- !u!114 &114301072202632092
 MonoBehaviour:
   m_ObjectHideFlags: 1

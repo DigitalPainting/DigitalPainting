@@ -9,8 +9,10 @@ public class RobotMovementController : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private float maxDistanceRebuildPath = 1;
     [SerializeField] private float acceleration = 1;
-    [SerializeField] private float minReachDistance = 2f;
-    [SerializeField] private float minFollowDistance = 4f;
+    [Tooltip("The minimum distance an agent must get from an object before it is considered to have reached it.")]
+    public float minReachDistance = 2f;
+    [Tooltip("The minimum distance to maintain from an object that the agent is following.")]
+    public float minFollowDistance = 4f;
     [SerializeField] private float pathPointRadius = 0.2f;
     [SerializeField] private Octree octree;
     [SerializeField] private LayerMask playerSeeLayerMask = -1;
@@ -20,18 +22,18 @@ public class RobotMovementController : MonoBehaviour
     private Rigidbody rigidbody;
     private Vector3 currentDestination;
     private Vector3 lastDestination;
-    private SphereCollider sphereCollider;
+    private Collider collider;
 
     public GameObject Target
     {
         get { return target.gameObject; }
         set { target = value.transform; }
     }
-
+    
     // Use this for initialization
     void Start()
     {
-        sphereCollider = GetComponent<SphereCollider>();
+        collider = GetComponent<Collider>();
         rigidbody = GetComponent<Rigidbody>();
         octree = FindObjectOfType<Octree>();
         if (octree == null)
@@ -83,7 +85,7 @@ public class RobotMovementController : MonoBehaviour
 
         var curPath = Path;
 
-        if (curPath != null && !curPath.isCalculating && curPath.Path.Count > 0)
+        if (!curPath.isCalculating && curPath != null && curPath.Path.Count > 0)
         {
             if (Vector3.Distance(transform.position, target.position) < minFollowDistance && CanSeePlayer())
             {
@@ -183,7 +185,16 @@ public class RobotMovementController : MonoBehaviour
         {
             Gizmos.color = Color.blue;
             Vector3 predictedPosition = rigidbody.position + rigidbody.velocity * Time.deltaTime;
-            Gizmos.DrawWireSphere(predictedPosition, sphereCollider.radius);
+            if (collider.GetType() == typeof(SphereCollider))
+            {
+                Gizmos.DrawWireSphere(predictedPosition, ((SphereCollider)collider).radius);
+            } else if (collider.GetType() == typeof(CapsuleCollider))
+            {
+                Gizmos.DrawWireSphere(predictedPosition, ((CapsuleCollider)collider).radius);
+            } else
+            {
+                Gizmos.DrawWireCube(predictedPosition, collider.bounds.size);
+            }
         }
 
         if (Path != null)
