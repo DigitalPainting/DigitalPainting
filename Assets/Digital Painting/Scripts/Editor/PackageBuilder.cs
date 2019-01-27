@@ -17,7 +17,7 @@ using UnityEngine;
 public class PackageBuilder
 {
 
-    [MenuItem("Digital Painting/Build/Build Core Package")]
+    [MenuItem("Tools/Build Package/Digital Painting Core")]
     public static void Build()
     {
         string[] rootDirs = { "Assets\\Digital Painting", "Assets\\Gizmos\\DigitalPainting" };

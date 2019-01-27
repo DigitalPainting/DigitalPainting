@@ -10,27 +10,57 @@ namespace wizardscode.digitalpainting.agent
     /// </summary>
     public class DroneController : AIAgentController
     {
-        internal override void Update()
+        private RobotMovementController pathfinding;
+        private Transform target;
+
+        override internal void Awake()
         {
-            base.Update();
-            SetHeight();
+            base.Awake();
+            pathfinding = GetComponent<RobotMovementController>();
+            target = new GameObject("Wander Target for " + gameObject.name).transform;
         }
 
-        /// <summary>
-        /// Set the current height of the drone based on the terrain height.
-        /// </summary>
-        private void SetHeight()
+        internal override void Update()
         {
-            // get the current position and height above the terrain
-            Vector3 position = transform.position;
-            
-            // calculate the new height 
-            float newY = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
-            float oldY = position.y;
-            float diffY = newY - oldY;
-            position.y += diffY * Time.deltaTime;
+            timeToNextWanderPathChange -= Time.deltaTime;
+            if (timeToNextWanderPathChange <= 0)
+            {
+            }
 
-            transform.position = position;
+            if (isFlyByWire)
+            {
+                if (thingOfInterest != null)
+                {
+                    if (thingOfInterest != null && Vector3.Distance(transform.position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
+                    {
+                        pathfinding.Target = thingOfInterest.gameObject;
+                    } else
+                    {
+                        ViewPOI();
+                    }
+                } else
+                {
+                    UpdatePointOfInterest();
+                    if (thingOfInterest == null)
+                    {
+                        timeToNextWanderPathChange -= Time.deltaTime;
+                        if (timeToNextWanderPathChange < 0)
+                        {
+                            Vector3 position = transform.position + (Random.insideUnitSphere * 15);
+
+                            // calculate the new height 
+                            float newY = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
+                            float oldY = position.y;
+                            float diffY = newY - oldY;
+                            position.y += diffY * Time.deltaTime;
+
+                            target.position = position;
+                            pathfinding.Target = target.gameObject;
+                            timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
+                        }
+                    }
+                }
+            }
         }
     }
 }
