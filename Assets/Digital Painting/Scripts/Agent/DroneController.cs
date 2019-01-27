@@ -12,7 +12,7 @@ namespace wizardscode.digitalpainting.agent
     {
         private RobotMovementController pathfinding;
         private Transform wanderTarget;
-        private Rigidbody rigidbody;
+        new private Rigidbody rigidbody;
 
         override internal void Awake()
         {
@@ -79,8 +79,8 @@ namespace wizardscode.digitalpainting.agent
             timeToNextWanderPathChange -= Time.deltaTime;
             if (timeToNextWanderPathChange < 0)
             {
-                int minDistance = 5;
-                int maxDistance = 15;
+                float minDistance = minDistanceOfRandomPathChange;
+                float maxDistance = maxDistanceOfRandomPathChange;
                 Quaternion randAng;
                 if (!turnAround)
                 {
@@ -96,10 +96,9 @@ namespace wizardscode.digitalpainting.agent
                 Vector3 position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
 
                 // calculate the new height 
-                float newY = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
-                float oldY = position.y;
-                float diffY = newY - oldY;
-                position.y += diffY * Time.deltaTime;
+                float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+                float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
+                position.y = newY;
 
                 wanderTarget.position = position;
                 pathfinding.Target = wanderTarget.gameObject;

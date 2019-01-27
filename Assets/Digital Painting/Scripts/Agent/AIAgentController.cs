@@ -30,6 +30,12 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Maximum angle to change path when randomly varying")]
         [Range(-180, 180)]
         public float maxAngleOfRandomPathChange = 25;
+        [Tooltip("Minimum distance to set a new wander target.")]
+        [Range(1, 100)]
+        public float minDistanceOfRandomPathChange = 10;
+        [Tooltip("Maximum distance to set a new wander target.")]
+        [Range(1, 100)]
+        public float maxDistanceOfRandomPathChange = 25;
 
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
