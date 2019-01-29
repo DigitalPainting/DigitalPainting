@@ -30,6 +30,12 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Maximum angle to change path when randomly varying")]
         [Range(-180, 180)]
         public float maxAngleOfRandomPathChange = 25;
+        [Tooltip("Minimum distance to set a new wander target.")]
+        [Range(1, 100)]
+        public float minDistanceOfRandomPathChange = 10;
+        [Tooltip("Maximum distance to set a new wander target.")]
+        [Range(1, 100)]
+        public float maxDistanceOfRandomPathChange = 25;
 
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
@@ -38,14 +44,13 @@ namespace wizardscode.digitalpainting.agent
         internal const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
         internal Quaternion targetRotation;
-        private float timeToNextPathChange = 3;
-        private float timeLeftLookingAtObject;
+        internal float timeToNextWanderPathChange = 3;
+        private float timeLeftLookingAtObject = float.NegativeInfinity;
         private List<Thing> visitedThings = new List<Thing>();
 
         override internal void Awake()
         {
             base.Awake();
-            ConfigureBarriers();
 
             bool hasCollider = false;
             Collider[] colliders = gameObject.GetComponents<Collider>();
@@ -78,6 +83,11 @@ namespace wizardscode.digitalpainting.agent
             Random.InitState((int)System.DateTime.Now.Ticks);
         }
 
+        internal void Start()
+        {
+            ConfigureBarriers();
+        }
+
         /// <summary>
         /// Barriers are a group of colliders that are used to keep agents within a defined area.
         /// </summary>
@@ -106,6 +116,11 @@ namespace wizardscode.digitalpainting.agent
                 MakeNextMove();
             }
 
+            UpdatePointOfInterest();
+        }
+
+        internal void UpdatePointOfInterest()
+        {
             // Look for points of interest
             if (thingOfInterest == null && Random.value <= 0.001)
             {
@@ -129,14 +144,14 @@ namespace wizardscode.digitalpainting.agent
             else
             {
                 // add some randomness to the flight 
-                timeToNextPathChange -= Time.deltaTime;
-                if (timeToNextPathChange <= 0)
+                timeToNextWanderPathChange -= Time.deltaTime;
+                if (timeToNextWanderPathChange <= 0)
                 {
                     float rotation = Random.Range(minAngleOfRandomPathChange, maxAngleOfRandomPathChange);
                     Vector3 newRotation = targetRotation.eulerAngles;
                     newRotation.y += rotation;
                     targetRotation = Quaternion.Euler(newRotation);
-                    timeToNextPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
+                    timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
                 }
             }
 
@@ -144,26 +159,10 @@ namespace wizardscode.digitalpainting.agent
             if (thingOfInterest != null && Vector3.Distance(position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
             {
                 position += transform.forward * normalMovementSpeed * Time.deltaTime;
-                timeLeftLookingAtObject = thingOfInterest.timeToLookAtObject;
             }
             else if (thingOfInterest != null)
             {
-                CinemachineVirtualCamera virtualCamera = thingOfInterest.virtualCamera;
-                virtualCamera.enabled = true;
-
-                timeLeftLookingAtObject -= Time.deltaTime;
-                if (timeLeftLookingAtObject < 0)
-                {
-                    // Remember we have been here so we don't come again
-                    visitedThings.Add(thingOfInterest);
-
-                    // when we start moving again move away from the object as we are pretty close by now and might move into it
-                    targetRotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
-
-                    // we no longer care about this thing so turn the camera off and don't focus on it anymore
-                    thingOfInterest = null;
-                    virtualCamera.enabled = false;
-                }
+                ViewPOI();
             }
             else
             {
@@ -175,6 +174,35 @@ namespace wizardscode.digitalpainting.agent
 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             transform.position = position;
+        }
+
+        /// <summary>
+        /// View a Thing of Interest that is within range.
+        /// </summary>
+        internal void ViewPOI()
+        {
+            if (timeLeftLookingAtObject == float.NegativeInfinity)
+            {
+                timeLeftLookingAtObject = thingOfInterest.timeToLookAtObject;
+            }
+
+            CinemachineVirtualCamera virtualCamera = thingOfInterest.virtualCamera;
+            virtualCamera.enabled = true;
+            
+            timeLeftLookingAtObject -= Time.deltaTime;
+            if (timeLeftLookingAtObject < 0)
+            {
+                // Remember we have been here so we don't come again
+                visitedThings.Add(thingOfInterest);
+
+                // when we start moving again move away from the object as we are pretty close by now and might move into it
+                targetRotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
+
+                // we no longer care about this thing so turn the camera off and don't focus on it anymore
+                thingOfInterest = null;
+                timeLeftLookingAtObject = float.NegativeInfinity;
+                virtualCamera.enabled = false;
+            }
         }
 
         Thing FindPointOfInterest()
