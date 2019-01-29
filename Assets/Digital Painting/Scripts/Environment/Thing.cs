@@ -46,6 +46,7 @@ namespace wizardscode.environment
             if (GetComponent<Collider>() == null)
             {
                 BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+                collider.isTrigger = true;
                 Bounds bounds = GetChildRendererBounds(gameObject);
                 collider.size = bounds.size;
             }

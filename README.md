@@ -63,6 +63,8 @@ All textures included with this package are available from [opengameart.org](htt
 
 All icons provided in this asset are available from [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
 
+Flying Pathfinding is under and MIT license and was originally pulled from [Simeonradivoev](https://github.com/simeonradivoev/Flying-Pathfinding). I've made some changes and am pushing them upstream, but there is a chance that they won't be included in the upstream project. My [fork](https://github.com/rgardler/Flying-Pathfinding) is available and contains a standalone version with all the changes found in the digital painting repository.
+
 
 
 
