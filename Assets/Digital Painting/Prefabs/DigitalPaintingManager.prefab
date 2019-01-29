@@ -70,10 +70,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraRigPrefab: {fileID: 114576470224930490, guid: 7eec9a0daa82c4b4a9deb0e5142afc70,
     type: 2}
-  agentPrefab: {fileID: 114899539620475532, guid: 5faf501b6facca94f875ec6b6ea698be,
-    type: 2}
   cameraPrefab: {fileID: 20085759441192012, guid: 1a97a61a83f662b4489e298cb2027fc5,
     type: 2}
+  agentPrefab: {fileID: 114899539620475532, guid: 5faf501b6facca94f875ec6b6ea698be,
+    type: 2}
+  renderAgent: 1
 --- !u!114 &114430713918459818
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -109,4 +110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bc654920ebc82a438d5840e53f96d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  implementation: {fileID: 11400000, guid: 391203896cefa3e458358467f3c126dc, type: 2}
+  configuration: {fileID: 11400000, guid: 5b4533fed0ddbe2428b71b0c2e37bee2, type: 2}
+  isAuto: 1
+  WeatherUpdateFrequency: 2
+  chanceOfRain: 0.3
+  chanceOfSleet: 0.09
+  chanceOfSnow: 0.05
+  chanceOfHail: 0.01

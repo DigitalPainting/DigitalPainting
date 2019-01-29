@@ -8,7 +8,7 @@ namespace wizardscode.digitalpainting
 {
     public class DigitalPaintingManager : MonoBehaviour
     {
-        [Tooltip("The clear shot camera rig prefab to use")]
+        [Tooltip("The clear shot camera rig prefab to use. If this is null a Clearshot camera will be lookd for in the scene.")]
         public Cinemachine.CinemachineClearShot cameraRigPrefab;
         [Tooltip("The Camera prefab to use if no main camera exists in the scene.")]
         public Camera cameraPrefab;
@@ -48,7 +48,12 @@ namespace wizardscode.digitalpainting
         /// </summary>
         private void CreateCamera()
         {
-            _clearshot = GameObject.Instantiate(cameraRigPrefab);
+            _clearshot = FindObjectOfType<CinemachineClearShot>();
+            if (_clearshot == null)
+            {
+                _clearshot = GameObject.Instantiate(cameraRigPrefab);
+            }
+
             Camera camera = Camera.main;
             if (camera == null)
             {

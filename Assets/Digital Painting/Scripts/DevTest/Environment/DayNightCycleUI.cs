@@ -8,6 +8,8 @@ namespace wizardscode.digitalpainting.devtest {
     public class DayNightCycleUI : MonoBehaviour {
         [Tooltip("Text label to display name of the Day Night Cycle Implementation being used.")]
         public Text implementatioNameLabel;
+        [Tooltip("Label for current phase of the day.")]
+        public Text phaseLabel;
         [Tooltip("Slider to set current time of day.")]
         public Slider timeOfDaySlider;
         [Tooltip("Time of Day text object.")]
@@ -28,11 +30,13 @@ namespace wizardscode.digitalpainting.devtest {
         {
             if (dayNightCycle != null && dayNightCycle.enabled) { 
                 implementatioNameLabel.text = dayNightCycle.ImplementationName;
+                phaseLabel.text = dayNightCycle.CurrentPhase.ToString();
                 timeOfDayLabel.text = "Time: " + dayNightCycle.CurrentTimeAsLabel;
                 dayLengthLabel.text = "Minutes per sim. day: " + dayNightCycle.DayCycleInMinutes;
             } else
             {
                 implementatioNameLabel.text = "Day Night Cycle disabled";
+                phaseLabel.text = "Phase: N/A";
                 timeOfDayLabel.text = "Time: N/A";
                 dayLengthLabel.text = "Minutes per sim. day: N/A";
             }

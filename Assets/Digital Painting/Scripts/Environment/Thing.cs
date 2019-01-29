@@ -13,6 +13,12 @@ namespace wizardscode.environment
     /// </summary>
     public class Thing : MonoBehaviour
     {
+        [Header("Positioning")]
+        [Tooltip("Should the object be grounded? If set to true the object will be placed on the ground when it is created.")]
+        public bool isGrounded = true;
+        [Tooltip("Y offset to be used when positioning the thing automatically.")]
+        public float yOffset = 0;
+
         [Header("Viewing")]
         [Tooltip("Distance at which to switch to the viewing camera")]
         public float distanceToTriggerViewingCamera = 10;
@@ -39,10 +45,17 @@ namespace wizardscode.environment
         {
             if (GetComponent<Collider>() == null)
             {
-                SphereCollider collider = gameObject.AddComponent<SphereCollider>();
-                // TODO: if this object has a mesh then get bounds of the mesh and create a more accurate collider which is used for sizing
-                // TODO: if this object has children make the collider encompass them too
-                collider.radius = 0.3f;
+                BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+                collider.isTrigger = true;
+                Bounds bounds = GetChildRendererBounds(gameObject);
+                collider.size = bounds.size;
+            }
+
+            if (isGrounded)
+            {
+                Vector3 position = gameObject.transform.position;
+                position.y = Terrain.activeTerrain.SampleHeight(position) + yOffset;
+                gameObject.transform.position = position;
             }
         }
 
@@ -87,6 +100,40 @@ namespace wizardscode.environment
             virtualCamera.enabled = false;
 
             // TODO: verify the object is in full view of the camera, if not try a different position
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 position = transform.position;
+            position.y = transform.position.y + transform.localScale.y;
+            Gizmos.DrawIcon(position, "DigitalPainting/Thing.png", true);
+            if (virtualCamera != null)
+            {
+                Gizmos.DrawIcon(transform.position, "DigitalPainting/VirtualCamera.png", true);
+            }
+
+            Bounds bounds = GetChildRendererBounds(gameObject);
+            Gizmos.DrawWireCube(bounds.center, bounds.size);
+        }
+
+        Bounds GetChildRendererBounds(GameObject go)
+        {
+            Renderer[] renderers = go.GetComponentsInChildren<Renderer>();
+
+            if (renderers.Length > 0)
+            {
+                Bounds bounds = renderers[0].bounds;
+                for (int i = 1, ni = renderers.Length; i < ni; i++)
+                {
+                    bounds.Encapsulate(renderers[i].bounds);
+                }
+                return bounds;
+            }
+            else
+            {
+                return new Bounds();
+            }
         }
     }
 }
