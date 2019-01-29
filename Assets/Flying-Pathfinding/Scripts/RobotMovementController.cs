@@ -31,15 +31,13 @@ public class RobotMovementController : MonoBehaviour
     public float minFlightHeight = 1f;
     [Tooltip("Maximum height to fly at.")]
     public float maxFlightHeight = 7;
-    private float timeSinceLastMove;
-    private Vector3 lastPosition;
 
-    public GameObject Target
+    public Transform Target
     {
-        get { return target.gameObject; }
-        set { target = value.transform; }
+        get { return target; }
+        set { target = value; }
     }
-    
+
     // Use this for initialization
     void Start()
     {
@@ -139,18 +137,7 @@ public class RobotMovementController : MonoBehaviour
         }
         else
         {
-            timeSinceLastMove += Time.deltaTime;
             rigidbody.velocity -= rigidbody.velocity * Time.deltaTime * acceleration;
-
-            if (HasTarget && Vector3.Distance(transform.position, lastPosition) < 1 && timeSinceLastMove > 5)
-            {
-                Debug.LogError("TODO: it appears the agent is stuck, need to give it a boost out. There is a solution in place but does it actually work?");
-                octree.GetPath(transform.position, target.position, this);
-            } else if (Vector3.Distance(transform.position, lastPosition) > 1)
-            {
-                timeSinceLastMove = 0;
-                lastPosition = transform.position;
-            }
         }
     }
 

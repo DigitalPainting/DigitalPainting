@@ -411,8 +411,8 @@ MonoBehaviour:
   m_ChildCameras:
   - {fileID: 114543278843384548}
   - {fileID: 114055141961330734}
-  m_ActivateAfter: 2
-  m_MinDuration: 3
+  m_ActivateAfter: 0
+  m_MinDuration: 0
   m_RandomizeChoice: 1
   m_DefaultBlend:
     m_Style: 1

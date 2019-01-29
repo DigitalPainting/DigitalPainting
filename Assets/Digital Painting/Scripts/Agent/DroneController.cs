@@ -39,9 +39,9 @@ namespace wizardscode.digitalpainting.agent
             {
                 if (thingOfInterest != null)
                 {
-                    if (Vector3.Distance(transform.position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
+                    if (Vector3.Distance(transform.position, thingOfInterest.AgentViewingTransform.position) > thingOfInterest.distanceToTriggerViewingCamera)
                     {
-                        pathfinding.Target = thingOfInterest.gameObject;
+                        pathfinding.Target = thingOfInterest.AgentViewingTransform;
                     } else
                     {
                         ViewPOI();
@@ -101,7 +101,7 @@ namespace wizardscode.digitalpainting.agent
                 position.y = newY;
 
                 wanderTarget.position = position;
-                pathfinding.Target = wanderTarget.gameObject;
+                pathfinding.Target = wanderTarget.gameObject.transform;
                 timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
             }
         }
