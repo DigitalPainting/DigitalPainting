@@ -261,6 +261,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   playerObject: {fileID: 0}
+  preferredFlightHeight: 1.5
+  minFlightHeight: 1
+  maxFlightHeight: 7
 --- !u!114 &114743800790520494
 MonoBehaviour:
   m_ObjectHideFlags: 1
