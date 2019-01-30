@@ -46,6 +46,7 @@ That's all you need to get started. Hit play and see what happens.
 
 ## Next Steps
 
+  * Add [cinematic cameras](./Cameras.md)
   * Add a [Day Night Cycle](./DayNightCycle.md)
   * Add a [Weather System](./Weather.md)
   * Mark some [Interesting Things](./InterestingThings.md) for the camera to investigate
