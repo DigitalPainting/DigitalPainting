@@ -20,6 +20,8 @@ namespace wizardscode.environment
         public float yOffset = 0;
 
         [Header("Viewing")]
+        [Tooltip("Position and rotation the agent should adopt when viewing this thing. If null a location will be automatically created.")]
+        public Transform _agentViewingTransform;
         [Tooltip("Distance at which to switch to the viewing camera")]
         public float distanceToTriggerViewingCamera = 10;
         [Tooltip("Time camera should spend paused looking at an object of interest when within range.")]
@@ -38,6 +40,28 @@ namespace wizardscode.environment
                     _guid = new Guid();
                 }
                 return _guid;
+            }
+        }
+
+        /// <summary>
+        /// Get the viewing position for this thing of interest.
+        /// </summary>
+        public Transform AgentViewingTransform
+        {
+            get {
+                if (_agentViewingTransform == null)
+                {
+                    GameObject obj = new GameObject("Agent Viewing Position for " + gameObject.name);
+
+                    Bounds bounds = this.GetComponent<Collider>().bounds;
+                    Vector3 pos = new Vector3(bounds.center.x + bounds.extents.x * 2, 0,  bounds.center.z + bounds.extents.z * 2);
+                    pos.y = Terrain.activeTerrain.SampleHeight(pos);
+                    obj.transform.position = pos;
+                    obj.transform.LookAt(transform.position);
+
+                    _agentViewingTransform = obj.transform;
+                }
+                return _agentViewingTransform;
             }
         }
 
@@ -87,7 +111,6 @@ namespace wizardscode.environment
             virtualCamera.m_StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.Never;
             virtualCamera.LookAt = transform;
             virtualCamera.Follow = transform;
-
             CinemachineTransposer transposer = virtualCamera.AddCinemachineComponent<CinemachineTransposer>();
             transposer.m_FollowOffset.x = bounds.extents.x + (bounds.extents.x * 2);
             transposer.m_FollowOffset.y = bounds.extents.y + (bounds.extents.y * 2);

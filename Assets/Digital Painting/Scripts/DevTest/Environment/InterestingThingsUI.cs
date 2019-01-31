@@ -59,7 +59,7 @@ namespace wizardscode.devtest
 
             if (agent.thingOfInterest != null)
             {
-                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.thingOfInterest.transform.position).ToString();
+                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.thingOfInterest.AgentViewingTransform.position).ToString();
             }
             else
             {
