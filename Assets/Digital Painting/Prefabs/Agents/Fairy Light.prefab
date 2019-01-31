@@ -251,8 +251,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  maxDistanceRebuildPath: 5
-  acceleration: 3
+  maxDistanceRebuildPath: 1
+  acceleration: 1
   minReachDistance: 2
   minFollowDistance: 4
   pathPointRadius: 1

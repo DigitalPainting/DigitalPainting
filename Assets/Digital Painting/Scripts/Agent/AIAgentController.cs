@@ -139,7 +139,7 @@ namespace wizardscode.digitalpainting.agent
         {
             if (thingOfInterest != null)
             {
-                targetRotation = Quaternion.LookRotation(thingOfInterest.transform.position - transform.position, Vector3.up);
+                targetRotation = Quaternion.LookRotation(thingOfInterest.AgentViewingTransform.position - transform.position, Vector3.up);
             }
             else
             {
@@ -156,7 +156,7 @@ namespace wizardscode.digitalpainting.agent
             }
 
             Vector3 position = transform.position;
-            if (thingOfInterest != null && Vector3.Distance(position, thingOfInterest.transform.position) > thingOfInterest.distanceToTriggerViewingCamera)
+            if (thingOfInterest != null && Vector3.Distance(position, thingOfInterest.AgentViewingTransform.position) > thingOfInterest.distanceToTriggerViewingCamera)
             {
                 position += transform.forward * normalMovementSpeed * Time.deltaTime;
             }
