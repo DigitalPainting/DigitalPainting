@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f618f5bd2c402df4faeb07fdabcb2e2a, type: 3}
+  m_Name: Bush
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8864321975999054768, guid: 0ce4565555c29ee43862c5da0c69d188, type: 3}
+  createParent: 1
+  isInterestingThing: 1
+  center: {x: 50, y: 0, z: 50}
+  radius: 20
+  isGrounded: 1
+  number: 15
+  yOffset: -0.1
+  minSize: 0.5
