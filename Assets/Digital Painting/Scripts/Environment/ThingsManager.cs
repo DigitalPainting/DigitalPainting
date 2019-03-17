@@ -11,7 +11,7 @@ namespace wizardscode.environment
         public List<Thing> allTheThings;
 
         // Use this for initialization
-        void Awake()
+        void Start()
         {
             if (allTheThings == null)
             {

@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.environment {
+namespace wizardscode.environment
+{
     public class SimpleSpawner : MonoBehaviour
     {
         public SpawnableObject[] objects;
-               
+
         private void Awake()
         {
-            for (int i = 0; i < objects.Length; i++) {
+            for (int i = 0; i < objects.Length; i++)
+            {
                 GameObject parent = null;
                 Vector3 realCenter = objects[i].center;
                 realCenter.y = Terrain.activeTerrain.SampleHeight(objects[i].center);
@@ -18,16 +20,21 @@ namespace wizardscode.environment {
                 {
                     parent = new GameObject("Spawned " + objects[i].prefab.name);
                     parent.transform.position = realCenter;
-                    float size = objects[i].radius;
-                    Bounds bounds = objects[i].prefab.GetComponent<Renderer>().bounds;
-                    Vector3 scale = new Vector3(size, bounds.extents.y * 2.25f, size);
-                    parent.transform.localScale = scale;
 
                     if (objects[i].isInterestingThing)
                     {
-                        parent.AddComponent<Thing>();
+                        Thing thing = parent.AddComponent<Thing>();
                         BoxCollider collider = parent.GetComponent<BoxCollider>();
                         collider.size = Vector3.one;
+
+                        GameObject view = new GameObject("Agent Viewing Position for " + parent.name);
+                        Vector3 pos = new Vector3(realCenter.x + objects[i].radius, 0, realCenter.z + objects[i].radius);
+                        pos.y = Terrain.activeTerrain.SampleHeight(pos) + objects[i].radius / 3;
+                        view.transform.position = pos;
+                        view.transform.LookAt(parent.transform.position);
+
+                        view.transform.SetParent(parent.transform, true);
+                        thing.AgentViewingTransform = view.transform;
                     }
                 }
 
@@ -44,7 +51,9 @@ namespace wizardscode.environment {
 
                     if (parent != null)
                     {
+                        Vector3 scale = obj.transform.lossyScale;
                         obj.transform.SetParent(parent.transform, true);
+                        obj.transform.localScale = scale;
                     }
                 }
             }
