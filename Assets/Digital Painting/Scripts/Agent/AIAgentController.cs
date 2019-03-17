@@ -128,6 +128,7 @@ namespace wizardscode.digitalpainting.agent
                 if (poi != null)
                 {
                     thingOfInterest = poi;
+                    manager.SetLookTarget(thingOfInterest.transform);
                 }
             }
         }

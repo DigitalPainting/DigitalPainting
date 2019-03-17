@@ -11,7 +11,7 @@ namespace wizardscode.digitalpainting.agent
     public class DroneController : AIAgentController
     {
         private RobotMovementController pathfinding;
-        private Transform wanderTarget;
+        internal Transform wanderTarget;
         new private Rigidbody rigidbody;
 
         override internal void Awake()
@@ -103,6 +103,8 @@ namespace wizardscode.digitalpainting.agent
                 wanderTarget.position = position;
                 pathfinding.Target = wanderTarget.gameObject.transform;
                 timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
+
+                manager.SetLookTarget(wanderTarget.transform);
             }
         }
 

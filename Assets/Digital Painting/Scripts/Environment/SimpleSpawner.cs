@@ -46,7 +46,8 @@ namespace wizardscode.environment
                     {
                         pos.y = Terrain.activeTerrain.SampleHeight(pos) + (objects[i].yOffset * size);
                     }
-                    GameObject obj = Instantiate(objects[i].prefab, pos, Quaternion.identity);
+                    Quaternion angle = Quaternion.Euler(0, Random.Range(0, objects[i].randomAngle), 0);
+                    GameObject obj = Instantiate(objects[i].prefab, pos, angle);
                     obj.transform.localScale = new Vector3(size, size, size);
 
                     if (parent != null)

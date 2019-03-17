@@ -23,6 +23,9 @@ namespace wizardscode.environment
         public int number = 10;
         [Tooltip("Additional Y offset. This can be used to do things like ensure the trunk of a tree completely penetrates the ground.")]
         public float yOffset = 0;
+        [Tooltip("Maximum angle of rotation. The object will be spawned at an angle of 0 to this value.")]
+        [Range(0, 360)]
+        public int randomAngle = 0;
         [Tooltip("Minimum size. All objects spawned will be a size of (1, 1, 1) this value.")]
         public float minSize = 1;
     }

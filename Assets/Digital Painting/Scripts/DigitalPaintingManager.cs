@@ -35,6 +35,11 @@ namespace wizardscode.digitalpainting
             }
         }
 
+        public void SetLookTarget(Transform lookAt)
+        {
+            _clearshot.LookAt = lookAt;
+        }
+
         void Awake()
         {
             SetupBarriers();
