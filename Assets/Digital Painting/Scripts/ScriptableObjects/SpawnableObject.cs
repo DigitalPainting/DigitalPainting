@@ -9,6 +9,10 @@ namespace wizardscode.environment
     {
         [Tooltip("Prefab to spawn.")]
         public GameObject prefab;
+        [Tooltip("Create a parent object to contain the spawned objects?")]
+        public bool createParent = true;
+        [Tooltip("Is the parent an Interesting Thing in the environment. Interesting things will be examined by agents within the world. Not used if there is no parent object.")]
+        public bool isInterestingThing = true;
         [Tooltip("Position of the center point of the spawn area.")]
         public Vector3 center = Vector3.zero;
         [Tooltip("Radius within which to spawn the objects.")]
