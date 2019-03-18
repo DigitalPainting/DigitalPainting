@@ -35,7 +35,7 @@ namespace wizardscode.digitalpainting
             }
         }
 
-        public void SetLookTarget(Transform lookAt)
+        public void SetCameraLookTarget(Transform lookAt)
         {
             _clearshot.LookAt = lookAt;
         }

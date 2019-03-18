@@ -104,7 +104,7 @@ namespace wizardscode.digitalpainting.agent
                 pathfinding.Target = wanderTarget.gameObject.transform;
                 timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
 
-                manager.SetLookTarget(wanderTarget.transform);
+                manager.SetCameraLookTarget(wanderTarget.transform);
             }
         }
 

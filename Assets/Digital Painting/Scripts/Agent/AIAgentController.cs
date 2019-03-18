@@ -48,7 +48,10 @@ namespace wizardscode.digitalpainting.agent
             set
             {
                 _thingOfInterest = value;
-                manager.SetLookTarget(_thingOfInterest.transform);
+                if (_thingOfInterest != null)
+                {
+                    manager.SetCameraLookTarget(_thingOfInterest.transform);
+                }
             }
         }
 
@@ -139,7 +142,7 @@ namespace wizardscode.digitalpainting.agent
                 if (poi != null)
                 {
                     ThingOfInterest = poi;
-                    manager.SetLookTarget(ThingOfInterest.transform);
+                    manager.SetCameraLookTarget(ThingOfInterest.transform);
                 }
             }
         }
