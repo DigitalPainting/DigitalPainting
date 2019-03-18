@@ -1,15 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Cinemachine;
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace wizardscode.environment {
+namespace wizardscode.environment
+{
     public class SimpleSpawner : MonoBehaviour
     {
         public SpawnableObject[] objects;
-               
+
         private void Awake()
         {
-            for (int i = 0; i < objects.Length; i++) {
+            for (int i = 0; i < objects.Length; i++)
+            {
                 GameObject parent = null;
                 Vector3 realCenter = objects[i].center;
                 realCenter.y = Terrain.activeTerrain.SampleHeight(objects[i].center);
@@ -18,16 +21,36 @@ namespace wizardscode.environment {
                 {
                     parent = new GameObject("Spawned " + objects[i].prefab.name);
                     parent.transform.position = realCenter;
-                    float size = objects[i].radius;
-                    Bounds bounds = objects[i].prefab.GetComponent<Renderer>().bounds;
-                    Vector3 scale = new Vector3(size, bounds.extents.y * 2.25f, size);
-                    parent.transform.localScale = scale;
 
                     if (objects[i].isInterestingThing)
                     {
-                        parent.AddComponent<Thing>();
+                        Thing thing = parent.AddComponent<Thing>();
                         BoxCollider collider = parent.GetComponent<BoxCollider>();
                         collider.size = Vector3.one;
+
+                        GameObject view = new GameObject("Agent Viewing Position for " + parent.name);
+                        Vector3 pos = new Vector3(realCenter.x + objects[i].radius, 0, realCenter.z + objects[i].radius);
+                        pos.y = Terrain.activeTerrain.SampleHeight(pos) + objects[i].radius / 3;
+                        view.transform.position = pos;
+                        view.transform.LookAt(parent.transform.position);
+                        view.transform.SetParent(parent.transform, true);
+                        thing.AgentViewingTransform = view.transform;
+
+                        // TODO: Make a prefab and instantiate from that rather than creating at runtime
+                        GameObject camera = new GameObject();
+                        camera.name = "Virtual Camera for " + this.name;
+                        CinemachineVirtualCamera virtualCamera = camera.AddComponent<CinemachineVirtualCamera>();
+                        virtualCamera.m_StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.Never;
+                        virtualCamera.LookAt = parent.transform;
+                        virtualCamera.Follow = parent.transform;
+                        CinemachineTransposer transposer = virtualCamera.AddCinemachineComponent<CinemachineTransposer>();
+                        transposer.m_FollowOffset.x = objects[i].radius + (objects[i].radius * 2);
+                        transposer.m_FollowOffset.y = objects[i].radius + (objects[i].radius * 2);
+                        transposer.m_FollowOffset.z = objects[i].radius + (objects[i].radius * 2);
+                        virtualCamera.AddCinemachineComponent<CinemachineComposer>();
+                        virtualCamera.transform.SetParent(parent.transform, true);
+                        thing.virtualCamera = virtualCamera;
+                        virtualCamera.enabled = false;
                     }
                 }
 
@@ -39,15 +62,34 @@ namespace wizardscode.environment {
                     {
                         pos.y = Terrain.activeTerrain.SampleHeight(pos) + (objects[i].yOffset * size);
                     }
-                    GameObject obj = Instantiate(objects[i].prefab, pos, Quaternion.identity);
+                    Quaternion angle = Quaternion.Euler(0, Random.Range(0, objects[i].randomAngle), 0);
+                    GameObject obj = Instantiate(objects[i].prefab);
                     obj.transform.localScale = new Vector3(size, size, size);
+                    obj.transform.position = pos;
+                    obj.transform.rotation = angle;
 
                     if (parent != null)
                     {
+                        Vector3 scale = obj.transform.lossyScale;
                         obj.transform.SetParent(parent.transform, true);
+                        obj.transform.localScale = scale;
                     }
+
+                    CustomizeObject(obj, objects[i]);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Do per object customization during initial instantiation.
+        /// This method is intended to be overridden in classes that extend the SimpleSpawner to provide specific object customizations.
+        /// </summary>
+        /// <param name="go">The GameObject to customize.</param>
+        /// <param name="spawnerDefinition">The spawner definition that created this object.</param>
+        internal virtual void CustomizeObject(GameObject go, SpawnableObject spawnerDefinition)
+        {
+
         }
     }
 }

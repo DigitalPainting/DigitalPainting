@@ -13,7 +13,8 @@ namespace wizardscode.digitalpainting.agent
 
         [Header("Objects of Interest")]
         [Tooltip("Current thing of interest. The agent will move to and around the object until it is no longer interested, then it will make this parameter null. When null the agent will move according to other algorithms.")]
-        public Thing thingOfInterest;
+        [SerializeField]
+        private Thing _thingOfInterest;
         [Tooltip("The range the agent will use to detect things in its environment")]
         public float detectionRange = 50;
 
@@ -40,6 +41,16 @@ namespace wizardscode.digitalpainting.agent
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
         public GameObject barriers;
+
+        public Thing ThingOfInterest
+        {
+            get { return _thingOfInterest; }
+            set
+            {
+                _thingOfInterest = value;
+                manager.SetLookTarget(_thingOfInterest.transform);
+            }
+        }
 
         internal const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
@@ -122,12 +133,13 @@ namespace wizardscode.digitalpainting.agent
         internal void UpdatePointOfInterest()
         {
             // Look for points of interest
-            if (thingOfInterest == null && Random.value <= 0.001)
+            if (ThingOfInterest == null && Random.value <= 0.001)
             {
                 Thing poi = FindPointOfInterest();
                 if (poi != null)
                 {
-                    thingOfInterest = poi;
+                    ThingOfInterest = poi;
+                    manager.SetLookTarget(ThingOfInterest.transform);
                 }
             }
         }
@@ -137,9 +149,9 @@ namespace wizardscode.digitalpainting.agent
         /// </summary>
         internal void MakeNextMove()
         {
-            if (thingOfInterest != null)
+            if (ThingOfInterest != null)
             {
-                targetRotation = Quaternion.LookRotation(thingOfInterest.AgentViewingTransform.position - transform.position, Vector3.up);
+                targetRotation = Quaternion.LookRotation(ThingOfInterest.AgentViewingTransform.position - transform.position, Vector3.up);
             }
             else
             {
@@ -156,11 +168,11 @@ namespace wizardscode.digitalpainting.agent
             }
 
             Vector3 position = transform.position;
-            if (thingOfInterest != null && Vector3.Distance(position, thingOfInterest.AgentViewingTransform.position) > thingOfInterest.distanceToTriggerViewingCamera)
+            if (ThingOfInterest != null && Vector3.Distance(position, ThingOfInterest.AgentViewingTransform.position) > ThingOfInterest.distanceToTriggerViewingCamera)
             {
                 position += transform.forward * normalMovementSpeed * Time.deltaTime;
             }
-            else if (thingOfInterest != null)
+            else if (ThingOfInterest != null)
             {
                 ViewPOI();
             }
@@ -183,23 +195,23 @@ namespace wizardscode.digitalpainting.agent
         {
             if (timeLeftLookingAtObject == float.NegativeInfinity)
             {
-                timeLeftLookingAtObject = thingOfInterest.timeToLookAtObject;
+                timeLeftLookingAtObject = ThingOfInterest.timeToLookAtObject;
             }
 
-            CinemachineVirtualCamera virtualCamera = thingOfInterest.virtualCamera;
+            CinemachineVirtualCamera virtualCamera = ThingOfInterest.virtualCamera;
             virtualCamera.enabled = true;
             
             timeLeftLookingAtObject -= Time.deltaTime;
             if (timeLeftLookingAtObject < 0)
             {
                 // Remember we have been here so we don't come again
-                visitedThings.Add(thingOfInterest);
+                visitedThings.Add(ThingOfInterest);
 
                 // when we start moving again move away from the object as we are pretty close by now and might move into it
                 targetRotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
 
                 // we no longer care about this thing so turn the camera off and don't focus on it anymore
-                thingOfInterest = null;
+                ThingOfInterest = null;
                 timeLeftLookingAtObject = float.NegativeInfinity;
                 virtualCamera.enabled = false;
             }

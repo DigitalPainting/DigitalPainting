@@ -59,9 +59,14 @@ namespace wizardscode.environment
                     obj.transform.position = pos;
                     obj.transform.LookAt(transform.position);
 
-                    _agentViewingTransform = obj.transform;
+                    AgentViewingTransform = obj.transform;
                 }
                 return _agentViewingTransform;
+            }
+
+            set
+            {
+                _agentViewingTransform = value;
             }
         }
 

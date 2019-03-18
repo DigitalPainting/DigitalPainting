@@ -40,9 +40,12 @@ namespace wizardscode.digitalpainting.agent
 
         float rotationX = 0;
         float rotationY = 0;
+        internal DigitalPaintingManager manager;
 
         virtual internal void Awake()
         {
+            manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
+
             if (home == null)
             {
                 home = new GameObject("Home for " + gameObject.name);
