@@ -6,6 +6,7 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
   * Automated Drone Exploration - see `Scripts/Agent/DroneController`
   * Designate items as [Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
+  * Support for spawning items into the world using a [SimpleSpawner](./Assets/Digital%20Painting/Docs/SpawnableObjects.md)
   * [Pluggable Day Night Cycle](./Assets/Digital%20Painting/Docs/DayNightCycle.md)
     * Basic Day Night Cycle included
     * [Plugin](https://github.com/DigitalPainting/WeatherMakerPlugin) for [Digital Ruby's Weather Maker](https://assetstore.unity.com/packages/tools/particles-effects/weather-maker-sky-weather-water-volumetric-clouds-and-light-60955) 
@@ -63,7 +64,8 @@ All textures included with this package are available from [opengameart.org](htt
 
 All icons provided in this asset are available from [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
 
-Flying Pathfinding is under and MIT license and was originally pulled from [Simeonradivoev](https://github.com/simeonradivoev/Flying-Pathfinding). I've made some changes and am pushing them upstream, but there is a chance that they won't be included in the upstream project. My [fork](https://github.com/rgardler/Flying-Pathfinding) is available and contains a standalone version with all the changes found in the digital painting repository.
+Flying Pathfinding is under and MIT license and was originally pulled from [Simeonradivoev](https://github.com/simeonradivoev/Flying-Pathfinding). I've made some changes and am pushing them upstream, but there is a chance that they won't be included in the upstream project. My [fork](https://github.com/rgardler/Flying-Pathfinding
+) is available and contains a standalone version with all the changes found in the digital painting repository.
 
 
 
