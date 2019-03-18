@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bush
   m_EditorClassIdentifier: 
   prefab: {fileID: 8864321975999054768, guid: 0ce4565555c29ee43862c5da0c69d188, type: 3}
+  minSize: 0.5
   createParent: 1
   isInterestingThing: 1
   center: {x: 50, y: 0, z: 50}
@@ -20,4 +21,4 @@ MonoBehaviour:
   isGrounded: 1
   number: 15
   yOffset: -0.1
-  minSize: 0.5
+  randomAngle: 360

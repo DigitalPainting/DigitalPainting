@@ -1,6 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Cinemachine;
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace wizardscode.environment
 {
@@ -32,9 +33,24 @@ namespace wizardscode.environment
                         pos.y = Terrain.activeTerrain.SampleHeight(pos) + objects[i].radius / 3;
                         view.transform.position = pos;
                         view.transform.LookAt(parent.transform.position);
-
                         view.transform.SetParent(parent.transform, true);
                         thing.AgentViewingTransform = view.transform;
+
+                        // TODO: Make a prefab and instantiate from that rather than creating at runtime
+                        GameObject camera = new GameObject();
+                        camera.name = "Virtual Camera for " + this.name;
+                        CinemachineVirtualCamera virtualCamera = camera.AddComponent<CinemachineVirtualCamera>();
+                        virtualCamera.m_StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.Never;
+                        virtualCamera.LookAt = parent.transform;
+                        virtualCamera.Follow = parent.transform;
+                        CinemachineTransposer transposer = virtualCamera.AddCinemachineComponent<CinemachineTransposer>();
+                        transposer.m_FollowOffset.x = objects[i].radius + (objects[i].radius * 2);
+                        transposer.m_FollowOffset.y = objects[i].radius + (objects[i].radius * 2);
+                        transposer.m_FollowOffset.z = objects[i].radius + (objects[i].radius * 2);
+                        virtualCamera.AddCinemachineComponent<CinemachineComposer>();
+                        virtualCamera.transform.SetParent(parent.transform, true);
+                        thing.virtualCamera = virtualCamera;
+                        virtualCamera.enabled = false;
                     }
                 }
 
@@ -47,8 +63,10 @@ namespace wizardscode.environment
                         pos.y = Terrain.activeTerrain.SampleHeight(pos) + (objects[i].yOffset * size);
                     }
                     Quaternion angle = Quaternion.Euler(0, Random.Range(0, objects[i].randomAngle), 0);
-                    GameObject obj = Instantiate(objects[i].prefab, pos, angle);
+                    GameObject obj = Instantiate(objects[i].prefab);
                     obj.transform.localScale = new Vector3(size, size, size);
+                    obj.transform.position = pos;
+                    obj.transform.rotation = angle;
 
                     if (parent != null)
                     {
@@ -56,8 +74,22 @@ namespace wizardscode.environment
                         obj.transform.SetParent(parent.transform, true);
                         obj.transform.localScale = scale;
                     }
+
+                    CustomizeObject(obj, objects[i]);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Do per object customization during initial instantiation.
+        /// This method is intended to be overridden in classes that extend the SimpleSpawner to provide specific object customizations.
+        /// </summary>
+        /// <param name="go">The GameObject to customize.</param>
+        /// <param name="spawnerDefinition">The spawner definition that created this object.</param>
+        internal virtual void CustomizeObject(GameObject go, SpawnableObject spawnerDefinition)
+        {
+
         }
     }
 }
