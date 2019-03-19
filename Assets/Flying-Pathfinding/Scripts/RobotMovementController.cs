@@ -38,6 +38,17 @@ public class RobotMovementController : MonoBehaviour
         set { target = value; }
     }
 
+    /// <summary>
+    /// Test if the cell that encompasses a given position is traversable.
+    /// </summary>
+    /// <param name="position">The position the cell most embody.</param>
+    /// <returns></returns>
+    internal bool IsTraversableCell(Vector3 position)
+    {
+        Octree.OctreeElement node = octree.GetNode(position);
+        return node != null ? node.Empty : false;
+    }
+
     // Use this for initialization
     void Start()
     {

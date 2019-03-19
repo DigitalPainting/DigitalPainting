@@ -268,7 +268,7 @@ public class Octree : MonoBehaviour
 
 	private static Vector3 tmpGetNodePos;
 
-	private OctreeElement GetNode(Vector3 position)
+	internal OctreeElement GetNode(Vector3 position)
 	{
 		tmpGetNodePos = position;
 		return GetNode(root);
