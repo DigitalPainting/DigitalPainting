@@ -48,26 +48,19 @@ namespace wizardscode.digitalpainting.agent
                     {
                         ViewPOI();
                     }
-
-                    /**
-                    if (!pathfinding.Octree.IsBuilding)
-                    {
-                        if (!pathfinding.HasReachableTarget)
-                        {
-                            Debug.LogError("Unable to reach POI: " + ThingOfInterest.name);
-                        }
-                    }
-    */
                 } else
                 {
                     UpdatePointOfInterest();
                     if (ThingOfInterest == null)
                     {
                         UpdateWanderTarget();
-                    }
-                    if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
+                    } else
                     {
                         timeToNextWanderPathChange = 0;
+                    }
+
+                    if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
+                    {
                         UpdateWanderTarget();
                     }
                 }
@@ -92,6 +85,7 @@ namespace wizardscode.digitalpainting.agent
                 if (position == Vector3.zero)
                 {
                     // Was unable to find a valid position in a few tries so skipping for now, will retry on next frame
+                    Debug.LogWarning("Unable to find a valid wander target");
                     return;
                 }
                 

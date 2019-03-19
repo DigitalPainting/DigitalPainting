@@ -156,7 +156,7 @@ public class Octree : MonoBehaviour
 								closest = next;
 							}
 							float distance = (next.Bounds.center - request.to).sqrMagnitude;
-							float newWeight = weights[current] + next.WeightedCost(request.controller.preferredFlightHeight, request.controller.minFlightHeight, request.controller.maxFlightHeight);
+							float newWeight = weights[current] + next.WeightedCost(request.controller.preferredFlightHeight, request.controller.minFlightHeight, request.controller.maxFlightHeight) + distance;
 							if (!weights.ContainsKey(next) || newWeight < weights[next])
 							{
 								weights[next] = newWeight;
@@ -392,6 +392,7 @@ public class Octree : MonoBehaviour
             new[]{ Pos.LBD, Pos.LBU, Pos.RBD, Pos.RBU}
         };
         public Bounds Bounds;
+        private float approxBoundsHeight;
         public OctreeElement[] Children;
         public OctreeElement Parent;
         public OctreeElement[][] Neigbors;
@@ -416,19 +417,10 @@ public class Octree : MonoBehaviour
         /// <returns></returns>
         public float WeightedCost(float preferredHeight, float minHeight, float maxHeight)
         {
-            // TODO Optimize this calculation by caching results
-            float height = Bounds.center.y;
-            if (height == preferredHeight)
-            {
-                return BaseCost * 0.5f;
-            } else if (height < minHeight || height > maxHeight)
-            {
-                return BaseCost * 10;
-            } else 
-            {
-                float weight = ((minHeight / height) + (maxHeight / height)) / 2;
-                return BaseCost * weight;
-            }
+            // I think this weighting is breaking things, too many nodes were being added to the fronteer
+            //float weight = Math.Abs(((approxBoundsHeight - preferredHeight) / (maxHeight - minHeight)));
+            //return BaseCost * weight;
+            return BaseCost;
         }
 
 
@@ -436,7 +428,9 @@ public class Octree : MonoBehaviour
 		{
 			Parent = parent;
 			Bounds = bounds;
-			Depth = depth;
+            // TODO Raytrace down to find surface below, there may be a building or tree or similar here.
+            approxBoundsHeight = Bounds.center.y + Terrain.activeTerrain.SampleHeight(Bounds.center);
+            Depth = depth;
 		}
 
 		public void Split()
