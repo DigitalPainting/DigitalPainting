@@ -48,7 +48,10 @@ namespace wizardscode.digitalpainting.agent
             set
             {
                 _thingOfInterest = value;
-                manager.SetLookTarget(_thingOfInterest.transform);
+                if (_thingOfInterest != null)
+                {
+                    manager.SetLookTarget(_thingOfInterest.transform);
+                }
             }
         }
 

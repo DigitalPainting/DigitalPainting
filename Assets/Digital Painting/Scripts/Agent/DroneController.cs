@@ -39,10 +39,12 @@ namespace wizardscode.digitalpainting.agent
             {
                 if (ThingOfInterest != null)
                 {
-                    if (Vector3.Distance(transform.position, ThingOfInterest.AgentViewingTransform.position) > ThingOfInterest.distanceToTriggerViewingCamera)
-                    {
+                    if (!GameObject.ReferenceEquals(pathfinding.Target, ThingOfInterest.AgentViewingTransform)) {
                         pathfinding.Target = ThingOfInterest.AgentViewingTransform;
-                    } else
+                        return;
+                    }
+
+                    if (Vector3.Distance(transform.position, ThingOfInterest.AgentViewingTransform.position) <= ThingOfInterest.distanceToTriggerViewingCamera)
                     {
                         ViewPOI();
                     }
@@ -52,15 +54,14 @@ namespace wizardscode.digitalpainting.agent
                     if (ThingOfInterest == null)
                     {
                         UpdateWanderTarget();
-                    }
-                    if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
+                    } else
                     {
                         timeToNextWanderPathChange = 0;
-                        UpdateWanderTarget();
                     }
-                    if (!pathfinding.HasTarget)
+
+                    if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
                     {
-                        UpdateWanderTarget(true);
+                        UpdateWanderTarget();
                     }
                 }
             }
@@ -74,38 +75,73 @@ namespace wizardscode.digitalpainting.agent
         /// turning the agent around.
         /// </summary>
         /// <param name="turnAround">Position the target behind the agent. By default this is false.</param>
-        private void UpdateWanderTarget(bool turnAround = false)
+        private void UpdateWanderTarget()
         {
             timeToNextWanderPathChange -= Time.deltaTime;
             if (timeToNextWanderPathChange < 0)
             {
-                float minDistance = minDistanceOfRandomPathChange;
-                float maxDistance = maxDistanceOfRandomPathChange;
-                Quaternion randAng;
-                if (!turnAround)
-                {
-                    randAng = Quaternion.Euler(0, Random.Range(minAngleOfRandomPathChange, maxAngleOfRandomPathChange), 0);
-                    
-                } else
-                {
+                Vector3 position = GetValidWanderPosition(0);
 
-                    randAng = Quaternion.Euler(0, Random.Range(180 - minAngleOfRandomPathChange, 180 + maxAngleOfRandomPathChange), 0);
-                    minDistance = maxDistance;
+                if (position == Vector3.zero)
+                {
+                    // Was unable to find a valid position in a few tries so skipping for now, will retry on next frame
+                    Debug.LogWarning("Unable to find a valid wander target");
+                    return;
                 }
-                randAng = transform.rotation * randAng;
-                Vector3 position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
-
-                // calculate the new height 
-                float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
-                float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
-                position.y = newY;
-
+                
                 wanderTarget.position = position;
-                pathfinding.Target = wanderTarget.gameObject.transform;
+
+                pathfinding.Target = wanderTarget;
                 timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
 
                 manager.SetLookTarget(wanderTarget.transform);
             }
+        }
+
+        private Vector3 GetValidWanderPosition(int attemptCount)
+        {
+            int maxAttempts = 6;
+            bool turnAround = false;
+
+            attemptCount ++;
+            if (attemptCount > maxAttempts / 2)
+            {
+                turnAround = true;
+            }
+            else if (attemptCount > maxAttempts)
+            {
+                return Vector3.zero;
+            }
+
+            Vector3 position;
+            float minDistance = minDistanceOfRandomPathChange;
+            float maxDistance = maxDistanceOfRandomPathChange;
+
+            Quaternion randAng;
+            if (!turnAround)
+            {
+                randAng = Quaternion.Euler(0, Random.Range(minAngleOfRandomPathChange, maxAngleOfRandomPathChange), 0);
+            }
+            else
+            {
+                randAng = Quaternion.Euler(0, Random.Range(180 - minAngleOfRandomPathChange, 180 + maxAngleOfRandomPathChange), 0);
+                minDistance = maxDistance;
+            }
+            transform.rotation = transform.rotation * randAng;
+            position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
+
+            // calculate the new height 
+            float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+            float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
+            position.y = newY;
+
+            if (attemptCount <= maxAttempts && !pathfinding.Octree.IsTraversableCell(position))
+            {
+                // Debug.LogWarning("Attempt " + attemptCount + " invalid wander location: " + position);
+                position = GetValidWanderPosition(attemptCount);
+            }
+
+            return position;
         }
 
         private void OnDrawGizmos()

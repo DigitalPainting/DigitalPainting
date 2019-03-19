@@ -9466,7 +9466,7 @@ MonoBehaviour:
   mouseLookSensitivity: 100
   home: {fileID: 0}
   isFlyByWire: 1
-  thingOfInterest: {fileID: 0}
+  _thingOfInterest: {fileID: 0}
   detectionRange: 50
   minTimeBetweenRandomPathChanges: 5
   maxTimeBetweenRandomPathChanges: 30
