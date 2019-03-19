@@ -55,7 +55,8 @@ namespace wizardscode.environment
 
                     Bounds bounds = this.GetComponent<Collider>().bounds;
                     Vector3 pos = new Vector3(bounds.center.x + bounds.extents.x * 2, 0,  bounds.center.z + bounds.extents.z * 2);
-                    pos.y = Terrain.activeTerrain.SampleHeight(pos) + bounds.extents.y * 2;
+                    pos.y = Terrain.activeTerrain.SampleHeight(pos) + bounds.center.y + bounds.extents.y * 2;
+                    
                     obj.transform.position = pos;
                     obj.transform.LookAt(transform.position);
 

@@ -48,6 +48,16 @@ namespace wizardscode.digitalpainting.agent
                     {
                         ViewPOI();
                     }
+
+                    /**
+                    if (!pathfinding.Octree.IsBuilding)
+                    {
+                        if (!pathfinding.HasReachableTarget)
+                        {
+                            Debug.LogError("Unable to reach POI: " + ThingOfInterest.name);
+                        }
+                    }
+    */
                 } else
                 {
                     UpdatePointOfInterest();
@@ -131,7 +141,7 @@ namespace wizardscode.digitalpainting.agent
             float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
             position.y = newY;
 
-            if (attemptCount <= maxAttempts && !pathfinding.IsTraversableCell(position))
+            if (attemptCount <= maxAttempts && !pathfinding.Octree.IsTraversableCell(position))
             {
                 // Debug.LogWarning("Attempt " + attemptCount + " invalid wander location: " + position);
                 position = GetValidWanderPosition(attemptCount);

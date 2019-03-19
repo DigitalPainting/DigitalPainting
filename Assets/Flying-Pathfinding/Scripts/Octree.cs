@@ -24,9 +24,20 @@ public class Octree : MonoBehaviour
 	private Queue<OctreeElement> toBeSplit = new Queue<OctreeElement>();
 	private Queue<PathRequest> requests = new Queue<PathRequest>();
 	private List<PathRequest> running = new List<PathRequest>();
+       
+    /// <summary>
+    /// Test if the cell that encompasses a given position is traversable.
+    /// </summary>
+    /// <param name="position">The position the cell most embody.</param>
+    /// <returns></returns>
+    internal bool IsTraversableCell(Vector3 position)
+    {
+        Octree.OctreeElement node = GetNode(position);
+        return node != null ? node.Empty : false;
+    }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
 	{
 		boxCollider = GetComponent<BoxCollider>();
 		root = new OctreeElement(null,boxCollider.bounds,0);

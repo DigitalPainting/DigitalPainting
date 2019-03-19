@@ -38,15 +38,9 @@ public class RobotMovementController : MonoBehaviour
         set { target = value; }
     }
 
-    /// <summary>
-    /// Test if the cell that encompasses a given position is traversable.
-    /// </summary>
-    /// <param name="position">The position the cell most embody.</param>
-    /// <returns></returns>
-    internal bool IsTraversableCell(Vector3 position)
+    public Octree Octree
     {
-        Octree.OctreeElement node = octree.GetNode(position);
-        return node != null ? node.Empty : false;
+        get { return octree; }
     }
 
     // Use this for initialization
@@ -174,7 +168,12 @@ public class RobotMovementController : MonoBehaviour
         }
     }
 
-    public bool HasTarget
+    /// <summary>
+    /// Test to see if there is a path to the current target.
+    /// Note that this will return false if the path is still building,
+    /// therefore you should also check Octree.IsBuilding.
+    /// </summary>
+    public bool HasReachableTarget
     {
         get
         {
