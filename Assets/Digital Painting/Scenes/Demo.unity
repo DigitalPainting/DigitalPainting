@@ -2655,31 +2655,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50.62
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.128571
+      value: 5.594757
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 65.07
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.18716544
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.19414414
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.037764125
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.96221155
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_RootOrder
@@ -3244,7 +3244,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468070949}
-  m_LocalRotation: {x: -0.18716544, y: 0.19414414, z: 0.037764125, w: 0.96221155}
+  m_LocalRotation: {x: -0.18716544, y: 0.19414411, z: 0.037764117, w: 0.96221155}
   m_LocalPosition: {x: -0.72155285, y: -0.14, z: -1.7152786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3599,7 +3599,7 @@ PrefabInstance:
     - target: {fileID: 114192318843746294, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 3}
       propertyPath: agentObjectDefs.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114192318843746294, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 3}

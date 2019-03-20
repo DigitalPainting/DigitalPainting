@@ -111,7 +111,7 @@ namespace wizardscode.digitalpainting
             Vector3 position = new Vector3(x, 0, z);
 
             float y = Terrain.activeTerrain.SampleHeight(position);
-            position.y = y + controller.heightOffset;            
+            position.y = y + controller.movementController.heightOffset;            
             agent.transform.position = position;
 
             return controller;
