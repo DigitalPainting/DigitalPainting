@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
 
 namespace wizardscode.digitalpainting
@@ -12,12 +13,8 @@ namespace wizardscode.digitalpainting
         public Cinemachine.CinemachineClearShot cameraRigPrefab;
         [Tooltip("The Camera prefab to use if no main camera exists in the scene.")]
         public Camera cameraPrefab;
-
-        [Header("Agent")]
-        [Tooltip("The Agent prefab to use as the primary character - that is the one the camera will follow.")]
-        public BaseAgentController agentPrefab;
-        [Tooltip("Render agent - if this is set to off (unchecked) then the agent will not be visible.")]
-        public bool renderAgent = true;
+        [Tooltip("The agents that exist int the world. These agents will act autonomously in the world, doing interesting things.")]
+        public AgentScriptableObject agentObjectDef;
 
         private Cinemachine.CinemachineClearShot _clearshot;
 
@@ -91,12 +88,12 @@ namespace wizardscode.digitalpainting
         /// <returns></returns>
         private BaseAgentController CreateAgent()
         {
-            GameObject agent = GameObject.Instantiate(agentPrefab).gameObject;
+            GameObject agent = GameObject.Instantiate(agentObjectDef.prefab).gameObject;
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
 
             Renderer renderer = agent.GetComponent<Renderer>();
             if (renderer != null) {
-                renderer.enabled = renderAgent;
+                renderer.enabled = agentObjectDef.render;
             }
 
             float x = Terrain.activeTerrain.terrainData.size.x / 2;
