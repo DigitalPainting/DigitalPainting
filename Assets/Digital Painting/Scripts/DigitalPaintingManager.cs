@@ -9,12 +9,12 @@ namespace wizardscode.digitalpainting
 {
     public class DigitalPaintingManager : MonoBehaviour
     {
-        [Tooltip("The clear shot camera rig prefab to use. If this is null a Clearshot camera will be lookd for in the scene.")]
+        [Tooltip("The clear shot camera rig prefab to use. If this is null a Clearshot camera will be look for in the scene.")]
         public Cinemachine.CinemachineClearShot cameraRigPrefab;
         [Tooltip("The Camera prefab to use if no main camera exists in the scene.")]
         public Camera cameraPrefab;
-        [Tooltip("The agents that exist int the world. These agents will act autonomously in the world, doing interesting things.")]
-        public AgentScriptableObject agentObjectDef;
+        [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
+        public AgentScriptableObject[] agentObjectDefs;
 
         private Cinemachine.CinemachineClearShot _clearshot;
 
@@ -41,7 +41,17 @@ namespace wizardscode.digitalpainting
         {
             SetupBarriers();
             CreateCamera();
-            AgentWithFocus = CreateAgent();
+            for (int i = 0; i < agentObjectDefs.Length; i++)
+            {
+                if (i == 0)
+                {
+                    AgentWithFocus = CreateAgent(agentObjectDefs[i]);
+                }
+                else
+                {
+                    CreateAgent(agentObjectDefs[i]);
+                }
+            }
         }
 
         /// <summary>
@@ -83,17 +93,17 @@ namespace wizardscode.digitalpainting
         }
 
         /// <summary>
-        /// Create the main agent that the cameras will follow initially.
+        /// Create an agent.
         /// </summary>
         /// <returns></returns>
-        private BaseAgentController CreateAgent()
+        private BaseAgentController CreateAgent(AgentScriptableObject def)
         {
-            GameObject agent = GameObject.Instantiate(agentObjectDef.prefab).gameObject;
+            GameObject agent = GameObject.Instantiate(def.prefab).gameObject;
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
 
             Renderer renderer = agent.GetComponent<Renderer>();
             if (renderer != null) {
-                renderer.enabled = agentObjectDef.render;
+                renderer.enabled = def.render;
             }
 
             float x = Terrain.activeTerrain.terrainData.size.x / 2;
