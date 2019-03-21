@@ -13,7 +13,8 @@ namespace wizardscode.digitalpainting.agent
     public class BaseAgentController : MonoBehaviour
     {
         [Tooltip("The movement controller that will manage movement for this agent.")]
-        public MovementControllerSO movementController;
+        [SerializeField]
+        internal MovementControllerSO _movementController;
 
         public enum MouseLookModeType { Never, Always, WithRightMouseButton }
         [Header("Manual Controls")]
@@ -29,6 +30,10 @@ namespace wizardscode.digitalpainting.agent
         float rotationX = 0;
         float rotationY = 0;
         internal DigitalPaintingManager manager;
+
+        public MovementControllerSO MovementController {
+            get { return _movementController; }
+        }
 
         virtual internal void Awake()
         {
@@ -59,7 +64,43 @@ namespace wizardscode.digitalpainting.agent
                     break;
             }
 
-            movementController.Move(transform);
+            Move();
+        }
+        
+        /// <summary>
+        /// Typically the Move method is called from the Update method of the agent controller.
+        /// It is responsible for making a decision about the agents next move and acting upon
+        /// that decision.
+        /// <paramref name="transform">The transform of the agent to be moved.</paramref>
+        /// </summary>
+        private void Move()
+        {
+            // Move with the keyboard controls 
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.fastMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.fastMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+            }
+            else if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+            {
+                transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+            }
+            else
+            {
+                transform.position += transform.forward * MovementController.normalMovementSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.right * MovementController.normalMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
+            }
+
+            if (Input.GetKey(KeyCode.Q))
+            {
+                MovementController.heightOffset += MovementController.climbSpeed * Time.deltaTime;
+            }
+
+            if (Input.GetKey(KeyCode.E))
+            {
+                MovementController.heightOffset -= MovementController.climbSpeed * Time.deltaTime;
+            }
         }
 
         private void MouseLook()

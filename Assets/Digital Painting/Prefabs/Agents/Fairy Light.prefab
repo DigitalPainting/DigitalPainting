@@ -9456,7 +9456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b9485c0356f994fa58af0adcee9283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementController: {fileID: 11400000, guid: 854a2540127fa784e81c047f97fb3a9e, type: 2}
+  _movementController: {fileID: 11400000, guid: 854a2540127fa784e81c047f97fb3a9e,
+    type: 2}
   mouseLookMode: 2
   mouseLookSensitivity: 100
   home: {fileID: 0}

@@ -106,12 +106,13 @@ namespace wizardscode.digitalpainting
                 renderer.enabled = def.render;
             }
 
-            float x = Terrain.activeTerrain.terrainData.size.x / 2;
-            float z = Terrain.activeTerrain.terrainData.size.z / 2;
+            float border = Terrain.activeTerrain.terrainData.size.x / 10;
+            float x = Random.Range(border, Terrain.activeTerrain.terrainData.size.x - border);
+            float z = Random.Range(border, Terrain.activeTerrain.terrainData.size.z - border);
             Vector3 position = new Vector3(x, 0, z);
 
             float y = Terrain.activeTerrain.SampleHeight(position);
-            position.y = y + controller.movementController.heightOffset;            
+            position.y = y + controller.MovementController.heightOffset;            
             agent.transform.position = position;
 
             return controller;

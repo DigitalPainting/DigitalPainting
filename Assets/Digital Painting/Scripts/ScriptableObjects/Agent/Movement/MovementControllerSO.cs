@@ -5,7 +5,7 @@ namespace wizardscode.agent.movement
     /// <summary>
     /// Movement Controllers implement this class and can then be assigned to a Movement Brain.
     /// </summary>
-    public abstract class MovementControllerSO : ScriptableObject
+    public class MovementControllerSO : ScriptableObject
     {
         [Header("Movement")]
         [Tooltip("Walking speed under normal circumstances")]
@@ -20,9 +20,5 @@ namespace wizardscode.agent.movement
         public float heightOffset = 0;
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
-
-        internal Transform target; // the current target that we are moving towards
-
-        abstract internal void Move(Transform transform);
     }
 }
