@@ -30,6 +30,11 @@ namespace wizardscode.agent.movement
         [Tooltip("Maximum distance to set a new wander target.")]
         [Range(1, 100)]
         public float maxDistanceOfRandomPathChange = 25;
+
+        // FIXME: This smells like it should be in a separate controller
+        [Header("Purpose Configuration")]
+        [Tooltip("Should this agent seek points of interest in the scene?")]
+        public bool seekPointsOfInterest = true;
         
     }
 }

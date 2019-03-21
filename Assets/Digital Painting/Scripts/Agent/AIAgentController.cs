@@ -91,14 +91,17 @@ namespace wizardscode.digitalpainting.agent
         }
         internal void UpdatePointOfInterest()
         {
-            // Look for points of interest
-            if (ThingOfInterest == null && Random.value <= 0.001)
+            if (MovementController.seekPointsOfInterest)
             {
-                Thing poi = FindPointOfInterest();
-                if (poi != null)
+                // Look for points of interest
+                if (ThingOfInterest == null && Random.value <= 0.001)
                 {
-                    ThingOfInterest = poi;
-                    manager.SetLookTarget(ThingOfInterest.transform);
+                    Thing poi = FindPointOfInterest();
+                    if (poi != null)
+                    {
+                        ThingOfInterest = poi;
+                        manager.SetLookTarget(ThingOfInterest.transform);
+                    }
                 }
             }
         }
