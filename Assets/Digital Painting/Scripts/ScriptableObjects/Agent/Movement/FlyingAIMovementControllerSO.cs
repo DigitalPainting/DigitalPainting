@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using wizardscode.digitalpainting;
+using wizardscode.utility;
 
 namespace wizardscode.agent.movement
 {
@@ -30,11 +31,10 @@ namespace wizardscode.agent.movement
         [Range(1, 100)]
         public float maxDistanceOfRandomPathChange = 25;
 
-        internal DigitalPaintingManager manager;
         // FIXME: RobotPathfindingController should be a part of this object. Need to handle FixedUpdate
         internal RobotMovementController pathfinding;
 
-        internal Transform wanderTarget;
+        public Transform wanderTarget;
         internal float timeToNextWanderPathChange = 3;
 
         /// <summary>
@@ -75,6 +75,11 @@ namespace wizardscode.agent.movement
         /// <param name="turnAround">Position the target behind the agent. By default this is false.</param>
         private void UpdateWanderTarget(Transform transform)
         {
+            if (wanderTarget == null)
+            {
+                wanderTarget = ObjectPool.Instance.GetFromPool().transform;
+            }
+
             timeToNextWanderPathChange -= Time.deltaTime;
             if (timeToNextWanderPathChange < 0)
             {
@@ -138,11 +143,6 @@ namespace wizardscode.agent.movement
             }
 
             return position;
-        }
-
-        public void OnEnable()
-        {
-            wanderTarget = new GameObject("Wander Target for " + name).transform;
         }
     }
 }

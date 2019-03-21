@@ -2655,31 +2655,31 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50
+      value: 50.62
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.594757
+      value: 1.128571
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 40
+      value: 65.07
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: -0.18716544
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.19414411
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.037764117
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.96221155
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_RootOrder
@@ -3637,6 +3637,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 82c77e00c6679b3438dddc03dc028301,
         type: 2}
+    - target: {fileID: 7711156887825927953, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: m_Name
+      value: Wander Target Pool
+      objectReference: {fileID: 0}
+    - target: {fileID: 286795433341699577, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: poolName
+      value: Wander Targets
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 892bb710e0f33aa468c5f743c6ab07dc, type: 3}
 --- !u!1 &1771391779
