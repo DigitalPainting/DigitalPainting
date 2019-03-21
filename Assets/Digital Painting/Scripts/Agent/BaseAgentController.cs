@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using wizardscode.agent.movement;
 
 namespace wizardscode.digitalpainting.agent
 {
@@ -13,19 +12,9 @@ namespace wizardscode.digitalpainting.agent
     /// </summary>
     public class BaseAgentController : MonoBehaviour
     {
-        [Header("Movement")]
-        [Tooltip("Walking speed under normal circumstances")]
-        public float normalMovementSpeed = 1;
-        [Tooltip("The factor by which to multiply the walking speed when moving fast.")]
-        public float fastMovementFactor = 4;
-        [Tooltip("The factor by which to multiply the walking speed when moving slowly.")]
-        public float slowMovementFactor = 0.2f;
-        [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
-        public float climbSpeed = 1;
-        [Tooltip("The height above the terrain this agent should be.")]
-        public float heightOffset = 0;
-        [Tooltip("Speed at which the agent will rotate.")]
-        public float rotationSpeed = 90;
+        [Tooltip("The movement controller that will manage movement for this agent.")]
+        [SerializeField]
+        internal MovementControllerSO _movementController;
 
         public enum MouseLookModeType { Never, Always, WithRightMouseButton }
         [Header("Manual Controls")]
@@ -42,6 +31,10 @@ namespace wizardscode.digitalpainting.agent
         float rotationY = 0;
         internal DigitalPaintingManager manager;
 
+        public MovementControllerSO MovementController {
+            get { return _movementController; }
+        }
+
         virtual internal void Awake()
         {
             manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
@@ -54,7 +47,7 @@ namespace wizardscode.digitalpainting.agent
             }
         }
 
-        internal virtual void Update()
+        virtual internal void Update()
         {
             // Mouse Look
             switch (mouseLookMode) {
@@ -70,32 +63,43 @@ namespace wizardscode.digitalpainting.agent
                 default:
                     break;
             }
-            
+
+            Move();
+        }
+        
+        /// <summary>
+        /// Typically the Move method is called from the Update method of the agent controller.
+        /// It is responsible for making a decision about the agents next move and acting upon
+        /// that decision.
+        /// <paramref name="transform">The transform of the agent to be moved.</paramref>
+        /// </summary>
+        private void Move()
+        {
             // Move with the keyboard controls 
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                transform.position += transform.forward * (normalMovementSpeed * fastMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
-                transform.position += transform.right * (normalMovementSpeed * fastMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+                transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.fastMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.fastMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
             else if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
             {
-                transform.position += transform.forward * (normalMovementSpeed * slowMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
-                transform.position += transform.right * (normalMovementSpeed * slowMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+                transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
             else
             {
-                transform.position += transform.forward * normalMovementSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
-                transform.position += transform.right * normalMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
+                transform.position += transform.forward * MovementController.normalMovementSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.right * MovementController.normalMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
 
             if (Input.GetKey(KeyCode.Q))
             {
-                heightOffset += climbSpeed * Time.deltaTime;
+                MovementController.heightOffset += MovementController.climbSpeed * Time.deltaTime;
             }
 
             if (Input.GetKey(KeyCode.E))
             {
-                heightOffset -= climbSpeed * Time.deltaTime;
+                MovementController.heightOffset -= MovementController.climbSpeed * Time.deltaTime;
             }
         }
 

@@ -2,22 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
 
 namespace wizardscode.digitalpainting
 {
     public class DigitalPaintingManager : MonoBehaviour
     {
-        [Tooltip("The clear shot camera rig prefab to use. If this is null a Clearshot camera will be lookd for in the scene.")]
+        [Tooltip("The clear shot camera rig prefab to use. If this is null a Clearshot camera will be look for in the scene.")]
         public Cinemachine.CinemachineClearShot cameraRigPrefab;
         [Tooltip("The Camera prefab to use if no main camera exists in the scene.")]
         public Camera cameraPrefab;
-
-        [Header("Agent")]
-        [Tooltip("The Agent prefab to use as the primary character - that is the one the camera will follow.")]
-        public BaseAgentController agentPrefab;
-        [Tooltip("Render agent - if this is set to off (unchecked) then the agent will not be visible.")]
-        public bool renderAgent = true;
+        [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
+        public AgentScriptableObject[] agentObjectDefs;
 
         private Cinemachine.CinemachineClearShot _clearshot;
 
@@ -44,7 +41,17 @@ namespace wizardscode.digitalpainting
         {
             SetupBarriers();
             CreateCamera();
-            AgentWithFocus = CreateAgent();
+            for (int i = 0; i < agentObjectDefs.Length; i++)
+            {
+                if (i == 0)
+                {
+                    AgentWithFocus = CreateAgent(agentObjectDefs[i]);
+                }
+                else
+                {
+                    CreateAgent(agentObjectDefs[i]);
+                }
+            }
         }
 
         /// <summary>
@@ -86,25 +93,26 @@ namespace wizardscode.digitalpainting
         }
 
         /// <summary>
-        /// Create the main agent that the cameras will follow initially.
+        /// Create an agent.
         /// </summary>
         /// <returns></returns>
-        private BaseAgentController CreateAgent()
+        private BaseAgentController CreateAgent(AgentScriptableObject def)
         {
-            GameObject agent = GameObject.Instantiate(agentPrefab).gameObject;
+            GameObject agent = GameObject.Instantiate(def.prefab).gameObject;
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
 
             Renderer renderer = agent.GetComponent<Renderer>();
             if (renderer != null) {
-                renderer.enabled = renderAgent;
+                renderer.enabled = def.render;
             }
 
-            float x = Terrain.activeTerrain.terrainData.size.x / 2;
-            float z = Terrain.activeTerrain.terrainData.size.z / 2;
+            float border = Terrain.activeTerrain.terrainData.size.x / 10;
+            float x = Random.Range(border, Terrain.activeTerrain.terrainData.size.x - border);
+            float z = Random.Range(border, Terrain.activeTerrain.terrainData.size.z - border);
             Vector3 position = new Vector3(x, 0, z);
 
             float y = Terrain.activeTerrain.SampleHeight(position);
-            position.y = y + controller.heightOffset;            
+            position.y = y + controller.MovementController.heightOffset;            
             agent.transform.position = position;
 
             return controller;

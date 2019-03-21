@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016bc8b336613904fb1e4590d489043a, type: 3}
+  m_Name: Fairy
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 1544121714815300, guid: 4a45380c1234c7d418c8952744e3af01, type: 3}
+  render: 1

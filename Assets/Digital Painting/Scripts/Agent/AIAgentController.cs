@@ -1,66 +1,36 @@
 ﻿using Cinemachine;
 using System.Collections.Generic;
 using UnityEngine;
+using wizardscode.agent.movement;
 using wizardscode.environment;
+using wizardscode.utility;
 
 namespace wizardscode.digitalpainting.agent
 {
     public class AIAgentController : BaseAgentController
     {
-        [Header("AI Controller")]
-        [Tooltip("Is the agent automated or manual movement?")]
-        public bool isFlyByWire = true;
-
-        [Header("Objects of Interest")]
-        [Tooltip("Current thing of interest. The agent will move to and around the object until it is no longer interested, then it will make this parameter null. When null the agent will move according to other algorithms.")]
-        [SerializeField]
-        private Thing _thingOfInterest;
         [Tooltip("The range the agent will use to detect things in its environment")]
         public float detectionRange = 50;
-
-        [Header("Wander configuration")]
-        [Tooltip("Minimum time between random variations in the path.")]
-        [Range(0, 120)]
-        public float minTimeBetweenRandomPathChanges = 5;
-        [Tooltip("Maximum time between random variations in the path.")]
-        [Range(0, 120)]
-        public float maxTimeBetweenRandomPathChanges = 15;
-        [Tooltip("Minimum angle to change path when randomly varying")]
-        [Range(-180, 180)]
-        public float minAngleOfRandomPathChange = -25;
-        [Tooltip("Maximum angle to change path when randomly varying")]
-        [Range(-180, 180)]
-        public float maxAngleOfRandomPathChange = 25;
-        [Tooltip("Minimum distance to set a new wander target.")]
-        [Range(1, 100)]
-        public float minDistanceOfRandomPathChange = 10;
-        [Tooltip("Maximum distance to set a new wander target.")]
-        [Range(1, 100)]
-        public float maxDistanceOfRandomPathChange = 25;
 
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
         public GameObject barriers;
 
-        public Thing ThingOfInterest
-        {
-            get { return _thingOfInterest; }
-            set
-            {
-                _thingOfInterest = value;
-                if (_thingOfInterest != null)
-                {
-                    manager.SetLookTarget(_thingOfInterest.transform);
-                }
-            }
-        }
-
         internal const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
-        internal Quaternion targetRotation;
-        internal float timeToNextWanderPathChange = 3;
-        private float timeLeftLookingAtObject = float.NegativeInfinity;
         private List<Thing> visitedThings = new List<Thing>();
+        private Thing _thingOfInterest;
+        private float timeLeftLookingAtObject = float.NegativeInfinity;
+        internal float timeToNextWanderPathChange = 0;
+        
+        private Transform target; // the current target that we are moving towards
+        private RobotMovementController pathfinding;
+        private Transform wanderTarget;
+
+        new public AIMovementControllerSO MovementController
+        {
+            get { return (AIMovementControllerSO)_movementController; }
+        }
 
         override internal void Awake()
         {
@@ -94,12 +64,46 @@ namespace wizardscode.digitalpainting.agent
                 Debug.LogWarning(gameObject.name + " is an AI Agent, but it did not have rigidbody. One has been added automatically so that the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'. Consider adding one.");
             }
 
-            Random.InitState((int)System.DateTime.Now.Ticks);
+            pathfinding = GetComponent<RobotMovementController>();
+            if (pathfinding == null)
+            {
+                Debug.LogWarning("No RobotMovementController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
+                pathfinding = gameObject.AddComponent<RobotMovementController>();
+            }
         }
 
         internal void Start()
         {
             ConfigureBarriers();
+        }
+
+        public Thing ThingOfInterest
+        {
+            get { return _thingOfInterest; }
+            set
+            {
+                _thingOfInterest = value;
+                if (_thingOfInterest != null)
+                {
+                    manager.SetLookTarget(_thingOfInterest.transform);
+                }
+            }
+        }
+        internal void UpdatePointOfInterest()
+        {
+            if (MovementController.seekPointsOfInterest)
+            {
+                // Look for points of interest
+                if (ThingOfInterest == null && Random.value <= 0.001)
+                {
+                    Thing poi = FindPointOfInterest();
+                    if (poi != null)
+                    {
+                        ThingOfInterest = poi;
+                        manager.SetLookTarget(ThingOfInterest.transform);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -117,78 +121,138 @@ namespace wizardscode.digitalpainting.agent
             }
         }
 
-        internal override void Update()
+        override internal void Update()
         {
-            Vector3 position = transform.position;
-            Quaternion rotation = transform.rotation;
-            if (!isFlyByWire)
+            if (ThingOfInterest == null)
             {
-                base.Update();
+                UpdatePointOfInterest();
+            }
+
+            if (ThingOfInterest != null) // Update POI doesn't always find something
+            {
+                target = ThingOfInterest.AgentViewingTransform;
+
+                if (Vector3.Distance(transform.position, target.position) > ThingOfInterest.distanceToTriggerViewingCamera)
+                {
+                    Move();
+                }
+                else
+                {
+                    ViewPOI();
+                }
             }
             else
             {
-                MakeNextMove();
+                target = null;
+                Move();
             }
-
-            UpdatePointOfInterest();
         }
 
-        internal void UpdatePointOfInterest()
+        /// <summary>
+        /// Typically the Move method is called from the Update method of the agent controller.
+        /// It is responsible for making a decision about the agents next move and acting upon
+        /// that decision.
+        /// </summary>
+        private void Move()
         {
-            // Look for points of interest
-            if (ThingOfInterest == null && Random.value <= 0.001)
+            if (target != null)
             {
-                Thing poi = FindPointOfInterest();
-                if (poi != null)
+                if (!GameObject.ReferenceEquals(pathfinding.Target, target))
                 {
-                    ThingOfInterest = poi;
-                    manager.SetLookTarget(ThingOfInterest.transform);
+                    pathfinding.Target = target;
+                    timeToNextWanderPathChange = 0;
+                    return;
+                }
+            }
+            else
+            {
+                UpdateWanderTarget();
+
+                if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
+                {
+                    UpdateWanderTarget();
                 }
             }
         }
 
         /// <summary>
-        /// Sets up the state of the agent such that the next movement can be made by changing position and rotation of the agent
+        /// Update the wander target, if it is time to do so.
+        /// A new position for the target is chosen within a cone defined by the
+        /// minAngleOfRandomPathChange and maxAngleOfRandomPathChange. Optionally,
+        /// the cone can extend behind the current agent, which has the effect of 
+        /// turning the agent around.
         /// </summary>
-        internal void MakeNextMove()
+        /// <param name="turnAround">Position the target behind the agent. By default this is false.</param>
+        private void UpdateWanderTarget()
         {
-            if (ThingOfInterest != null)
+            if (wanderTarget == null)
             {
-                targetRotation = Quaternion.LookRotation(ThingOfInterest.AgentViewingTransform.position - transform.position, Vector3.up);
+                wanderTarget = ObjectPool.Instance.GetFromPool().transform;
             }
-            else
+
+            timeToNextWanderPathChange -= Time.deltaTime;
+            if (timeToNextWanderPathChange < 0)
             {
-                // add some randomness to the flight 
-                timeToNextWanderPathChange -= Time.deltaTime;
-                if (timeToNextWanderPathChange <= 0)
+                Vector3 position = GetValidWanderPosition(transform, 0);
+
+                if (position == Vector3.zero)
                 {
-                    float rotation = Random.Range(minAngleOfRandomPathChange, maxAngleOfRandomPathChange);
-                    Vector3 newRotation = targetRotation.eulerAngles;
-                    newRotation.y += rotation;
-                    targetRotation = Quaternion.Euler(newRotation);
-                    timeToNextWanderPathChange = Random.Range(minTimeBetweenRandomPathChanges, maxTimeBetweenRandomPathChanges);
+                    // Was unable to find a valid position in a few tries so skipping for now, will retry on next frame
+                    Debug.LogWarning("Unable to find a valid wander target");
+                    return;
                 }
+
+                wanderTarget.position = position;
+
+                pathfinding.Target = wanderTarget;
+                timeToNextWanderPathChange = Random.Range(MovementController.minTimeBetweenRandomPathChanges, MovementController.maxTimeBetweenRandomPathChanges);
+            }
+        }
+
+        private Vector3 GetValidWanderPosition(Transform transform, int attemptCount)
+        {
+            int maxAttempts = 6;
+            bool turnAround = false;
+
+            attemptCount++;
+            if (attemptCount > maxAttempts / 2)
+            {
+                turnAround = true;
+            }
+            else if (attemptCount > maxAttempts)
+            {
+                return Vector3.zero;
             }
 
-            Vector3 position = transform.position;
-            if (ThingOfInterest != null && Vector3.Distance(position, ThingOfInterest.AgentViewingTransform.position) > ThingOfInterest.distanceToTriggerViewingCamera)
+            Vector3 position;
+            float minDistance = MovementController.minDistanceOfRandomPathChange;
+            float maxDistance = MovementController.maxDistanceOfRandomPathChange;
+
+            Quaternion randAng;
+            if (!turnAround)
             {
-                position += transform.forward * normalMovementSpeed * Time.deltaTime;
-            }
-            else if (ThingOfInterest != null)
-            {
-                ViewPOI();
+                randAng = Quaternion.Euler(0, Random.Range(MovementController.minAngleOfRandomPathChange, MovementController.maxAngleOfRandomPathChange), 0);
             }
             else
             {
-                // calculate the new position and height
-                position += transform.forward * normalMovementSpeed * Time.deltaTime;
-                float desiredHeight = Terrain.activeTerrain.SampleHeight(position) + heightOffset;
-                position.y += (desiredHeight - position.y) * Time.deltaTime;
+                randAng = Quaternion.Euler(0, Random.Range(180 - MovementController.minAngleOfRandomPathChange, 180 + MovementController.maxAngleOfRandomPathChange), 0);
+                minDistance = maxDistance;
+            }
+            transform.rotation = transform.rotation * randAng;
+            position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
+
+            // calculate the new height 
+            float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+            float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
+            position.y = newY;
+
+            if (attemptCount <= maxAttempts && !pathfinding.Octree.IsTraversableCell(position))
+            {
+                // Debug.LogWarning("Attempt " + attemptCount + " invalid wander location: " + position);
+                position = GetValidWanderPosition(transform, attemptCount);
             }
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            transform.position = position;
+            return position;
         }
 
         /// <summary>
@@ -203,15 +267,12 @@ namespace wizardscode.digitalpainting.agent
 
             CinemachineVirtualCamera virtualCamera = ThingOfInterest.virtualCamera;
             virtualCamera.enabled = true;
-            
+
             timeLeftLookingAtObject -= Time.deltaTime;
             if (timeLeftLookingAtObject < 0)
             {
                 // Remember we have been here so we don't come again
                 visitedThings.Add(ThingOfInterest);
-
-                // when we start moving again move away from the object as we are pretty close by now and might move into it
-                targetRotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
 
                 // we no longer care about this thing so turn the camera off and don't focus on it anymore
                 ThingOfInterest = null;
@@ -238,11 +299,6 @@ namespace wizardscode.digitalpainting.agent
                 }
             }
             return null;
-        }
-
-        void OnCollisionEnter(Collision collision)
-        {
-            targetRotation = Quaternion.LookRotation(home.transform.position - transform.position, Vector3.up);
         }
     }
 }

@@ -9453,27 +9453,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1544121714815300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6c6c092b84ff8468c3f99ef2097313, type: 3}
+  m_Script: {fileID: 11500000, guid: 81b9485c0356f994fa58af0adcee9283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalMovementSpeed: 1
-  fastMovementFactor: 4
-  slowMovementFactor: 0.2
-  climbSpeed: 3
-  heightOffset: 1.8
-  rotationSpeed: 0.2
+  _movementController: {fileID: 11400000, guid: 854a2540127fa784e81c047f97fb3a9e,
+    type: 2}
   mouseLookMode: 2
   mouseLookSensitivity: 100
   home: {fileID: 0}
-  isFlyByWire: 1
-  _thingOfInterest: {fileID: 0}
   detectionRange: 50
-  minTimeBetweenRandomPathChanges: 5
-  maxTimeBetweenRandomPathChanges: 30
-  minAngleOfRandomPathChange: -25
-  maxAngleOfRandomPathChange: 25
-  minDistanceOfRandomPathChange: 15
-  maxDistanceOfRandomPathChange: 40
   barriers: {fileID: 0}
 --- !u!114 &114743800790520494
 MonoBehaviour:
