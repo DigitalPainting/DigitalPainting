@@ -43,13 +43,10 @@ namespace wizardscode.digitalpainting
             CreateCamera();
             for (int i = 0; i < agentObjectDefs.Length; i++)
             {
+                BaseAgentController agent = CreateAgent("Agent: " + i + " " + agentObjectDefs[i].prefab.name, agentObjectDefs[i]);
                 if (i == 0)
                 {
-                    AgentWithFocus = CreateAgent(agentObjectDefs[i]);
-                }
-                else
-                {
-                    CreateAgent(agentObjectDefs[i]);
+                    AgentWithFocus = agent;
                 }
             }
         }
@@ -96,9 +93,10 @@ namespace wizardscode.digitalpainting
         /// Create an agent.
         /// </summary>
         /// <returns></returns>
-        private BaseAgentController CreateAgent(AgentScriptableObject def)
+        private BaseAgentController CreateAgent(string name, AgentScriptableObject def)
         {
             GameObject agent = GameObject.Instantiate(def.prefab).gameObject;
+            agent.name = name;
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
 
             Renderer renderer = agent.GetComponent<Renderer>();

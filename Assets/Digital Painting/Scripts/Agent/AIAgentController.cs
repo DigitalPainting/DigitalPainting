@@ -105,11 +105,17 @@ namespace wizardscode.digitalpainting.agent
                     if (poi != null)
                     {
                         ThingOfInterest = poi;
-                        manager.SetLookTarget(ThingOfInterest.transform);
+                        if (GameObject.ReferenceEquals(manager.AgentWithFocus, gameObject))
+                        {
+                            manager.SetLookTarget(ThingOfInterest.transform);
+                        }
                     }
                     else
                     {
-                        manager.SetLookTarget(null);
+                        if (GameObject.ReferenceEquals(manager.AgentWithFocus, gameObject))
+                        {
+                            manager.SetLookTarget(null);
+                        }
                     }
                 }
             }
