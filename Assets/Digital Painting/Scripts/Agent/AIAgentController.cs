@@ -87,8 +87,13 @@ namespace wizardscode.digitalpainting.agent
                 {
                     manager.SetLookTarget(_thingOfInterest.transform);
                 }
+                else
+                {
+                    manager.SetLookTarget(null);
+                }
             }
         }
+
         internal void UpdatePointOfInterest()
         {
             if (MovementController.seekPointsOfInterest)
@@ -101,6 +106,10 @@ namespace wizardscode.digitalpainting.agent
                     {
                         ThingOfInterest = poi;
                         manager.SetLookTarget(ThingOfInterest.transform);
+                    }
+                    else
+                    {
+                        manager.SetLookTarget(null);
                     }
                 }
             }
@@ -265,8 +274,11 @@ namespace wizardscode.digitalpainting.agent
                 timeLeftLookingAtObject = ThingOfInterest.timeToLookAtObject;
             }
 
-            CinemachineVirtualCamera virtualCamera = ThingOfInterest.virtualCamera;
-            virtualCamera.enabled = true;
+            // if we are not currently focusing on this game object don't take control of the camera
+            if (!GameObject.ReferenceEquals(manager.AgentWithFocus, gameObject))
+            {
+                ThingOfInterest.virtualCamera.enabled = true;
+            }
 
             timeLeftLookingAtObject -= Time.deltaTime;
             if (timeLeftLookingAtObject < 0)
@@ -275,12 +287,16 @@ namespace wizardscode.digitalpainting.agent
                 visitedThings.Add(ThingOfInterest);
 
                 // we no longer care about this thing so turn the camera off and don't focus on it anymore
+                ThingOfInterest.virtualCamera.enabled = false;
                 ThingOfInterest = null;
                 timeLeftLookingAtObject = float.NegativeInfinity;
-                virtualCamera.enabled = false;
             }
         }
 
+        /// <summary>
+        /// Get a point of interest for the agent to explore.
+        /// </summary>
+        /// <returns>Point of Interest to explore or null (if things of interest exist).</returns>
         Thing FindPointOfInterest()
         {
             Collider[] things = Physics.OverlapSphere(transform.position, detectionRange);
