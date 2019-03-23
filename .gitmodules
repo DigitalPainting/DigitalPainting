@@ -1,0 +1,3 @@
+[submodule "Assets/ScriptableObject-Architecture"]
+	path = Assets/ScriptableObject-Architecture
+	url = git@github.com:rgardler/ScriptableObject-Architecture.git
