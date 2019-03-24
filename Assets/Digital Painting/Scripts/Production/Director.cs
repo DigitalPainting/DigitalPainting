@@ -12,12 +12,10 @@ namespace wizardscode.production
     /// /// </summary>
     public class Director : MonoBehaviour
     {
-        [SerializeField]
-        [Tooltip("The agent that currently has focus.")]
+        [SerializeField] [Tooltip("The SO Variable Reference indicating which agent currently has focus.")]
         private BaseAgentControllerReference _agentWithFocus;
-        [SerializeField]
-        [Tooltip("Main Cinemachine camera rig.")]
-        private CinemachineVirtualCameraBase cameraRig;
+        [SerializeField] [Tooltip("Main Cinemachine camera rig. If this is left as a null then a Default follow camera setup will be created.")]
+        private CinemachineVirtualCameraBase defaultCameraRig;
 
         private CameraReference _mainCameraReference;
         [SerializeField]
@@ -35,23 +33,6 @@ namespace wizardscode.production
             }
         }
 
-        public void OnCameraPriorityChange()
-        {
-            int highestPri = -1;
-            CinemachineVirtualCameraBase selectedVCam = null;
-
-            for (int i = _vCams.Length - 1; i >= 0; i--)
-            {
-                if (highestPri < _vCams[i].m_Priority)
-                {
-                    highestPri = _vCams[i].m_Priority;
-                    selectedVCam = _vCams[i];
-                }
-            }
-
-            selectedVCam.LookAt = _agentWithFocus.Value.transform;
-        }
-
         private void Awake()
         {
             SetupMainCamera();
@@ -59,8 +40,8 @@ namespace wizardscode.production
 
         public void OnAgentWithFocusChanged()
         {
-            cameraRig.Follow = _agentWithFocus.Value.transform;
-            cameraRig.LookAt = _agentWithFocus.Value.transform;
+            defaultCameraRig.Follow = _agentWithFocus.Value.transform;
+            defaultCameraRig.LookAt = _agentWithFocus.Value.transform;
         }
 
         /// <summary>
@@ -69,6 +50,19 @@ namespace wizardscode.production
         /// </summary>
         private void SetupMainCamera()
         {
+            if (defaultCameraRig == null)
+            {
+                GameObject go = new GameObject("Default follow ClearShot");
+                defaultCameraRig = go.AddComponent<CinemachineClearShot>();
+                defaultCameraRig.m_Priority = 100;
+
+                go = new GameObject("Default follow Virtual Camera");
+                go.transform.SetParent(defaultCameraRig.transform);
+                CinemachineVirtualCamera vcam = go.AddComponent<CinemachineVirtualCamera>();
+                vcam.AddCinemachineComponent<CinemachineTransposer>();
+                vcam.AddCinemachineComponent<CinemachineComposer>();
+            }
+
             Camera camera = Camera.main;
             CinemachineBrain brain = camera.GetComponent<CinemachineBrain>();
             if (brain == null)

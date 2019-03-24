@@ -22,12 +22,13 @@ namespace wizardscode.digitalpainting
         /// <summary>
         /// Get or set the agent that has the current focus of the camera.
         /// </summary>
-        [Obsolete("Use SO Architecture variable CurrentAgentWithFocus instead.")]
+        [Obsolete("Use the SO Architecture variable AgehtWithFocus instead.")]
         public BaseAgentController AgentWithFocus {
             get { return _agentWithFocus.Value; }
             set
             {
                 _agentWithFocus.Value = value;
+                _onChangeFocusAgentEvent.Raise();
             }
         }
 

@@ -15,7 +15,7 @@ namespace wizardscode.production
     /// </summary>
     public class CameraTrigger : MonoBehaviour
     {
-        [Header("Agent Interaction")]
+        [Header("Trigger Reaction")]
         [SerializeField]
         [Tooltip("Virtual Camera to use in this trigger zone. If the this collider is triggered currently in focus agent then the camera will switch to this one, with the LookAt set to the agent.")]
         private CinemachineVirtualCamera _virtualCamera;
@@ -64,7 +64,7 @@ namespace wizardscode.production
             if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
             {
                 _virtualCamera.m_Priority += 100;
-                _onEnterEvent.Raise();
+                if (_onEnterEvent != null) _onEnterEvent.Raise();
             }
         }
 
@@ -74,7 +74,7 @@ namespace wizardscode.production
             {
                 _virtualCamera.enabled = false;
                 _virtualCamera.m_Priority -= 100;
-                _onExitEvent.Raise();
+                if (_onEnterEvent != null) _onExitEvent.Raise();
             }
         }
     }
