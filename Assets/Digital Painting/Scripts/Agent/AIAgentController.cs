@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.environment;
+using wizardscode.production;
 using wizardscode.utility;
 
 namespace wizardscode.digitalpainting.agent
@@ -11,11 +12,12 @@ namespace wizardscode.digitalpainting.agent
     {
         [Tooltip("The range the agent will use to detect things in its environment")]
         public float detectionRange = 50;
+        [SerializeField]
 
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
         public GameObject barriers;
-
+        
         internal const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
         private List<Thing> visitedThings = new List<Thing>();
@@ -83,14 +85,6 @@ namespace wizardscode.digitalpainting.agent
             set
             {
                 _thingOfInterest = value;
-                if (_thingOfInterest != null)
-                {
-                    manager.SetLookTarget(_thingOfInterest.transform);
-                }
-                else
-                {
-                    manager.SetLookTarget(null);
-                }
             }
         }
 
@@ -102,21 +96,6 @@ namespace wizardscode.digitalpainting.agent
                 if (ThingOfInterest == null && Random.value <= 0.001)
                 {
                     Thing poi = FindPointOfInterest();
-                    if (poi != null)
-                    {
-                        ThingOfInterest = poi;
-                        if (GameObject.ReferenceEquals(manager.AgentWithFocus, gameObject))
-                        {
-                            manager.SetLookTarget(ThingOfInterest.transform);
-                        }
-                    }
-                    else
-                    {
-                        if (GameObject.ReferenceEquals(manager.AgentWithFocus, gameObject))
-                        {
-                            manager.SetLookTarget(null);
-                        }
-                    }
                 }
             }
         }

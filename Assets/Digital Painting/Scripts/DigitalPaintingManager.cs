@@ -1,91 +1,46 @@
 ﻿using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
+using Random = UnityEngine.Random;
 
 namespace wizardscode.digitalpainting
 {
     public class DigitalPaintingManager : MonoBehaviour
     {
-        [Tooltip("The clear shot camera rig prefab to use. If this is null a Clearshot camera will be look for in the scene.")]
-        public Cinemachine.CinemachineClearShot cameraRigPrefab;
-        [Tooltip("The Camera prefab to use if no main camera exists in the scene.")]
-        public Camera cameraPrefab;
         [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
         public AgentScriptableObject[] agentObjectDefs;
 
-        private Cinemachine.CinemachineClearShot _clearshot;
+        [SerializeField][Tooltip("The agent that currently has focus.")]
+        private BaseAgentControllerReference _agentWithFocus;
 
-        private BaseAgentController _agent;
+        private BaseAgentControllerGameEvent _onChangeFocusAgentEvent = default(BaseAgentControllerGameEvent);
+
         /// <summary>
         /// Get or set the agent that has the current focus of the camera.
         /// </summary>
+        [Obsolete("Use SO Architecture variable CurrentAgentWithFocus instead.")]
         public BaseAgentController AgentWithFocus {
-            get { return _agent; }
+            get { return _agentWithFocus.Value; }
             set
             {
-                _agent = value;
-                _clearshot.Follow = _agent.transform;
-                _clearshot.LookAt = _agent.transform;
+                _agentWithFocus.Value = value;
             }
-        }
-
-        public void SetCameraLookTarget(Transform lookAt)
-        {
-            _clearshot.LookAt = lookAt;
         }
 
         void Awake()
         {
             SetupBarriers();
-            CreateCamera();
             for (int i = 0; i < agentObjectDefs.Length; i++)
             {
                 BaseAgentController agent = CreateAgent("Agent: " + i + " " + agentObjectDefs[i].prefab.name, agentObjectDefs[i]);
                 if (i == 0)
                 {
-                    AgentWithFocus = agent;
+                    _agentWithFocus.Value = agent;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Create the default camera rig. If there is a Main Camera in the scene it will be configured appropriately,
-        /// otherwise a camera will be added to the scene.
-        /// </summary>
-        private void CreateCamera()
-        {
-            _clearshot = FindObjectOfType<CinemachineClearShot>();
-            if (_clearshot == null)
-            {
-                _clearshot = GameObject.Instantiate(cameraRigPrefab);
-            }
-
-            Camera camera = Camera.main;
-            if (camera == null)
-            {
-                camera = Instantiate(cameraPrefab);
-                return;
-            }
-            
-            if (camera.GetComponent<CinemachineBrain>() == null)
-            {
-                Debug.LogWarning("Camera did not have a Cinemachine brain, adding one. You should probably add one to your camera in the scene.");
-                camera.gameObject.AddComponent<CinemachineBrain>();
-            }
-
-            if (camera.GetComponent<AudioListener>() == null)
-            {
-                Debug.LogWarning("Camera did not have an audio listener, adding one. You should probably add one to your camera in the scene.");
-                camera.gameObject.AddComponent<AudioListener>();
-            }
-
-            if (camera.GetComponent<FlareLayer>() == null)
-            {
-                Debug.LogWarning("Camera did not have an Flare Layer, adding one. You should probably add one to your camera in the scene.");
-                camera.gameObject.AddComponent<FlareLayer>();
             }
         }
 

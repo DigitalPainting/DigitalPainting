@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,20 +7,36 @@ using wizardscode.digitalpainting;
 
 namespace wizardscode.production
 {
+    /// <summary>
+    /// CameraTrigger should be attached to any object that has a trigger collider that is designed
+    /// to influence the camera the Director chooses to activate. When something triggers the collider
+    /// the weight for an affected camera will be changed and an event will be fired to inform the director
+    /// of the change.
+    /// </summary>
     public class CameraTrigger : MonoBehaviour
     {
         [Header("Agent Interaction")]
+        [SerializeField]
         [Tooltip("Virtual Camera to use in this trigger zone. If the this collider is triggered currently in focus agent then the camera will switch to this one, with the LookAt set to the agent.")]
-        public CinemachineVirtualCameraBase virtualCamera;
+        private CinemachineVirtualCamera _virtualCamera;
+        [SerializeField]
+        [Tooltip("The GameEvent to fire when the collider is entered.")]
+        private GameEvent _onEnterEvent = default(GameEvent);
+        [SerializeField]
+        [Tooltip("The GameEvent to fire when the collider is exited.")]
+        private GameEvent _onExitEvent = default(GameEvent);
 
         private DigitalPaintingManager _manager;
 
         private void Awake()
         {
-            if (virtualCamera == null)
+            if (_virtualCamera == null)
             {
-                Debug.LogError("You have a `CameraTrigger` component attached to '" + gameObject.name + "' that does not have a Virtual Camera identified. Disabling the trigger.");
-                this.enabled = false;
+                _virtualCamera = gameObject.GetComponent<CinemachineVirtualCamera>();
+                if (_virtualCamera == null) { 
+                    Debug.LogError("You have a `CameraTrigger` component attached to '" + gameObject.name + "' that does not have a Virtual Camera identified and the parent object does not have a Virtual Camera either. Disabling the trigger.");
+                    this.enabled = false;
+                }
             }
 
             bool hasTrigger = false;
@@ -46,8 +63,8 @@ namespace wizardscode.production
         {
             if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
             {
-                virtualCamera.enabled = true;
-                virtualCamera.LookAt = other.gameObject.transform;
+                _virtualCamera.m_Priority += 100;
+                _onEnterEvent.Raise();
             }
         }
 
@@ -55,7 +72,9 @@ namespace wizardscode.production
         {
             if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
             {
-                virtualCamera.enabled = false;
+                _virtualCamera.enabled = false;
+                _virtualCamera.m_Priority -= 100;
+                _onExitEvent.Raise();
             }
         }
     }
