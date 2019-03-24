@@ -20,6 +20,16 @@ namespace wizardscode.production
         [Tooltip("Virtual Camera to use in this trigger zone. If the this collider is triggered currently in focus agent then the camera will switch to this one, with the LookAt set to the agent.")]
         private CinemachineVirtualCamera _virtualCamera;
         [SerializeField]
+        [Tooltip("The base increase in camera priority when this trigger is fired")]
+        [Range(1, 500)]
+        private int basePriorityBoost = 100;
+        [SerializeField]
+        [Tooltip("Should the camera follow the triggering agent?")]
+        private bool followTriggerAgent = false;
+        [SerializeField]
+        [Tooltip("Should the camera look at the triggering agent?")]
+        private bool lookAtTriggerAgent = true;
+        [SerializeField]
         [Tooltip("The GameEvent to fire when the collider is entered.")]
         private GameEvent _onEnterEvent = default(GameEvent);
         [SerializeField]
@@ -63,7 +73,9 @@ namespace wizardscode.production
         {
             if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
             {
-                _virtualCamera.m_Priority += 100;
+                _virtualCamera.m_Priority += basePriorityBoost;
+                if (followTriggerAgent) _virtualCamera.m_Follow = other.gameObject.transform;
+                if (lookAtTriggerAgent) _virtualCamera.m_LookAt = other.gameObject.transform;
                 if (_onEnterEvent != null) _onEnterEvent.Raise();
             }
         }
@@ -72,8 +84,7 @@ namespace wizardscode.production
         {
             if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
             {
-                _virtualCamera.enabled = false;
-                _virtualCamera.m_Priority -= 100;
+                _virtualCamera.m_Priority -= basePriorityBoost;
                 if (_onEnterEvent != null) _onExitEvent.Raise();
             }
         }

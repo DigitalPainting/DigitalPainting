@@ -217,8 +217,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 594432558}
-  - component: {fileID: 594432560}
   - component: {fileID: 594432559}
+  - component: {fileID: 594432560}
   m_Layer: 0
   m_Name: TriggeredCamera 1
   m_TagString: Untagged
@@ -254,6 +254,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 1564012178}
+  basePriorityBoost: 100
+  followTriggerAgent: 1
+  lookAtTriggerAgent: 1
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
 --- !u!65 &594432560
@@ -819,8 +822,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1402095823}
-  - component: {fileID: 1402095825}
   - component: {fileID: 1402095824}
+  - component: {fileID: 1402095825}
   m_Layer: 0
   m_Name: TriggeredCamera 2
   m_TagString: Untagged
@@ -856,6 +859,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 2128974849}
+  basePriorityBoost: 100
+  followTriggerAgent: 1
+  lookAtTriggerAgent: 1
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
 --- !u!65 &1402095825
@@ -880,10 +886,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1523635861}
+  - component: {fileID: 1523635857}
   - component: {fileID: 1523635860}
   - component: {fileID: 1523635859}
   - component: {fileID: 1523635858}
-  - component: {fileID: 1523635857}
   - component: {fileID: 1523635862}
   m_Layer: 0
   m_Name: Cube
@@ -905,6 +911,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 1024515161}
+  basePriorityBoost: 100
+  followTriggerAgent: 0
+  lookAtTriggerAgent: 1
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
 --- !u!65 &1523635858
