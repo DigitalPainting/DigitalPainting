@@ -30,6 +30,9 @@ namespace wizardscode.production
         [Tooltip("Should the camera look at the triggering agent?")]
         private bool lookAtTriggerAgent = true;
         [SerializeField]
+        [Tooltip("Default look at target, only used if the lookAtTriggerAgent property is false.")]
+        private Transform defaultLookAtTarget = null;
+        [SerializeField]
         [Tooltip("The GameEvent to fire when the collider is entered.")]
         private GameEvent _onEnterEvent = default(GameEvent);
         [SerializeField]
@@ -75,7 +78,14 @@ namespace wizardscode.production
             {
                 _virtualCamera.m_Priority += basePriorityBoost;
                 if (followTriggerAgent) _virtualCamera.m_Follow = other.gameObject.transform;
-                if (lookAtTriggerAgent) _virtualCamera.m_LookAt = other.gameObject.transform;
+                if (lookAtTriggerAgent)
+                {
+                    _virtualCamera.m_LookAt = other.gameObject.transform;
+                }
+                else
+                {
+                    _virtualCamera.m_LookAt = defaultLookAtTarget;
+                }
                 if (_onEnterEvent != null) _onEnterEvent.Raise();
             }
         }

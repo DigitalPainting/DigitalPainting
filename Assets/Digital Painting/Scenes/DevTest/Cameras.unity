@@ -257,6 +257,7 @@ MonoBehaviour:
   basePriorityBoost: 100
   followTriggerAgent: 1
   lookAtTriggerAgent: 1
+  defaultLookAtTarget: {fileID: 0}
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
 --- !u!65 &594432560
@@ -754,6 +755,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1024515162}
   - component: {fileID: 1024515161}
+  - component: {fileID: 1024515163}
   m_Layer: 0
   m_Name: CM vcam3
   m_TagString: Untagged
@@ -813,6 +815,36 @@ Transform:
   m_Father: {fileID: 1523635861}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1024515163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024515160}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1
+  m_IgnoreTag: 
+  m_TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_MinimumDistanceFromTarget: 1
+  m_AvoidObstacles: 1
+  m_DistanceLimit: 0
+  m_MinimumOcclusionTime: 0
+  m_CameraRadius: 0.1
+  m_Strategy: 2
+  m_MaximumEffort: 4
+  m_SmoothingTime: 0
+  m_Damping: 0
+  m_DampingWhenOccluded: 0
+  m_OptimalTargetDistance: 3
 --- !u!1 &1402095820
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,6 +894,7 @@ MonoBehaviour:
   basePriorityBoost: 100
   followTriggerAgent: 1
   lookAtTriggerAgent: 1
+  defaultLookAtTarget: {fileID: 0}
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
 --- !u!65 &1402095825
@@ -912,8 +945,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 1024515161}
   basePriorityBoost: 100
-  followTriggerAgent: 0
-  lookAtTriggerAgent: 1
+  followTriggerAgent: 1
+  lookAtTriggerAgent: 0
+  defaultLookAtTarget: {fileID: 1523635861}
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
 --- !u!65 &1523635858
@@ -1000,7 +1034,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 3}
+  m_Size: {x: 10, y: 3, z: 10}
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &1564012176
 GameObject:
@@ -1117,7 +1151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_FollowOffset: {x: 0, y: 0, z: -3}
   m_XDamping: 1
   m_YDamping: 1
   m_ZDamping: 1

@@ -8,7 +8,11 @@ This default camera works pretty well in open spaces, but it can have trouble in
 
 For example, in the main demo scene there is a "maze" that uses a `Cinemachine ClearShot` camera to ensure the agent is always in view. You can use any CineMachine camera, not just a ClearShot. Also, in the `Demo` scene there are come trigger cameras that will be fired when something enters the area they are covering. How trigger cameras work will be describe below.
 
-# How Trigger Cameras Work
+# Test Scene
+
+In the `Scenes/Assets/DevTest` folder you will find a `Cameras` scene. This has a simple scene that is used for testing camera behaviour. In this scene you can find a number of examples of how to use different kinds of camera in your Digital Painting. 
+
+# Trigger Cameras
 
 A trigger camera is a camera that has a trigger collider attached and a `CameraTrigger` component. When something triggers the collider the `CameraTrigger` script adjusts the priority of the specified camera. Cinemachine will then use the priority to decide which camera to use.
 
