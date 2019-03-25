@@ -4095,6 +4095,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b4071a107e79d4e888cb7886f11bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _agentWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
   thingOfInterestDropdown: {fileID: 114495303261267626}
   distanceToThingOfInterestText: {fileID: 114723639686596340}
   addableThingDropdown: {fileID: 114762196426372934}

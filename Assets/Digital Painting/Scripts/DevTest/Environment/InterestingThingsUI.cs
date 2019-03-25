@@ -10,6 +10,9 @@ namespace wizardscode.devtest
     public class InterestingThingsUI : MonoBehaviour
     {
         [Header("User Interface)")]
+        [SerializeField]
+        [Tooltip("A reference to the agent that currently has focus.")]
+        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
         [Tooltip("The thing that the agent is currently interested in")]
         public Dropdown thingOfInterestDropdown;
         [Tooltip("Text object to display distance to current thing of interest.")]
@@ -20,12 +23,10 @@ namespace wizardscode.devtest
         public Thing[] addableThings;
 
         private ThingsManager thingsManager;
-        AIAgentController agent;
 
         private void Start()
         {
             thingsManager = FindObjectOfType<ThingsManager>();
-            agent = GameObject.FindObjectOfType<AIAgentController>();
             PopulateInterestingThingsDropdown();
             PopulateAddableThingsDropdown();
         }
@@ -57,9 +58,10 @@ namespace wizardscode.devtest
         {
             PopulateInterestingThingsDropdown();
 
-            if (agent.ThingOfInterest != null)
+            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            if (agent.PointOfInterest != null)
             {
-                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.ThingOfInterest.AgentViewingTransform.position).ToString();
+                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
             }
             else
             {
@@ -69,9 +71,11 @@ namespace wizardscode.devtest
 
         private void LateUpdate()
         {
-            if (agent.ThingOfInterest != null)
+            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+
+            if (agent.PointOfInterest != null)
             {
-                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.ThingOfInterest) + 1;
+                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
             }
             else
             {
@@ -81,18 +85,22 @@ namespace wizardscode.devtest
 
         public void OnThingSelectionChanged()
         {
+            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+
             if (thingOfInterestDropdown.value == 0)
             {
-                agent.ThingOfInterest = null;
+                agent.PointOfInterest = null;
             }
             else
             {
-                agent.ThingOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
+                agent.PointOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
             }
         }
 
         public void OnAddThingClicked()
         {
+            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+
             Thing newThing = GameObject.Instantiate<Thing>(addableThings[0]);
             newThing.name = "This is " + transform.position.ToString();
             Vector3 position = agent.transform.position;

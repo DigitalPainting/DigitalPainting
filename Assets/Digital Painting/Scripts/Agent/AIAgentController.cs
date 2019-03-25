@@ -20,7 +20,7 @@ namespace wizardscode.digitalpainting.agent
         internal const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
         private List<Thing> visitedThings = new List<Thing>();
-        private Thing _thingOfInterest;
+        private Thing _poi;
         private float timeLeftLookingAtObject = float.NegativeInfinity;
         internal float timeToNextWanderPathChange = 0;
         
@@ -78,12 +78,12 @@ namespace wizardscode.digitalpainting.agent
             ConfigureBarriers();
         }
 
-        public Thing ThingOfInterest
+        public Thing PointOfInterest
         {
-            get { return _thingOfInterest; }
+            get { return _poi; }
             set
             {
-                _thingOfInterest = value;
+                _poi = value;
             }
         }
 
@@ -92,9 +92,9 @@ namespace wizardscode.digitalpainting.agent
             if (MovementController.seekPointsOfInterest)
             {
                 // Look for points of interest
-                if (ThingOfInterest == null && Random.value <= 0.001)
+                if (PointOfInterest == null && Random.value <= 0.001)
                 {
-                    Thing poi = FindPointOfInterest();
+                    PointOfInterest = FindPointOfInterest();
                 }
             }
         }
@@ -116,16 +116,16 @@ namespace wizardscode.digitalpainting.agent
 
         override internal void Update()
         {
-            if (ThingOfInterest == null)
+            if (PointOfInterest == null)
             {
                 UpdatePointOfInterest();
             }
 
-            if (ThingOfInterest != null) // Update POI doesn't always find something
+            if (PointOfInterest != null) // Update POI doesn't always find something
             {
-                target = ThingOfInterest.AgentViewingTransform;
+                target = PointOfInterest.AgentViewingTransform;
 
-                if (Vector3.Distance(transform.position, target.position) > ThingOfInterest.distanceToTriggerViewingCamera)
+                if (Vector3.Distance(transform.position, target.position) > PointOfInterest.distanceToTriggerViewingCamera)
                 {
                     Move();
                 }
@@ -255,18 +255,18 @@ namespace wizardscode.digitalpainting.agent
         {
             if (timeLeftLookingAtObject == float.NegativeInfinity)
             {
-                timeLeftLookingAtObject = ThingOfInterest.timeToLookAtObject;
+                timeLeftLookingAtObject = PointOfInterest.timeToLookAtObject;
             }
 
             timeLeftLookingAtObject -= Time.deltaTime;
             if (timeLeftLookingAtObject < 0)
             {
                 // Remember we have been here so we don't come again
-                visitedThings.Add(ThingOfInterest);
+                visitedThings.Add(PointOfInterest);
 
                 // we no longer care about this thing so turn the camera off and don't focus on it anymore
-                ThingOfInterest.virtualCamera.enabled = false;
-                ThingOfInterest = null;
+                PointOfInterest.virtualCamera.enabled = false;
+                PointOfInterest = null;
                 timeLeftLookingAtObject = float.NegativeInfinity;
             }
         }
