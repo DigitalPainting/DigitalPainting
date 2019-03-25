@@ -28,7 +28,9 @@ namespace wizardscode.digitalpainting
             set
             {
                 _agentWithFocus.Value = value;
-                _onChangeFocusAgentEvent.Raise();
+                if (_onChangeFocusAgentEvent != null) {
+                    _onChangeFocusAgentEvent.Raise();
+                }
             }
         }
 

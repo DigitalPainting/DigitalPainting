@@ -18,8 +18,6 @@ namespace wizardscode.production
         private CinemachineVirtualCameraBase defaultCameraRig;
 
         private CameraReference _mainCameraReference;
-        [SerializeField]
-        private CinemachineVirtualCameraBase[] _vCams;
 
         internal Camera MainCamera
         {

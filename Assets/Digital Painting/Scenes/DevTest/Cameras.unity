@@ -112,102 +112,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &223710395 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1163264246283250, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 682228001}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &223710400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223710395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35ce5860d8156c747a0c777a4fa14bfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DeveloperDescription:
-    _value: 
-  _showDebugFields: 0
-  _enableGizmoDebugging: 1
-  _debugColor: {r: 0, g: 1, b: 1, a: 1}
-  _previouslyRegisteredEvent: {fileID: 0}
-  _event: {fileID: 0}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 223710395}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: BaseAgentControllerUnityEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  _debugValue: {fileID: 0}
---- !u!1 &478642901 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 534104588618770187, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 682228001}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &478642903 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1585729370379257032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-    type: 3}
-  m_PrefabInstance: {fileID: 682228001}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 478642901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cb5ea655ef1be5479758c1adc3e03e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &478642905
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 478642901}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5758ca93461aeeb4589456a052b07d74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DeveloperDescription:
-    _value: 
-  _showDebugFields: 0
-  _enableGizmoDebugging: 1
-  _debugColor: {r: 0, g: 1, b: 1, a: 1}
-  _previouslyRegisteredEvent: {fileID: 11400000, guid: 207794dad31c5df4abf2df624c7c70c0,
-    type: 2}
-  _event: {fileID: 11400000, guid: 207794dad31c5df4abf2df624c7c70c0, type: 2}
-  _response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 478642903}
-        m_MethodName: OnAgentWithFocusChanged
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
 --- !u!1 &594432555
 GameObject:
   m_ObjectHideFlags: 0
@@ -434,15 +338,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 250
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 250
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4980822680671696, guid: 1a97a61a83f662b4489e298cb2027fc5, type: 3}
       propertyPath: m_LocalRotation.x
@@ -842,8 +746,8 @@ MonoBehaviour:
   m_Strategy: 2
   m_MaximumEffort: 4
   m_SmoothingTime: 0
-  m_Damping: 0
-  m_DampingWhenOccluded: 0
+  m_Damping: 2.11
+  m_DampingWhenOccluded: 1.34
   m_OptimalTargetDistance: 3
 --- !u!1 &1402095820
 GameObject:
