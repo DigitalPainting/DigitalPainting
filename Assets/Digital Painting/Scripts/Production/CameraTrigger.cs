@@ -15,34 +15,15 @@ namespace wizardscode.production
     /// </summary>
     public class CameraTrigger : MonoBehaviour
     {
-        [Header("Trigger Reaction")]
         [SerializeField]
         [Tooltip("Virtual Camera to use in this trigger zone. If the this collider is triggered currently in focus agent then the camera will switch to this one, with the LookAt set to the agent.")]
         private CinemachineVirtualCameraBase _virtualCamera;
         [SerializeField]
-        [Tooltip("The base increase in camera priority when this trigger is fired")]
-        [Range(1, 500)]
-        private int basePriorityBoost = 100;
-        [SerializeField]
-        [Tooltip("Should the camera follow the triggering agent?")]
-        private bool followTriggerAgent = false;
-        [SerializeField]
-        [Tooltip("Should the camera look at the triggering agent?")]
-        private bool lookAtTriggerAgent = true;
+        [Tooltip("Configuration for this camera trigger.")]
+        private CameraTriggerConfiguration config;
         [SerializeField]
         [Tooltip("Default look at target, only used if the lookAtTriggerAgent property is false.")]
-        private Transform defaultLookAtTarget = null;
-        [SerializeField]
-        [Tooltip("The GameEvent to fire when the collider is entered.")]
-        private GameEvent _onEnterEvent = default(GameEvent);
-        [SerializeField]
-        [Tooltip("The GameEvent to fire when the collider is exited.")]
-        private GameEvent _onExitEvent = default(GameEvent);
-
-        [Header("System")]
-        [SerializeField]
-        [Tooltip("A reference to the agent that currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
+        private Transform _defaultLookAtTarget = null;
 
         private DigitalPaintingManager _manager;
 
@@ -79,32 +60,32 @@ namespace wizardscode.production
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_agentWithFocus.Value == null) return;
+            if (config.AgentControllerWithFocus == null) return;
 
-            if (GameObject.ReferenceEquals(other.gameObject, _agentWithFocus.Value.gameObject))
+            if (GameObject.ReferenceEquals(other.gameObject, config.AgentControllerWithFocus.gameObject))
             {
-                _virtualCamera.Priority += basePriorityBoost;
-                if (followTriggerAgent) _virtualCamera.Follow = other.gameObject.transform;
-                if (lookAtTriggerAgent)
+                _virtualCamera.Priority += config.PriorityBoost;
+                if (config.FollowTriggerAgent) _virtualCamera.Follow = other.gameObject.transform;
+                if (config.LookAtTriggerAgent)
                 {
                     _virtualCamera.LookAt = other.gameObject.transform;
                 }
                 else
                 {
-                    _virtualCamera.LookAt = defaultLookAtTarget;
+                    _virtualCamera.LookAt = _defaultLookAtTarget;
                 }
-                if (_onEnterEvent != null) _onEnterEvent.Raise();
+                if (config.OnEnterEvent != null) config.OnEnterEvent.Raise();
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (_agentWithFocus.Value == null) return;
+            if (config.AgentControllerWithFocus == null) return;
 
-            if (GameObject.ReferenceEquals(other.gameObject, _agentWithFocus.Value.gameObject))
+            if (GameObject.ReferenceEquals(other.gameObject, config.AgentControllerWithFocus.gameObject))
             {
-                _virtualCamera.m_Priority -= basePriorityBoost;
-                if (_onEnterEvent != null) _onExitEvent.Raise();
+                _virtualCamera.m_Priority -= config.PriorityBoost;
+                if (config.OnEnterEvent != null) config.OnExitEvent.Raise();
             }
         }
     }

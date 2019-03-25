@@ -124,15 +124,7 @@ namespace wizardscode.digitalpainting.agent
             if (PointOfInterest != null) // Update POI doesn't always find something
             {
                 target = PointOfInterest.AgentViewingTransform;
-
-                if (Vector3.Distance(transform.position, target.position) > PointOfInterest.distanceToTriggerViewingCamera)
-                {
-                    Move();
-                }
-                else
-                {
-                    ViewPOI();
-                }
+                Move();
             }
             else
             {
@@ -265,7 +257,6 @@ namespace wizardscode.digitalpainting.agent
                 visitedThings.Add(PointOfInterest);
 
                 // we no longer care about this thing so turn the camera off and don't focus on it anymore
-                PointOfInterest.virtualCamera.enabled = false;
                 PointOfInterest = null;
                 timeLeftLookingAtObject = float.NegativeInfinity;
             }

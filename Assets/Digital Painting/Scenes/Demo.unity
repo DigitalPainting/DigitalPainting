@@ -1872,7 +1872,6 @@ MonoBehaviour:
   isGrounded: 0
   yOffset: 0
   _agentViewingTransform: {fileID: 0}
-  distanceToTriggerViewingCamera: 10
   timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!135 &860275544
@@ -2186,7 +2185,6 @@ MonoBehaviour:
   isGrounded: 0
   yOffset: 0
   _agentViewingTransform: {fileID: 0}
-  distanceToTriggerViewingCamera: 10
   timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!135 &934807355
@@ -2328,7 +2326,6 @@ MonoBehaviour:
   isGrounded: 0
   yOffset: 0.5
   _agentViewingTransform: {fileID: 0}
-  distanceToTriggerViewingCamera: 3
   timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!65 &940597283
@@ -2774,7 +2771,7 @@ GameObject:
   - component: {fileID: 1194567440}
   - component: {fileID: 1194567439}
   m_Layer: 0
-  m_Name: Bouncing Sphere Trigger
+  m_Name: Approaching Bouncing Sphere (Trigger)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3237,7 +3234,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468070949}
-  m_LocalRotation: {x: -0.18716544, y: 0.19414411, z: 0.037764117, w: 0.96221155}
+  m_LocalRotation: {x: -0.18716544, y: 0.19414414, z: 0.037764125, w: 0.96221155}
   m_LocalPosition: {x: -0.72155285, y: -0.14, z: -1.7152786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3778,7 +3775,6 @@ MonoBehaviour:
   isGrounded: 1
   yOffset: 0.5
   _agentViewingTransform: {fileID: 0}
-  distanceToTriggerViewingCamera: 3
   timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!65 &1771391782
@@ -3874,7 +3870,6 @@ MonoBehaviour:
   isGrounded: 1
   yOffset: 0.5
   _agentViewingTransform: {fileID: 0}
-  distanceToTriggerViewingCamera: 3
   timeToLookAtObject: 15
   virtualCamera: {fileID: 0}
 --- !u!65 &1788803318
@@ -4486,6 +4481,7 @@ GameObject:
   - component: {fileID: 1949648692}
   - component: {fileID: 1949648691}
   - component: {fileID: 1949648690}
+  - component: {fileID: 1949648694}
   m_Layer: 0
   m_Name: Cylinder with Camera
   m_TagString: Untagged
@@ -4523,7 +4519,6 @@ MonoBehaviour:
   isGrounded: 0
   yOffset: 0
   _agentViewingTransform: {fileID: 0}
-  distanceToTriggerViewingCamera: 5
   timeToLookAtObject: 15
   virtualCamera: {fileID: 1468070951}
 --- !u!136 &1949648691
@@ -4585,6 +4580,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1949648688}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &1949648694
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949648688}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1999598054
 GameObject:
   m_ObjectHideFlags: 0

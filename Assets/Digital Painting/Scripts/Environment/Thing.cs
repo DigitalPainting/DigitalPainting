@@ -22,8 +22,6 @@ namespace wizardscode.environment
         [Header("Viewing")]
         [Tooltip("Position and rotation the agent should adopt when viewing this thing. If null a location will be automatically created.")]
         public Transform _agentViewingTransform;
-        [Tooltip("Distance at which to switch to the viewing camera")]
-        public float distanceToTriggerViewingCamera = 10;
         [Tooltip("Time camera should spend paused looking at an object of interest when within range.")]
         public float timeToLookAtObject = 15;
         [Tooltip("Virtual camera to use when viewing this thing. If null an attempt will be made to automatically place one in a sensible position.")]
@@ -73,12 +71,22 @@ namespace wizardscode.environment
 
         private void Awake()
         {
-            if (GetComponent<Collider>() == null)
+            Collider[] cols = GetComponents<Collider>();
+            bool hasTrigger = false;
+            for (int i = 0; i < cols.Length; i++)
             {
+                if (cols[i].isTrigger)
+                {
+                    hasTrigger = true;
+                    break;
+                }
+            }
+            if (!hasTrigger) { 
+                Debug.LogWarning(name + " does not have a collider with trigger enabled, creating a default one that is twice the size of the Thing. Consider adding one that is an optimal size.");
                 BoxCollider collider = gameObject.AddComponent<BoxCollider>();
                 collider.isTrigger = true;
                 Bounds bounds = GetChildRendererBounds(gameObject);
-                collider.size = bounds.size;
+                collider.size = bounds.size * 2;
             }
 
             if (isGrounded)
