@@ -264,7 +264,14 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 2106890847}
   m_ShowDebugText: 0
-  m_ChildCameras: []
+  m_ChildCameras:
+  - {fileID: 758891311}
+  - {fileID: 1834471046}
+  - {fileID: 1554019884}
+  - {fileID: 996029609}
+  - {fileID: 1481543696}
+  - {fileID: 185281329}
+  - {fileID: 670478681}
   m_ActivateAfter: 0
   m_MinDuration: 3
   m_RandomizeChoice: 1
@@ -2806,6 +2813,10 @@ MonoBehaviour:
   defaultLookAtTarget: {fileID: 934807353}
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
+  _agentWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 0}
 --- !u!135 &1194567440
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4833,6 +4844,10 @@ MonoBehaviour:
   defaultLookAtTarget: {fileID: 0}
   _onEnterEvent: {fileID: 0}
   _onExitEvent: {fileID: 0}
+  _agentWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
 --- !u!1 &2110444810
 GameObject:
   m_ObjectHideFlags: 0

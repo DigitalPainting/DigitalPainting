@@ -12,7 +12,6 @@ namespace wizardscode.digitalpainting.agent
     {
         [Tooltip("The range the agent will use to detect things in its environment")]
         public float detectionRange = 50;
-        [SerializeField]
 
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
@@ -257,12 +256,6 @@ namespace wizardscode.digitalpainting.agent
             if (timeLeftLookingAtObject == float.NegativeInfinity)
             {
                 timeLeftLookingAtObject = ThingOfInterest.timeToLookAtObject;
-            }
-
-            // if we are not currently focusing on this game object don't take control of the camera
-            if (!GameObject.ReferenceEquals(manager.AgentWithFocus, gameObject))
-            {
-                ThingOfInterest.virtualCamera.enabled = true;
             }
 
             timeLeftLookingAtObject -= Time.deltaTime;

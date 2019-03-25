@@ -39,6 +39,11 @@ namespace wizardscode.production
         [Tooltip("The GameEvent to fire when the collider is exited.")]
         private GameEvent _onExitEvent = default(GameEvent);
 
+        [Header("System")]
+        [SerializeField]
+        [Tooltip("A reference to the agent that currently has focus.")]
+        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
+
         private DigitalPaintingManager _manager;
 
         private void Awake()
@@ -74,7 +79,9 @@ namespace wizardscode.production
 
         private void OnTriggerEnter(Collider other)
         {
-            if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
+            if (_agentWithFocus.Value == null) return;
+
+            if (GameObject.ReferenceEquals(other.gameObject, _agentWithFocus.Value.gameObject))
             {
                 _virtualCamera.Priority += basePriorityBoost;
                 if (followTriggerAgent) _virtualCamera.Follow = other.gameObject.transform;
@@ -92,7 +99,9 @@ namespace wizardscode.production
 
         private void OnTriggerExit(Collider other)
         {
-            if (GameObject.ReferenceEquals(other.gameObject, _manager.AgentWithFocus.gameObject))
+            if (_agentWithFocus.Value == null) return;
+
+            if (GameObject.ReferenceEquals(other.gameObject, _agentWithFocus.Value.gameObject))
             {
                 _virtualCamera.m_Priority -= basePriorityBoost;
                 if (_onEnterEvent != null) _onExitEvent.Raise();

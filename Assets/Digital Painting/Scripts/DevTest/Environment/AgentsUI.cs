@@ -12,6 +12,11 @@ namespace wizardscode.devtest
     {
         [Tooltip("The Agent that is currently focused")]
         public Dropdown agentDropdown;
+
+        [SerializeField]
+        [Tooltip("A reference to the agent that currently has focus.")]
+        private BaseAgentControllerReference _agentControllerWithFocus = default(BaseAgentControllerReference);
+
         private DigitalPaintingManager manager;
         private BaseAgentController[] agents;
 
@@ -35,12 +40,12 @@ namespace wizardscode.devtest
 
         private void LateUpdate()
         {
-            agentDropdown.value = Array.FindIndex(agents, x => x == manager.AgentWithFocus);
+            agentDropdown.value = Array.FindIndex(agents, x => x == _agentControllerWithFocus.Value);
         }
 
         public void OnAgentSelectionChanged()
         {
-            manager.AgentWithFocus = agents[agentDropdown.value];
+            _agentControllerWithFocus.Value = agents[agentDropdown.value];
         }
     }
 }

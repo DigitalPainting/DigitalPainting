@@ -6540,6 +6540,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentDropdown: {fileID: 5935386415918984935}
+  _agentControllerWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
 --- !u!1 &3684827055911535679
 GameObject:
   m_ObjectHideFlags: 0

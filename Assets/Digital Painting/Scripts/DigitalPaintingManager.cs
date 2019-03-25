@@ -14,25 +14,10 @@ namespace wizardscode.digitalpainting
         [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
         public AgentScriptableObject[] agentObjectDefs;
 
-        [SerializeField][Tooltip("The agent that currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus;
+        [SerializeField][Tooltip("A reference to the agent that currently has focus.")]
+        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
 
         private BaseAgentControllerGameEvent _onChangeFocusAgentEvent = default(BaseAgentControllerGameEvent);
-
-        /// <summary>
-        /// Get or set the agent that has the current focus of the camera.
-        /// </summary>
-        [Obsolete("Use the SO Architecture variable AgehtWithFocus instead.")]
-        public BaseAgentController AgentWithFocus {
-            get { return _agentWithFocus.Value; }
-            set
-            {
-                _agentWithFocus.Value = value;
-                if (_onChangeFocusAgentEvent != null) {
-                    _onChangeFocusAgentEvent.Raise();
-                }
-            }
-        }
 
         void Awake()
         {

@@ -19,10 +19,10 @@ public class RobotMovementController : MonoBehaviour
     [SerializeField] private GameObject playerObject;
     private Octree.PathRequest oldPath;
     private Octree.PathRequest newPath;
-    private Rigidbody rigidbody;
+    new private Rigidbody rigidbody;
     private Vector3 currentDestination;
     private Vector3 lastDestination;
-    private Collider collider;
+    new private Collider collider;
     
     [Header("Height")]
     [Tooltip("preferred height to fly at.")]
