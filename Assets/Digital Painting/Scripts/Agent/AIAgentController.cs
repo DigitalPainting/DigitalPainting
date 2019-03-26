@@ -148,6 +148,11 @@ namespace wizardscode.digitalpainting.agent
                     timeToNextWanderPathChange = 0;
                     return;
                 }
+
+                if (Vector3.Distance(transform.position, target.position) <= pathfinding.minReachDistance)
+                {
+                    ViewPOI();
+                }
             }
             else
             {
