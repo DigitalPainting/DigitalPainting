@@ -2949,9 +2949,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6db0107b67844794db0bd40d39e87b6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _virtualCamera: {fileID: 0}
+  _virtualCamera: {fileID: 1700707622}
   config: {fileID: 11400000, guid: 851e0bd8469e40e408c004d8f052c4d7, type: 2}
-  _defaultLookAtTarget: {fileID: 0}
+  _defaultLookAtTarget: {fileID: 1816026079}
 --- !u!135 &1194567440
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -17,11 +17,16 @@ namespace wizardscode.digitalpainting
         [SerializeField][Tooltip("A reference to the agent that currently has focus.")]
         private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
 
-        private BaseAgentControllerGameEvent _onChangeFocusAgentEvent = default(BaseAgentControllerGameEvent);
-
+        private Octree octree;
+        
         void Awake()
         {
             SetupBarriers();
+            octree = GameObject.FindObjectOfType<Octree>();
+        }
+
+        private void Start()
+        {
             for (int i = 0; i < agentObjectDefs.Length; i++)
             {
                 BaseAgentController agent = CreateAgent("Agent: " + i + " " + agentObjectDefs[i].prefab.name, agentObjectDefs[i]);
@@ -43,20 +48,31 @@ namespace wizardscode.digitalpainting
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
 
             Renderer renderer = agent.GetComponent<Renderer>();
-            if (renderer != null) {
+            if (renderer != null)
+            {
                 renderer.enabled = def.render;
             }
 
+            Vector3 position = GetSpawnPositionCandidate(controller);
+            while(!octree.IsTraversableCell(position))
+            {
+                position = GetSpawnPositionCandidate(controller);
+            }
+            agent.transform.position = position;
+
+            return controller;
+        }
+
+        private static Vector3 GetSpawnPositionCandidate(BaseAgentController controller)
+        {
             float border = Terrain.activeTerrain.terrainData.size.x / 10;
             float x = Random.Range(border, Terrain.activeTerrain.terrainData.size.x - border);
             float z = Random.Range(border, Terrain.activeTerrain.terrainData.size.z - border);
             Vector3 position = new Vector3(x, 0, z);
 
             float y = Terrain.activeTerrain.SampleHeight(position);
-            position.y = y + controller.MovementController.heightOffset;            
-            agent.transform.position = position;
-
-            return controller;
+            position.y = y + controller.MovementController.heightOffset;
+            return position;
         }
 
         /// <summary>
