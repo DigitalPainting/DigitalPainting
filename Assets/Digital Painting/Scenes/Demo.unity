@@ -1716,7 +1716,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656061160}
-  m_LocalRotation: {x: -0.18716541, y: 0.19414413, z: 0.037764106, w: 0.96221155}
+  m_LocalRotation: {x: -0.18716541, y: 0.19414411, z: 0.037764102, w: 0.96221155}
   m_LocalPosition: {x: -0.72155285, y: -0.14, z: -1.7152786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1895,6 +1895,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &731056619
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 731056620}
+  m_Layer: 0
+  m_Name: Viewing Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &731056620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731056619}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.72, y: 0.164, z: 0.218}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1816026079}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &747942397
 GameObject:
@@ -2950,7 +2980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 1700707622}
-  config: {fileID: 11400000, guid: 851e0bd8469e40e408c004d8f052c4d7, type: 2}
+  config: {fileID: 11400000, guid: 00d38deb136ed6647a5f79e7d39ec646, type: 2}
   _defaultLookAtTarget: {fileID: 1816026079}
 --- !u!135 &1194567440
 SphereCollider:
@@ -3994,6 +4024,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1700707621}
+  - {fileID: 731056620}
   m_Father: {fileID: 649169333}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4084,7 +4115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 0}
   config: {fileID: 11400000, guid: ccef30c16b039fb4a99fbd583c583c88, type: 2}
-  _defaultLookAtTarget: {fileID: 0}
+  _defaultLookAtTarget: {fileID: 731056620}
   isGrounded: 0
   yOffset: 0
   _agentViewingTransform: {fileID: 0}
@@ -4886,7 +4917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _virtualCamera: {fileID: 71942522}
-  config: {fileID: 11400000, guid: 851e0bd8469e40e408c004d8f052c4d7, type: 2}
+  config: {fileID: 11400000, guid: 00d38deb136ed6647a5f79e7d39ec646, type: 2}
   _defaultLookAtTarget: {fileID: 0}
 --- !u!1 &2110444810
 GameObject:

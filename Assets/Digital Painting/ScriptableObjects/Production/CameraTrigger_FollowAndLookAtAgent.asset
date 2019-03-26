@@ -18,6 +18,6 @@ MonoBehaviour:
     _useConstant: 0
     _constantValue: {fileID: 0}
     _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
-  _basePriorityBoost: 100
+  _basePriorityBoost: 300
   _followTriggerAgent: 1
   _lookAtTriggerAgent: 1
