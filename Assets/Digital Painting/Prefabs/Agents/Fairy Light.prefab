@@ -9494,8 +9494,8 @@ MonoBehaviour:
   target: {fileID: 0}
   maxDistanceRebuildPath: 1
   acceleration: 1
-  minReachDistance: 2
-  minFollowDistance: 4
+  minReachDistance: 1
+  minFollowDistance: 2
   pathPointRadius: 1
   octree: {fileID: 0}
   playerSeeLayerMask:

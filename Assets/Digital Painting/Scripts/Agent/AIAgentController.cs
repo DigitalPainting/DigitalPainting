@@ -124,21 +124,21 @@ namespace wizardscode.digitalpainting.agent
             if (PointOfInterest != null) // Update POI doesn't always find something
             {
                 target = PointOfInterest.AgentViewingTransform;
-                Move();
+                UpdateMove();
             }
             else
             {
                 target = null;
-                Move();
+                UpdateMove();
             }
         }
 
         /// <summary>
-        /// Typically the Move method is called from the Update method of the agent controller.
+        /// Typically the UpdateMove method is called from the Update method of the agent controller.
         /// It is responsible for making a decision about the agents next move and acting upon
         /// that decision.
         /// </summary>
-        private void Move()
+        private void UpdateMove()
         {
             if (target != null)
             {
@@ -231,13 +231,17 @@ namespace wizardscode.digitalpainting.agent
             float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
             position.y = newY;
 
-            if (attemptCount <= maxAttempts && !pathfinding.Octree.IsTraversableCell(position))
+            if (attemptCount <= maxAttempts)
             {
-                // Debug.LogWarning("Attempt " + attemptCount + " invalid wander location: " + position);
-                position = GetValidWanderPosition(transform, attemptCount);
-            }
-
-            return position;
+                if (!pathfinding.Octree.IsTraversableCell(position))
+                {
+                    position = GetValidWanderPosition(transform, attemptCount);
+                } else
+                {
+                    return position;
+                }
+            } 
+            return Vector3.zero;
         }
 
         /// <summary>
@@ -284,6 +288,13 @@ namespace wizardscode.digitalpainting.agent
                 }
             }
             return null;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 position = transform.position;
+            Gizmos.DrawWireSphere(transform.position, 0.5f);
         }
     }
 }

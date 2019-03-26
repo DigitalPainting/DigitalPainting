@@ -49,7 +49,7 @@ namespace wizardscode.environment
                         transposer.m_FollowOffset.z = objects[i].radius + (objects[i].radius * 2);
                         virtualCamera.AddCinemachineComponent<CinemachineComposer>();
                         virtualCamera.transform.SetParent(parent.transform, true);
-                        thing.virtualCamera = virtualCamera;
+                        thing._virtualCamera = virtualCamera;
                         virtualCamera.enabled = false;
                     }
                 }

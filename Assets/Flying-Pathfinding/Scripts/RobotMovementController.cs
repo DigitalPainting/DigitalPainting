@@ -142,6 +142,8 @@ public class RobotMovementController : MonoBehaviour
         }
         else
         {
+            // We don't have a path so we will slow to a stop
+            // FIMXE: what if we are stuck and we just need to find a path?
             rigidbody.velocity -= rigidbody.velocity * Time.deltaTime * acceleration;
         }
     }
