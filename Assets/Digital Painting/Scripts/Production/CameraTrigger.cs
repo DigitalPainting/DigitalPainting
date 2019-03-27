@@ -17,7 +17,7 @@ namespace wizardscode.production
     {
         [Header("Camera Configuration", order = 100)]
         [SerializeField]
-        [Tooltip("Virtual Camera to use in this trigger zone. If the this collider is triggered currently in focus agent then the camera will switch to this one, with the LookAt set to the agent.")]
+        [Tooltip("Virtual Camera to use in this trigger zone. If the this collider is triggered currently in focus agent then the camera will switch to this one, with the LookAt set to the agent. This can be either a prefab that will be instantiated and placed at a default location or it will be a reference to a camera pre-positioned in the scene.")]
         internal CinemachineVirtualCameraBase _virtualCamera;
         [SerializeField]
         [Tooltip("Configuration for this camera trigger.")]

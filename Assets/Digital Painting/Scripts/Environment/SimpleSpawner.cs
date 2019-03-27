@@ -36,17 +36,16 @@ namespace wizardscode.environment
                         view.transform.SetParent(parent.transform, true);
                         thing.AgentViewingTransform = view.transform;
 
-                        // TODO: Make a prefab and instantiate from that rather than creating at runtime
                         GameObject camera = new GameObject();
                         camera.name = "Virtual Camera for " + this.name;
                         CinemachineVirtualCamera virtualCamera = camera.AddComponent<CinemachineVirtualCamera>();
                         virtualCamera.m_StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.Never;
                         virtualCamera.LookAt = parent.transform;
                         virtualCamera.Follow = parent.transform;
-                        CinemachineTransposer transposer = virtualCamera.AddCinemachineComponent<CinemachineTransposer>();
-                        transposer.m_FollowOffset.x = objects[i].radius + (objects[i].radius * 2);
-                        transposer.m_FollowOffset.y = objects[i].radius + (objects[i].radius * 2);
-                        transposer.m_FollowOffset.z = objects[i].radius + (objects[i].radius * 2);
+
+                        CinemachineFramingTransposer transposer = virtualCamera.AddCinemachineComponent<CinemachineFramingTransposer>();
+                        transposer.m_CameraDistance = objects[i].radius * 2;
+
                         virtualCamera.AddCinemachineComponent<CinemachineComposer>();
                         virtualCamera.transform.SetParent(parent.transform, true);
                         thing._virtualCamera = virtualCamera;

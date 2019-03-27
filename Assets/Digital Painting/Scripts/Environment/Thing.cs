@@ -107,10 +107,9 @@ namespace wizardscode.environment
             _virtualCamera.m_StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.Never;
             _virtualCamera.LookAt = transform;
             _virtualCamera.Follow = transform;
-            CinemachineTransposer transposer = ((CinemachineVirtualCamera)_virtualCamera).AddCinemachineComponent<CinemachineTransposer>();
-            transposer.m_FollowOffset.x = bounds.extents.x + (bounds.extents.x * 2);
-            transposer.m_FollowOffset.y = bounds.extents.y + (bounds.extents.y * 2);
-            transposer.m_FollowOffset.z = bounds.extents.z + (bounds.extents.z * 2);
+
+            CinemachineFramingTransposer transposer = ((CinemachineVirtualCamera)_virtualCamera).AddCinemachineComponent<CinemachineFramingTransposer>();
+            transposer.m_CameraDistance = bounds.extents.x * 2;
 
             ((CinemachineVirtualCamera)_virtualCamera).AddCinemachineComponent<CinemachineComposer>();
 

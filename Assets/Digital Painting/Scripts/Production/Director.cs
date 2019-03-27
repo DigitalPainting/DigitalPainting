@@ -15,9 +15,10 @@ namespace wizardscode.production
         [SerializeField] [Tooltip("The SO Variable Reference indicating which agent currently has focus.")]
         private BaseAgentControllerReference _agentWithFocus;
         [SerializeField] [Tooltip("Main Cinemachine camera rig. This can either be a rig in the scene, a prefab that will be instantiated or null. In the case of a null a Default follow camera setup will be created.")]
-        private CinemachineVirtualCameraBase defaultCameraRig;
+        private CinemachineVirtualCameraBase defaultCameraSetup;
 
         private CameraReference _mainCameraReference;
+        private CinemachineVirtualCameraBase defaultCameraRig;
 
         internal Camera MainCamera
         {
@@ -48,14 +49,19 @@ namespace wizardscode.production
         /// </summary>
         private void SetupMainCamera()
         {
-            if (defaultCameraRig == null)
+            if (defaultCameraSetup == null)
             {
                 CreateDefaultClearShot();
-            } else
+            }
+            else
             {
-                if (!defaultCameraRig.gameObject.scene.IsValid())
+                if (defaultCameraSetup.gameObject.scene.IsValid())
                 {
-                    CinemachineVirtualCameraBase rig = Instantiate(defaultCameraRig);
+                    defaultCameraRig = defaultCameraSetup;
+                }
+                else
+                {
+                    CinemachineVirtualCameraBase rig = Instantiate(defaultCameraSetup);
                     rig.gameObject.name = "Default Cinemachine ClearShot Camera";
                 }
             }
