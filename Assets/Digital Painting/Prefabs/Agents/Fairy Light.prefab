@@ -9539,7 +9539,7 @@ MonoBehaviour:
     dFactor: 0.06382979
   playerHead: {fileID: 0}
   physicsRotation: 1
-  rotationEasing: 0.15
+  rotationEasing: 10
 --- !u!135 &135805775664490126
 SphereCollider:
   m_ObjectHideFlags: 0
