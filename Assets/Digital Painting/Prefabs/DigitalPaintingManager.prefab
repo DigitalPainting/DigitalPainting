@@ -33,6 +33,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 767566812936522869}
+  - {fileID: 6264240995470709677}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,11 +49,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a462e77d98d43043ba228a13db67c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraRigPrefab: {fileID: 114576470224930490, guid: 7eec9a0daa82c4b4a9deb0e5142afc70,
-    type: 3}
-  cameraPrefab: {fileID: 20085759441192012, guid: 1a97a61a83f662b4489e298cb2027fc5,
-    type: 3}
   agentObjectDefs: []
+  _agentWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 0}
 --- !u!114 &114104959585131336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +116,91 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   demoUI: {fileID: 1808907733917478, guid: 9c495122d1430c347ab9945831679e2b, type: 3}
+--- !u!1 &534104588618770187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6264240995470709677}
+  - component: {fileID: 1585729370379257032}
+  - component: {fileID: 4228008670085889337}
+  m_Layer: 0
+  m_Name: Director
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6264240995470709677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534104588618770187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4451654348586044}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1585729370379257032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534104588618770187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cb5ea655ef1be5479758c1adc3e03e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _agentWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 0}
+  defaultCameraRig: {fileID: 0}
+--- !u!114 &4228008670085889337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534104588618770187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5758ca93461aeeb4589456a052b07d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeveloperDescription:
+    _value: 
+  _showDebugFields: 0
+  _enableGizmoDebugging: 1
+  _debugColor: {r: 0, g: 1, b: 1, a: 1}
+  _previouslyRegisteredEvent: {fileID: 11400000, guid: 207794dad31c5df4abf2df624c7c70c0,
+    type: 2}
+  _event: {fileID: 11400000, guid: 207794dad31c5df4abf2df624c7c70c0, type: 2}
+  _response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1585729370379257032}
+        m_MethodName: OnAgentWithFocusChanged
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &7711156887825927953
 GameObject:
   m_ObjectHideFlags: 0
@@ -126,7 +212,7 @@ GameObject:
   - component: {fileID: 767566812936522869}
   - component: {fileID: 286795433341699577}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: TargetObjectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

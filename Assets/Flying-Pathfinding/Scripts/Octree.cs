@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Threading;
 using Priority_Queue;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class Octree : MonoBehaviour
 {
     [Tooltip("Turn on debug information, such as providing Gizmo's showing cell status. Note that drawing all these Gizmo's takes some time, so normally you'll want this set to false.")]
-    public bool Debug = false;
+    public bool isDebug = false;
 
 	[SerializeField] private float minCellSize = 2;
 	[SerializeField] private LayerMask mask = -1;
@@ -29,9 +30,13 @@ public class Octree : MonoBehaviour
     /// Test if the cell that encompasses a given position is traversable.
     /// </summary>
     /// <param name="position">The position the cell most embody.</param>
-    /// <returns></returns>
+    /// <returns>True is the node containing the position is traversable, otherwise returns false.</returns>
     internal bool IsTraversableCell(Vector3 position)
     {
+        if (!Contains(position))
+        {
+            return false;
+        }
         Octree.OctreeElement node = GetNode(position);
         return node != null ? node.Empty : false;
     }
@@ -277,23 +282,46 @@ public class Octree : MonoBehaviour
 		neighborPathPositions[depth] = pos;
 	}
 
-	private static Vector3 tmpGetNodePos;
+    internal bool Contains(Vector3 position)
+    {
+        return root.Bounds.Contains(position);
+    }
 
+    /// <summary>
+    /// Get the smallest known node that encompasses the position.
+    /// </summary>
+    /// <param name="position">The position that must be containers</param>
+    /// <returns>The smallest node containing the position or null if the octree does not contain the position.</returns>
 	internal OctreeElement GetNode(Vector3 position)
 	{
-		tmpGetNodePos = position;
-		return GetNode(root);
-	}
+        OctreeElement node = GetNode(root, position);
+#if UNITY_EDITOR
+        if (node == null)
+        {
+            Debug.LogError("Requested a node containing a position " + position + " which is not within the Octree. This should not happen. First check that the position is within the Octree using Contains(position)");
+        }
+#endif
+        return node;
+    }
 
-	private OctreeElement GetNode(OctreeElement parent)
+    /// <summary>
+    /// Get the smallest known node that encompasses the position.
+    /// If the supplied parent node has children and it encompasses the position
+    /// work through the children until the one that contains the position is found.
+    /// This is repeated recursively to return the smallest node possible.
+    /// </summary>
+    /// <param name="parent">The node to start the search within.</param>
+    /// <param name="position">The position that must be containers</param>
+    /// <returns>The smallest child node containing the position or null if the parent does not contain the position.</returns>
+	private OctreeElement GetNode(OctreeElement parent, Vector3 position)
 	{
-		if (parent.Bounds.Contains(tmpGetNodePos))
+		if (parent.Bounds.Contains(position))
 		{
 			if (parent.Children != null)
 			{
 				for (int i = 0; i < parent.Children.Length; i++)
 				{
-					OctreeElement child = GetNode(parent.Children[i]);
+					OctreeElement child = GetNode(parent.Children[i], position);
 					if (child != null) return child;
 				}
 			}
@@ -307,7 +335,7 @@ public class Octree : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (root == null || !Debug)
+        if (root == null || !isDebug)
         {
             return;
         }

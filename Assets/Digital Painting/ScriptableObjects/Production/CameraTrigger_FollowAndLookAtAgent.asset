@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a00a9882e8f75a4985305df38f2b2d4, type: 3}
+  m_Name: CameraTrigger_FollowAndLookAtAgent
+  m_EditorClassIdentifier: 
+  _onEnterEvent: {fileID: 0}
+  _onExitEvent: {fileID: 0}
+  _agentWithFocus:
+    _useConstant: 0
+    _constantValue: {fileID: 0}
+    _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
+  _basePriorityBoost: 300
+  _followTriggerAgent: 1
+  _lookAtTriggerAgent: 1

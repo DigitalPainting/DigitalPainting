@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.environment;
+using wizardscode.production;
 using wizardscode.utility;
 
 namespace wizardscode.digitalpainting.agent
@@ -15,11 +16,11 @@ namespace wizardscode.digitalpainting.agent
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
         public GameObject barriers;
-
+        
         internal const string DEFAULT_BARRIERS_NAME = "AI Barriers";
 
         private List<Thing> visitedThings = new List<Thing>();
-        private Thing _thingOfInterest;
+        private Thing _poi;
         private float timeLeftLookingAtObject = float.NegativeInfinity;
         internal float timeToNextWanderPathChange = 0;
         
@@ -77,31 +78,23 @@ namespace wizardscode.digitalpainting.agent
             ConfigureBarriers();
         }
 
-        public Thing ThingOfInterest
+        public Thing PointOfInterest
         {
-            get { return _thingOfInterest; }
+            get { return _poi; }
             set
             {
-                _thingOfInterest = value;
-                if (_thingOfInterest != null)
-                {
-                    manager.SetLookTarget(_thingOfInterest.transform);
-                }
+                _poi = value;
             }
         }
+
         internal void UpdatePointOfInterest()
         {
             if (MovementController.seekPointsOfInterest)
             {
                 // Look for points of interest
-                if (ThingOfInterest == null && Random.value <= 0.001)
+                if (PointOfInterest == null && Random.value <= 0.001)
                 {
-                    Thing poi = FindPointOfInterest();
-                    if (poi != null)
-                    {
-                        ThingOfInterest = poi;
-                        manager.SetLookTarget(ThingOfInterest.transform);
-                    }
+                    PointOfInterest = FindPointOfInterest();
                 }
             }
         }
@@ -123,37 +116,29 @@ namespace wizardscode.digitalpainting.agent
 
         override internal void Update()
         {
-            if (ThingOfInterest == null)
+            if (PointOfInterest == null)
             {
                 UpdatePointOfInterest();
             }
 
-            if (ThingOfInterest != null) // Update POI doesn't always find something
+            if (PointOfInterest != null) // Update POI doesn't always find something
             {
-                target = ThingOfInterest.AgentViewingTransform;
-
-                if (Vector3.Distance(transform.position, target.position) > ThingOfInterest.distanceToTriggerViewingCamera)
-                {
-                    Move();
-                }
-                else
-                {
-                    ViewPOI();
-                }
+                target = PointOfInterest.AgentViewingTransform;
+                UpdateMove();
             }
             else
             {
                 target = null;
-                Move();
+                UpdateMove();
             }
         }
 
         /// <summary>
-        /// Typically the Move method is called from the Update method of the agent controller.
+        /// Typically the UpdateMove method is called from the Update method of the agent controller.
         /// It is responsible for making a decision about the agents next move and acting upon
         /// that decision.
         /// </summary>
-        private void Move()
+        private void UpdateMove()
         {
             if (target != null)
             {
@@ -162,6 +147,11 @@ namespace wizardscode.digitalpainting.agent
                     pathfinding.Target = target;
                     timeToNextWanderPathChange = 0;
                     return;
+                }
+
+                if (Vector3.Distance(transform.position, target.position) <= pathfinding.minReachDistance)
+                {
+                    ViewPOI();
                 }
             }
             else
@@ -246,13 +236,17 @@ namespace wizardscode.digitalpainting.agent
             float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
             position.y = newY;
 
-            if (attemptCount <= maxAttempts && !pathfinding.Octree.IsTraversableCell(position))
+            if (attemptCount <= maxAttempts)
             {
-                // Debug.LogWarning("Attempt " + attemptCount + " invalid wander location: " + position);
-                position = GetValidWanderPosition(transform, attemptCount);
-            }
-
-            return position;
+                if (!pathfinding.Octree.IsTraversableCell(position))
+                {
+                    position = GetValidWanderPosition(transform, attemptCount);
+                } else
+                {
+                    return position;
+                }
+            } 
+            return Vector3.zero;
         }
 
         /// <summary>
@@ -262,25 +256,25 @@ namespace wizardscode.digitalpainting.agent
         {
             if (timeLeftLookingAtObject == float.NegativeInfinity)
             {
-                timeLeftLookingAtObject = ThingOfInterest.timeToLookAtObject;
+                timeLeftLookingAtObject = PointOfInterest.timeToLookAtObject;
             }
-
-            CinemachineVirtualCamera virtualCamera = ThingOfInterest.virtualCamera;
-            virtualCamera.enabled = true;
 
             timeLeftLookingAtObject -= Time.deltaTime;
             if (timeLeftLookingAtObject < 0)
             {
                 // Remember we have been here so we don't come again
-                visitedThings.Add(ThingOfInterest);
+                visitedThings.Add(PointOfInterest);
 
                 // we no longer care about this thing so turn the camera off and don't focus on it anymore
-                ThingOfInterest = null;
+                PointOfInterest = null;
                 timeLeftLookingAtObject = float.NegativeInfinity;
-                virtualCamera.enabled = false;
             }
         }
 
+        /// <summary>
+        /// Get a point of interest for the agent to explore.
+        /// </summary>
+        /// <returns>Point of Interest to explore or null (if things of interest exist).</returns>
         Thing FindPointOfInterest()
         {
             Collider[] things = Physics.OverlapSphere(transform.position, detectionRange);
@@ -299,6 +293,13 @@ namespace wizardscode.digitalpainting.agent
                 }
             }
             return null;
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 position = transform.position;
+            Gizmos.DrawWireSphere(transform.position, 0.5f);
         }
     }
 }

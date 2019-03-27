@@ -9494,8 +9494,8 @@ MonoBehaviour:
   target: {fileID: 0}
   maxDistanceRebuildPath: 1
   acceleration: 1
-  minReachDistance: 2
-  minFollowDistance: 4
+  minReachDistance: 1
+  minFollowDistance: 2
   pathPointRadius: 1
   octree: {fileID: 0}
   playerSeeLayerMask:
@@ -9538,8 +9538,8 @@ MonoBehaviour:
     iFactor: 0
     dFactor: 0.06382979
   playerHead: {fileID: 0}
-  physicsRotation: 0
-  rotationEasing: 1
+  physicsRotation: 1
+  rotationEasing: 10
 --- !u!135 &135805775664490126
 SphereCollider:
   m_ObjectHideFlags: 0
