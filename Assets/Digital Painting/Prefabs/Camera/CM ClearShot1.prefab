@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 114576470224930490}
   - component: {fileID: 114265346984810744}
   m_Layer: 0
-  m_Name: CM ClearShot1
+  m_Name: Avoiding Follow ClearShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -362,7 +362,7 @@ MonoBehaviour:
   - m_Script
   m_LockStageInInspector: 
   m_StreamingVersion: 20170927
-  m_Priority: 10
+  m_Priority: 100
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 0}
