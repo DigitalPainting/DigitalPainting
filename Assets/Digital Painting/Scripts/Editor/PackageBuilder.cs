@@ -20,7 +20,7 @@ public class PackageBuilder
     [MenuItem("Tools/Build Package/Digital Painting/Core")]
     public static void Build()
     {
-        string[] rootDirs = { "Assets\\Digital Painting", "Assets\\Flying-Pathfinding", "Assets\\Gizmos\\DigitalPainting" };
+        string[] rootDirs = { "Assets\\Digital Painting", "Assets\\Flying-Pathfinding", "Assets\\Gizmos\\DigitalPainting", "Assets\\ScriptableObject-Architecture", "Assets\\SO Architecture" };
         string excludeSubDir = "Plugins";
         string packageName = @"..\DigitalPainting.unitypackage";
 
