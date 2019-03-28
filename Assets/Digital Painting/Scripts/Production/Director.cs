@@ -16,21 +16,9 @@ namespace wizardscode.production
         private BaseAgentControllerReference _agentWithFocus;
         [SerializeField] [Tooltip("Main Cinemachine camera rig. This can either be a rig in the scene, a prefab that will be instantiated or null. In the case of a null a Default follow camera setup will be created.")]
         private CinemachineVirtualCameraBase defaultCameraSetup;
+        [SerializeField]
 
-        private CameraReference _mainCameraReference;
         private CinemachineVirtualCameraBase defaultCameraRig;
-
-        internal Camera MainCamera
-        {
-            get
-            {
-                if (_mainCameraReference.Value == null)
-                {
-                    SetupMainCamera();
-                }
-                return _mainCameraReference.Value;
-            }
-        }
 
         private void Awake()
         {
@@ -61,8 +49,8 @@ namespace wizardscode.production
                 }
                 else
                 {
-                    CinemachineVirtualCameraBase rig = Instantiate(defaultCameraSetup);
-                    rig.gameObject.name = "Default Cinemachine ClearShot Camera";
+                    defaultCameraRig = Instantiate(defaultCameraSetup);
+                    defaultCameraRig.gameObject.name = "Default Cinemachine ClearShot Camera";
                 }
             }
 
