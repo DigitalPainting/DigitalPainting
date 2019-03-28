@@ -33,7 +33,15 @@ There are a few steps you should take to ensure the best experience:
 ## Add the Core Digital Painting Assets
 
 Having created a standard Unity scene you need to add The Digital Painting Assets. If you want to use
-defaults this is pretty easy to do.
+defaults this is pretty easy to do. You can either work from the source or from a released package:
+
+### From Source
+
+If you want to work from source then we recommend the use of [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules):
+
+  * `git submodule add git@github.com:DigitalPainting/DigitalPainting.git`
+
+### From Released Packages
 
   * [Export the Digital Painting asset](ReleasingTheDigitalPaintingAsset.md) from Unity (we should make releases so this is not necessary)
   * Import the Digital Painting asset into your project
