@@ -2,3 +2,6 @@
 	path = Assets/ScriptableObject-Architecture
 	url = git@github.com:rgardler/ScriptableObject-Architecture.git
 
+[submodule "Assets/Flying-Pathfinding"]
+	path = Assets/Flying-Pathfinding
+	url = git@github.com:DigitalPainting/Flying-Pathfinding.git
