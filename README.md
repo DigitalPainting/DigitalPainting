@@ -38,15 +38,22 @@ These packages will be imported for you when you install the Digital Painting as
 
 ## Development
 
-All the assets for the Digital Painting project are in the `Digital Painting` folder. Be 
-sure to import the packages listed above and the development assets below. There is a 
-`Scenes/Dev Scene` which is intended to be used to build and test new features.
+We use Git submodules to keep things clean and open the possibility of releasing some of the features as separate projects. Therefore in order to checkout the source you must use:
 
-In order to build and test features of the Digital Painting project all developers use 
-the "Dev Scene" to develop new features. This scene uses a standard set of (zero cost) 
-assets from the Unity Asset store and packages from Unity itself. Any features that are 
-dependent on other assets must be optional and must degrade gracefully in this scene when 
-only the assets and packages listed below are included.
+`git clone git@github.com:DigitalPainting/DigitalPainting.git test --recurse-submodules`
+
+Be sure to import the packages listed above and the development assets in the next section. While these are free of cost they are not open source and so we cannot include them in the source.
+
+In order to build and test features of the Digital Painting project all developers should create
+or use the appropriate dev sene (see `Digital Patinting/scenes/dev`). No new features will be accepted without a
+corresponding dev scene to allow testing of the feature. It is also important that the "Demo Scene" 
+includes a demo of all new new features. 
+
+The dev and demo scenes must use only a standard set of (zero cost) 
+assets from the Unity Asset store and packages from Unity itself. The number of dependencies must be kept to a minimum.
+Any features that are dependent on assets that are not free of cost must be optional and must degrade gracefully in this scene when 
+only the assets and packages listed below are included. See the plugin mechanism for guidance on how to include features that
+depend on paid assets.
 
 ### Required Assets and Packages for Development Work (all zero cost)
 
@@ -60,13 +67,11 @@ Download and import the following assets:
 
 ### Credits
 
-All textures included with this package are available from [opengameart.org](https://opengameart.org/textures/all) under either a [CC0 license](https://creativecommons.org/share-your-work/public-domain/) and can therefore be reused without restriction. 
+All textures included with this package are available from [opengameart.org](https://opengameart.org/textures/all) under a [CC0 license](https://creativecommons.org/share-your-work/public-domain/) and can therefore be reused without restriction. 
 
 All icons provided in this asset are available from [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
 
-Flying Pathfinding is under and MIT license and was originally pulled from [Simeonradivoev](https://github.com/simeonradivoev/Flying-Pathfinding). I've made some changes and am pushing them upstream, but there is a chance that they won't be included in the upstream project. My [fork](https://github.com/rgardler/Flying-Pathfinding
-) is available and contains a standalone version with all the changes found in the digital painting repository.
-
+Please see the license details within git submodules. Only permissively licensed code is included. Changes to these submodules should be submitted upstream for inclusion in the originating project (at the owners disretion).
 
 
 
