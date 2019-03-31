@@ -22,7 +22,7 @@ Since we want our Wandering Sphere to navigate itself around our world we will u
 
 While the Agent Controller has logic for controlling the agents movement it does not have the configuration for that movement. You will need to tell the agent how to move around the scene, this is done with a Movement Controller Scriptable Object. We are creating a new kind of agent and so we will create a new Scriptable Object.
 
-Right click on the `ScriptableObjects/Agents` folder and select `Wizards Code -> Agent -> Flying AI Movement Controller`. This controller provides configuration options used by the movement AI. Here you can configure how the agent moves.
+Right click on the `ScriptableObjects/Agents` folder (create it if necessary) and select `Wizards Code -> Agent -> Flying AI Movement Controller`. This controller provides configuration options used by the movement AI. Here you can configure how the agent moves.
 
 We'll leave most items at their default, but we will want to change the `seekPointsOfInterest` property to false. This controls whether the agent will actively seek out points of interest in the world. Since we want our agent to simply wander around we'll turn this off.
 
@@ -30,11 +30,14 @@ Drop this scriptable object into the MovementController slot of you agent Game O
 
 ### Spawnging Agents
 
-That is it (well not quite). You can now start your application and your sphere will start moving around. We don't want to have to manually manage all agents in the scene. In order to do this we will use the DigitalPaintingManager. Increase the size of the AgentObjectDefs property by 1.
+That is it (well not quite). You can now start your application and your sphere will start moving around. If you hare happy to have your agents defined in the scene itself you can move on now. However, it is sometimes a good idea to create a prefab and have the Digital Painting code spawn your agents at startup.
 
-We need another scriptable object to put in here to define our new agent. To create this right click on the `ScriptableObjects/Agents` folder and select `Wizards Code -> Agent -> Agent Definition`. Name the new Scriptable Object "Wandering Sphere". To configure this definition we need a prefab for the model. Create one our of the object we created in the scene and delete the original from the scene. Add the prefab to the Agent Definition.
+Create a prefab for your agent.
 
-Now that we have our Agent Definition Scriptable Object we can drag this into the new Agent Object Defs slot we created before.
+Agents spawned by the Digital Painting Manager are defined by another scriptable object. To create this right click on the `ScriptableObjects/Agents` folder and select `Wizards Code -> Agent -> Agent Definition`. Name the new Scriptable Object "Wandering Sphere". Add the prefab created in the previous step to the Agent Definition.
+
+In the `DigitalPaintingMaanger` in your scene increase the size of the AgentObjectDefs property by 1 and put your agent definition scriptable object into the created slot.
 
 Now when you play your scene your wandering sphere will be spawned in.
+
 

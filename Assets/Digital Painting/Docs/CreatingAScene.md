@@ -156,6 +156,7 @@ You can now hit play and see the first version of your digital painting.
 
 ## Next Steps
 
+  * Create your own [Custom Agent](./agents.md)
   * Add [cinematic cameras](./Cameras.md)
   * Add a more realistic [Day Night Cycle](./DayNightCycle.md)
   * Add a [Weather System](./Weather.md)

@@ -27,6 +27,7 @@ namespace wizardscode.digitalpainting.agent
         private Transform target; // the current target that we are moving towards
         private RobotMovementController pathfinding;
         private Transform wanderTarget;
+        private RobotRotationController rotationController;
 
         new public AIMovementControllerSO MovementController
         {
@@ -52,7 +53,7 @@ namespace wizardscode.digitalpainting.agent
                 Collider collider = gameObject.AddComponent<SphereCollider>();
                 collider.isTrigger = false;
 
-                Debug.LogWarning(gameObject.name + " is an AI Agent, but it did not have a collider that is not a trigger. One has been added automatically so that the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'. Consider adding one.");
+                Debug.LogWarning(gameObject.name + " is an AI Agent, but it did not have a collider that is not a trigger. One has been added automatically so that the agent will be contained by the '" + DEFAULT_BARRIERS_NAME + "'. Consider adding one.");
             }
 
             Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
@@ -70,6 +71,13 @@ namespace wizardscode.digitalpainting.agent
             {
                 Debug.LogWarning("No RobotMovementController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
                 pathfinding = gameObject.AddComponent<RobotMovementController>();
+            }
+
+            rotationController = GetComponent<RobotRotationController>();
+            if (rotationController == null)
+            {
+                Debug.LogWarning("No RobotRotationController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
+                rotationController = gameObject.AddComponent<RobotRotationController>();
             }
         }
 
@@ -300,6 +308,11 @@ namespace wizardscode.digitalpainting.agent
             Gizmos.color = Color.cyan;
             Vector3 position = transform.position;
             Gizmos.DrawWireSphere(transform.position, 0.5f);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            pathfinding.Octree.GetNode(transform.position).DrawGizmos();
         }
     }
 }
