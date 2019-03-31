@@ -23,6 +23,10 @@ namespace wizardscode.digitalpainting
         {
             SetupBarriers();
             octree = GameObject.FindObjectOfType<Octree>();
+            if (octree == null)
+            {
+                Debug.LogError("There is no Octree in the scene.");
+            }
         }
 
         private void Start()
