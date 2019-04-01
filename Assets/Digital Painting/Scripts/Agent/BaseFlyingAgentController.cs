@@ -15,6 +15,11 @@ namespace wizardscode.agent
         /// Tests to see if the agent is currently flying.
         /// </summary>
         internal bool IsFlying { get; private set;  }
+        
+        /// <summary>
+        /// Tests to see if the agent is currently landing.
+        /// </summary>
+        internal bool IsLanding { get; private set; }
 
         /// <summary>
         /// Test to see if the agent is transitioning between flying and grounded. When this is
@@ -50,6 +55,7 @@ namespace wizardscode.agent
             {
                 // Landed
                 IsFlying = false;
+                IsLanding = false;
                 currentHeight = 0;
                 AdjustHeightToTerrain();
             }
@@ -105,15 +111,17 @@ namespace wizardscode.agent
             {
                 if (IsFlying)
                 {
-                    if (currentHeight > 0.05f)
+                    if (currentHeight > MovementController.minimumFlyHeight + 0.05f)
                     {
                         currentHeight -= MovementController.climbSpeed * Time.deltaTime;
+                        currentFlyingAngle = 0;
+                        SetFlyingRotation();
                     }
 
-                    if (currentHeight <= 0.05f)
+                    if (!IsLanding && currentHeight <= MovementController.minimumFlyHeight + 0.05f)
                     {
-                        currentHeight = 0;
-                        InTransition = false;
+                        currentHeight = MovementController.minimumFlyHeight;
+                        IsLanding = true;
                         Land();
                     }
                     else
@@ -150,14 +158,19 @@ namespace wizardscode.agent
             if (MovementController.useRootMotion)
             {
                 float angleChange = MovementController.rotationSpeed * Time.deltaTime;
-                currentFlyingAngle = Mathf.Clamp(currentFlyingAngle + angleChange, -MovementController.maximumFlyingAngle, 0);
-                Vector3 newRotation = new Vector3(currentFlyingAngle, transform.eulerAngles.y, transform.eulerAngles.z);
-                transform.eulerAngles = newRotation;
+                currentFlyingAngle = Mathf.Clamp(currentFlyingAngle + angleChange, MovementController.maximumFlyingAngle, 0);
+                SetFlyingRotation();
             }
             else
             {
                 Debug.LogError("Currently BaseFlyingAgentController only supports agents with Root Motion animations.");
             }
+        }
+
+        private void SetFlyingRotation()
+        {
+            Vector3 newRotation = new Vector3(currentFlyingAngle, transform.eulerAngles.y, transform.eulerAngles.z);
+            transform.eulerAngles = newRotation;
         }
 
 
@@ -179,8 +192,7 @@ namespace wizardscode.agent
             {
                 float angleChange = MovementController.rotationSpeed * Time.deltaTime;
                 currentFlyingAngle = Mathf.Clamp(currentFlyingAngle - angleChange , -MovementController.maximumFlyingAngle, 0);
-                Vector3 newRotation = new Vector3(currentFlyingAngle, transform.eulerAngles.y, transform.eulerAngles.z);
-                transform.eulerAngles = newRotation;
+                SetFlyingRotation();
             }
             else
             {
