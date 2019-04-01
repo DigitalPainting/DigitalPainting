@@ -7,18 +7,36 @@ namespace wizardscode.agent.movement
     /// </summary>
     public class MovementControllerSO : ScriptableObject
     {
+        [Header("Positioning")]
+        [Tooltip("The height above the terrain this agent should be.")]
+        public float heightOffset = 0;
+
         [Header("Movement")]
+        [Tooltip("Should this agent use Root Motion from the animator?")]
+        public bool useRootMotion = false;
         [Tooltip("Walking speed under normal circumstances")]
         public float normalMovementSpeed = 1;
         [Tooltip("The factor by which to multiply the walking speed when moving fast.")]
         public float fastMovementFactor = 4;
         [Tooltip("The factor by which to multiply the walking speed when moving slowly.")]
         public float slowMovementFactor = 0.2f;
-        [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
-        public float climbSpeed = 1;
-        [Tooltip("The height above the terrain this agent should be.")]
-        public float heightOffset = 0;
+        [Tooltip("The maximum speed that the agent can move at.")]
+        public float maxSpeed = 4;
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
+
+        [Header("Flying")]
+        [Tooltip("Can this agent fly?")]
+        public bool canFly = true;
+        [Tooltip("When flying should the agent climb / fall to track the contours of the land?")]
+        public bool trackContoursInFlight = false;
+        [Tooltip("Minimum flying height for this agent, if the agent goes below this height it will land.")]
+        public float minimumFlyHeight = 2;
+        [Tooltip("Maximum flying height for this agent, the agent will not go higher than this.")]
+        public float maximumFlyHeight = 50;
+        [Tooltip("Maximum flying angle for this agent.")]
+        public float maximumFlyingAngle = 30;
+        [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
+        public float climbSpeed = 1;
     }
 }

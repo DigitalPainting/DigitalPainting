@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 114576470224930490}
   - component: {fileID: 114265346984810744}
   m_Layer: 0
-  m_Name: Avoiding Follow ClearShot
+  m_Name: Default Clearshot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

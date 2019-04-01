@@ -312,7 +312,10 @@ namespace wizardscode.digitalpainting.agent
 
         private void OnDrawGizmosSelected()
         {
-            pathfinding.Octree.GetNode(transform.position).DrawGizmos();
+            if (pathfinding != null)
+            {
+                pathfinding.Octree.GetNode(transform.position).DrawGizmos();
+            }
         }
     }
 }

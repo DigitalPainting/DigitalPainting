@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 using wizardscode.agent.movement;
 
 namespace wizardscode.digitalpainting.agent
@@ -12,6 +13,9 @@ namespace wizardscode.digitalpainting.agent
     /// </summary>
     public class BaseAgentController : MonoBehaviour
     {
+        [Tooltip("Prefab for virtual camera to use when this is the agent with focus. If set to null the default camera for the scene will be used.")]
+        [SerializeField]
+        internal CinemachineVirtualCameraBase virtualCameraPrefab;
         [Tooltip("The movement controller that will manage movement for this agent.")]
         [SerializeField]
         internal MovementControllerSO _movementController;
@@ -26,10 +30,11 @@ namespace wizardscode.digitalpainting.agent
         [Header("Overrides")]
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
-
+        
         float rotationX = 0;
         float rotationY = 0;
         internal DigitalPaintingManager manager;
+        internal Animator animator;
 
         public MovementControllerSO MovementController {
             get { return _movementController; }
@@ -38,6 +43,8 @@ namespace wizardscode.digitalpainting.agent
         virtual internal void Awake()
         {
             manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
+
+            animator = FindObjectOfType<Animator>();
 
             if (home == null)
             {
@@ -66,40 +73,52 @@ namespace wizardscode.digitalpainting.agent
 
             Move();
         }
-        
+
         /// <summary>
         /// Typically the Move method is called from the Update method of the agent controller.
         /// It is responsible for making a decision about the agents next move and acting upon
         /// that decision.
-        /// <paramref name="transform">The transform of the agent to be moved.</paramref>
         /// </summary>
-        private void Move()
+        virtual public void Move()
         {
-            // Move with the keyboard controls 
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.fastMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
-                transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.fastMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+                MoveVerticalAxis(MovementController.fastMovementFactor);
+                MoveHorizontalAxis(MovementController.fastMovementFactor);
             }
             else if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
             {
-                transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
-                transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+                MoveVerticalAxis(MovementController.slowMovementFactor);
+                MoveHorizontalAxis(MovementController.fastMovementFactor);
             }
             else
             {
-                transform.position += transform.forward * MovementController.normalMovementSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
-                transform.position += transform.right * MovementController.normalMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
+                MoveVerticalAxis(1);
+                MoveHorizontalAxis(1);
             }
+        }
 
-            if (Input.GetKey(KeyCode.Q))
+        /// <summary>
+        /// Move the agent according to the Vertical Axis.
+        /// </summary>
+        /// <param name="speedMultiplier">A multiplier for the speed (e.g. run or crawl)</param>
+        virtual internal void MoveVerticalAxis(float speedMultiplier)
+        {
+            if (!MovementController.useRootMotion)
             {
-                MovementController.heightOffset += MovementController.climbSpeed * Time.deltaTime;
+                transform.position += transform.forward * (MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Vertical") * Time.deltaTime;
             }
+        }
 
-            if (Input.GetKey(KeyCode.E))
+        /// <summary>
+        /// Move the agent according to the Horizontal Axis.
+        /// </summary>
+        /// <param name="speedMultiplier">A multiplier for the speed (e.g. run or crawl)</param>
+        virtual internal void MoveHorizontalAxis(float speedMultiplier)
+        {
+            if (!MovementController.useRootMotion)
             {
-                MovementController.heightOffset -= MovementController.climbSpeed * Time.deltaTime;
+                transform.position += transform.right * (MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
         }
 
