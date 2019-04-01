@@ -52,30 +52,28 @@ Start by [creating a demo](./CreatingAScene.md) scene with Digital Painting enab
 
 The dragon model has some great animations with root motion. We want to use those to move our agent. To do this we will need a Movement Controller for our dragon. To keep things simple we'll start by controlling the Dragon with the keyboard. Later we'll hook create an AI Agent Controller.
 
-Create a new script called `DragonAgentController` and have it extend `BaseFlyingAgentController` provided in the Digital Painting Asset (it's in the `wizardscode.agent` namespace).  Add the `DragonAgentController` to the Dragon.
+Create a new script called `DragonAgentController` and have it extend `BaseFlyingAgentController` provided in the Digital Painting Asset (it's in the `wizardscode.agent` namespace).  Add the `DragonAgentController` to the Dragon. This is going to be empty for this walkthrough. We have created it so that we have an easy way of changnig behaviour without impacting the base flying behaviour as we continue to work on the Dragon.
 
 ## Movement Controller Configuration
 
-As with the previous example we need to define the parameters that control the dragons movements. We do this by providing a Movement Controller Scriptable Object. Create a ScriptableObjects folder in your Scripts directory and right click it, then select `Wizards Code -> Agent -> Manual Movement Controller`. Call it `DragonMovementController` This controller provides configuration options used by the most basic of movement types. Most of the default settings will do for now, but you should set `Use Root Motion` to true since the Dragon's animations have root motion.
+As with the previous example we need to define the parameters that control the dragons movements. We do this by providing a Movement Controller Scriptable Object. Create a ScriptableObjects folder in your Scripts directory and right click it, then select `Wizards Code -> Agent -> Manual Movement Controller`. Call it `DragonMovementController` This controller provides configuration options used by the most basic of movement types. Most of the default settings will do for now, but you should set `Use Root Motion` to true since the Dragon's animations have root motion. We'll also ensure that all the animation triggers identified in this controller are correctly set. They should be "idleLand", "runLand", "idleTakeoff" and "runTakeoff".
 
-Drag your mvoement controller into the approrpiate field in the `DragonAgentController`.
-
-## Spawning the Dragon
-
-Lets have the Digital Painting Manager spawn our Dragon so that it can setup the camera for us. Create a prefab from your dragon and remove it from your scene. Now create the definiton object by right clicking on the `ScriptableObjects/Agents` folder and selecting `Wizards Code -> Agent -> Agent Definition`. Name the new Scriptable Object "Dragon Definition". Create a slot in the agents definition list in the Digital Painting Manager and drag the definition into it.
+Drag your movement controller into the approrpiate field in the `DragonAgentController` as this will be the default controller.
 
 ## Custom Camera
 
-We'd like to have a custom camera for this kind of agent. Let's start from the default Clearhot camera provided in the Digital Painting. Drag this clearshot camera into your scene, unpack the prefab and rename the object to `Dragon Clearshot`. Create a prefab from this camera and delete it from your scene. Adjust the camera settings as desired.
+We'd like to have a custom camera for this kind of agent. Let's start from the default ClearShot camera provided in the Digital Painting. Drag this clearshot camera into your scene, unpack the prefab and rename the object to `Dragon Clearshot`. Create a prefab from this camera and delete it from your scene. Adjust the camera settings as desired.
 
-We need to tell the Director to use this camera as the default whenver the Dragon is the agent with focus. To do this we simply drag the prefab into the Virtual Camera Prefab proeprty of the Dragojn Agent Controller.
+We need to tell the Director to use this camera as the default whenver the Dragon is the agent with focus. To do this we simply drag the prefab into the Virtual Camera Prefab proeprty of the Dragon Agent Controller.
 
-## Adding Animations
+## Spawning the Dragon
 
-If you hit play now you will be able to make the dragon slide about using whatever Inputs you have setup in Unity. You can also make the Dragon fly using the 'q' and 'e' keys. However, there are no animations. Lets start with making the dragon flap its wings when in the air.
+Lets have the Digital Painting Manager spawn our Dragon so that it can setup the camera for us. Create a prefab from your dragon and remove it from your scene. Now create the definiton object by right clicking on the `ScriptableObjects/Agents` folder and selecting `Wizards Code -> Agent -> Agent Definition`. Name the new Scriptable Object "Dragon Definition". 
 
-The animator for the Dragon uses a set of parameters. In the Dragons Pack demo scene these are managed by buttons and sliders on the canvas which, in turn, call various methods in the the SFB_DragonHeight. We'll use the code in this file and on the UI events, to inspire our own controller.
+Set the prefab and movement controller to the objects you just created. Note that you don't really need to provide the Movement Controller here since we are just using the default. However, for completeness it is a good idea to provide it. If you provide a different controller here it will override the one identified in the prefab.
 
-There is an boolean parameter in the animator called `idleTakeoff` which we will use to have the dragon take off whenever it leaves the ground and another called `idleLand` which can be used when it reaches the ground. To make this happen we need to override the `TakeOff` and `Land` methods in our `DragonAgentController`. That was easy. Now lets make the dragon fly forward. The animator supplied with the Dragon pack has an Animation Event that calls a SetGroundHeight method. Since we are not using the script containing this method we need to replace that in our `DragonAgentController`. To wire up the event we will have to make a copy of the animation controller and the IdleLand animation. Replace the IdleLand animation in our new controller with the copy of idle land and delete the SetGroundHeight event (as we will be calculating the correct ground height in the controller).
+Create a slot in the agents definition list in the Digital Painting Manager and drag the definition into it.
 
-Moving forward is controlled by the `locomotion` parameter on the animator. A value of 0.5 is stationary, 0 is full speed backwards and 1 is full speed forwards. This makes it possible to pass the value of the input axis directly into the parameter. This is done by overriding the `MoveVerticalAxis` method. 
+## Animations
+
+Basic animations are handled by the BaseFlyingAgentController, so there  is nothing for you to do. Though you will likely need to set the `Minimum Fly Height` in the Movement Controller SO. This is used to ensure that the agent is at the right height when the landing animation is started. It is also used to ensure the model rises to a height that will prevent it clipping the ground as it flies.

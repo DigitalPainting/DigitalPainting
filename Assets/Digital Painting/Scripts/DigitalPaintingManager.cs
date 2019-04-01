@@ -50,6 +50,10 @@ namespace wizardscode.digitalpainting
             GameObject agent = GameObject.Instantiate(def.prefab).gameObject;
             agent.name = name;
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
+            if (def.movementController)
+            {
+                controller.MovementController = def.movementController;
+            }
 
             Renderer renderer = agent.GetComponent<Renderer>();
             if (renderer != null)

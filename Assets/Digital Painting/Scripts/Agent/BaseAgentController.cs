@@ -38,6 +38,7 @@ namespace wizardscode.digitalpainting.agent
 
         public MovementControllerSO MovementController {
             get { return _movementController; }
+            set { _movementController = value;  } 
         }
 
         virtual internal void Awake()

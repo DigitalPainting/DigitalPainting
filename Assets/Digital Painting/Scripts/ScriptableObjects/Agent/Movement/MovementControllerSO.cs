@@ -7,6 +7,7 @@ namespace wizardscode.agent.movement
     /// </summary>
     public class MovementControllerSO : ScriptableObject
     {
+        [Header("Viewing")]
         [Header("Positioning")]
         [Tooltip("The height above the terrain this agent should be.")]
         public float heightOffset = 0;
