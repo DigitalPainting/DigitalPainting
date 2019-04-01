@@ -29,6 +29,14 @@ namespace wizardscode.agent
         public bool InTransition { get; private set; }
 
         /// <summary>
+        /// Test to see if the agent is moving.
+        /// </summary>
+        /// <returns>True if in a transitioning state.</returns>
+        public bool IsMoving {
+            get { return animator.GetFloat("locomotion") != 0.5; }
+        }
+
+        /// <summary>
         /// Start a transition from flying to grounded or vice-versa. This will
         /// start the appropriate animation. The animation should call EndTransition
         /// when the transition to air or ground is complete (not necessarily when 
