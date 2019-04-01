@@ -77,3 +77,15 @@ Create a slot in the agents definition list in the Digital Painting Manager and 
 ## Animations
 
 Basic animations are handled by the BaseFlyingAgentController, so there  is nothing for you to do. Though you will likely need to set the `Minimum Fly Height` in the Movement Controller SO. This is used to ensure that the agent is at the right height when the landing animation is started. It is also used to ensure the model rises to a height that will prevent it clipping the ground as it flies.
+
+## AI Controller
+
+Now that we have the basics setup for manual control lets create a stimple AI controller. Create a new `AIDragonAgentController` and have it inherit from `AIAgentController`.
+
+## Prefab
+
+Duplicate the dragon prefab and add the AIDragonController to the new one. Setup the controller as above.
+
+## Spawn the dragon
+
+We need to use this new controller with our dragon. We could create a new prefab but it's possible
