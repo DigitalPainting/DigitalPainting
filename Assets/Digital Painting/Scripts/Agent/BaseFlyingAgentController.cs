@@ -185,9 +185,20 @@ namespace wizardscode.agent
         /// <summary>
         /// Perform the appropriate Landing animation.
         /// </summary>
-        virtual public void Land()
+        public virtual void Land()
         {
-            
+            if (IsFlying)
+            {
+                // FIXME: don't use strings to set animator parameters
+                if (IsMoving)
+                {
+                    animator.SetBool(MovementController.movingLand, true);
+                }
+                else
+                {
+                    animator.SetBool(MovementController.idleLand, true);
+                }
+            }
         }
 
         virtual public void FlyUp()
@@ -211,8 +222,20 @@ namespace wizardscode.agent
         /// <summary>
         /// Perform the appropriate TakeOff animation.
         /// </summary>
-        virtual public void TakeOff()
+        public virtual void TakeOff()
         {
+            if (!IsFlying)
+            {
+                // FIXME: don't use strings to set animator parameters
+                if (IsMoving)
+                {
+                    animator.SetBool(MovementController.movingTakeOff, true);
+                }
+                else
+                {
+                    animator.SetBool(MovementController.idleTakeOff, true);
+                }
+            }
         }
 
         internal override void MoveVerticalAxis(float speedMultiplier)

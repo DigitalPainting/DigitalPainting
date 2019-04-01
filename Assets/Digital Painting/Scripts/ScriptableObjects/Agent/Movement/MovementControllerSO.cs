@@ -38,5 +38,15 @@ namespace wizardscode.agent.movement
         public float maximumFlyingAngle = 30;
         [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
         public float climbSpeed = 1;
+
+        [Header("Flying Animations")]
+        [Tooltip("The name of the bool to trigger a landing from idle animation.")]
+        public string idleLand = "idleLand";
+        [Tooltip("The name of the bool to trigger a landing while moving animation.")]
+        public string movingLand = "runLand";
+        [Tooltip("The name of the bool to trigger the take off from idle animation.")]
+        public string idleTakeOff = "idleTakeoff";
+        [Tooltip("The name of the bool to trigger the take off while moving animation.")]
+        public string movingTakeOff = "runTakeoff";
     }
 }
