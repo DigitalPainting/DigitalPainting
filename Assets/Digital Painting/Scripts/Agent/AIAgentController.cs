@@ -25,6 +25,16 @@ namespace wizardscode.digitalpainting.agent
         private Thing _poi;
         private float timeLeftLookingAtObject = float.NegativeInfinity;
 
+        new internal AIMovementControllerSO MovementController
+        {
+            get { return (AIMovementControllerSO)base.MovementController; }
+        }
+
+        new internal FlyingMovementBrain MovementBrain
+        {
+            get { return (FlyingMovementBrain)base.MovementBrain; }
+        }
+
         override internal void Awake()
         {
             base.Awake();
@@ -74,7 +84,7 @@ namespace wizardscode.digitalpainting.agent
 
         internal void UpdatePointOfInterest()
         {
-            if (movementBrain.SeeksPOI())
+            if (MovementBrain.SeeksPOI())
             {
                 // Look for points of interest
                 if (PointOfInterest == null && Random.value <= 0.001)
@@ -108,18 +118,18 @@ namespace wizardscode.digitalpainting.agent
 
             if (PointOfInterest != null) // Update POI doesn't always find something
             {
-                movementBrain.Target = PointOfInterest.AgentViewingTransform;
-                movementBrain.UpdateMove();
+                MovementBrain.Target = PointOfInterest.AgentViewingTransform;
+                MovementBrain.UpdateMove();
 
-                if (movementBrain.HasReachedTarget())
+                if (MovementBrain.HasReachedTarget())
                 {
                     ViewPOI();
                 }
             }
             else
             {
-                movementBrain.Target = null;
-                movementBrain.UpdateMove();
+                MovementBrain.Target = null;
+                MovementBrain.UpdateMove();
             }
         }
 

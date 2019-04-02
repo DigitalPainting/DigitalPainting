@@ -14,7 +14,7 @@ namespace wizardscode.ai
 
         public MovementControllerSO MovementController
         {
-            get { return (AIMovementControllerSO)_movementController; }
+            get { return _movementController; }
             set { _movementController = value; }
         }
 

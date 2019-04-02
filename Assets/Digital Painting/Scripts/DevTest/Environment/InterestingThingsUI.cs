@@ -33,6 +33,7 @@ namespace wizardscode.devtest
 
         private void PopulateInterestingThingsDropdown()
         {
+            thingOfInterestDropdown.enabled = true;
             thingOfInterestDropdown.ClearOptions();
             List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
             options.Add(new Dropdown.OptionData("Wander"));
@@ -56,30 +57,41 @@ namespace wizardscode.devtest
 
         private void Update()
         {
-            PopulateInterestingThingsDropdown();
-
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-            if (agent.PointOfInterest != null)
+            if (_agentWithFocus.Value is AIAgentController)
             {
-                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
+                PopulateInterestingThingsDropdown();
+
+                AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+                if (agent.PointOfInterest != null)
+                {
+                    distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
+                }
+                else
+                {
+                    distanceToThingOfInterestText.text = "Wandering";
+                }
             }
             else
             {
-                distanceToThingOfInterestText.text = "Wandering";
+                thingOfInterestDropdown.enabled = false;
+                distanceToThingOfInterestText.text = "Manual Control";
             }
         }
 
         private void LateUpdate()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            if (_agentWithFocus.Value is AIAgentController)
+            {
+                AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
 
-            if (agent.PointOfInterest != null)
-            {
-                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
-            }
-            else
-            {
-                thingOfInterestDropdown.value = 0;
+                if (agent.PointOfInterest != null)
+                {
+                    thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
+                }
+                else
+                {
+                    thingOfInterestDropdown.value = 0;
+                }
             }
         }
 

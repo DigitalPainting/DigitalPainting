@@ -29,7 +29,7 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
 
-        internal FlyingMovementBrain movementBrain;
+        private BaseMovementBrain _movementBrain;
 
         float rotationX = 0;
         float rotationY = 0;
@@ -38,14 +38,19 @@ namespace wizardscode.digitalpainting.agent
 
         internal MovementControllerSO MovementController
         {
-            get { return movementBrain.MovementController; }
+            get { return MovementBrain.MovementController; }
+        }
+
+        internal BaseMovementBrain MovementBrain
+        {
+            get { return _movementBrain;  }
         }
 
         virtual internal void Awake()
         {
             manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
-            movementBrain = FindObjectOfType<FlyingMovementBrain>();
-            if (movementBrain == null)
+            _movementBrain = FindObjectOfType<BaseMovementBrain>();
+            if (MovementBrain == null)
             {
                 Debug.LogError("There is no MovementBrain attached to " + gameObject.name);
             }
@@ -89,13 +94,13 @@ namespace wizardscode.digitalpainting.agent
         {
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                MoveVerticalAxis(movementBrain.MovementController.fastMovementFactor);
-                MoveHorizontalAxis(movementBrain.MovementController.fastMovementFactor);
+                MoveVerticalAxis(MovementBrain.MovementController.fastMovementFactor);
+                MoveHorizontalAxis(MovementBrain.MovementController.fastMovementFactor);
             }
             else if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
             {
-                MoveVerticalAxis(movementBrain.MovementController.slowMovementFactor);
-                MoveHorizontalAxis(movementBrain.MovementController.fastMovementFactor);
+                MoveVerticalAxis(MovementBrain.MovementController.slowMovementFactor);
+                MoveHorizontalAxis(MovementBrain.MovementController.fastMovementFactor);
             }
             else
             {
@@ -110,9 +115,9 @@ namespace wizardscode.digitalpainting.agent
         /// <param name="speedMultiplier">A multiplier for the speed (e.g. run or crawl)</param>
         virtual internal void MoveVerticalAxis(float speedMultiplier)
         {
-            if (!movementBrain.MovementController.useRootMotion)
+            if (!MovementBrain.MovementController.useRootMotion)
             {
-                transform.position += transform.forward * (movementBrain.MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.forward * (MovementBrain.MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Vertical") * Time.deltaTime;
             }
         }
 
@@ -122,9 +127,9 @@ namespace wizardscode.digitalpainting.agent
         /// <param name="speedMultiplier">A multiplier for the speed (e.g. run or crawl)</param>
         virtual internal void MoveHorizontalAxis(float speedMultiplier)
         {
-            if (!movementBrain.MovementController.useRootMotion)
+            if (!MovementBrain.MovementController.useRootMotion)
             {
-                transform.position += transform.right * (movementBrain.MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Horizontal") * Time.deltaTime;
+                transform.position += transform.right * (MovementBrain.MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
         }
 
