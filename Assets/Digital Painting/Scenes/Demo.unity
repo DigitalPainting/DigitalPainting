@@ -264,14 +264,7 @@ MonoBehaviour:
   m_LookAt: {fileID: 0}
   m_Follow: {fileID: 2106890847}
   m_ShowDebugText: 0
-  m_ChildCameras:
-  - {fileID: 758891311}
-  - {fileID: 1834471046}
-  - {fileID: 1554019884}
-  - {fileID: 996029609}
-  - {fileID: 1481543696}
-  - {fileID: 185281329}
-  - {fileID: 670478681}
+  m_ChildCameras: []
   m_ActivateAfter: 0
   m_MinDuration: 3
   m_RandomizeChoice: 0
@@ -1077,6 +1070,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114313452888132310, guid: 60e43b29053340448bd33cb55fecb101,
+        type: 3}
+      propertyPath: minCellSize
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 65841498849853628, guid: 60e43b29053340448bd33cb55fecb101,
         type: 3}
       propertyPath: m_Size.y
@@ -1086,11 +1084,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.y
       value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 114313452888132310, guid: 60e43b29053340448bd33cb55fecb101,
-        type: 3}
-      propertyPath: minCellSize
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60e43b29053340448bd33cb55fecb101, type: 3}
@@ -1735,7 +1728,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656061160}
-  m_LocalRotation: {x: -0.18716541, y: 0.19414413, z: 0.037764102, w: 0.96221155}
+  m_LocalRotation: {x: -0.18716542, y: 0.19414413, z: 0.03776411, w: 0.96221155}
   m_LocalPosition: {x: -0.72155285, y: -0.14, z: -1.7152786}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3724,18 +3717,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1585729370379257032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: _agentWithFocus._variable
-      value: 
-      objectReference: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838,
-        type: 2}
-    - target: {fileID: 1585729370379257032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: defaultCameraRig
-      value: 
-      objectReference: {fileID: 1524742428610133876, guid: 15f4bc0d157a6b648a6f61013ec646f9,
-        type: 3}
     - target: {fileID: 4451654348586044, guid: 892bb710e0f33aa468c5f743c6ab07dc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 816.28357
@@ -3766,65 +3747,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4451654348586044, guid: 892bb710e0f33aa468c5f743c6ab07dc, type: 3}
       propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: implementation
-      value: 
-      objectReference: {fileID: 11400000, guid: 5b4533fed0ddbe2428b71b0c2e37bee2,
-        type: 2}
-    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: configuration
-      value: 
-      objectReference: {fileID: 11400000, guid: 391203896cefa3e458358467f3c126dc,
-        type: 2}
-    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: isAuto
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: WeatherUpdateFrequency
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: configuration
-      value: 
-      objectReference: {fileID: 11400000, guid: 96a5d14ec4ca7c3488ce2ba2ca207b7d,
-        type: 2}
-    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: startTime
-      value: 28000
-      objectReference: {fileID: 0}
-    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: sunPrefab
-      value: 
-      objectReference: {fileID: 108792081150906930, guid: 935ed1b2f6a62904888782218dd03f07,
-        type: 3}
-    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: skybox
-      value: 
-      objectReference: {fileID: 2100000, guid: 4074ef2f68c9e1e4ebeb126f0af53116, type: 2}
-    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: dayCycleInMinutes
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114430713918459818, guid: 892bb710e0f33aa468c5f743c6ab07dc,
-        type: 3}
-      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114192318843746294, guid: 892bb710e0f33aa468c5f743c6ab07dc,
@@ -3880,11 +3802,82 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838,
         type: 2}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: configuration
+      value: 
+      objectReference: {fileID: 11400000, guid: 96a5d14ec4ca7c3488ce2ba2ca207b7d,
+        type: 2}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: startTime
+      value: 28000
+      objectReference: {fileID: 0}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: sunPrefab
+      value: 
+      objectReference: {fileID: 108792081150906930, guid: 935ed1b2f6a62904888782218dd03f07,
+        type: 3}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: skybox
+      value: 
+      objectReference: {fileID: 2100000, guid: 4074ef2f68c9e1e4ebeb126f0af53116, type: 2}
+    - target: {fileID: 114104959585131336, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: dayCycleInMinutes
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114430713918459818, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: implementation
+      value: 
+      objectReference: {fileID: 11400000, guid: 5b4533fed0ddbe2428b71b0c2e37bee2,
+        type: 2}
+    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: configuration
+      value: 
+      objectReference: {fileID: 11400000, guid: 391203896cefa3e458358467f3c126dc,
+        type: 2}
+    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: isAuto
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114805408651030032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: WeatherUpdateFrequency
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7711156887825927953, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 3}
       propertyPath: m_Name
       value: Wander Target Pool
       objectReference: {fileID: 0}
+    - target: {fileID: 1585729370379257032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: _agentWithFocus._variable
+      value: 
+      objectReference: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838,
+        type: 2}
+    - target: {fileID: 1585729370379257032, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+        type: 3}
+      propertyPath: defaultCameraRig
+      value: 
+      objectReference: {fileID: 1524742428610133876, guid: 15f4bc0d157a6b648a6f61013ec646f9,
+        type: 3}
     - target: {fileID: 286795433341699577, guid: 892bb710e0f33aa468c5f743c6ab07dc,
         type: 3}
       propertyPath: poolName

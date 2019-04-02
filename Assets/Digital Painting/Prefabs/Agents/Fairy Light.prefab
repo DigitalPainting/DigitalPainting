@@ -9415,6 +9415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4004592835009960}
   - component: {fileID: 114301072202632092}
+  - component: {fileID: 104736886277265415}
   - component: {fileID: 114743800790520494}
   - component: {fileID: 114665674840848990}
   - component: {fileID: 54869636479982310}
@@ -9456,13 +9457,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b9485c0356f994fa58af0adcee9283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementController: {fileID: 11400000, guid: 854a2540127fa784e81c047f97fb3a9e,
-    type: 2}
+  virtualCameraPrefab: {fileID: 0}
   mouseLookMode: 2
   mouseLookSensitivity: 100
   home: {fileID: 0}
   detectionRange: 50
   barriers: {fileID: 0}
+--- !u!114 &104736886277265415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544121714815300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65d8a9828b8a6b14f9b051a2c4be7873, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movementController: {fileID: 11400000, guid: 854a2540127fa784e81c047f97fb3a9e,
+    type: 2}
 --- !u!114 &114743800790520494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9491,17 +9505,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894835bc784f7fd468296443fc1c190c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  maxDistanceRebuildPath: 1
   acceleration: 1
   minReachDistance: 1
-  minFollowDistance: 2
-  pathPointRadius: 1
   octree: {fileID: 0}
+  maxDistanceRebuildPath: 1
   playerSeeLayerMask:
     serializedVersion: 2
     m_Bits: 1
   playerObject: {fileID: 0}
+  minFollowDistance: 2
+  pathPointRadius: 1
   preferredFlightHeight: 1.5
   minFlightHeight: 1
   maxFlightHeight: 7

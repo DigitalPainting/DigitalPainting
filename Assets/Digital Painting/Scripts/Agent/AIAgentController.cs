@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent.movement;
+using wizardscode.ai;
 using wizardscode.environment;
 using wizardscode.production;
 using wizardscode.utility;
@@ -9,9 +10,10 @@ using wizardscode.utility;
 namespace wizardscode.digitalpainting.agent
 {
     public class AIAgentController : BaseAgentController
-    {
+    {   
         [Tooltip("The range the agent will use to detect things in its environment")]
-        public float detectionRange = 50;
+        [SerializeField]
+        internal float detectionRange = 50;
 
         [Header("Overrides")]
         [Tooltip("Set of objects within which the agent must stay. Each object must have a collider and non-kinematic rigid body. If null a default object will be searched for using the name `" + DEFAULT_BARRIERS_NAME + "`.")]
@@ -22,17 +24,6 @@ namespace wizardscode.digitalpainting.agent
         private List<Thing> visitedThings = new List<Thing>();
         private Thing _poi;
         private float timeLeftLookingAtObject = float.NegativeInfinity;
-        internal float timeToNextWanderPathChange = 0;
-        
-        private Transform target; // the current target that we are moving towards
-        private RobotMovementController pathfinding;
-        private Transform wanderTarget;
-        private RobotRotationController rotationController;
-
-        new public AIMovementControllerSO MovementController
-        {
-            get { return (AIMovementControllerSO)_movementController; }
-        }
 
         override internal void Awake()
         {
@@ -65,23 +56,9 @@ namespace wizardscode.digitalpainting.agent
 
                 Debug.LogWarning(gameObject.name + " is an AI Agent, but it did not have rigidbody. One has been added automatically so that the agent will not be contained by the '" + DEFAULT_BARRIERS_NAME + "'. Consider adding one.");
             }
-
-            pathfinding = GetComponent<RobotMovementController>();
-            if (pathfinding == null)
-            {
-                Debug.LogWarning("No RobotMovementController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
-                pathfinding = gameObject.AddComponent<RobotMovementController>();
-            }
-
-            rotationController = GetComponent<RobotRotationController>();
-            if (rotationController == null)
-            {
-                Debug.LogWarning("No RobotRotationController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
-                rotationController = gameObject.AddComponent<RobotRotationController>();
-            }
         }
 
-        internal void Start()
+        internal virtual void Start()
         {
             ConfigureBarriers();
         }
@@ -97,7 +74,7 @@ namespace wizardscode.digitalpainting.agent
 
         internal void UpdatePointOfInterest()
         {
-            if (MovementController.seekPointsOfInterest)
+            if (movementBrain.SeeksPOI())
             {
                 // Look for points of interest
                 if (PointOfInterest == null && Random.value <= 0.001)
@@ -131,130 +108,19 @@ namespace wizardscode.digitalpainting.agent
 
             if (PointOfInterest != null) // Update POI doesn't always find something
             {
-                target = PointOfInterest.AgentViewingTransform;
-                UpdateMove();
-            }
-            else
-            {
-                target = null;
-                UpdateMove();
-            }
-        }
+                movementBrain.Target = PointOfInterest.AgentViewingTransform;
+                movementBrain.UpdateMove();
 
-        /// <summary>
-        /// Typically the UpdateMove method is called from the Update method of the agent controller.
-        /// It is responsible for making a decision about the agents next move and acting upon
-        /// that decision.
-        /// </summary>
-        private void UpdateMove()
-        {
-            if (target != null)
-            {
-                if (!GameObject.ReferenceEquals(pathfinding.Target, target))
-                {
-                    pathfinding.Target = target;
-                    timeToNextWanderPathChange = 0;
-                    return;
-                }
-
-                if (Vector3.Distance(transform.position, target.position) <= pathfinding.minReachDistance)
+                if (movementBrain.HasReachedTarget())
                 {
                     ViewPOI();
                 }
             }
             else
             {
-                UpdateWanderTarget();
-
-                if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
-                {
-                    UpdateWanderTarget();
-                }
+                movementBrain.Target = null;
+                movementBrain.UpdateMove();
             }
-        }
-
-        /// <summary>
-        /// Update the wander target, if it is time to do so.
-        /// A new position for the target is chosen within a cone defined by the
-        /// minAngleOfRandomPathChange and maxAngleOfRandomPathChange. Optionally,
-        /// the cone can extend behind the current agent, which has the effect of 
-        /// turning the agent around.
-        /// </summary>
-        /// <param name="turnAround">Position the target behind the agent. By default this is false.</param>
-        private void UpdateWanderTarget()
-        {
-            if (wanderTarget == null)
-            {
-                wanderTarget = ObjectPool.Instance.GetFromPool().transform;
-            }
-
-            timeToNextWanderPathChange -= Time.deltaTime;
-            if (timeToNextWanderPathChange < 0)
-            {
-                Vector3 position = GetValidWanderPosition(transform, 0);
-
-                if (position == Vector3.zero)
-                {
-                    // Was unable to find a valid position in a few tries so skipping for now, will retry on next frame
-                    Debug.LogWarning("Unable to find a valid wander target");
-                    return;
-                }
-
-                wanderTarget.position = position;
-
-                pathfinding.Target = wanderTarget;
-                timeToNextWanderPathChange = Random.Range(MovementController.minTimeBetweenRandomPathChanges, MovementController.maxTimeBetweenRandomPathChanges);
-            }
-        }
-
-        private Vector3 GetValidWanderPosition(Transform transform, int attemptCount)
-        {
-            int maxAttempts = 6;
-            bool turnAround = false;
-
-            attemptCount++;
-            if (attemptCount > maxAttempts / 2)
-            {
-                turnAround = true;
-            }
-            else if (attemptCount > maxAttempts)
-            {
-                return Vector3.zero;
-            }
-
-            Vector3 position;
-            float minDistance = MovementController.minDistanceOfRandomPathChange;
-            float maxDistance = MovementController.maxDistanceOfRandomPathChange;
-
-            Quaternion randAng;
-            if (!turnAround)
-            {
-                randAng = Quaternion.Euler(0, Random.Range(MovementController.minAngleOfRandomPathChange, MovementController.maxAngleOfRandomPathChange), 0);
-            }
-            else
-            {
-                randAng = Quaternion.Euler(0, Random.Range(180 - MovementController.minAngleOfRandomPathChange, 180 + MovementController.maxAngleOfRandomPathChange), 0);
-                minDistance = maxDistance;
-            }
-            transform.rotation = transform.rotation * randAng;
-            position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
-
-            // calculate the new height 
-            float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
-            float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
-            position.y = newY;
-
-            if (attemptCount <= maxAttempts)
-            {
-                if (!pathfinding.Octree.IsTraversableCell(position))
-                {
-                    position = GetValidWanderPosition(transform, attemptCount);
-                } else
-                {
-                    return position;
-                }
-            } 
-            return Vector3.zero;
         }
 
         /// <summary>
@@ -308,14 +174,6 @@ namespace wizardscode.digitalpainting.agent
             Gizmos.color = Color.cyan;
             Vector3 position = transform.position;
             Gizmos.DrawWireSphere(transform.position, 0.5f);
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            if (pathfinding != null)
-            {
-                pathfinding.Octree.GetNode(transform.position).DrawGizmos();
-            }
         }
     }
 }

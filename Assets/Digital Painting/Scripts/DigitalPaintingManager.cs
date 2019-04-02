@@ -52,7 +52,7 @@ namespace wizardscode.digitalpainting
             BaseAgentController controller = agent.GetComponent<BaseAgentController>();
             if (def.movementController)
             {
-                controller.MovementController = def.movementController;
+                controller.movementBrain.MovementController = def.movementController;
             }
 
             Renderer renderer = agent.GetComponent<Renderer>();
@@ -79,7 +79,7 @@ namespace wizardscode.digitalpainting
             Vector3 position = new Vector3(x, 0, z);
 
             float y = Terrain.activeTerrain.SampleHeight(position);
-            position.y = y + controller.MovementController.heightOffset;
+            position.y = y + controller.movementBrain.MovementController.heightOffset;
             return position;
         }
 

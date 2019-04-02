@@ -25,6 +25,8 @@ namespace wizardscode.agent.movement
         public float maxSpeed = 4;
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
+        [Tooltip("Minimum distance the agent needs to be from a position to be considered at that position.")]
+        public float minReachDistance = 1;
 
         [Header("Flying")]
         [Tooltip("Can this agent fly?")]

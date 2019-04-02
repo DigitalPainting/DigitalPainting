@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using UnityEngine;
 using wizardscode.agent.movement;
+using wizardscode.ai;
 
 namespace wizardscode.digitalpainting.agent
 {
@@ -16,9 +17,6 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Prefab for virtual camera to use when this is the agent with focus. If set to null the default camera for the scene will be used.")]
         [SerializeField]
         internal CinemachineVirtualCameraBase virtualCameraPrefab;
-        [Tooltip("The movement controller that will manage movement for this agent.")]
-        [SerializeField]
-        internal MovementControllerSO _movementController;
 
         public enum MouseLookModeType { Never, Always, WithRightMouseButton }
         [Header("Manual Controls")]
@@ -30,20 +28,27 @@ namespace wizardscode.digitalpainting.agent
         [Header("Overrides")]
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
-        
+
+        internal FlyingMovementBrain movementBrain;
+
         float rotationX = 0;
         float rotationY = 0;
         internal DigitalPaintingManager manager;
         internal Animator animator;
 
-        public MovementControllerSO MovementController {
-            get { return _movementController; }
-            set { _movementController = value;  } 
+        internal MovementControllerSO MovementController
+        {
+            get { return movementBrain.MovementController; }
         }
 
         virtual internal void Awake()
         {
             manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
+            movementBrain = FindObjectOfType<FlyingMovementBrain>();
+            if (movementBrain == null)
+            {
+                Debug.LogError("There is no MovementBrain attached to " + gameObject.name);
+            }
 
             animator = FindObjectOfType<Animator>();
 
@@ -84,13 +89,13 @@ namespace wizardscode.digitalpainting.agent
         {
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                MoveVerticalAxis(MovementController.fastMovementFactor);
-                MoveHorizontalAxis(MovementController.fastMovementFactor);
+                MoveVerticalAxis(movementBrain.MovementController.fastMovementFactor);
+                MoveHorizontalAxis(movementBrain.MovementController.fastMovementFactor);
             }
             else if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
             {
-                MoveVerticalAxis(MovementController.slowMovementFactor);
-                MoveHorizontalAxis(MovementController.fastMovementFactor);
+                MoveVerticalAxis(movementBrain.MovementController.slowMovementFactor);
+                MoveHorizontalAxis(movementBrain.MovementController.fastMovementFactor);
             }
             else
             {
@@ -105,9 +110,9 @@ namespace wizardscode.digitalpainting.agent
         /// <param name="speedMultiplier">A multiplier for the speed (e.g. run or crawl)</param>
         virtual internal void MoveVerticalAxis(float speedMultiplier)
         {
-            if (!MovementController.useRootMotion)
+            if (!movementBrain.MovementController.useRootMotion)
             {
-                transform.position += transform.forward * (MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Vertical") * Time.deltaTime;
+                transform.position += transform.forward * (movementBrain.MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Vertical") * Time.deltaTime;
             }
         }
 
@@ -117,9 +122,9 @@ namespace wizardscode.digitalpainting.agent
         /// <param name="speedMultiplier">A multiplier for the speed (e.g. run or crawl)</param>
         virtual internal void MoveHorizontalAxis(float speedMultiplier)
         {
-            if (!MovementController.useRootMotion)
+            if (!movementBrain.MovementController.useRootMotion)
             {
-                transform.position += transform.right * (MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Horizontal") * Time.deltaTime;
+                transform.position += transform.right * (movementBrain.MovementController.normalMovementSpeed * speedMultiplier) * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
         }
 
