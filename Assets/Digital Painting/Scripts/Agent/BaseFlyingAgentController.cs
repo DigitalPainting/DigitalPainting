@@ -203,17 +203,17 @@ namespace wizardscode.agent
 
         virtual public void FlyUp()
         {
-            if (currentHeight <= 0)
+            if (!InTransition && currentHeight <= 0)
             {
                 StartTransition();
             }
-            else if (MovementController.useRootMotion)
+            else if (!InTransition && MovementController.useRootMotion)
             {
                 float angleChange = MovementController.rotationSpeed * Time.deltaTime;
                 currentFlyingAngle = Mathf.Clamp(currentFlyingAngle - angleChange , -MovementController.maximumFlyingAngle, 0);
                 SetFlyingRotation();
             }
-            else
+            else if (!InTransition)
             {
                 Debug.LogError("Currently BaseFlyingAgentController only supports agents with Root Motion animations.");
             }

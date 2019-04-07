@@ -44,7 +44,9 @@ namespace wizardscode.digitalpainting.devtest {
         
         public void OnTimeOfDayChanged()
         {
-            dayNightCycle.configuration.SetTime(timeOfDaySlider.value);
+            if (dayNightCycle != null) {
+                dayNightCycle.configuration.SetTime(timeOfDaySlider.value);
+            }
         }
     }
 }

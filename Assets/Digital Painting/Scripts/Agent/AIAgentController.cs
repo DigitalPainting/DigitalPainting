@@ -4,8 +4,6 @@ using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.ai;
 using wizardscode.environment;
-using wizardscode.production;
-using wizardscode.utility;
 
 namespace wizardscode.digitalpainting.agent
 {

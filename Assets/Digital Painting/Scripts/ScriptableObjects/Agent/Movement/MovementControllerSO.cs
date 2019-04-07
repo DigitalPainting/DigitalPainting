@@ -15,6 +15,8 @@ namespace wizardscode.agent.movement
         [Header("Movement")]
         [Tooltip("Should this agent use Root Motion from the animator?")]
         public bool useRootMotion = false;
+        [Tooltip("Acceleration under normal circumstances.")]
+        public float Acceleration = 1;
         [Tooltip("Walking speed under normal circumstances")]
         public float normalMovementSpeed = 1;
         [Tooltip("The factor by which to multiply the walking speed when moving fast.")]

@@ -17,7 +17,7 @@ namespace wizardscode.utility
         [Tooltip("If an object is requested from the pool, but there are none available will a new one be added to the pool?")]
         public bool willGrow = true;
 
-        List<GameObject> pooledObjects;
+        static List<GameObject> pooledObjects;
 
         private void Awake()
         {

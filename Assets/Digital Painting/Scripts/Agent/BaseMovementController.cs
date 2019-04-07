@@ -1,21 +1,16 @@
 ﻿using UnityEngine;
+using wizardscode.ai;
 
 namespace wizardscode.agent {
     public class BaseMovementController : MonoBehaviour
     {
-        [Header("Core Movement")]
-        protected Transform target;
-        [SerializeField] protected float acceleration = 1;
-        [Tooltip("The minimum distance an agent must get from an object before it is considered to have reached it.")]
-        public float minReachDistance = 2f;
-
-        protected Vector3 currentDestination;
         protected Vector3 lastDestination;
 
-        public Transform Target
+        protected BaseMovementBrain MovementBrain;
+
+        private void Awake()
         {
-            get { return target; }
-            set { target = value; }
+            MovementBrain = GetComponent<BaseMovementBrain>();
         }
 
         private void OnDrawGizmosSelected()

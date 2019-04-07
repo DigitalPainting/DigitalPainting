@@ -12,6 +12,39 @@ namespace wizardscode.ai
 
         internal BaseAgentController agentController;
 
+        /// <summary>
+        /// The position of the current waypoint, which is a point between the current location and the final Target.
+        /// The last waypoint is the position of the Target itself.
+        /// </summary>
+        public virtual Vector3 WayPointPosition
+        {
+            get { return Target.position; }
+
+        }
+
+        protected Transform target;
+        /// <summary>
+        /// The current target that we are intended to move to.
+        /// </summary>
+        public Transform Target
+        {
+            get { return target; }
+            set { target = value; }
+        }
+
+        private float m_Speed;
+        public float Speed
+        {
+            get { return m_Speed; }
+            set
+            {
+                if (value <= _movementController.maxSpeed)
+                {
+                    m_Speed = value;
+                }
+            }
+        }
+
         public MovementControllerSO MovementController
         {
             get { return _movementController; }

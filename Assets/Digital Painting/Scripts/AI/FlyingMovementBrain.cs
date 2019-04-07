@@ -18,9 +18,6 @@ namespace wizardscode.ai
         internal float timeToNextWanderPathChange = 0;
 
         private RobotMovementController pathfinding;
-        private RobotRotationController rotationController;
-        
-        internal Transform Target { get; set; }
 
         /// <summary>
         /// Indicates whether the agent should spend time seeking Points of Interest.
@@ -29,6 +26,16 @@ namespace wizardscode.ai
         public bool SeeksPOI()
         {
             return ((AIMovementControllerSO)MovementController).seekPointsOfInterest;
+        }
+
+        /// <summary>
+        /// The current waypoint, which is a point between the current location and the final Target.
+        /// The last waypoint is the Target itself.
+        /// </summary>
+        public override Vector3 WayPointPosition
+        {
+            get { return pathfinding.CurrentTargetPosition; }
+
         }
 
         /// <summary>
@@ -55,13 +62,6 @@ namespace wizardscode.ai
                 Debug.LogWarning("No RobotMovementController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
                 pathfinding = gameObject.AddComponent<RobotMovementController>();
             }
-
-            rotationController = GetComponent<RobotRotationController>();
-            if (rotationController == null)
-            {
-                Debug.LogWarning("No RobotRotationController found on " + gameObject.name + ". One has been added automatically, but consider adding one manually so that it may be optimally configured.");
-                rotationController = gameObject.AddComponent<RobotRotationController>();
-            }
         }
 
         /// <summary>
@@ -71,23 +71,9 @@ namespace wizardscode.ai
         /// </summary>
         internal override void UpdateMove()
         {
-            if (Target != null)
-            {
-                if (!GameObject.ReferenceEquals(pathfinding.Target, Target))
-                {
-                    pathfinding.Target = Target;
-                    timeToNextWanderPathChange = 0;
-                    return;
-                }
-            }
-            else
+            if (Target == null || Vector3.Distance(transform.position, wanderTarget.position) <= MovementController.minReachDistance)
             {
                 UpdateWanderTarget();
-
-                if (Vector3.Distance(transform.position, wanderTarget.position) <= pathfinding.minReachDistance)
-                {
-                    UpdateWanderTarget();
-                }
             }
         }
 
@@ -120,7 +106,7 @@ namespace wizardscode.ai
 
                 wanderTarget.position = position;
 
-                pathfinding.Target = wanderTarget;
+                Target = wanderTarget;
                 timeToNextWanderPathChange = Random.Range(((AIMovementControllerSO)MovementController).minTimeBetweenRandomPathChanges, ((AIMovementControllerSO)MovementController).maxTimeBetweenRandomPathChanges);
             }
         }
@@ -158,7 +144,7 @@ namespace wizardscode.ai
 
             // calculate the new height 
             float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
-            float newY = Mathf.Clamp(position.y, terrainHeight + pathfinding.minFlightHeight, terrainHeight + pathfinding.maxFlightHeight);
+            float newY = Mathf.Clamp(position.y, terrainHeight + MovementController.minimumFlyHeight, terrainHeight + MovementController.maximumFlyHeight);
             position.y = newY;
 
             if (attemptCount <= maxAttempts)
@@ -179,7 +165,23 @@ namespace wizardscode.ai
         {
             if (pathfinding != null)
             {
-                pathfinding.Octree.GetNode(transform.position).DrawGizmos();
+                Octree.OctreeElement node = pathfinding.Octree.GetNode(transform.position);
+                if (node != null)
+                {
+                    node.DrawGizmos();
+                }
+            }
+
+            if (Target != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(Target.transform.position, 1);
+            }
+
+            if (WayPointPosition != null)
+            {
+                Gizmos.color = Color.gray;
+                Gizmos.DrawSphere(WayPointPosition, 0.5f);
             }
         }
     }
