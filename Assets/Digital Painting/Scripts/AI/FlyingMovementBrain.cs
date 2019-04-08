@@ -35,7 +35,6 @@ namespace wizardscode.ai
         public override Vector3 WayPointPosition
         {
             get { return pathfinding.CurrentTargetPosition; }
-
         }
 
         /// <summary>
@@ -71,6 +70,8 @@ namespace wizardscode.ai
         /// </summary>
         internal override void UpdateMove()
         {
+            timeToNextWanderPathChange -= Time.deltaTime;
+
             if (Target == null || Vector3.Distance(transform.position, wanderTarget.position) <= MovementController.minReachDistance)
             {
                 UpdateWanderTarget();
@@ -92,11 +93,9 @@ namespace wizardscode.ai
                 wanderTarget = ObjectPool.Instance.GetFromPool().transform;
             }
 
-            timeToNextWanderPathChange -= Time.deltaTime;
             if (timeToNextWanderPathChange < 0)
             {
-                Vector3 position = GetValidWanderPosition(transform, 0);
-
+                Vector3 position = GetValidWanderPosition();
                 if (position == Vector3.zero)
                 {
                     // Was unable to find a valid position in a few tries so skipping for now, will retry on next frame
@@ -110,55 +109,37 @@ namespace wizardscode.ai
                 timeToNextWanderPathChange = Random.Range(((AIMovementControllerSO)MovementController).minTimeBetweenRandomPathChanges, ((AIMovementControllerSO)MovementController).maxTimeBetweenRandomPathChanges);
             }
         }
-        private Vector3 GetValidWanderPosition(Transform transform, int attemptCount)
+        private Vector3 GetValidWanderPosition()
         {
-            int maxAttempts = 6;
-            bool turnAround = false;
-
-            attemptCount++;
-            if (attemptCount > maxAttempts / 2)
-            {
-                turnAround = true;
-            }
-            else if (attemptCount > maxAttempts)
-            {
-                return Vector3.zero;
-            }
-
             Vector3 position;
-            float minDistance = ((AIMovementControllerSO)MovementController).minDistanceOfRandomPathChange;
-            float maxDistance = ((AIMovementControllerSO)MovementController).maxDistanceOfRandomPathChange;
+            float minDistance = ((AIMovementControllerSO)MovementController).minDistanceOfRandomPathChange / 2;
+            float maxDistance = ((AIMovementControllerSO)MovementController).maxDistanceOfRandomPathChange / 2;
 
-            Quaternion randAng;
-            if (!turnAround)
+            float x = Random.Range(minDistance, maxDistance);
+            float z = Random.Range(minDistance, maxDistance);
+
+            position = new Vector3(transform.position.x + x, 0, transform.position.z + z);
+            if (Random.value > 0.5)
             {
-                randAng = Quaternion.Euler(0, Random.Range(((AIMovementControllerSO)MovementController).minAngleOfRandomPathChange, ((AIMovementControllerSO)MovementController).maxAngleOfRandomPathChange), 0);
-            }
-            else
+                position += transform.position;
+            } else
             {
-                randAng = Quaternion.Euler(0, Random.Range(180 - ((AIMovementControllerSO)MovementController).minAngleOfRandomPathChange, 180 + ((AIMovementControllerSO)MovementController).maxAngleOfRandomPathChange), 0);
-                minDistance = maxDistance;
+                position -= transform.position;
             }
-            transform.rotation = transform.rotation * randAng;
-            position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
 
             // calculate the new height 
             float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
-            float newY = Mathf.Clamp(position.y, terrainHeight + MovementController.minimumFlyHeight, terrainHeight + MovementController.maximumFlyHeight);
-            position.y = newY;
+            float y = Random.Range(MovementController.minimumFlyHeight, MovementController.maximumFlyHeight);
+            position.y = y + terrainHeight;
 
-            if (attemptCount <= maxAttempts)
+            if (!pathfinding.Octree.IsTraversableCell(position))
             {
-                if (!pathfinding.Octree.IsTraversableCell(position))
-                {
-                    position = GetValidWanderPosition(transform, attemptCount);
-                }
-                else
-                {
-                    return position;
-                }
+                return GetValidWanderPosition();
             }
-            return Vector3.zero;
+            else
+            {
+                return position;
+            }
         }
         
         private void OnDrawGizmosSelected()

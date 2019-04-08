@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.digitalpainting.agent;
@@ -7,19 +8,91 @@ namespace wizardscode.agent
 {
     public class BaseFlyingAgentController : BaseAgentController
     {
+        public enum MovementStyle { Grounded, Flying, Gliding, Diving}
         internal float currentRotation;
         internal float currentHeight = 0;
         internal float currentFlyingAngle;
 
+        private MovementStyle m_currentMovementStyle = MovementStyle.Grounded;
+        public MovementStyle MovementType
+        {
+            get { return m_currentMovementStyle; }
+            set {
+                // FIXME: don't use strings to set animator parameters in below
+                switch (value)
+                {
+                    case MovementStyle.Grounded:
+                        if (!InTransition && currentHeight > 0)
+                        {
+                            InTransition = true;
+
+                            if (IsMoving)
+                            {
+                                animator.SetBool(MovementController.movingLand, true);
+                            }
+                            else
+                            {
+                                animator.SetBool(MovementController.idleLand, true);
+                            }
+                        } else if (InTransition && currentHeight <= 0)
+                        {
+                            InTransition = false;
+                        }
+                        break;
+                    case MovementStyle.Flying:
+                        animator.SetBool(MovementController.endDive, true);
+                        animator.SetBool(MovementController.endGlide, true);
+
+                        if (!InTransition && m_currentMovementStyle == MovementStyle.Grounded)
+                        {
+                            InTransition = true;
+                            if (IsMoving)
+                            {
+                                animator.SetBool(MovementController.movingTakeOff, true);
+                            }
+                            else
+                            {
+                                animator.SetBool(MovementController.idleTakeOff, true);
+                            }
+                        }
+
+                        if (InTransition && currentHeight >= MovementController.minimumFlyHeight)
+                        {
+                            InTransition = false;
+                        }
+
+                        break;
+                    case MovementStyle.Diving:
+                        if (m_currentMovementStyle != MovementStyle.Diving)
+                        {
+                            animator.SetBool(MovementController.endDive, false);
+                            animator.SetBool(MovementController.startDive, true);
+                        }
+                        break;
+                    case MovementStyle.Gliding:
+                        if (m_currentMovementStyle != MovementStyle.Gliding && m_currentMovementStyle != MovementStyle.Flying)
+                        {
+                            MovementType = MovementStyle.Flying;
+                            return;
+                        }
+                        else if (m_currentMovementStyle != MovementStyle.Gliding)
+                        {
+                            animator.SetBool(MovementController.endGlide, false);
+                            animator.SetBool(MovementController.glide, true);
+                        }
+                        break;
+                }
+                m_currentMovementStyle = value;
+            }
+        }
+
         /// <summary>
         /// Tests to see if the agent is currently flying.
         /// </summary>
-        internal bool IsFlying { get; private set;  }
-        
-        /// <summary>
-        /// Tests to see if the agent is currently landing.
-        /// </summary>
-        internal bool IsLanding { get; private set; }
+        internal bool IsFlying {
+            get { return MovementType != MovementStyle.Grounded; }
+            set { MovementType = MovementStyle.Flying; }
+        }
 
         /// <summary>
         /// Test to see if the agent is transitioning between flying and grounded. When this is
@@ -34,44 +107,6 @@ namespace wizardscode.agent
         /// <returns>True if in a transitioning state.</returns>
         public bool IsMoving {
             get { return animator.GetFloat("locomotion") != 0.5; }
-        }
-
-        /// <summary>
-        /// Start a transition from flying to grounded or vice-versa. This will
-        /// start the appropriate animation. The animation should call EndTransition
-        /// when the transition to air or ground is complete (not necessarily when 
-        /// the animation is complete).
-        /// </summary>
-        public void StartTransition()
-        {
-            InTransition = true;
-            if (!IsFlying)
-            {
-                TakeOff();
-            }
-        }
-        
-        /// <summary>
-        /// End a transition from flying to grounded or vice-versa. Typically
-        /// this will be called from an animation event. The IsFlying status
-        /// will be changed when this is called.
-        /// </summary>
-        public void EndTransition()
-        {
-            InTransition = false;
-            if (IsFlying)
-            {
-                // Landed
-                IsFlying = false;
-                IsLanding = false;
-                currentHeight = 0;
-                AdjustHeightToTerrain();
-            }
-            else
-            {
-                // Taken Off
-                IsFlying = true;
-            }
         }
         
         public override void Move()
@@ -91,11 +126,11 @@ namespace wizardscode.agent
 
             if (!InTransition && Input.GetKey(KeyCode.F))
             {
-                StartTransition();
+                FlyUp();
             }
 
             // Set the turn angle
-            float turnY = transform.eulerAngles.y + (currentRotation * MovementController.rotationSpeed * Time.deltaTime);
+            float turnY = transform.eulerAngles.y + (currentRotation * MovementController.maxRotationSpeed * Math.Abs(MovementBrain.Speed / MovementController.maxSpeed) * Time.deltaTime);
             Vector3 newRotation = new Vector3(transform.eulerAngles.x, turnY, transform.eulerAngles.z);
             transform.eulerAngles = newRotation;
             
@@ -109,7 +144,7 @@ namespace wizardscode.agent
         /// <summary>
         /// Sets the current height to the correct value above the terrain. 
         /// </summary>
-        private void ManageHeight()
+        internal void ManageHeight()
         {
             float terrainHeight = Terrain.activeTerrain.SampleHeight(transform.position);
             currentHeight = transform.position.y - terrainHeight;
@@ -126,11 +161,10 @@ namespace wizardscode.agent
                         SetFlyingRotation();
                     }
 
-                    if (!IsLanding && currentHeight <= MovementController.minimumFlyHeight + 0.05f)
+                    if (!InTransition && currentHeight <= MovementController.minimumFlyHeight + 0.05f)
                     {
                         currentHeight = MovementController.minimumFlyHeight;
-                        IsLanding = true;
-                        Land();
+                        MovementType = MovementStyle.Grounded;
                     }
                     else
                     {
@@ -163,9 +197,10 @@ namespace wizardscode.agent
 
         virtual public void FlyDown()
         {
+            MovementType = MovementStyle.Flying;
             if (MovementController.useRootMotion)
             {
-                float angleChange = MovementController.rotationSpeed * Time.deltaTime;
+                float angleChange = MovementController.maxRotationSpeed * Math.Abs(MovementBrain.Speed / MovementController.maxSpeed) * Time.deltaTime;
                 currentFlyingAngle = Mathf.Clamp(currentFlyingAngle + angleChange, MovementController.maximumFlyingAngle, 0);
                 SetFlyingRotation();
             }
@@ -175,66 +210,24 @@ namespace wizardscode.agent
             }
         }
 
-        private void SetFlyingRotation()
+        internal void SetFlyingRotation()
         {
             Vector3 newRotation = new Vector3(currentFlyingAngle, transform.eulerAngles.y, transform.eulerAngles.z);
             transform.eulerAngles = newRotation;
         }
 
-
-        /// <summary>
-        /// Perform the appropriate Landing animation.
-        /// </summary>
-        public virtual void Land()
-        {
-            if (IsFlying)
-            {
-                // FIXME: don't use strings to set animator parameters
-                if (IsMoving)
-                {
-                    animator.SetBool(MovementController.movingLand, true);
-                }
-                else
-                {
-                    animator.SetBool(MovementController.idleLand, true);
-                }
-            }
-        }
-
         virtual public void FlyUp()
         {
-            if (!InTransition && currentHeight <= 0)
+            MovementType = MovementStyle.Flying;
+            if (!InTransition && MovementController.useRootMotion)
             {
-                StartTransition();
-            }
-            else if (!InTransition && MovementController.useRootMotion)
-            {
-                float angleChange = MovementController.rotationSpeed * Time.deltaTime;
+                float angleChange = MovementController.maxRotationSpeed * Math.Abs(MovementBrain.Speed / MovementController.maxSpeed) * Time.deltaTime;
                 currentFlyingAngle = Mathf.Clamp(currentFlyingAngle - angleChange , -MovementController.maximumFlyingAngle, 0);
                 SetFlyingRotation();
             }
             else if (!InTransition)
             {
                 Debug.LogError("Currently BaseFlyingAgentController only supports agents with Root Motion animations.");
-            }
-        }
-
-        /// <summary>
-        /// Perform the appropriate TakeOff animation.
-        /// </summary>
-        public virtual void TakeOff()
-        {
-            if (!IsFlying)
-            {
-                // FIXME: don't use strings to set animator parameters
-                if (IsMoving)
-                {
-                    animator.SetBool(MovementController.movingTakeOff, true);
-                }
-                else
-                {
-                    animator.SetBool(MovementController.idleTakeOff, true);
-                }
             }
         }
 
@@ -256,7 +249,7 @@ namespace wizardscode.agent
         internal override void MoveHorizontalAxis(float speedMultiplier)
         {
             currentRotation = Input.GetAxis("Horizontal");
-            Vector3 newRotation = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -currentRotation * MovementController.rotationSpeed);
+            Vector3 newRotation = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, -currentRotation * MovementController.maxRotationSpeed);
             if (IsFlying)
             {
                 transform.eulerAngles = newRotation;

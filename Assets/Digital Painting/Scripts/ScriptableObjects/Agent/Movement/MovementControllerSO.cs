@@ -26,7 +26,7 @@ namespace wizardscode.agent.movement
         [Tooltip("The maximum speed that the agent can move at.")]
         public float maxSpeed = 4;
         [Tooltip("Speed at which the agent will rotate.")]
-        public float rotationSpeed = 90;
+        public float maxRotationSpeed = 90;
         [Tooltip("Minimum distance the agent needs to be from a position to be considered at that position.")]
         public float minReachDistance = 1;
 
@@ -53,5 +53,13 @@ namespace wizardscode.agent.movement
         public string idleTakeOff = "idleTakeoff";
         [Tooltip("The name of the bool to trigger the take off while moving animation.")]
         public string movingTakeOff = "runTakeoff";
+        [Tooltip("Animation to use when starting to dive towards the ground at a steep angle.")]
+        public string startDive = "flyDive";
+        [Tooltip("Animation to use when ending a dive.")]
+        public string endDive = "flyDiveEnd";
+        [Tooltip("Animation to use when starting to glide.")]
+        public string glide = "flyGlide";
+        [Tooltip("Animation to use when ending a glide.")]
+        public string endGlide = "flyGlideEnd";
     }
 }
