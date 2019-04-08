@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using wizardscode.agent;
+using wizardscode.ai;
 using wizardscode.digitalpainting.agent;
 using wizardscode.environment;
 
@@ -57,14 +59,14 @@ namespace wizardscode.devtest
 
         private void Update()
         {
-            if (_agentWithFocus.Value is AIAgentController)
+            PointOfInterestBrain poiBrain = _agentWithFocus.Value.GetComponent<PointOfInterestBrain>();
+            if (poiBrain != null)
             {
                 PopulateInterestingThingsDropdown();
-
-                AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-                if (agent.PointOfInterest != null)
+                
+                if (poiBrain.PointOfInterest != null)
                 {
-                    distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
+                    distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(_agentWithFocus.Value.transform.position, poiBrain.PointOfInterest.AgentViewingTransform.position).ToString();
                 }
                 else
                 {
@@ -80,13 +82,14 @@ namespace wizardscode.devtest
 
         private void LateUpdate()
         {
-            if (_agentWithFocus.Value is AIAgentController)
+            PointOfInterestBrain poiBrain = _agentWithFocus.Value.GetComponent<PointOfInterestBrain>();
+            if (poiBrain != null)
             {
-                AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+                BaseFlyingAgentController agent = (BaseFlyingAgentController)_agentWithFocus.Value;
 
-                if (agent.PointOfInterest != null)
+                if (poiBrain.PointOfInterest != null)
                 {
-                    thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
+                    thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == poiBrain.PointOfInterest) + 1;
                 }
                 else
                 {
@@ -97,21 +100,21 @@ namespace wizardscode.devtest
 
         public void OnThingSelectionChanged()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-
+            BaseFlyingAgentController agent = (BaseFlyingAgentController)_agentWithFocus.Value;
+            PointOfInterestBrain poiBrain = _agentWithFocus.Value.GetComponent<PointOfInterestBrain>();
             if (thingOfInterestDropdown.value == 0)
             {
-                agent.PointOfInterest = null;
+                poiBrain.PointOfInterest = null;
             }
             else
             {
-                agent.PointOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
+                poiBrain.PointOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
             }
         }
 
         public void OnAddThingClicked()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            BaseFlyingAgentController agent = (BaseFlyingAgentController)_agentWithFocus.Value;
 
             Thing newThing = GameObject.Instantiate<Thing>(addableThings[0]);
             newThing.name = "This is " + transform.position.ToString();

@@ -37,22 +37,6 @@ namespace wizardscode.ai
             get { return pathfinding.CurrentTargetPosition; }
         }
 
-        /// <summary>
-        /// Indicates whether the agent had reached the target. To have reached the target it
-        /// must be within minReachDistance.
-        /// </summary>
-        /// <returns>True if agent is within the minReachDistance of the current target. Also true if there is no target.</returns>
-        public bool HasReachedTarget() {
-            if (Target == null)
-            {
-                return true;
-            }
-            else
-            {
-                return Vector3.Distance(transform.position, Target.position) <= MovementController.minReachDistance;
-            }
-        }
-
         internal void Start()
         {
             pathfinding = GetComponent<RobotMovementController>();
