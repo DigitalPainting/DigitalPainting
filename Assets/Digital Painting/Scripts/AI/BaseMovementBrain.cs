@@ -10,7 +10,17 @@ namespace wizardscode.ai
         [SerializeField]
         internal MovementControllerSO _movementController;
 
-        internal BaseAgentController agentController;
+        private BaseAgentController m_agentController;
+        private void Awake()
+        {
+            AgentController = GetComponent<BaseAgentController>();
+        }
+
+        public BaseAgentController AgentController
+        {
+            get { return m_agentController; }
+            private set { m_agentController = value; }
+        }
 
         /// <summary>
         /// The position of the current waypoint, which is a point between the current location and the final Target.

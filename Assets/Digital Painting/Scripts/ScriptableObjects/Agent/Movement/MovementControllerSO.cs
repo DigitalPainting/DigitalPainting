@@ -39,8 +39,18 @@ namespace wizardscode.agent.movement
         public float minimumFlyHeight = 2;
         [Tooltip("Maximum flying height for this agent, the agent will not go higher than this.")]
         public float maximumFlyHeight = 50;
-        [Tooltip("Maximum flying angle for this agent.")]
-        public float maximumFlyingAngle = 30;
+        [Tooltip("Minimum roll for this agent (left down).")]
+        [Range(0, -180)]
+        public float minimumRoll = -60;
+        [Tooltip("Maximum roll for this agent (right down).")]
+        [Range(0, 180)]
+        public float maximumRoll = 60;
+        [Tooltip("Minimum pitch for this agent (nose down).")]
+        [Range(0, -180)]
+        public float minimumPitch = -80;
+        [Tooltip("Maximum pitch for this agent (nose up).")]
+        [Range(0, 180)]
+        public float maximumPitch = 30;
         [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
         public float climbSpeed = 1;
 

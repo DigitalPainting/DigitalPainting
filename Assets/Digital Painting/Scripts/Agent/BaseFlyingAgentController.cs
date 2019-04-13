@@ -8,19 +8,21 @@ namespace wizardscode.agent
 {
     public class BaseFlyingAgentController : BaseAgentController
     {
-        public enum MovementStyle { Grounded, Flying, Gliding, Diving}
         internal float currentRotation;
         internal float currentHeight = 0;
         internal float currentFlyingAngle;
 
-        private MovementStyle m_currentMovementStyle = MovementStyle.Grounded;
-        public MovementStyle MovementType
+        
+        public override MovementStyle MovementType
         {
             get { return m_currentMovementStyle; }
             set {
                 // FIXME: don't use strings to set animator parameters in below
                 switch (value)
                 {
+                    case MovementStyle.Idle:
+                        SlowToStop();
+                        break;
                     case MovementStyle.Grounded:
                         if (!InTransition && currentHeight > 0)
                         {
@@ -201,7 +203,7 @@ namespace wizardscode.agent
             if (MovementController.useRootMotion)
             {
                 float angleChange = MovementController.maxRotationSpeed * Math.Abs(MovementBrain.Speed / MovementController.maxSpeed) * Time.deltaTime;
-                currentFlyingAngle = Mathf.Clamp(currentFlyingAngle + angleChange, MovementController.maximumFlyingAngle, 0);
+                currentFlyingAngle = Mathf.Clamp(currentFlyingAngle + angleChange, MovementController.maximumPitch, 0);
                 SetFlyingRotation();
             }
             else
@@ -222,7 +224,7 @@ namespace wizardscode.agent
             if (!InTransition && MovementController.useRootMotion)
             {
                 float angleChange = MovementController.maxRotationSpeed * Math.Abs(MovementBrain.Speed / MovementController.maxSpeed) * Time.deltaTime;
-                currentFlyingAngle = Mathf.Clamp(currentFlyingAngle - angleChange , -MovementController.maximumFlyingAngle, 0);
+                currentFlyingAngle = Mathf.Clamp(currentFlyingAngle - angleChange , -MovementController.maximumPitch, 0);
                 SetFlyingRotation();
             }
             else if (!InTransition)

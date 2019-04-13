@@ -56,20 +56,16 @@ namespace wizardscode.ai
         {
             timeToNextWanderPathChange -= Time.deltaTime;
 
-            if (Target == null || Vector3.Distance(transform.position, wanderTarget.position) <= MovementController.minReachDistance)
+            if (Target == null || HasReachedTarget())
             {
+                AgentController.MovementType = BaseAgentController.MovementStyle.Idle;
                 UpdateWanderTarget();
             }
         }
 
         /// <summary>
         /// Update the wander target, if it is time to do so.
-        /// A new position for the target is chosen within a cone defined by the
-        /// minAngleOfRandomPathChange and maxAngleOfRandomPathChange. Optionally,
-        /// the cone can extend behind the current agent, which has the effect of 
-        /// turning the agent around.
         /// </summary>
-        /// <param name="turnAround">Position the target behind the agent. By default this is false.</param>
         private void UpdateWanderTarget()
         {
             if (wanderTarget == null)

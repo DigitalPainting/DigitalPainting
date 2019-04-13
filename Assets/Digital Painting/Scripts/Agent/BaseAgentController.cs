@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using System;
 using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.ai;
@@ -29,12 +30,20 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
 
+        public enum MovementStyle { Idle, Grounded, Flying, Gliding, Diving }
+        internal MovementStyle m_currentMovementStyle = MovementStyle.Idle;
         private BaseMovementBrain _movementBrain;
 
         float rotationX = 0;
         float rotationY = 0;
         internal DigitalPaintingManager manager;
         internal Animator animator;
+
+        public virtual MovementStyle MovementType
+        {
+            get { return m_currentMovementStyle; }
+            set { m_currentMovementStyle = value; }
+        }
 
         internal MovementControllerSO MovementController
         {
@@ -106,6 +115,23 @@ namespace wizardscode.digitalpainting.agent
             {
                 MoveVerticalAxis(1);
                 MoveHorizontalAxis(1);
+            }
+        }
+
+        internal void SlowToStop()
+        {
+            float delta = Time.deltaTime * MovementBrain.MovementController.Acceleration;
+            if (Math.Abs(MovementBrain.Speed) <= delta)
+            {
+                MovementBrain.Speed = 0;
+            }
+            else if (MovementBrain.Speed > 0)
+            {
+                MovementBrain.Speed -= delta;
+            }
+            else if (MovementBrain.Speed < 0)
+            {
+                MovementBrain.Speed += delta;
             }
         }
 

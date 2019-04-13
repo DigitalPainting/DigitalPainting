@@ -1,12 +1,15 @@
 ﻿using Cinemachine;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.ai;
 using wizardscode.environment;
+using Random = UnityEngine.Random;
 
 namespace wizardscode.digitalpainting.agent
 {
+    [Obsolete("Use AIDragonAgentController")]
     public class AIAgentController : BaseAgentController
     {   
         [Tooltip("The range the agent will use to detect things in its environment")]
