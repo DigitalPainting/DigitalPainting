@@ -58,7 +58,7 @@ namespace wizardscode.ai
 
             if (Target == null || HasReachedTarget())
             {
-                AgentController.MovementType = BaseAgentController.MovementStyle.Idle;
+                AgentController.Idle();
                 UpdateWanderTarget();
             }
         }

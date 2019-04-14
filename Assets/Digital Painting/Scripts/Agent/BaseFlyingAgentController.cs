@@ -20,7 +20,7 @@ namespace wizardscode.agent
                 // FIXME: don't use strings to set animator parameters in below
                 switch (value)
                 {
-                    case MovementStyle.Idle:
+                    case MovementStyle.IdleGrounded:
                         SlowToStop();
                         break;
                     case MovementStyle.Grounded:
@@ -40,6 +40,23 @@ namespace wizardscode.agent
                         {
                             InTransition = false;
                         }
+                        break;
+                    case MovementStyle.TakingOff:
+                        if (InTransition && currentHeight < MovementController.minimumFlyHeight)
+                        {
+                            if (MovementBrain.Speed > 0)
+                            {
+                                animator.SetBool(MovementController.movingTakeOff, true);
+                            } else {
+                                animator.SetBool(MovementController.idleTakeOff, true);
+                            }
+                        } else
+                        {
+                            InTransition = false;
+                        }
+                        break;
+                    case MovementStyle.IdleFlying:
+                        SlowToStop();
                         break;
                     case MovementStyle.Flying:
                         animator.SetBool(MovementController.endDive, true);
@@ -101,7 +118,7 @@ namespace wizardscode.agent
         /// true it means that the IsFLying value has just toggled, or will soon toggle.
         /// </summary>
         /// <returns>True if in a transitioning state.</returns>
-        public bool InTransition { get; private set; }
+        public bool InTransition { get; internal set; }
 
         /// <summary>
         /// Test to see if the agent is moving.

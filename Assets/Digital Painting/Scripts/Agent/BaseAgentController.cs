@@ -30,8 +30,8 @@ namespace wizardscode.digitalpainting.agent
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
 
-        public enum MovementStyle { Idle, Grounded, Flying, Gliding, Diving }
-        internal MovementStyle m_currentMovementStyle = MovementStyle.Idle;
+        public enum MovementStyle { IdleGrounded, Grounded, IdleFlying, TakingOff, Flying, Gliding, Diving }
+        internal MovementStyle m_currentMovementStyle = MovementStyle.IdleGrounded;
         private BaseMovementBrain _movementBrain;
 
         float rotationX = 0;
@@ -53,6 +53,34 @@ namespace wizardscode.digitalpainting.agent
         internal BaseMovementBrain MovementBrain
         {
             get { return _movementBrain;  }
+        }
+
+        /// <summary>
+        /// A shorthand way of establishing if the agent is in an idle state. This can be any one of the valid 
+        /// MovementStyles that equate to being Idle.
+        /// </summary>
+        internal bool IsIdle()
+        {
+            return MovementType == MovementStyle.IdleGrounded || MovementType == MovementStyle.IdleFlying;
+        }
+
+        /// <summary>
+        /// If agent is idle it is doing nothing at all. This is a shorthand for
+        /// getting and setting the idle state, if appropriate it will set the correct
+        /// idle state based on the current state, e.g. if flying this will set the
+        /// MovementType to IdleFlying.
+        /// </summary>
+        public void Idle() {
+            if (IsIdle()) return;
+
+            if (MovementType == MovementStyle.Grounded)
+            {
+                MovementType = MovementStyle.IdleGrounded;
+            }
+            else
+            {
+                MovementType = MovementStyle.IdleFlying;
+            };
         }
 
         virtual internal void Awake()
