@@ -28,8 +28,16 @@ namespace wizardscode.production
 
         public void OnAgentWithFocusChanged()
         {
-            defaultCameraRig.Follow = _agentWithFocus.Value.transform;
-            defaultCameraRig.LookAt = _agentWithFocus.Value.transform;
+            if (_agentWithFocus.Value == null)
+            {
+                defaultCameraRig.Follow = null;
+                defaultCameraRig.LookAt = null;
+            }
+            else
+            {
+                defaultCameraRig.Follow = _agentWithFocus.Value.transform;
+                defaultCameraRig.LookAt = _agentWithFocus.Value.transform;
+            }
         }
 
         /// <summary>
