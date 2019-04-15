@@ -63,13 +63,16 @@ namespace wizardscode.production
         {
             if (config == null || config.AgentControllerWithFocus == null) return;
 
-            if (GameObject.ReferenceEquals(other.gameObject, config.AgentControllerWithFocus.gameObject))
+            Transform root = other.gameObject.transform.root;
+            if (_virtualCamera.Follow == root) { return; }
+
+            if (GameObject.ReferenceEquals(root.gameObject, config.AgentControllerWithFocus.gameObject))
             {
                 _virtualCamera.Priority += config.PriorityBoost;
-                if (config.FollowTriggerAgent) _virtualCamera.Follow = other.gameObject.transform;
+                if (config.FollowTriggerAgent) _virtualCamera.Follow = root;
                 if (config.LookAtTriggerAgent)
                 {
-                    _virtualCamera.LookAt = other.gameObject.transform;
+                    _virtualCamera.LookAt = root.transform;
                 }
                 else
                 {
@@ -83,7 +86,10 @@ namespace wizardscode.production
         {
             if (config == null || config.AgentControllerWithFocus == null) return;
 
-            if (GameObject.ReferenceEquals(other.gameObject, config.AgentControllerWithFocus.gameObject))
+            Transform root = other.gameObject.transform.root;
+            if (_virtualCamera.Follow == root) { return; }
+
+            if (GameObject.ReferenceEquals(root.gameObject, config.AgentControllerWithFocus.gameObject))
             {
                 _virtualCamera.m_Priority -= config.PriorityBoost;
                 if (config.OnEnterEvent != null) config.OnExitEvent.Raise();
