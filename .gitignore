@@ -31,6 +31,7 @@ ExportedObj/
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 Logs/
+Assets/_TerrainAutoUpgrade
 
 # Builds
 *.apk
@@ -64,3 +65,8 @@ Assets/TextMesh Pro.meta
 Assets/TextMesh Pro/
 Assets/NatureManufacture Assets.meta
 Assets/NatureManufacture Assets
+Assets/Malbers\ Animations.meta
+Assets/Malbers\ Animations
+
+Assets/Scenes.meta
+Assets/Scenes
