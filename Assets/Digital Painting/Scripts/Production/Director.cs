@@ -23,6 +23,7 @@ namespace wizardscode.production
         private void Awake()
         {
             SetupMainCamera();
+            _agentWithFocus.Value = null; // set agent with focus to null on startup so that we always trigger the initial on change event.
         }
 
         public void OnAgentWithFocusChanged()
