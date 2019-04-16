@@ -38,7 +38,7 @@ Now that we have our Agent Definition Scriptable Object we can drag this into th
 
 Now when you play your scene your wandering sphere will be spawned in.
 
-## Create an Agent with a Character Controller
+## Create an Agent with a Custom Character Controller
 
 For the most part we want our agents to be more complex. They will have a character controller and animations. Precisely how you wire up these agents will vary depending on the character controller in use. In this example we will use the [Elemental Dragon](https://assetstore.unity.com/packages/3d/characters/creatures/elemental-dragon-137816) from Malbers Animations.
 
@@ -51,6 +51,10 @@ Next up, import the asset into your project.
 To get started we wil simply drop a default prefab (without AI) from the asset into our scene. The Elemental Dragon comes with a controller. If you hit play now you can control the dragon using the controller but it is not recognized as an Agent in the painting and so the cameras do not react to it. To fix this we need to add the `BaseAgentController` script to the dragon. Now when we play we can move around using the Controller provided by the Elemental Dragon asset. The dragon will also trigger cameras in the scene. 
 
 We've made a few changes to the Dragon Prefab and should probably create a new prefab before we accidentally save those changes to the original. 
+
+### Adding a Camera Target
+
+FIXME: Add a CameraTarget component that will tell the camera where to look / follow when the agent gets focus.
 
 ### Integrating the AI Controller
 
@@ -68,7 +72,12 @@ The Digital Painting had the concept of Points of Interest. These can be thought
 
 To do this create a controller that extends `BaseAIAgentController` and override the `Target` set method to ensure that any selected target has an MWayPoint script and is fed to the AI controller.
 
-FIXME: need to add a waypoint with the correct type to each object
+FIXME: When waypoint is set to an invalid location dragon spins around fast
+FIXME: When waypoint position is being set it appears to only be infront of the dragon, resulting in frequently invalid positions when near the edge of the terrain.
+FIXME: When visiting a POI it doesn't seem to be added to the VisitedThings list.
+FIXME: Create a Terrain Layer and have the agent use that instead of the default layer (so that the dragon doesn't land on buildings and the like)
+FIXME: Make the agent look at the target when it is set
+FIXME: Stop the agent looking at the target when it is unset (i.e. made null)
 
 Replace the `BaseAgentController` on the Dragon with the `MalbersAIAgentController`. For this controller to work we will need a movement controller for our dragon. You can create one using the `Create -> Assets -> Wizards Code -> Agent` menu.
 
