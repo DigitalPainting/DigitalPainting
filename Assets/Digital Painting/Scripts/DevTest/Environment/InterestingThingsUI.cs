@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
 using wizardscode.environment;
 
@@ -62,9 +63,16 @@ namespace wizardscode.devtest
                 PopulateInterestingThingsDropdown();
                 
                 AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-                if (agent != null && agent.PointOfInterest != null)
+                if (agent != null && agent.Target != null)
                 {
-                    distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
+                    Thing thing = agent.Target.GetComponent<Thing>();
+                    if (thing)
+                    {
+                        distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, thing.AgentViewingTransform.position).ToString();
+                    } else
+                    {
+                        distanceToThingOfInterestText.text = "";
+                    }
                 }
                 else
                 {
@@ -78,29 +86,32 @@ namespace wizardscode.devtest
             if (_agentWithFocus.Value is AIAgentController)
             {
                 AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-
-                if (agent.PointOfInterest != null)
+                if (agent.Target)
                 {
-                    thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
-                }
-                else
-                {
-                    thingOfInterestDropdown.value = 0;
+                    Thing thing = agent.Target.GetComponent<Thing>();
+                    if (thing)
+                    {
+                        thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == thing) + 1;
+                    }
+                    else
+                    {
+                        thingOfInterestDropdown.value = 0;
+                    }
                 }
             }
         }
 
         public void OnThingSelectionChanged()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-
+            BaseAIAgentController agent = (BaseAIAgentController)_agentWithFocus.Value;
+            
             if (thingOfInterestDropdown.value == 0)
             {
-                agent.PointOfInterest = null;
+                agent.Target = null;
             }
             else
             {
-                agent.PointOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
+                agent.Target = thingsManager.allTheThings[thingOfInterestDropdown.value - 1].transform;
             }
         }
 

@@ -11,7 +11,7 @@ namespace wizardscode.digitalpainting.agent
     /// Right mouse button _ mouse provides look
     /// </summary>
     public class BaseAgentController : MonoBehaviour
-    {
+    { 
         [Tooltip("The movement controller that will manage movement for this agent.")]
         [SerializeField]
         internal MovementControllerSO _movementController;
