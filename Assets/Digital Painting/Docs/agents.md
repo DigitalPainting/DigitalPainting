@@ -64,6 +64,8 @@ Lets start by duplicating the prefab we created. This new prefab should be renam
 
 By default the AI uses a set of Waypoints that are fixed in the scene. This is not ideal for our final goal, but to get us started we'll use this approach. Later we'll dynamically generate Waypoints in the painting itself. For now, add a number of waypoints (Game Objects with the MWayPoint script attached). Five is a reasonable number with some in the air and some on the ground. Make each one a "Next Way Point" for all points. Make one of them the starting target for the Dragon.
 
+By default Malbers prefabs use the `Default` layer as their Ground layer. This can result in odd effects such as landing on the tops of objects in the scene. Create a new layer called `Ground` and set the `Ground Layer` property in the `Animal` script to use this layer instead of default.
+
 Now, when you press play, your dragon will move around the scene from waypoint to waypoint.
 
 ### Visiting Points of Interest
@@ -75,9 +77,9 @@ To do this create a controller that extends `BaseAIAgentController` and override
 FIXME: When waypoint is set to an invalid location dragon spins around fast
 FIXME: When waypoint position is being set it appears to only be infront of the dragon, resulting in frequently invalid positions when near the edge of the terrain.
 FIXME: When visiting a POI it doesn't seem to be added to the VisitedThings list.
-FIXME: Create a Terrain Layer and have the agent use that instead of the default layer (so that the dragon doesn't land on buildings and the like)
 FIXME: Make the agent look at the target when it is set
 FIXME: Stop the agent looking at the target when it is unset (i.e. made null)
+FIXME: When in NavMesh mode the agent tries to climb up slopes that it can't climb. Have the controller make the agent jump or fly when this occurs (depending on the height of the slope)
 
 Replace the `BaseAgentController` on the Dragon with the `MalbersAIAgentController`. For this controller to work we will need a movement controller for our dragon. You can create one using the `Create -> Assets -> Wizards Code -> Agent` menu.
 
