@@ -80,6 +80,8 @@ Remove (or at least disable) all the fixed waypoints you created in the previous
 
 Now you can run the application and your dragon will wander around the scene occasionally viewing points of interest.
 
+The Malbers Animations asset has a useful Look At script. this can be used to make the Dragon look at the waypoint it is visiting. To use this we can add the necessary code to configure the LookAt target in the `Target` set method. 
+
 FIXME: Make the agent look at the target when it is set
 FIXME: Stop the agent looking at the target when it is unset (i.e. made null)
 FIXME: When in NavMesh mode the agent tries to climb up slopes that it can't climb. Have the controller make the agent jump or fly when this occurs (depending on the height of the slope)
