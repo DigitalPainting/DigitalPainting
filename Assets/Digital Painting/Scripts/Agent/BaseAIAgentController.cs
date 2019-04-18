@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.digitalpainting.agent;
 using wizardscode.environment;
 using wizardscode.utility;
+using Random = UnityEngine.Random;
 
 namespace wizardscode.agent
 {
@@ -29,19 +31,67 @@ namespace wizardscode.agent
             get { return m_target; }
             set
             {
-                if (m_target != value)
-                {
-                    m_target = value;
-                    timeToNextWanderPathChange = Random.Range(MovementController.minTimeBetweenRandomPathChanges, MovementController.maxTimeBetweenRandomPathChanges);
-                }
+                if (m_target == value) return;
+                 
+                m_target = value;
+                timeToNextWanderPathChange = Random.Range(MovementController.minTimeBetweenRandomPathChanges, MovementController.maxTimeBetweenRandomPathChanges);
+                
                 if (value)
                 {
-                    TargetReached = false;
+                    HasReachedTarget = false;
+
+                    Vector3 pos;
+                    Thing thing = value.GetComponent<Thing>();
+                    if (thing)
+                    {
+                        if (thing.AgentViewingTransform)
+                        {   
+                            pos = thing.AgentViewingTransform.position;
+                            m_target = thing.AgentViewingTransform;
+                        }
+                        else
+                        {
+                            pos = value.transform.position;
+                            m_target = value.transform;
+                        }
+
+                        if (thing.isGrounded)
+                        {
+                            pos.y = Terrain.activeTerrain.SampleHeight(pos);
+                        }
+                    }
+                    else
+                    {
+                        pos = value.transform.position;
+                        float height = Terrain.activeTerrain.SampleHeight(pos);
+
+                        if (height < MovementController.minimumReachDistance * 0.75)
+                        {
+                            pos.y = height;
+                        }
+                    }
+
+                    Waypoint waypoint = GetOrAddWaypointComponent(m_target);
+                    waypoint.Thing = thing;
+                } 
+                else
+                {
+                    m_target = null;
                 }
             }
         }
 
-        public bool TargetReached{
+        virtual internal Waypoint GetOrAddWaypointComponent(Transform target)
+        {
+            Waypoint waypoint = target.GetComponent<Waypoint>();
+            if (!waypoint)
+            {
+                waypoint = target.gameObject.AddComponent<Waypoint>();
+            }
+            return waypoint;
+        }
+
+        public bool HasReachedTarget{
             get {
                 if (m_targetReached) return true;
                 else
@@ -91,7 +141,7 @@ namespace wizardscode.agent
 
             if (Target)
             {
-                if (TargetReached)
+                if (HasReachedTarget)
                 {
                     ReachedTarget();
                 }
@@ -226,9 +276,10 @@ namespace wizardscode.agent
         /// </summary>
         internal void ReachedTarget()
         {
-            TargetReached = true;
+            HasReachedTarget = true;
 
-            Thing thing = Target.GetComponent<Thing>();
+            Waypoint wp = Target.GetComponent<Waypoint>();
+            Thing thing = wp.Thing;
             if (thing) // this is a Thing of interest
             {
                 if (timeLeftLookingAtObject == float.NegativeInfinity)

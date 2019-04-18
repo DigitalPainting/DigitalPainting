@@ -72,16 +72,16 @@ Now, when you press play, your dragon will move around the scene from waypoint t
 
 The Digital Painting had the concept of Points of Interest. These can be thought of as Waypoints. In order to use the POI system we need a way of feeding them into the AI controller that is supplied as part of our asset. We'll do this by creating new Digital Painting Agent Controller that is aware of the Malber AI controller. It will add the appropriate Waypoint information to the POI and then feed that waypoint to the Malber controller.
 
-To do this create a controller that extends `BaseAIAgentController` and override the `Target` set method to ensure that any selected target has an MWayPoint script and is fed to the AI controller.
-
-FIXME: When waypoint is set to an invalid location dragon spins around fast
-FIXME: When waypoint position is being set it appears to only be infront of the dragon, resulting in frequently invalid positions when near the edge of the terrain.
-FIXME: When visiting a POI it doesn't seem to be added to the VisitedThings list.
-FIXME: Make the agent look at the target when it is set
-FIXME: Stop the agent looking at the target when it is unset (i.e. made null)
-FIXME: When in NavMesh mode the agent tries to climb up slopes that it can't climb. Have the controller make the agent jump or fly when this occurs (depending on the height of the slope)
+To do this create a controller called `MalbersAIController` that extends `BaseAIAgentController` and override the `GetOrAddWaypointComponent` set method to ensure that any selected target has an MWayPoint script and it is correctly configured. We'll also need to override the `Target` set command and ensure that the waypoint fed to the AI controller provided by the Malbers Animations asset. 
 
 Replace the `BaseAgentController` on the Dragon with the `MalbersAIAgentController`. For this controller to work we will need a movement controller for our dragon. You can create one using the `Create -> Assets -> Wizards Code -> Agent` menu.
 
 Remove (or at least disable) all the fixed waypoints you created in the previous section. Set the Target in the `Animal AI Control` script to null.
 
+Now you can run the application and your dragon will wander around the scene occasionally viewing points of interest.
+
+FIXME: Make the agent look at the target when it is set
+FIXME: Stop the agent looking at the target when it is unset (i.e. made null)
+FIXME: When in NavMesh mode the agent tries to climb up slopes that it can't climb. Have the controller make the agent jump or fly when this occurs (depending on the height of the slope)
+FIXME: the navigation is "stupid" in that the agent will no navigate around or over a wall. Should be integrate the pathfinding or provide an avoidance script?
+FIXME: The camera doesn't work well with this agent
