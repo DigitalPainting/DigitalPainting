@@ -82,8 +82,40 @@ Now you can run the application and your dragon will wander around the scene occ
 
 The Malbers Animations asset has a useful Look At script. this can be used to make the Dragon look at the waypoint it is visiting. To use this we can add the necessary code to configure the LookAt target in the `Target` set method. 
 
-FIXME: Make the agent look at the target when it is set
-FIXME: Stop the agent looking at the target when it is unset (i.e. made null)
-FIXME: When in NavMesh mode the agent tries to climb up slopes that it can't climb. Have the controller make the agent jump or fly when this occurs (depending on the height of the slope)
-FIXME: the navigation is "stupid" in that the agent will no navigate around or over a wall. Should be integrate the pathfinding or provide an avoidance script?
+### Improving the Supplied AI Controller
+
+The AI Controller provided by Malbers Animations is great, but like most things it can be improved. One option would be to edit the source of the Malbers controller, however, these changes could be overwritten if a susbsequent asset upgrade. A better approach would be to override the `AnimalAIControl` and customize the behaviour. Lets do that and make a few improvements. In the Digital Painting AI decision making is handled by class called `*AIBehaviour`, so we'll call our extension class `MalbersAnimalAIBehaviour`.
+
+To ensure our new behaviour works we'll first apply it to the Dragon but without any customizations, so there is no code in our initial class. Add this component to the Dragon and copy the existing AI contoller values into the new behaviour component. Delete the original AI control. You should now be able to run the application and see the same behaviour as before. Apply the changes to the Dragon Prefab.
+
+Note that we have lost the custom editor for this component as the class has a different name. To fix this you can extend the Malbers Animations supplied editor as well.
+
+Now lets start adding our improvments to the AI controller. We'll add the following:
+
+  * When the way point is > x distance have the agent fly regardless of the type of waypoint
+  * When in NavMesh mode the agent tries to climb up slopes that it can't climb. Have the controller make the agent jump or fly when this occurs (depending on the height of the slope)
+  * FIXME: The flying navigation is "stupid" in that the agent will not navigate around or over obstacles.
+
+#### Fly over larger distances and jumping up steep slopes
+
+Generally it is more efficient for agents that can fly to do so when the distance it over a certain value. To make this change we will need to define a new property that captures the minimum distance needed to trigger flight and we will need to override the locomotion method when the distance it greater than this parameter.
+
+Adding the parameter is easy, simply add it to your behaviour class. However, if you created a custom editor it will not show up in the inspector. So you'll have to make some changes here too.
+
+Adding the logic to force flight is a little more complex. You'll need to inspect the existing controller to figure out how the flying is triggered and extend the appropriate method to change the default behaviour when needed. In the Malbers AI Controller it is in the `Updating` method. This is also the right location to make the dragon jump on steep slopes.
+
+#### Better flight navigation
+
+The Digital Camera comes with a `Flying-Pathfinder` asset. We can use this to improve the simple navigation used in the Malbers Animations controller. To use it add the `RobotMovementController` to the Dragon.
+
+The `RobotMovementController` finds a path from the current position to a target position, setting a number of waypoints along the way. To use it for our dragon we will need to set the target in the controller and, when the path is complete, setup waypoints along the way with each waypoint pointing to the next. You will also need to add the octree prefab to the scene and ensure that it is positioned and sized correctly for your terrain.
+
+Earlier we overrode the `Target` parameter get nd set methods in `MalbersAIController`. This is where we will change the code to set the target in the `RobotMovementController` in addition to the `AnimalAiController`. This is so that the Dragon will start movint towards the target even while the path is still being calculated. As soon as the flight path is ready that will take over, unless the agent is on a walking path.
+
+Now we need to set the waypoints for the complete path once it is ready. To do this we will override the `UpdateMove` method. On each frame we'll decide if we have a new path and, if we do, setup the waypoints accordingly. The target for the `AnimalAIController` will be set to the first waypoint in this path.
+
+FIXME: improve the naming of the RobotMovementController and refactor the class so it uses the config parameters in the MovementControllerSO.
+
+### Improving the Camera Setup
+
 FIXME: The camera doesn't work well with this agent

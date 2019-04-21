@@ -128,7 +128,7 @@ namespace wizardscode.agent
         /// </summary>
 
 
-        internal void UpdateMove()
+        virtual internal void UpdateMove()
         {
             if (!Target)
             {
@@ -274,7 +274,7 @@ namespace wizardscode.agent
         /// <summary>
         /// View a Thing of Interest that is within range.
         /// </summary>
-        internal void ReachedTarget()
+        internal virtual void ReachedTarget()
         {
             HasReachedTarget = true;
 

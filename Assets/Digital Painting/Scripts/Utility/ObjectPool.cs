@@ -6,6 +6,8 @@ namespace wizardscode.utility
 {
     /// <summary>
     /// A general object pool.
+    /// To get an object from the pool simple call GetFromPool.
+    /// To return an object to the pool call .SetActive(false) on it.
     /// </summary>
     public class ObjectPool : MonoBehaviour
     {
@@ -66,7 +68,9 @@ namespace wizardscode.utility
             // if we got here there are currently no inactive objects
             if (willGrow)
             {
-                return CreateObjectInPool();
+                GameObject go = CreateObjectInPool();
+                go.SetActive(true);
+                return go;
             }
             else
             {
