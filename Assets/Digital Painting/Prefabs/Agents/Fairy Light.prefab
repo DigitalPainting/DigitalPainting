@@ -9458,11 +9458,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementController: {fileID: 11400000, guid: 854a2540127fa784e81c047f97fb3a9e,
     type: 2}
-  mouseLookMode: 2
-  mouseLookSensitivity: 100
   home: {fileID: 0}
   detectionRange: 50
-  barriers: {fileID: 0}
 --- !u!114 &114743800790520494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9491,6 +9488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894835bc784f7fd468296443fc1c190c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controlMovement: 1
   target: {fileID: 0}
   maxDistanceRebuildPath: 1
   acceleration: 1

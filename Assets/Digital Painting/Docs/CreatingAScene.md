@@ -39,7 +39,15 @@ defaults this is pretty easy to do. You can either work from the source or from 
 
 If you want to work from source then we recommend the use of [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules):
 
-  * `git submodule add git@github.com:DigitalPainting/DigitalPainting.git`
+```
+cd Assets
+git submodule add git@github.com:DigitalPainting/DigitalPainting.git
+git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
+git submodule add git@github.com:DigitalPainting/ScriptableObject-Architecture.git
+```
+
+You will likely get some compile errors. This is because you need to install some Unity packages using the Package Manager.
+Pay close attention to the error messages, they tell you what you need to install.
 
 ### From Released Packages
 
@@ -49,6 +57,15 @@ If you want to work from source then we recommend the use of [Git Submodules](ht
   * Add the `Assets/Digital Painting/Prefabs/DigitalPaintingManager`
     * Ensure that each of the features you want are enabled and configured properly (see docs folder)
     * Turn off the `Demo Manager` script if you don't wan the UI to overlay your scene
+
+## Configure Your Scene to use the Digital Painting
+
+  * Add the `DigitalPaintingManager` to your scene
+  * Add the Octree prefab to the scene and ensure it covers your terrain
+  * Add an [agent](agents.md) to the scene - the easiest way to get started is to add the Fairy agent that comes with the Digital Painting package
+  * Ensure there is an `AgentWithFocus` reference variable set in the `Digital Painting Manager` and the `Director`
+
+## DONE!
 
 That's all you need to get started. Hit play and see what happens.
 
