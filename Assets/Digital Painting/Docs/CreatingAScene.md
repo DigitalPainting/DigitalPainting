@@ -51,6 +51,8 @@ Pay close attention to the error messages, they tell you what you need to instal
 
 ### From Released Packages
 
+FIXME: Add support for Unity Package Manager here
+
   * [Export the Digital Painting asset](ReleasingTheDigitalPaintingAsset.md) from Unity (we should make releases so this is not necessary)
   * Import the Digital Painting asset into your project
   * If there are any compile errors import the required packages (see [README.md](../../../README.md) for details)
