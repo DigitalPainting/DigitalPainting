@@ -1,3 +1,4 @@
+using ScriptableObjectArchitecture;
 using UnityEngine;
 using wizardscode.digitalpainting.agent;
 
