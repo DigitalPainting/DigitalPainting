@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using ScriptableObjectArchitecture;
 using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.digitalpainting.agent;
@@ -19,15 +20,22 @@ namespace wizardscode.production
         [SerializeField]
         [Tooltip("The GameEvent to fire when the collider is exited.")]
         private GameEvent _onExitEvent = default(GameEvent);
+        private Director _director;
 
-        [Header("Variable References")]
-        [SerializeField]
-        [Tooltip("A reference to the agent that currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
+        private Director Director
+        {
+            get {
+                if (!_director)
+                {
+                    _director = GameObject.FindObjectOfType<Director>();
+                }
+                return _director;
+            }
+        }
 
         public BaseAgentController AgentControllerWithFocus
         {
-            get { return _agentWithFocus.Value; }
+            get { return Director.AgentWithFocus; }
         }
         
         public GameEvent OnEnterEvent

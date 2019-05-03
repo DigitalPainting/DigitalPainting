@@ -4,15 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using wizardscode.digitalpainting.agent;
 using wizardscode.environment;
+using wizardscode.production;
 
 namespace wizardscode.devtest
 {
     public class InterestingThingsUI : MonoBehaviour
     {
         [Header("User Interface)")]
-        [SerializeField]
-        [Tooltip("A reference to the agent that currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
         [Tooltip("The thing that the agent is currently interested in")]
         public Dropdown thingOfInterestDropdown;
         [Tooltip("Text object to display distance to current thing of interest.")]
@@ -21,6 +19,12 @@ namespace wizardscode.devtest
         public Dropdown addableThingDropdown;
         [Tooltip("Interesting thing prefabs that can be added to the scene.")]
         public Thing[] addableThings;
+        private Director director;
+
+        private void Awake()
+        {
+            director = GameObject.FindObjectOfType<Director>();
+        }
 
         private ThingsManager thingsManager;
 
@@ -58,7 +62,7 @@ namespace wizardscode.devtest
         {
             PopulateInterestingThingsDropdown();
 
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
             if (agent.PointOfInterest != null)
             {
                 distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
@@ -71,7 +75,7 @@ namespace wizardscode.devtest
 
         private void LateUpdate()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
 
             if (agent.PointOfInterest != null)
             {
@@ -85,7 +89,7 @@ namespace wizardscode.devtest
 
         public void OnThingSelectionChanged()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
 
             if (thingOfInterestDropdown.value == 0)
             {
@@ -99,7 +103,7 @@ namespace wizardscode.devtest
 
         public void OnAddThingClicked()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
 
             Thing newThing = GameObject.Instantiate<Thing>(addableThings[0]);
             newThing.name = "This is " + transform.position.ToString();
