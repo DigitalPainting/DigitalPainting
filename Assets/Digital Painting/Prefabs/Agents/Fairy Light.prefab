@@ -9491,6 +9491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894835bc784f7fd468296443fc1c190c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controlMovement: 1
   target: {fileID: 0}
   maxDistanceRebuildPath: 1
   acceleration: 1
