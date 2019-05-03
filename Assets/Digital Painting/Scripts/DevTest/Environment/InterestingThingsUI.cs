@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
 using wizardscode.environment;
+using wizardscode.production;
 
 namespace wizardscode.devtest
 {
     public class InterestingThingsUI : MonoBehaviour
     {
         [Header("User Interface)")]
-        [SerializeField]
-        [Tooltip("A reference to the agent that currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
         [Tooltip("The thing that the agent is currently interested in")]
         public Dropdown thingOfInterestDropdown;
         [Tooltip("Text object to display distance to current thing of interest.")]
@@ -22,6 +19,12 @@ namespace wizardscode.devtest
         public Dropdown addableThingDropdown;
         [Tooltip("Interesting thing prefabs that can be added to the scene.")]
         public Thing[] addableThings;
+        private Director director;
+
+        private void Awake()
+        {
+            director = GameObject.FindObjectOfType<Director>();
+        }
 
         private ThingsManager thingsManager;
 
@@ -57,67 +60,50 @@ namespace wizardscode.devtest
 
         private void Update()
         {
+            PopulateInterestingThingsDropdown();
 
-            if (_agentWithFocus.Value is AIAgentController)
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
+            if (agent.PointOfInterest != null)
             {
-                PopulateInterestingThingsDropdown();
-                
-                AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-                if (agent != null && agent.Target != null)
-                {
-                    Thing thing = agent.Target.GetComponent<Thing>();
-                    if (thing)
-                    {
-                        distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, thing.AgentViewingTransform.position).ToString();
-                    } else
-                    {
-                        distanceToThingOfInterestText.text = "";
-                    }
-                }
-                else
-                {
-                    distanceToThingOfInterestText.text = "Wandering";
-                }
+                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
+            }
+            else
+            {
+                distanceToThingOfInterestText.text = "Wandering";
             }
         }
 
         private void LateUpdate()
         {
-            if (_agentWithFocus.Value is AIAgentController)
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
+
+            if (agent.PointOfInterest != null)
             {
-                AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
-                if (agent.Target)
-                {
-                    Thing thing = agent.Target.GetComponent<Thing>();
-                    if (thing)
-                    {
-                        thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == thing) + 1;
-                    }
-                    else
-                    {
-                        thingOfInterestDropdown.value = 0;
-                    }
-                }
+                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
+            }
+            else
+            {
+                thingOfInterestDropdown.value = 0;
             }
         }
 
         public void OnThingSelectionChanged()
         {
-            BaseAIAgentController agent = (BaseAIAgentController)_agentWithFocus.Value;
-            
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
+
             if (thingOfInterestDropdown.value == 0)
             {
-                agent.Target = null;
+                agent.PointOfInterest = null;
             }
             else
             {
-                agent.Target = thingsManager.allTheThings[thingOfInterestDropdown.value - 1].transform;
+                agent.PointOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
             }
         }
 
         public void OnAddThingClicked()
         {
-            AIAgentController agent = (AIAgentController)_agentWithFocus.Value;
+            AIAgentController agent = (AIAgentController)director.AgentWithFocus;
 
             Thing newThing = GameObject.Instantiate<Thing>(addableThings[0]);
             newThing.name = "This is " + transform.position.ToString();

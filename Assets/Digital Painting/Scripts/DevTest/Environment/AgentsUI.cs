@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using wizardscode.digitalpainting;
 using wizardscode.digitalpainting.agent;
+using wizardscode.production;
 
 namespace wizardscode.devtest
 {
@@ -13,12 +14,14 @@ namespace wizardscode.devtest
         [Tooltip("The Agent that is currently focused")]
         public Dropdown agentDropdown;
 
-        [SerializeField]
-        [Tooltip("A reference to the agent that currently has focus.")]
-        private BaseAgentControllerReference _agentControllerWithFocus = default(BaseAgentControllerReference);
-
         private DigitalPaintingManager manager;
         private BaseAgentController[] agents;
+        private Director director;
+
+        private void Awake()
+        {
+            director = GameObject.FindObjectOfType<Director>();
+        }
 
         private void Start()
         {
@@ -40,12 +43,12 @@ namespace wizardscode.devtest
 
         private void LateUpdate()
         {
-            agentDropdown.value = Array.FindIndex(agents, x => x == _agentControllerWithFocus.Value);
+            agentDropdown.value = Array.FindIndex(agents, x => x == director.AgentWithFocus);
         }
 
         public void OnAgentSelectionChanged()
         {
-            _agentControllerWithFocus.Value = agents[agentDropdown.value];
+            director.AgentWithFocus = agents[agentDropdown.value];
         }
     }
 }

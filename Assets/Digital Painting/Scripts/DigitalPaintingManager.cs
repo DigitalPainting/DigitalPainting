@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
+using wizardscode.production;
 using Random = UnityEngine.Random;
 
 namespace wizardscode.digitalpainting
@@ -14,14 +15,13 @@ namespace wizardscode.digitalpainting
         [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
         public AgentScriptableObject[] agentObjectDefs;
 
-        [SerializeField][Tooltip("A reference to the agent that currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus = default(BaseAgentControllerReference);
-
         private Octree octree;
-        
+        private Director director;
+
         void Awake()
         {
             octree = GameObject.FindObjectOfType<Octree>();
+            director = GameObject.FindObjectOfType<Director>();
         }
 
         private void Start()
@@ -31,7 +31,7 @@ namespace wizardscode.digitalpainting
                 BaseAgentController agent = CreateAgent("Agent: " + i + " " + agentObjectDefs[i].prefab.name, agentObjectDefs[i]);
                 if (i == 0)
                 {
-                    _agentWithFocus.Value = agent;
+                    director.AgentWithFocus = agent;
                 }
             }
         }

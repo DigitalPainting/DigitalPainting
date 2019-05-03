@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using UnityEngine;
+using wizardscode.digitalpainting.agent;
 
 namespace wizardscode.production
 {
@@ -12,32 +13,35 @@ namespace wizardscode.production
     /// /// </summary>
     public class Director : MonoBehaviour
     {
-        [SerializeField] [Tooltip("The SO Variable Reference indicating which agent currently has focus.")]
-        private BaseAgentControllerReference _agentWithFocus;
         [SerializeField] [Tooltip("Main Cinemachine camera rig. This can either be a rig in the scene, a prefab that will be instantiated or null. In the case of a null a Default follow camera setup will be created.")]
         private CinemachineVirtualCameraBase defaultCameraSetup;
         [SerializeField]
 
         private CinemachineVirtualCameraBase defaultCameraRig;
+        private BaseAgentController _agentWithFocus;
 
         private void Awake()
         {
             SetupMainCamera();
-            _agentWithFocus.Value = null; // set agent with focus to null on startup so that we always trigger the initial on change event.
+        }
+
+        public BaseAgentController AgentWithFocus
+        {
+            get { return _agentWithFocus; }
+            set
+            {
+                if (_agentWithFocus != value)
+                {
+                    _agentWithFocus = value;
+                    OnAgentWithFocusChanged();
+                }
+            }
         }
 
         public void OnAgentWithFocusChanged()
         {
-            if (_agentWithFocus.Value == null)
-            {
-                defaultCameraRig.Follow = null;
-                defaultCameraRig.LookAt = null;
-            }
-            else
-            {
-                defaultCameraRig.Follow = _agentWithFocus.Value.transform;
-                defaultCameraRig.LookAt = _agentWithFocus.Value.transform;
-            }
+            defaultCameraRig.Follow = _agentWithFocus.transform;
+            defaultCameraRig.LookAt = _agentWithFocus.transform;
         }
 
         /// <summary>
