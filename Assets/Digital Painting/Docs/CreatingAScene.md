@@ -33,7 +33,13 @@ There are a few steps you should take to ensure the best experience:
 ## Add the Core Digital Painting Assets
 
 Having created a standard Unity scene you need to add The Digital Painting Assets. If you want to use
-defaults this is pretty easy to do. You can either work from the source or from a released package:
+defaults this is pretty easy to do. Firstly configure the pacakges to be installed by adding the following lines to your `Packages/manifest.json` file:
+
+```
+    "com.danieleverland.scriptableobjectarchitecture": "https://github.com/DanielEverland/ScriptableObject-Architecture.git#release/stable",
+    "com.unity.cinemachine": "2.2.8",
+```
+Next you need to insert the Digital Paintin code. You can either work from the source or from a released package:
 
 ### From Source
 
@@ -43,11 +49,9 @@ If you want to work from source then we recommend the use of [Git Submodules](ht
 cd Assets
 git submodule add git@github.com:DigitalPainting/DigitalPainting.git
 git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
-git submodule add git@github.com:DigitalPainting/ScriptableObject-Architecture.git
 ```
 
-You will likely get some compile errors. This is because you need to install some Unity packages using the Package Manager.
-Pay close attention to the error messages, they tell you what you need to install.
+Note there will be some warnings when the code is imported. This is caused by a limitation of the way Unity imports packages that are git submodules. So far, apart from the annoying warnings on import and startup we've not found any problems.
 
 ### From Released Packages
 
