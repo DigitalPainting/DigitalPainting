@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Animal
+  - Water
+  - Fly
   layers:
   - Default
   - TransparentFX
@@ -25,6 +28,7 @@ TagManager:
   - 
   - 
   - 
+  - Animal
   - 
   - 
   - 
@@ -35,8 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Ground
   m_SortingLayers:
   - name: Default
     uniqueID: 0

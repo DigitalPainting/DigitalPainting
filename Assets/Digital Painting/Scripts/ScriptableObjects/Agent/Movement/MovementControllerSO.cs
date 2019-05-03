@@ -7,7 +7,11 @@ namespace wizardscode.agent.movement
     /// </summary>
     public class MovementControllerSO : ScriptableObject
     {
-        [Header("Movement")]
+        [Header("Common")]
+        [Tooltip("The minimum distance from a waypoint before it is considered to have been reached.")]
+        public float minimumReachDistance = 3;
+
+        [Header("Ground Movement")]
         [Tooltip("Walking speed under normal circumstances")]
         public float normalMovementSpeed = 1;
         [Tooltip("The factor by which to multiply the walking speed when moving fast.")]
@@ -20,5 +24,13 @@ namespace wizardscode.agent.movement
         public float heightOffset = 0;
         [Tooltip("Speed at which the agent will rotate.")]
         public float rotationSpeed = 90;
+
+        [Header("Air Movement")]
+        [Tooltip("If the target is greater than this distance away then always fly, regardless of the type of waypoint.")]
+        public float ToFly = 8;
+        [Tooltip("Minimum Height at which this agent will fly. Below this and the agent is considered to be landing.")]
+        public float minimumFlyHeight = 1;
+        [Tooltip("Maximum Height at which this agent will fly.")]
+        public float maximumFlyHeight = 50;
     }
 }

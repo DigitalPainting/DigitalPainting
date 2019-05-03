@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Cinemachine;
+using UnityEngine;
 using wizardscode.agent.movement;
 
 namespace wizardscode.agent

@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4451654348586044}
   - component: {fileID: 114192318843746294}
-  - component: {fileID: 114104959585131336}
-  - component: {fileID: 114805408651030032}
   - component: {fileID: 114467244445007254}
   - component: {fileID: 114430713918459818}
   m_Layer: 0
@@ -49,47 +47,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a462e77d98d43043ba228a13db67c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentObjectDefs: []
+  agentObjectDefs:
+  - {fileID: 11400000, guid: 82c77e00c6679b3438dddc03dc028301, type: 2}
   _agentWithFocus:
     _useConstant: 0
     _constantValue: {fileID: 0}
-    _variable: {fileID: 0}
---- !u!114 &114104959585131336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163264246283250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b734a48009a61b47aa78c2cb2073e12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startTime: 18000
-  dayCycleInMinutes: 1
-  skybox: {fileID: 0}
-  sunPrefab: {fileID: 0}
-  configuration: {fileID: 11400000, guid: 96a5d14ec4ca7c3488ce2ba2ca207b7d, type: 2}
---- !u!114 &114805408651030032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163264246283250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bc654920ebc82a438d5840e53f96d5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  configuration: {fileID: 0}
-  isAuto: 1
-  WeatherUpdateFrequency: 2
-  chanceOfRain: 0.3
-  chanceOfSleet: 0.09
-  chanceOfSnow: 0.05
-  chanceOfHail: 0.01
+    _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
 --- !u!114 &114467244445007254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +127,7 @@ MonoBehaviour:
     _useConstant: 0
     _constantValue: {fileID: 0}
     _variable: {fileID: 0}
+  defaultCameraSetup: {fileID: 0}
   defaultCameraRig: {fileID: 0}
 --- !u!114 &4228008670085889337
 MonoBehaviour:

@@ -33,15 +33,29 @@ There are a few steps you should take to ensure the best experience:
 ## Add the Core Digital Painting Assets
 
 Having created a standard Unity scene you need to add The Digital Painting Assets. If you want to use
-defaults this is pretty easy to do. You can either work from the source or from a released package:
+defaults this is pretty easy to do. Firstly configure the pacakges to be installed by adding the following lines to your `Packages/manifest.json` file:
+
+```
+    "com.danieleverland.scriptableobjectarchitecture": "https://github.com/DanielEverland/ScriptableObject-Architecture.git#release/stable",
+    "com.unity.cinemachine": "2.2.8",
+```
+Next you need to insert the Digital Paintin code. You can either work from the source or from a released package:
 
 ### From Source
 
 If you want to work from source then we recommend the use of [Git Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules):
 
-  * `git submodule add git@github.com:DigitalPainting/DigitalPainting.git`
+```
+cd Assets
+git submodule add git@github.com:DigitalPainting/DigitalPainting.git
+git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
+```
+
+Note there will be some warnings when the code is imported. This is caused by a limitation of the way Unity imports packages that are git submodules. So far, apart from the annoying warnings on import and startup we've not found any problems.
 
 ### From Released Packages
+
+FIXME: Add support for Unity Package Manager here
 
   * [Export the Digital Painting asset](ReleasingTheDigitalPaintingAsset.md) from Unity (we should make releases so this is not necessary)
   * Import the Digital Painting asset into your project
@@ -49,6 +63,15 @@ If you want to work from source then we recommend the use of [Git Submodules](ht
   * Add the `Assets/Digital Painting/Prefabs/DigitalPaintingManager`
     * Ensure that each of the features you want are enabled and configured properly (see docs folder)
     * Turn off the `Demo Manager` script if you don't wan the UI to overlay your scene
+
+## Configure Your Scene to use the Digital Painting
+
+  * Add the `DigitalPaintingManager` to your scene
+  * Add the Octree prefab to the scene and ensure it covers your terrain
+  * Add an [agent](agents.md) to the scene - the easiest way to get started is to add the Fairy agent that comes with the Digital Painting package
+  * Ensure there is an `AgentWithFocus` reference variable set in the `Digital Painting Manager` and the `Director`
+
+## DONE!
 
 That's all you need to get started. Hit play and see what happens.
 

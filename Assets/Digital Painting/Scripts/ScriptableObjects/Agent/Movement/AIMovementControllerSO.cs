@@ -8,7 +8,7 @@ namespace wizardscode.agent.movement
     /// The movement brain controls movement of an agent. Through the configuration of various settings
     /// you can create a variety of movement types from fully manual to fully automated.
     /// </summary>
-    [CreateAssetMenu(fileName = "Flying AI Movement Controller", menuName = "Wizards Code/Agent/Flying AI Movement Controller")]
+    [CreateAssetMenu(fileName = "AI Movement Controller", menuName = "Wizards Code/Agent/AI Movement Controller")]
     public class AIMovementControllerSO : MovementControllerSO
     {
         [Header("Wander configuration")]
