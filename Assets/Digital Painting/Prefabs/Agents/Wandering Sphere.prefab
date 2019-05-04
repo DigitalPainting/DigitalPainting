@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 2212942371509693380}
   - component: {fileID: 2212942371509693383}
   - component: {fileID: 2212942371509693382}
+  - component: {fileID: 7119957512079993625}
+  - component: {fileID: 457071765402619158}
   m_Layer: 0
   m_Name: Wandering Sphere
   m_TagString: Untagged
@@ -106,8 +108,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementController: {fileID: 11400000, guid: 1fd82e7d1b3000947ae81eb68fbdefb0,
     type: 2}
-  mouseLookMode: 2
-  mouseLookSensitivity: 100
   home: {fileID: 0}
   detectionRange: 50
-  barriers: {fileID: 0}
+--- !u!114 &7119957512079993625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212942371509693433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 894835bc784f7fd468296443fc1c190c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlMovement: 1
+  target: {fileID: 0}
+  maxDistanceRebuildPath: 1
+  acceleration: 1
+  minReachDistance: 2
+  minFollowDistance: 4
+  pathPointRadius: 0.2
+  octree: {fileID: 0}
+  playerSeeLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  playerObject: {fileID: 0}
+  preferredFlightHeight: 1.5
+  minFlightHeight: 1
+  maxFlightHeight: 7
+--- !u!54 &457071765402619158
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2212942371509693433}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
