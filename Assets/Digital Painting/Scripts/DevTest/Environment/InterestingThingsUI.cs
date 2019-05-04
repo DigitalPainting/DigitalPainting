@@ -63,7 +63,7 @@ namespace wizardscode.devtest
             PopulateInterestingThingsDropdown();
 
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
-            Thing thing = agent.Target ? agent.Target.GetComponentInParent<Thing>() : null;
+            Thing thing = GetThing(agent.Target);
             if (thing)
             {
                 distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, thing.AgentViewingTransform.position).ToString();
@@ -77,7 +77,7 @@ namespace wizardscode.devtest
         private void LateUpdate()
         {
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
-            Thing thing = agent.Target ? agent.Target.GetComponentInParent<Thing>() : null;
+            Thing thing = GetThing(agent.Target);
             if (thing)
             {
                 thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == thing) + 1;
@@ -86,6 +86,24 @@ namespace wizardscode.devtest
             {
                 thingOfInterestDropdown.value = 0;
             }
+        }
+
+        /// <summary>
+        /// If this is a thing, indicated by a Thing component on the game object or a parent, return the Thing component..
+        /// </summary>
+        /// <param name="transform">The transform of the Game Object that might be a Thing</param>
+        /// <returns>The Thing component or null if none exists in on the GameObject or it's parents</returns>
+        private static Thing GetThing(Transform transform)
+        {
+            if (transform == null) {
+                return null;
+            }
+            Thing thing = transform.GetComponent<Thing>();
+            if (thing == null)
+            {
+                thing = transform.GetComponentInParent<Thing>();
+            }
+            return thing;
         }
 
         public void OnThingSelectionChanged()

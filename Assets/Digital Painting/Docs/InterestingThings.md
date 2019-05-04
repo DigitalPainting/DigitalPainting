@@ -51,3 +51,6 @@ one the engine will attempt to create one. This may be wildly inaccurate, especi
 thing is actually an empty game object marking a position (e.g. a view) rather than a physical 
 thing (e.g. a bird).
 
+# Known Issues
+
+FIXME: If a thing does not have a viewing location as a child the the InterestingThingUI does not allow it to be selected (we are recording the transfrom of the viewing location not the thing itself in agent.target)
