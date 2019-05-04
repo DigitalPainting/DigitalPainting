@@ -28,7 +28,7 @@ We'll leave most items at their default, but we will want to change the `seekPoi
 
 Drop this scriptable object into the MovementController slot of you agent Game Object.
 
-### Spawngng Agents
+### Spawning Agents
 
 That is it (well not quite). You can now start your application and your sphere will start moving around. We don't want to have to manually manage all agents in the scene. In order to do this we will use the DigitalPaintingManager. Increase the size of the AgentObjectDefs property by 1.
 

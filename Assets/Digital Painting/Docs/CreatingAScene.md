@@ -7,13 +7,15 @@ do that.
 In this example we'll document using a scene purchased from the Asset Store, however you 
 can use any scene that has a terrain withing it.
 
-## Create a Base Project
+### Create a Base Project
 
 Create your new project and create or import your scene. I've used the excellent [Nature 
 Manufacture’s Meadow Environment – Dynamic Nature](https://assetstore.unity.com/packages/3d/vegetation/meadow-environment-dynamic-nature-132195)
 asset. I'm using a copy of the `Unity Standard Demo Scene` that comes with the asset.
 THe process should be the same if you want to use the gills demo scene, but that requires
 Unity Pro and some other assets. 
+
+Note, that your scene must have a terrain within it. This is used for agent navigation.
 
 The Meadow environment 
 asset recommends you to setup some of the lighting and camera effects, but it should be
@@ -26,11 +28,11 @@ to track this. If you hit a problem in this regard we would welcome your contrib
 
 There are a few steps you should take to ensure the best experience:
 
-  1. If you want to use the Day Night Cycle feature of THe Digital Painting remove any lighting in the scene that will conflict with this. This is not necessary if you turn off or remove the Day Night Cycle in `Digital Painting Manager`.
+  1. If you want to use the Day Night Cycle feature of The Digital Painting remove any lighting in the scene that will conflict with this. This is not necessary if you turn off or remove the Day Night Cycle in `Digital Painting Manager`.
   2. Import the post process stack 2.0 into your project (package manager--> post process stack)
   3. Change shadow distance to 500 or higher in quality settings
 
-## Add the Core Digital Painting Assets
+### Add the Core Digital Painting Assets
 
 Having created a standard Unity scene you need to add The Digital Painting Assets. If you want to use
 defaults this is pretty easy to do. Firstly configure the pacakges to be installed by adding the following lines to your `Packages/manifest.json` file:
@@ -39,6 +41,9 @@ defaults this is pretty easy to do. Firstly configure the pacakges to be install
     "com.danieleverland.scriptableobjectarchitecture": "https://github.com/DanielEverland/ScriptableObject-Architecture.git#release/stable",
     "com.unity.cinemachine": "2.2.8",
 ```
+
+FIXME: When we have made releases of the other assets we use install those via the package manager. For now see the 'From Source' section below.
+
 Next you need to insert the Digital Paintin code. You can either work from the source or from a released package:
 
 ### From Source
@@ -53,23 +58,11 @@ git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
 
 Note there will be some warnings when the code is imported. This is caused by a limitation of the way Unity imports packages that are git submodules. So far, apart from the annoying warnings on import and startup we've not found any problems.
 
-### From Released Packages
-
-FIXME: Add support for Unity Package Manager here
-
-  * [Export the Digital Painting asset](ReleasingTheDigitalPaintingAsset.md) from Unity (we should make releases so this is not necessary)
-  * Import the Digital Painting asset into your project
-  * If there are any compile errors import the required packages (see [README.md](../../../README.md) for details)
-  * Add the `Assets/Digital Painting/Prefabs/DigitalPaintingManager`
-    * Ensure that each of the features you want are enabled and configured properly (see docs folder)
-    * Turn off the `Demo Manager` script if you don't wan the UI to overlay your scene
-
 ## Configure Your Scene to use the Digital Painting
 
-  * Add the `DigitalPaintingManager` to your scene
-  * Add the Octree prefab to the scene and ensure it covers your terrain
-  * Add an [agent](agents.md) to the scene - the easiest way to get started is to add the Fairy agent that comes with the Digital Painting package
-  * Ensure there is an `AgentWithFocus` reference variable set in the `Digital Painting Manager` and the `Director`
+  * Add the `DigitalPaintingManager` prefab to your scene
+  * Add the Octree prefab to the scene and ensure the Box Collider covers your terrain (for a standard 500 x 500 terrain this means you should position the octree at 250, 0, 250 and set the box collider scale to 500, 100, 500 - note that the y value changes how high your flying agents can go)
+  * Add an agent to the scene - the easiest way to get started is to add the Fairy agent that comes with the Digital Painting package, see the 'Spawning Agents' section of the [agent](agents.md) documentation.
 
 ## DONE!
 
