@@ -63,9 +63,10 @@ namespace wizardscode.devtest
             PopulateInterestingThingsDropdown();
 
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
-            if (agent.PointOfInterest != null)
+            Thing thing = agent.Target ? agent.Target.GetComponentInParent<Thing>() : null;
+            if (thing)
             {
-                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, agent.PointOfInterest.AgentViewingTransform.position).ToString();
+                distanceToThingOfInterestText.text = "Distance: " + Vector3.Distance(agent.transform.position, thing.AgentViewingTransform.position).ToString();
             }
             else
             {
@@ -76,10 +77,10 @@ namespace wizardscode.devtest
         private void LateUpdate()
         {
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
-
-            if (agent.PointOfInterest != null)
+            Thing thing = agent.Target ? agent.Target.GetComponentInParent<Thing>() : null;
+            if (thing)
             {
-                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == agent.PointOfInterest) + 1;
+                thingOfInterestDropdown.value = thingsManager.allTheThings.FindIndex(x => x == thing) + 1;
             }
             else
             {
@@ -93,11 +94,11 @@ namespace wizardscode.devtest
 
             if (thingOfInterestDropdown.value == 0)
             {
-                agent.PointOfInterest = null;
+                agent.Target = null;
             }
             else
             {
-                agent.PointOfInterest = thingsManager.allTheThings[thingOfInterestDropdown.value - 1];
+                agent.Target = thingsManager.allTheThings[thingOfInterestDropdown.value - 1].transform;
             }
         }
 
