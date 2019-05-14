@@ -25,7 +25,7 @@ To create your own Digital Painting scene you can start with any Unity scene tha
 This prefab will try to configure your scene to work with the Digital Painting. However, there are a few things you should be aware of, for example, if you plan to use the Day Night Cycle then your scene should not have any lighting that will interfere with the sun(s) provided by the cycle. 
 
 For more details see
-the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/InterestingThings.md).
+the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/CreatingAScene.md).
 
 ### Required Packages (for use)
 
