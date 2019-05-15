@@ -6,7 +6,7 @@ using wizardscode.digitalpainting;
 
 public class EditorConfigScriptableObject : ScriptableObject
 {
-    public static string LatestVersion = "0.0.10";
+    public static string LatestVersion = "0.0.11";
     public DigitalPaintingManager ManagerPrefab;
     public string version;
     public string DocsIndexURL = "https://github.com/DigitalPainting/DigitalPainting/tree/master/Assets/Digital%20Painting/Docs";
