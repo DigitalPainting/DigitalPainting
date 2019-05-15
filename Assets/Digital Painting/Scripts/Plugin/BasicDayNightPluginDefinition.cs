@@ -1,21 +1,26 @@
 ﻿using System;
-/// <summary>
-/// Defines the basic Day Night plugin that is included with the Digital Painting asset.
-/// </summary>
-public class BasicDayNightPluginDefinition : AbstractDayNightPluginDefinition
+
+
+namespace wizardscode.plugin
 {
-    public override string GetPluginImplementationClassName()
+    /// <summary>
+    /// Defines the basic Day Night plugin that is included with the Digital Painting asset.
+    /// </summary>
+    public class BasicDayNightPluginDefinition : AbstractDayNightPluginDefinition
     {
-        return "SimpleDayNightCycle";
-    }
+        public override string GetPluginImplementationClassName()
+        {
+            return "SimpleDayNightProfile";
+        }
 
-    public override string GetReadableName()
-    {
-        return "Simple Day Night Cycle";
-    }
+        public override string GetReadableName()
+        {
+            return "Simple Day Night Cycle";
+        }
 
-    public override string GetURL()
-    {
-        return "https://github.com/DigitalPainting/DigitalPainting";
+        public override string GetURL()
+        {
+            return "https://github.com/DigitalPainting/DigitalPainting";
+        }
     }
 }

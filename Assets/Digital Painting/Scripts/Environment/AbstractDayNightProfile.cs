@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace wizardscode.environment
 {
-    public abstract class AbstractDayNightCycle : ScriptableObject
+    /// <summary>
+    /// Describes the common configuration of a Day Night plugin.
+    /// </summary>
+    public abstract class AbstractDayNightProfile : ScriptableObject
     {
         protected DayNightCycleManager manager;
 

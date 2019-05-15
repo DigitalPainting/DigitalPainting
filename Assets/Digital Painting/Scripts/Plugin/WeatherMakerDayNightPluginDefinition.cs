@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace wizardscode.plugin
 {
-    public class WeatherMakerPluginDefinition : AbstractWeatherPluginDefinition
+    public class WeatherMakerDayNightPluginDefinition : AbstractDayNightPluginDefinition
     {
         public override string GetPluginImplementationClassName()
         {
-            return "WeatherMakerWeatherSystem";
+            return "WeatherMakerScript";
         }
 
         public override string GetReadableName()
         {
-            return "Weather Maker";
+            return "Day Night from Weather Maker";
         }
 
         public override string GetURL()

@@ -26,7 +26,7 @@ namespace wizardscode.environment
         public Light sunPrefab;
 
         [Tooltip("The Day Night Cycle configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
-        public AbstractDayNightCycle configuration;
+        public AbstractDayNightProfile configuration;
 
         public const float SECOND = 1;
         public const float MINUTE_AS_SECONDS = 60 * SECOND;

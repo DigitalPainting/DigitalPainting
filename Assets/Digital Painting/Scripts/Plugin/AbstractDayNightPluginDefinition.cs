@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// An abstract definition for a Day Night Cycle plugin.
-/// These plugins manage the time of day and associated skybox and lighting.
-/// </summary>
-public abstract class AbstractDayNightPluginDefinition : AbstractPluginDefinition
+
+namespace wizardscode.plugin
 {
-    public override Type GetManagerType()
+    /// <summary>
+    /// An abstract definition for a Day Night Cycle plugin.
+    /// These plugins manage the time of day and associated skybox and lighting.
+    /// </summary>
+    public abstract class AbstractDayNightPluginDefinition : AbstractPluginDefinition
     {
-        return Type.GetType("wizardscode.environment.DayNightCycleManager");
+        public override Type GetManagerType()
+        {
+            return Type.GetType("wizardscode.environment.DayNightCycleManager");
+        }
     }
 }

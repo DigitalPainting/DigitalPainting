@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AbstractWeatherPluginDefinition : AbstractPluginDefinition
+
+namespace wizardscode.plugin
 {
-    public override Type GetManagerType()
+    public abstract class AbstractWeatherPluginDefinition : AbstractPluginDefinition
     {
-        return Type.GetType("wizardscode.environment.WeatherManager");
+        public override Type GetManagerType()
+        {
+            return Type.GetType("wizardscode.environment.WeatherManager");
+        }
     }
 }
