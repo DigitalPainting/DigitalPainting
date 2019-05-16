@@ -22,7 +22,7 @@ namespace wizardscode.environment
         [Tooltip("The speed at which a game day passes in real-time.")]
         public float dayCycleInMinutes = 1;
 
-        protected DayNightCycleManager manager;
+        protected DayNightPluginManager manager;
 
         private Light _sun;
         internal Light Sun
@@ -44,7 +44,7 @@ namespace wizardscode.environment
         /// <param name="startTime">Start time in seconds.</param>
         virtual internal void Initialize()
         {
-            manager = GameObject.FindObjectOfType<DayNightCycleManager>();
+            manager = GameObject.FindObjectOfType<DayNightPluginManager>();
             if (manager == null)
             {
                 Debug.LogError("Cannot find DayNightCycleManager.");

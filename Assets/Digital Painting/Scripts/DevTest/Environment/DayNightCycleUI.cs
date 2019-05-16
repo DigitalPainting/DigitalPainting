@@ -19,11 +19,11 @@ namespace wizardscode.digitalpainting.devtest {
 
         [Header("Overrides")]
         [Tooltip("The DayNightCycle object that we are using. If null then the first one found in the scene will be used. This is usually sufficient.")]
-        public DayNightCycleManager dayNightCycle;
+        public DayNightPluginManager dayNightCycle;
 
         private void Start()
         {
-            dayNightCycle = GameObject.FindObjectOfType<DayNightCycleManager>();
+            dayNightCycle = GameObject.FindObjectOfType<DayNightPluginManager>();
         }
 
         private void Update()
