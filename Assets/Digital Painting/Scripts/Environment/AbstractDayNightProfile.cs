@@ -9,6 +9,19 @@ namespace wizardscode.environment
     /// </summary>
     public abstract class AbstractDayNightProfile : ScriptableObject
     {
+        [Header("Environment settings")]
+        [Tooltip("Skybox materials to use.")]
+        public Material skybox;
+        [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
+        public Light sunPrefab;
+
+        [Header("Timing")]
+        [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]
+        [Range(0, 86400)]
+        public float startTime = 5 * 60 * 60; // (5 AM)
+        [Tooltip("The speed at which a game day passes in real-time.")]
+        public float dayCycleInMinutes = 1;
+
         protected DayNightCycleManager manager;
 
         private Light _sun;
@@ -25,16 +38,12 @@ namespace wizardscode.environment
             }
         }
 
-        protected float startTime;
-
         /// <summary>
         /// Initialize the Day Night Cycle to start at the given time.
         /// </summary>
         /// <param name="startTime">Start time in seconds.</param>
-        virtual internal void Initialize(float startTime)
+        virtual internal void Initialize()
         {
-            this.startTime = startTime;
-
             manager = GameObject.FindObjectOfType<DayNightCycleManager>();
             if (manager == null)
             {

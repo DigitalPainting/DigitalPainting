@@ -10,6 +10,7 @@ namespace wizardscode.environment
     [CreateAssetMenu(fileName = "SimpleDayNightProfile", menuName = "Wizards Code/Day Night Cycle/Simple Day Night Profile")]
     public class SimpleDayNightProfile : AbstractDayNightProfile
     {
+        [Header("Simple Day Night Config")]
         public Color dawnDuskFog = new Color(133.0f / 255.0f, 124.0f / 255.0f, 102.0f / 255.0f);
         public Color dayFog = new Color(180.0f / 255.0f, 208.0f / 255.0f, 209.0f / 255.0f);
         public Color nightFog = new Color(12.0f / 255.0f, 15.0f / 255.0f, 91.0f / 255.0f);
@@ -24,11 +25,11 @@ namespace wizardscode.environment
 
         override internal void InitializeSun()
         {
-            if (manager.sunPrefab == null)
+            if (sunPrefab == null)
             {
                 Debug.LogError("You have not defined a sun in your SimpleDayNightCycle Configuration");
             }
-            Sun = Instantiate(manager.sunPrefab).GetComponent<Light>();
+            Sun = Instantiate(sunPrefab).GetComponent<Light>();
             sunInitialIntensity = Sun.intensity;
         }
 
@@ -42,7 +43,7 @@ namespace wizardscode.environment
 
         public void UpdateTime()
         {
-            float dayCycleInSeconds = manager.dayCycleInMinutes * 60;
+            float dayCycleInSeconds = dayCycleInMinutes * 60;
             currentTimeOfDay += Time.deltaTime * (DayNightCycleManager.DAY_AS_SECONDS / dayCycleInSeconds);
             if (currentTimeOfDay > DayNightCycleManager.DAY_AS_SECONDS)
             {
