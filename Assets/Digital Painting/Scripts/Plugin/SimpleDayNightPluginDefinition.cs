@@ -1,14 +1,19 @@
 ﻿using System;
-
+using wizardscode.environment;
 
 namespace wizardscode.plugin
 {
     /// <summary>
     /// Defines the basic Day Night plugin that is included with the Digital Painting asset.
     /// </summary>
-    public class BasicDayNightPluginDefinition : AbstractDayNightPluginDefinition
+    public class SimpleDayNightPluginDefinition : AbstractDayNightPluginDefinition
     {
         public override string GetPluginImplementationClassName()
+        {
+            return "SimpleDayNightProfile";
+        }
+
+        public override String GetProfileTypeName()
         {
             return "SimpleDayNightProfile";
         }

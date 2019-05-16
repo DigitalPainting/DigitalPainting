@@ -123,7 +123,7 @@ namespace wizardscode.editor
         /// Find all the plugins of a a given type known to the system and display
         /// buttons to set them up, disable them or find out more information.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">Plugin definition type</typeparam>
         private void PluginSelectionGUI<T>(string name) where T : AbstractPluginDefinition
         {
             List<AbstractPluginDefinition> availablePlugins = new List<AbstractPluginDefinition>();
@@ -145,7 +145,13 @@ namespace wizardscode.editor
                         AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponent(pluginDef.GetManagerType());
                         if (pluginManager)
                         {
-                            enabledPlugins.Add(pluginDef);
+                            if (pluginManager.m_pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
+                            {
+                                enabledPlugins.Add(pluginDef);
+                            } else
+                            {
+                                availablePlugins.Add(pluginDef);
+                            }
                         }
                         else
                         {

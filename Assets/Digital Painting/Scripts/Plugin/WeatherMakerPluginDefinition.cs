@@ -13,6 +13,11 @@ namespace wizardscode.plugin
             return "WeatherMakerWeatherSystem";
         }
 
+        public override String GetProfileTypeName()
+        {
+            throw new NotImplementedException();
+        }
+
         public override string GetReadableName()
         {
             return "Weather Maker";

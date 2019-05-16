@@ -11,7 +11,6 @@ namespace wizardscode.environment
     [AddComponentMenu("Wizards Code/Environment/Day Night Cycle")]
     public class DayNightPluginManager : AbstractPluginManager
     {
-
         public const float SECOND = 1;
         public const float MINUTE_AS_SECONDS = 60 * SECOND;
         public const float HOUR_AS_SECONDS = 60 * MINUTE_AS_SECONDS;

@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using wizardscode.environment.WeatherMaker;
 
 namespace wizardscode.plugin
 {
@@ -9,6 +11,11 @@ namespace wizardscode.plugin
         public override string GetPluginImplementationClassName()
         {
             return "WeatherMakerScript";
+        }
+
+        public override String GetProfileTypeName()
+        {
+            return "WeatherMakerDayNightProfile";
         }
 
         public override string GetReadableName()

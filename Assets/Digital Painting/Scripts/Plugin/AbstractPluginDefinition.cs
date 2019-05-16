@@ -11,11 +11,19 @@ namespace wizardscode.plugin
     public abstract class AbstractPluginDefinition
     {
         /// <summary>
-        /// Get the type of the manager, that is the Type of the MonoBehaviour that
+        /// Get the name of type of the manager, that is the Type of the MonoBehaviour that
         /// is used by the `DigitalPaintingManager` to manage the plugin.
         /// </summary>
         /// <returns></returns>
         public abstract Type GetManagerType();
+
+        /// <summary>
+        /// Get the name of the type of the profile for this plugin implementation. This allows
+        /// us to check that a profile exists and also to check whether a plugin implementation
+        /// is enabled in the scene.
+        /// </summary>
+        /// <returns></returns>
+        public abstract String GetProfileTypeName();
 
         /// <summary>
         /// The name of a class that we know exists in the plugin implementation.
