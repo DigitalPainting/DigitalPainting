@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using wizardscode.plugin;
 
 namespace wizardscode.environment
 {
     /// <summary>
     /// Describes the common configuration of a Day Night plugin.
     /// </summary>
-    public abstract class AbstractDayNightProfile : ScriptableObject
+    public abstract class AbstractDayNightProfile : AbstractPluginProfile
     {
         [Header("Environment settings")]
         [Tooltip("Skybox materials to use.")]

@@ -19,20 +19,20 @@ namespace wizardscode.digitalpainting.devtest {
 
         [Header("Overrides")]
         [Tooltip("The DayNightCycle object that we are using. If null then the first one found in the scene will be used. This is usually sufficient.")]
-        public DayNightPluginManager dayNightCycle;
+        public DayNightPluginManager dayNightManager;
 
         private void Start()
         {
-            dayNightCycle = GameObject.FindObjectOfType<DayNightPluginManager>();
+            dayNightManager = GameObject.FindObjectOfType<DayNightPluginManager>();
         }
 
         private void Update()
         {
-            if (dayNightCycle != null && dayNightCycle.enabled) { 
-                implementatioNameLabel.text = dayNightCycle.ImplementationName;
-                phaseLabel.text = dayNightCycle.CurrentPhase.ToString();
-                timeOfDayLabel.text = "Time: " + dayNightCycle.CurrentTimeAsLabel;
-                dayLengthLabel.text = "Minutes per sim. day: " + dayNightCycle.DayCycleInMinutes;
+            if (dayNightManager != null && dayNightManager.enabled) { 
+                implementatioNameLabel.text = dayNightManager.ImplementationName;
+                phaseLabel.text = dayNightManager.CurrentPhase.ToString();
+                timeOfDayLabel.text = "Time: " + dayNightManager.CurrentTimeAsLabel;
+                dayLengthLabel.text = "Minutes per sim. day: " + dayNightManager.DayCycleInMinutes;
             } else
             {
                 implementatioNameLabel.text = "Day Night Cycle disabled";
@@ -44,7 +44,7 @@ namespace wizardscode.digitalpainting.devtest {
         
         public void OnTimeOfDayChanged()
         {
-            dayNightCycle.configuration.SetTime(timeOfDaySlider.value);
+            dayNightManager.Profile.SetTime(timeOfDaySlider.value);
         }
     }
 }

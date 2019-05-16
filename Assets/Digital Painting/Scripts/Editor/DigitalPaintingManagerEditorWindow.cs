@@ -142,7 +142,8 @@ namespace wizardscode.editor
                     AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;
                     if (pluginDef.AvailableForUse)
                     {
-                        if (manager.GetComponent(pluginDef.GetManagerType()))
+                        AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponent(pluginDef.GetManagerType());
+                        if (pluginManager)
                         {
                             enabledPlugins.Add(pluginDef);
                         }

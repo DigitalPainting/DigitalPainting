@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using wizardscode.plugin;
 
 namespace wizardscode.environment
 {
@@ -8,10 +9,8 @@ namespace wizardscode.environment
     /// the chosen Day Night Cycle implementation.
     /// </summary>
     [AddComponentMenu("Wizards Code/Environment/Day Night Cycle")]
-    public class DayNightPluginManager : MonoBehaviour
+    public class DayNightPluginManager : AbstractPluginManager
     {
-        [Tooltip("The Day Night Cycle configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
-        public AbstractDayNightProfile configuration;
 
         public const float SECOND = 1;
         public const float MINUTE_AS_SECONDS = 60 * SECOND;
@@ -34,12 +33,17 @@ namespace wizardscode.environment
 
         public float CurrentTime
         {
-            get { return configuration.GetTime();  }
+            get { return Profile.GetTime();  }
+        }
+
+        internal AbstractDayNightProfile Profile
+        {
+            get { return (AbstractDayNightProfile)m_pluginProfile; }
         }
 
         private void Awake()
         {
-            if (configuration == null)
+            if (Profile == null)
             {
                 Debug.LogWarning("No configuration provided for the Day Night Cycle, disabling the `DayNightCycleManager` component. Consider removing, or disabling it permanently.");
                 enabled = false;
@@ -48,11 +52,11 @@ namespace wizardscode.environment
 
         private void Start()
         {
-            if (configuration == null)
+            if (Profile == null)
             {
                 Debug.LogError("You have not configured the Day Night Cycle.");
             }
-            configuration.Initialize();
+            Profile.Initialize();
 
             dawnStartTime = 0;
             dayStartTime = dawnStartTime + DayNightPluginManager.QUARTER_DAY_AS_SECONDS;
@@ -64,12 +68,12 @@ namespace wizardscode.environment
 
         public float DayCycleInMinutes
         {
-            get { return configuration.dayCycleInMinutes; }
+            get { return Profile.dayCycleInMinutes; }
         }               
 
         public string ImplementationName
         {
-            get { return configuration.name; }
+            get { return Profile.name; }
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace wizardscode.environment
         public string CurrentTimeAsLabel
         {
             get {
-                TimeSpan t = TimeSpan.FromSeconds(configuration.GetTime());
+                TimeSpan t = TimeSpan.FromSeconds(Profile.GetTime());
                 string result = string.Format("{0:D2}:{1:D2}",
                                         t.Hours,
                                         t.Minutes);
@@ -88,7 +92,7 @@ namespace wizardscode.environment
         
         private void Update()
         {
-            configuration.Update();
+            Profile.Update();
             SetPhase();
         }
 
