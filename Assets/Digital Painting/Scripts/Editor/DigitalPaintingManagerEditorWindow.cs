@@ -140,7 +140,7 @@ namespace wizardscode.editor
                 foreach (Type pluginType in plugins)
                 {
                     AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;
-                    if (pluginDef.IsPresent)
+                    if (pluginDef.AvailableForUse)
                     {
                         if (manager.GetComponent(pluginDef.GetManagerType()))
                         {

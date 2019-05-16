@@ -14,7 +14,7 @@ namespace wizardscode.plugin
     {
         public override Type GetManagerType()
         {
-            return Type.GetType("wizardscode.environment.DayNightCycleManager");
+            return Type.GetType("wizardscode.environment.DayNightPluginManager");
         }
     }
 }

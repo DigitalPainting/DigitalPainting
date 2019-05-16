@@ -42,7 +42,7 @@ namespace wizardscode.plugin
         /// assembly.
         /// </summary>
         /// <returns>True if the plugin asset is present and can be used, otherwise false.</returns>
-        public virtual bool IsPresent
+        public virtual bool AvailableForUse
         {
             get
             {
