@@ -199,11 +199,15 @@ namespace wizardscode.editor
                     for (int i = availablePluginsCache[name].Count - 1; i >= 0; i--)
                     {
                         AbstractPluginDefinition defn = availablePluginsCache[name][i];
-                        if (GUILayout.Button("Enable " + defn.GetReadableName()))
+                        bool hasManager = manager.gameObject.GetComponent(defn.GetManagerType()) != null;
+                        using (new EditorGUI.DisabledScope(hasManager))
                         {
-                            manager.gameObject.AddComponent(defn.GetManagerType());
-                            enabledPluginsCache[name].Add(defn);
-                            availablePluginsCache[name].Remove(defn);
+                            if (GUILayout.Button("Enable " + defn.GetReadableName()))
+                            {
+                                manager.gameObject.AddComponent(defn.GetManagerType());
+                                enabledPluginsCache[name].Add(defn);
+                                availablePluginsCache[name].Remove(defn);
+                            }
                         }
                     }
                 }
