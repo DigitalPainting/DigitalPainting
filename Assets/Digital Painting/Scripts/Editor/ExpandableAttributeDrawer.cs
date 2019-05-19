@@ -12,7 +12,7 @@ namespace wizardscode.editor
     /// <summary>
     /// Draws the property field for any field marked with ExpandableAttribute.
     /// 
-    /// Original code from Fydar: https://forum.unity.com/threads/editor-tool-better-scriptableobject-inspector-editing.484393/
+    /// Original code from https://forum.unity.com/threads/editor-tool-better-scriptableobject-inspector-editing.484393/
     /// </summary>
     [CustomPropertyDrawer(typeof(ExpandableAttribute), true)]
     public class ExpandableAttributeDrawer : PropertyDrawer
@@ -97,13 +97,27 @@ namespace wizardscode.editor
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            ExpandableAttribute decorator = attribute as ExpandableAttribute;
+
             Rect fieldRect = new Rect(position);
             fieldRect.height = EditorGUIUtility.singleLineHeight;
 
             EditorGUI.PropertyField(fieldRect, property, label, true);
 
-            if (property.objectReferenceValue == null)
+            if (decorator.Required && property.objectReferenceValue == null)
+            {
+                string msg;
+                if (decorator.IsRequiredMessage != null)
+                {
+                    msg = decorator.IsRequiredMessage;
+                }
+                else
+                {
+                    msg = label.text + " is required.";
+                }
+                EditorGUILayout.HelpBox(msg, MessageType.Error);
                 return;
+            }
 
             property.isExpanded = EditorGUI.Foldout(fieldRect, property.isExpanded, GUIContent.none, true);
 
