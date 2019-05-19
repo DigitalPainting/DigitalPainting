@@ -145,7 +145,8 @@ namespace wizardscode.editor
                         AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponent(pluginDef.GetManagerType());
                         if (pluginManager)
                         {
-                            if (pluginManager.m_pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
+                            AbstractPluginProfile pluginProfile = pluginManager.m_pluginProfile;
+                            if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
                             {
                                 enabledPlugins.Add(pluginDef);
                             } else
