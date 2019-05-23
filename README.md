@@ -32,7 +32,17 @@ We use Git submodules to keep things clean and open the possibility of releasing
 
 `git clone git@github.com:DigitalPainting/DigitalPainting.git test --recurse-submodules`
 
-Be sure to import the packages listed above and the development assets in the next section. While these are free of cost they are not open source and so we cannot include them in the source.
+### Required Assets and Packages for Development Work (all zero cost)
+
+Download and import the following assets:
+
+  * Unity Environment Standard Assets (Assets -> Import Package -> Environment)
+    * You only need the `Environment` and `Effects/LightFlares`
+    * You'll need to regenerate the SpeedTree assets (click the error then click `Apply & Generate Materials` in the inspector)
+  * ProBuilder Package (install using Package Manager)
+  * TextMesh Pro  (install using Package Manager)
+
+### Dev Scenes
 
 In order to build and test features of the Digital Painting project all developers should create
 or use the appropriate dev sene (see `Digital Patinting/scenes/dev`). No new features will be accepted without a
@@ -44,16 +54,6 @@ assets from the Unity Asset store and packages from Unity itself. The number of 
 Any features that are dependent on assets that are not free of cost must be optional and must degrade gracefully in this scene when 
 only the assets and packages listed below are included. See the plugin mechanism for guidance on how to include features that
 depend on paid assets.
-
-### Required Assets and Packages for Development Work (all zero cost)
-
-Download and import the following assets:
-
-  * Unity Environment Standard Assets (Assets -> Import Package -> Environment)
-    * You only need the `Environment` and `Effects/LightFlares`
-    * You'll need to regenerate the SpeedTree assets (click the error then click `Apply & Generate Materials` in the inspector)
-  * ProBuilder Package (install using Package Manager)
-  * TextMesh Pro  (install using Package Manager)
 
 ### Credits
 
