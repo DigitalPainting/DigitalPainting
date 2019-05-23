@@ -20,21 +20,11 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
 The Digital Painting asset comes with functional scenes that are designed for development and demonstration use. These scenes are very basic in their nature, using only primitives that comes with Unity by default. They are not designed to be pretty. There are some additional [demo scenes](./Assets/Digital%20Painting/Plugins/Scenes/README.md) included that are prettier, in some cases beautiful, though each of these has some additional dependencies that must be installed - some of which are not free. The [demo scenes](./Assets/Digital%20Painting/Plugins/Scenes/README.md) document details these.
 
-To create your own Digital Painting scene you can start with any Unity scene that has a terrain. Simply add the `Digital Painting/Prefabs/DigitalPaintingManager` prefab to it. You are now ready to go, hit play.
+### Creating your First Scene
 
-This prefab will try to configure your scene to work with the Digital Painting. However, there are a few things you should be aware of, for example, if you plan to use the Day Night Cycle then your scene should not have any lighting that will interfere with the sun(s) provided by the cycle. 
+To create your own Digital Painting scene you can start with any Unity scene that has a terrain. To add the Digital Painting asset to your scene open the Digital Painting Manager Window using `Window > Wizards Code > Open Digital Painting Manager`, ensure the `Standard` tab is selected and click `Add Digital Painting Manager`. This will add the necessary components to your scene and present an interface for adding plugins to enhance your scene.
 
-For more details see
-the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/CreatingAScene.md).
-
-### Required Packages (for use)
-
-These packages will be imported for you when you install the Digital Painting asset. However, some of the them require manual steps to finalize the setup.
-
-  * Cinemachine
-    * No manual steps required
-  * TextMesh Pro
-    * Window -> TextMeshPro -> Import TMP Essential Resources
+For more details see the [documentation on creating scenes](./Assets/Digital%20Painting/Docs/CreatingAScene.md).
 
 ## Development
 

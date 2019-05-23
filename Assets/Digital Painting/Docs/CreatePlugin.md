@@ -20,7 +20,6 @@ The majority of the implementation code for a plugin will come from an external 
 
 ## Enable
 
-FIXME: Check the required Asset is installed
 FIXME: Install the plugin package
 FIXME: run the Enable script in the Plugin Definition - adds the manager component, does required config
 FIXME: add the configuration to the manager
@@ -42,8 +41,7 @@ Once all this is done it's really easy for users to use the plugin.
 FIXME: make step 3.5 automatic... provide a prefab and make it a child of the Digital Painting Manager?
 FIXME: make step 4 automatic... select an existing profile or offer to create a new one in a known location - `profiles/plugins`
 FIXME: make setp 5 automatic... select an existing profile, duplicate it into `profiles/weathermaker`
-FIXME: move day night config settins into the profile SO
-FIXME: Provide an editor for the plugin profile
+FIXME: Provide an editor for the plugin profile and expose it in the plugin manager
 
 # LEGACY: Building a Plugin or Scene
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.PackageManager;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.plugin;
@@ -82,6 +84,9 @@ namespace wizardscode.editor
             }
         }
 
+        /// <summary>
+        /// Adds the required Digital Painting assets and its dependencies.
+        /// </summary>
         private void AddDigitalPainting()
         {
             // Parent Game Object
@@ -95,6 +100,67 @@ namespace wizardscode.editor
             // Flying Pathfinding
             Octree octree = Instantiate(Config.FlyingPathfinderPrefab, parent.transform);
             octree.FitToTerrain(Terrain.activeTerrain);
+        }
+
+        /// <summary>
+        /// Install all dependencies of Digital Painting that are not already present.
+        /// </summary>
+        private static void InstallDependencies()
+        {
+            string[] requiredPackages = { "Cinemachine", "TextMesh Pro" };
+            foreach (string package in requiredPackages)
+            {
+                AddPackage(package, req =>
+                {
+                    if (req.Status == StatusCode.Success)
+                    {
+                        _request = null;
+                    }
+                });
+                /**
+                AddRequest request = Client.Add(package);
+                while (request.IsCompleted)
+                {
+                    Debug.Log("Installing " + package);
+                }
+
+                if (request.Status == StatusCode.Failure)
+                {
+                    Debug.LogError("Unable to install " + package);
+                }
+    */
+            }
+        }
+
+        static AddRequest _request;
+        static Action<Request> _callback;
+
+        public static void AddPackage(string packageId, Action<Request> callback = null)
+        {
+            _request = Client.Add(packageId);
+            _callback = callback;
+            EditorUtility.DisplayProgressBar("Add Package", "Cloning " + packageId, 0.5f);
+            EditorApplication.update += UpdatePackageRequest;
+        }
+
+        static void UpdatePackageRequest()
+        {
+            if (_request.Status != StatusCode.InProgress)
+            {
+                if (_request.Status == StatusCode.Failure)
+                {
+                    Debug.LogErrorFormat("Error: {0} ({1})", _request.Error.message, _request.Error.errorCode);
+                }
+
+                EditorApplication.update -= UpdatePackageRequest;
+                EditorUtility.ClearProgressBar();
+                if (_callback != null)
+                {
+                    _callback(_request);
+                }
+                _request = null;
+                return;
+            }
         }
 
         private static void IsPlayingGUI()

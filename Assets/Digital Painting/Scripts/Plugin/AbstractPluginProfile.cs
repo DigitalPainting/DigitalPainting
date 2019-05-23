@@ -36,7 +36,7 @@ namespace wizardscode.plugin
         /// </summary>
         /// <param name="message">A human readable message describing the validation state.</param>
         /// <param name="error">Indicates the level of severity of the message. From OK, meaning all good, to Error meaning it won't work like this.</param>
-        public ValidationObject(string message, Level impact, AbstractPluginProfile.ProfileCallback callback)
+        public ValidationObject(string message, Level impact, AbstractPluginProfile.ProfileCallback callback = null)
         {
             this.message = message;
             this.impact = impact;
