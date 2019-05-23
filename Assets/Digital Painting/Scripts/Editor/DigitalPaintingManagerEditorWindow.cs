@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -75,28 +76,25 @@ namespace wizardscode.editor
         private void ValidationGUI()
         {
             List<ValidationResult> validations = Validate();
+
+            // Test data
+            validations.Add(new ValidationResult("Error 1", ValidationResult.Level.Error));
+            validations.Add(new ValidationResult("Warning 1", ValidationResult.Level.Warning));
+            validations.Add(new ValidationResult("Error 2", ValidationResult.Level.Error));
+            validations.Add(new ValidationResult("Warning 2", ValidationResult.Level.Warning));
+            validations.Add(new ValidationResult("Error 3", ValidationResult.Level.Error));
+            validations.Add(new ValidationResult("Warning 3", ValidationResult.Level.Warning));
+            validations.Add(new ValidationResult("OK 1", ValidationResult.Level.OK));
+            validations.Add(new ValidationResult("OK 2", ValidationResult.Level.OK));
+            validations.Add(new ValidationResult("OK 3", ValidationResult.Level.OK));
+
+
             if (validations.Count > 0)
             {
-                int okCount = 0;
-                int warningCount = 0;
-                int errorCount = 0;
-
-                foreach (ValidationResult result in validations)
-                {
-                    switch (result.impact)
-                    {
-                        case ValidationResult.Level.OK:
-                            okCount++;
-                            break;
-                        case ValidationResult.Level.Warning:
-                            warningCount++;
-                            break;
-                        case ValidationResult.Level.Error:
-                            errorCount++;
-                            break;
-                    }
-                }
-
+                int okCount = validations.Count(x => x.impact == ValidationResult.Level.OK);
+                int warningCount = validations.Count(x => x.impact == ValidationResult.Level.Warning);
+                int errorCount = validations.Count(x => x.impact == ValidationResult.Level.Error);
+                
                 string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " ok)";
 
                 showMainValidation = EditorGUILayout.Foldout(showMainValidation, title);
