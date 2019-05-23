@@ -4,6 +4,7 @@ using wizardscode.environment;
 using System.Collections.Generic;
 using wizardscode.plugin;
 using System;
+using wizardscode.utility;
 
 namespace wizardscode.editor {
     [CustomEditor(typeof(DayNightPluginManager))]
@@ -18,54 +19,17 @@ namespace wizardscode.editor {
 
         public override void OnInspectorGUI()
         {
-            List<ValidationObject> messages = new List<ValidationObject>();
+            List<ValidationResult> results = new List<ValidationResult>();
             serializedObject.Update();
             if (pluginProfile.objectReferenceValue != null)
             {
-                messages = ((AbstractPluginProfile)pluginProfile.objectReferenceValue).Validate();
+                results = ((AbstractPluginProfile)pluginProfile.objectReferenceValue).Validate();
             }
 
-            ShowErrors(messages);
+            ValidationHelper.ShowValidationResults(results);
 
             EditorGUILayout.PropertyField(pluginProfile);
             serializedObject.ApplyModifiedProperties();
-        }
-
-        private void ShowErrors(List<ValidationObject> messages)
-        {
-            foreach (ValidationObject msg in messages)
-            {
-                switch (msg.impact)
-                {
-                    case ValidationObject.Level.OK:
-                        // If it's OK we don't need to report it.
-                        break;
-                    case ValidationObject.Level.Warning:
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.HelpBox(msg.message, MessageType.Warning, true);
-                        if (msg.resolutionCallback != null)
-                        {
-                            if (GUILayout.Button("Fix It!"))
-                            {
-                                msg.resolutionCallback();
-                            }
-                        }
-                        EditorGUILayout.EndHorizontal();
-                        break;
-                    case ValidationObject.Level.Error:
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.HelpBox(msg.message, MessageType.Error, true);
-                        if (msg.resolutionCallback != null)
-                        {
-                            if (GUILayout.Button("Fix It!"))
-                            {
-                                msg.resolutionCallback();
-                            }
-                        }
-                        EditorGUILayout.EndHorizontal();
-                        break;
-                }
-            }
         }
     }
 }

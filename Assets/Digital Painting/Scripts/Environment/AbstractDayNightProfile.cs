@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using wizardscode.plugin;
+using wizardscode.utility;
 
 namespace wizardscode.environment
 {
@@ -27,24 +28,24 @@ namespace wizardscode.environment
 
         protected DayNightPluginManager manager;
 
-        public override List<ValidationObject> Validate()
+        public override List<ValidationResult> Validate()
         {
-            List<ValidationObject>validation = base.Validate();
+            List<ValidationResult>validation = base.Validate();
             
             if (skybox == null)
             {
-                validation.Add(new ValidationObject("No skybox is set in the Day Night Profile", ValidationObject.Level.Warning, null));
+                validation.Add(new ValidationResult("No skybox is set in the Day Night Profile", ValidationResult.Level.Warning, null));
             } else
             {
                 if (RenderSettings.skybox != skybox)
                 {
-                    validation.Add(new ValidationObject("Skybox set in RenderSettings is not the same as the one set in the Day Night Profile", ValidationObject.Level.Error, SetSkybox));
+                    validation.Add(new ValidationResult("Skybox set in RenderSettings is not the same as the one set in the Day Night Profile", ValidationResult.Level.Error, SetSkybox));
                 }
             }
 
             if (sunPrefab == null)
             {
-                validation.Add(new ValidationObject("No sun prefab is set in the Day Night Profile", ValidationObject.Level.Warning, null));
+                validation.Add(new ValidationResult("No sun prefab is set in the Day Night Profile", ValidationResult.Level.Warning, null));
             }
 
             return validation;

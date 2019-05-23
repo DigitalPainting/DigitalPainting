@@ -6,6 +6,7 @@ using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.plugin;
+using wizardscode.utility;
 
 namespace wizardscode.editor
 {
@@ -50,6 +51,9 @@ namespace wizardscode.editor
                 }
 
                 selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Standard", "Advanced", "Experimental", "More..." });
+                
+                ValidationGUI();
+
                 switch (selectedTab)
                 {
                     case 0:
@@ -66,6 +70,64 @@ namespace wizardscode.editor
                         break;
                 }
             }
+        }
+
+        private void ValidationGUI()
+        {
+            List<ValidationResult> results = Validate();
+            if (results.Count > 0)
+            {
+                int okCount = 0;
+                int warningCount = 0;
+                int errorCount = 0;
+
+                foreach (ValidationResult result in results)
+                {
+                    switch (result.impact)
+                    {
+                        case ValidationResult.Level.OK:
+                            okCount++;
+                            break;
+                        case ValidationResult.Level.Warning:
+                            warningCount++;
+                            break;
+                        case ValidationResult.Level.Error:
+                            errorCount++;
+                            break;
+                    }
+                }
+
+                string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " ok)";
+
+                showMainValidation = EditorGUILayout.Foldout(showMainValidation, title);
+                if (errorCount > 0)
+                {
+                    showMainValidation = true;
+                }
+
+                if (showMainValidation)
+                {
+                    ValidationHelper.ShowValidationResults(results);
+                }
+            }
+        }
+
+        public void OnInspectorUpdate()
+        {
+            this.Repaint();
+        }
+
+        /// <summary>
+        /// Test to see if the Digital Painting is setup correctly in the current scene. 
+        /// </summary>
+        /// <returns>A list of ValidationResults that describe any problems found. If the list is empty then no errors were found.</returns>
+        public virtual List<ValidationResult> Validate()
+        {   
+            List<ValidationResult> validations = new List<ValidationResult>();
+
+            
+
+            return validations;
         }
 
         private void StandardTabGUI()
@@ -117,23 +179,12 @@ namespace wizardscode.editor
                         _request = null;
                     }
                 });
-                /**
-                AddRequest request = Client.Add(package);
-                while (request.IsCompleted)
-                {
-                    Debug.Log("Installing " + package);
-                }
-
-                if (request.Status == StatusCode.Failure)
-                {
-                    Debug.LogError("Unable to install " + package);
-                }
-    */
             }
         }
 
         static AddRequest _request;
         static Action<Request> _callback;
+        private bool showMainValidation;
 
         public static void AddPackage(string packageId, Action<Request> callback = null)
         {
