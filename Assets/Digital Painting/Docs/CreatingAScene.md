@@ -12,7 +12,7 @@ can use any scene that has a terrain withing it.
 Create your new project and create or import your scene. I've used the excellent [Nature 
 Manufacture’s Meadow Environment – Dynamic Nature](https://assetstore.unity.com/packages/3d/vegetation/meadow-environment-dynamic-nature-132195)
 asset. I'm using a copy of the `Unity Standard Demo Scene` that comes with the asset.
-THe process should be the same if you want to use the gills demo scene, but that requires
+The process should be the same if you want to use the gills demo scene, but that requires
 Unity Pro and some other assets. 
 
 Note, that your scene must have a terrain within it. This is used for agent navigation.
@@ -21,18 +21,12 @@ FIXME: Validate the scene has a terrain when the DigitalPaintingManager is added
 
 The Meadow environment 
 asset recommends you to setup some of the lighting and camera effects, but it should be
-noted that some plugins for THe Digital Painting also advise specific lighting and camera 
-effects. These plugins may overwrite you settings.
+noted that some plugins for The Digital Painting also advise specific lighting and camera 
+effects. These plugins may overwrite your settings.
 
 At the time of writing there is no way to force a specific setup. This is a feature that
 needs to be added, see [issue #23](https://github.com/DigitalPainting/DigitalPainting/issues/23) 
 to track this. If you hit a problem in this regard we would welcome your contribution.
-
-There are a few steps you should take to ensure the best experience:
-
-  1. If you want to use the Day Night Cycle feature of The Digital Painting remove any lighting in the scene that will conflict with this. This is not necessary if you turn off or remove the Day Night Cycle in `Digital Painting Manager`.
-  2. Import the post process stack 2.0 into your project (package manager--> post process stack)
-  3. Change shadow distance to 500 or higher in quality settings
 
 ### Add the Core Digital Painting Assets
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static wizardscode.utility.ValidationHelper;
@@ -11,6 +12,10 @@ namespace wizardscode.utility
         public delegate void ProfileCallback();
 
 #if UNITY_EDITOR
+        static bool showErrors = true;
+        static bool showWarnings = true;
+        static bool showOk = false;
+
         public static void ShowValidationResults(List<ValidationResult> messages)
         {
             if (messages.Count == 0)
@@ -18,41 +23,62 @@ namespace wizardscode.utility
                 return;
             }
 
+            EditorGUI.indentLevel++;
             EditorGUILayout.BeginVertical();
-            foreach (ValidationResult msg in messages)
+
+            List<ValidationResult> msgs = messages.Where(x => x.impact == ValidationResult.Level.Error).ToList();
+            showErrors = EditorGUILayout.Foldout(showErrors, "Errors: " + msgs.Count());
+            if (showErrors)
             {
-                switch (msg.impact)
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in msgs)
                 {
-                    case ValidationResult.Level.OK:
-                        // If it's OK we don't need to report it.
-                        break;
-                    case ValidationResult.Level.Warning:
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.HelpBox(msg.message, MessageType.Warning, true);
-                        if (msg.resolutionCallback != null)
-                        {
-                            if (GUILayout.Button("Fix It!"))
-                            {
-                                msg.resolutionCallback();
-                            }
-                        }
-                        EditorGUILayout.EndHorizontal();
-                        break;
-                    case ValidationResult.Level.Error:
-                        EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.HelpBox(msg.message, MessageType.Error, true);
-                        if (msg.resolutionCallback != null)
-                        {
-                            if (GUILayout.Button("Fix It!"))
-                            {
-                                msg.resolutionCallback();
-                            }
-                        }
-                        EditorGUILayout.EndHorizontal();
-                        break;
+
+                    ValidationResultGUI(msg, MessageType.Error);
+                }
+                EditorGUI.indentLevel--;
+            }
+
+            msgs = messages.Where(x => x.impact == ValidationResult.Level.Warning).ToList();
+            showWarnings = EditorGUILayout.Foldout(showWarnings, "Warnings: " + msgs.Count());
+            if (showWarnings)
+            {
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in msgs)
+                {
+                    ValidationResultGUI(msg, MessageType.Warning);
+                }
+                EditorGUI.indentLevel--;
+            }
+
+            msgs = messages.Where(x => x.impact == ValidationResult.Level.OK).ToList();
+            showOk = EditorGUILayout.Foldout(showOk, "OK: " + msgs.Count());
+            if (showOk)
+            {
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in msgs)
+                {
+                    ValidationResultGUI(msg, MessageType.None);
+                }
+                EditorGUI.indentLevel--;
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUI.indentLevel--;
+        }
+
+        private static void ValidationResultGUI(ValidationResult msg, MessageType messageType)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.HelpBox(msg.message, messageType, true);
+            if (msg.resolutionCallback != null)
+            {
+                if (GUILayout.Button("Fix It!"))
+                {
+                    msg.resolutionCallback();
                 }
             }
-            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
         }
 #endif
     }

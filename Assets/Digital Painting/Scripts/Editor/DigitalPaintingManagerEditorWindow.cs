@@ -103,9 +103,6 @@ namespace wizardscode.editor
                 if (errorCount > 0)
                 {
                     showMainValidation = true;
-                } else if (errorCount + warningCount == 0)
-                {
-                    showMainValidation = false;
                 }
 
                 if (showMainValidation)
