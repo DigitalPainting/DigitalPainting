@@ -19,7 +19,7 @@ namespace wizardscode.editor {
 
         public override void OnInspectorGUI()
         {
-            List<ValidationResult> results = new List<ValidationResult>();
+            ValidationResultCollection results = new ValidationResultCollection();
             serializedObject.Update();
             if (pluginProfile.objectReferenceValue != null)
             {

@@ -28,24 +28,24 @@ namespace wizardscode.environment
 
         protected DayNightPluginManager manager;
 
-        public override List<ValidationResult> Validate()
+        public override ValidationResultCollection Validate()
         {
-            List<ValidationResult>validation = base.Validate();
+            ValidationResultCollection validation = base.Validate();
             
             if (skybox == null)
             {
-                validation.Add(new ValidationResult("No skybox is set in the Day Night Profile", ValidationResult.Level.Warning, null));
+                validation.AddOrUpdate(new ValidationResult("No skybox is set in the Day Night Profile", ValidationResult.Level.Warning, null));
             } else
             {
                 if (RenderSettings.skybox != skybox)
                 {
-                    validation.Add(new ValidationResult("Skybox set in RenderSettings is not the same as the one set in the Day Night Profile", ValidationResult.Level.Error, SetSkybox));
+                    validation.AddOrUpdate(new ValidationResult("Skybox set in RenderSettings is not the same as the one set in the Day Night Profile", ValidationResult.Level.Error, SetSkybox));
                 }
             }
 
             if (sunPrefab == null)
             {
-                validation.Add(new ValidationResult("No sun prefab is set in the Day Night Profile", ValidationResult.Level.Warning, null));
+                validation.AddOrUpdate(new ValidationResult("No sun prefab is set in the Day Night Profile", ValidationResult.Level.Warning, null));
             }
 
             return validation;

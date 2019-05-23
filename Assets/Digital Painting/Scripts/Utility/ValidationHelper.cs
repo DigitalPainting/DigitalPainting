@@ -16,7 +16,7 @@ namespace wizardscode.utility
         static bool showWarnings = true;
         static bool showOk = false;
 
-        public static void ShowValidationResults(List<ValidationResult> messages)
+        public static void ShowValidationResults(ValidationResultCollection messages)
         {
             if (messages.Count == 0)
             {
@@ -26,7 +26,7 @@ namespace wizardscode.utility
             EditorGUI.indentLevel++;
             EditorGUILayout.BeginVertical();
 
-            List<ValidationResult> msgs = messages.Where(x => x.impact == ValidationResult.Level.Error).ToList();
+            List<ValidationResult> msgs = messages.ErrorList;
             showErrors = EditorGUILayout.Foldout(showErrors, "Errors: " + msgs.Count());
             if (showErrors)
             {
@@ -39,7 +39,7 @@ namespace wizardscode.utility
                 EditorGUI.indentLevel--;
             }
 
-            msgs = messages.Where(x => x.impact == ValidationResult.Level.Warning).ToList();
+            msgs = messages.WarningList;
             showWarnings = EditorGUILayout.Foldout(showWarnings, "Warnings: " + msgs.Count());
             if (showWarnings)
             {
@@ -51,7 +51,7 @@ namespace wizardscode.utility
                 EditorGUI.indentLevel--;
             }
 
-            msgs = messages.Where(x => x.impact == ValidationResult.Level.OK).ToList();
+            msgs = messages.OKList;
             showOk = EditorGUILayout.Foldout(showOk, "OK: " + msgs.Count());
             if (showOk)
             {
@@ -69,8 +69,14 @@ namespace wizardscode.utility
 
         private static void ValidationResultGUI(ValidationResult msg, MessageType messageType)
         {
-            EditorGUILayout.BeginHorizontal();
+            if (msg.ignore)
+            {
+                return;
+            }
+
+            EditorGUILayout.BeginVertical();
             EditorGUILayout.HelpBox(msg.message, messageType, true);
+
             if (msg.resolutionCallback != null)
             {
                 if (GUILayout.Button("Fix It!"))
@@ -78,9 +84,71 @@ namespace wizardscode.utility
                     msg.resolutionCallback();
                 }
             }
-            EditorGUILayout.EndHorizontal();
+            msg.ignore = EditorGUILayout.Toggle("Ignore", msg.ignore);
+            EditorGUILayout.EndVertical();
         }
 #endif
+    }
+
+    public class ValidationResultCollection
+    {
+        Dictionary<int, ValidationResult> collection = new Dictionary<int, ValidationResult>();
+
+
+        /// <summary>
+        /// Get or create a ValidationResult for a named validation test.
+        /// </summary>
+        /// <param name="name">The name of the validation test.</param>
+        /// <returns>An existing ValidationResult if the test has already been run, or a new validation result with an untested state.</returns>
+        public ValidationResult GetOrCreate(string name)
+        {
+            ValidationResult result;
+            if (!collection.TryGetValue(name.GetHashCode(), out result))
+            {
+                result = new ValidationResult(name);
+                AddOrUpdate(result);
+            }
+            return result;
+        }
+
+        public void AddOrUpdate(ValidationResult result)
+        {
+            collection[result.id] = result;
+        }
+
+        public int Count
+        {
+            get { return collection.Count(); }
+        }
+
+        public int CountOK
+        {
+            get { return collection.Values.Count(x => x.impact == ValidationResult.Level.OK); }
+        }
+
+        public int CountWarning
+        {
+            get { return collection.Values.Count(x => x.impact == ValidationResult.Level.Warning); }
+        }
+
+        public int CountError
+        {
+            get { return collection.Values.Count(x => x.impact == ValidationResult.Level.Error); }
+        }
+
+        public List<ValidationResult> ErrorList {
+            get { return collection.Values.Where(x => x.impact == ValidationResult.Level.Error).ToList(); }
+        }
+
+        public List<ValidationResult> WarningList
+        {
+            get { return collection.Values.Where(x => x.impact == ValidationResult.Level.Warning).ToList(); }
+        }
+
+        public List<ValidationResult> OKList
+        {
+            get { return collection.Values.Where(x => x.impact == ValidationResult.Level.OK).ToList(); }
+        }
     }
     
     /// <summary>
@@ -89,21 +157,30 @@ namespace wizardscode.utility
     /// </summary>
     public class ValidationResult
     {
-        public enum Level { OK, Warning, Error }
+        public enum Level { OK, Warning, Error, Untested }
+
+        public int id;
         public Level impact;
         public string message;
         public ProfileCallback resolutionCallback;
+        public bool ignore = false;
+
+        /// <summary>
+        /// Create a Validation object in an untested state.
+        /// </summary>
+        /// <param name="message">A human readable message describing the validation state.</param>
+        /// <param name="impact">The importance of the result from OK to Error.</param>
+        internal ValidationResult(string message) : this(message, Level.Untested, null)
+        {
+        }
 
         /// <summary>
         /// Create a Validation object.
         /// </summary>
         /// <param name="message">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
-        public ValidationResult(string message, Level impact)
+        internal ValidationResult(string message, Level impact) : this(message, impact, null)
         {
-            this.message = message;
-            this.impact = impact;
-            this.resolutionCallback = null;
         }
 
         /// <summary>
@@ -112,8 +189,9 @@ namespace wizardscode.utility
         /// <param name="message">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
         /// <param name="callbackToFix">A callback method that will allow the result to be corrected if possible.</param>
-        public ValidationResult(string message, Level impact, ProfileCallback callbackToFix)
+        internal ValidationResult(string message, Level impact, ProfileCallback callbackToFix)
         {
+            this.id = message.GetHashCode();
             this.message = message;
             this.impact = impact;
             this.resolutionCallback = callbackToFix;

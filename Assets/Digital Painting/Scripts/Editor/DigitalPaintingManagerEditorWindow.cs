@@ -75,26 +75,16 @@ namespace wizardscode.editor
 
         private void ValidationGUI()
         {
-            List<ValidationResult> validations = Validate();
-
-            // Test data
-            validations.Add(new ValidationResult("Error 1", ValidationResult.Level.Error));
-            validations.Add(new ValidationResult("Warning 1", ValidationResult.Level.Warning));
-            validations.Add(new ValidationResult("Error 2", ValidationResult.Level.Error));
-            validations.Add(new ValidationResult("Warning 2", ValidationResult.Level.Warning));
-            validations.Add(new ValidationResult("Error 3", ValidationResult.Level.Error));
-            validations.Add(new ValidationResult("Warning 3", ValidationResult.Level.Warning));
-            validations.Add(new ValidationResult("OK 1", ValidationResult.Level.OK));
-            validations.Add(new ValidationResult("OK 2", ValidationResult.Level.OK));
-            validations.Add(new ValidationResult("OK 3", ValidationResult.Level.OK));
-
+            Validate();
+            
+            CreateTestData();
 
             if (validations.Count > 0)
             {
-                int okCount = validations.Count(x => x.impact == ValidationResult.Level.OK);
-                int warningCount = validations.Count(x => x.impact == ValidationResult.Level.Warning);
-                int errorCount = validations.Count(x => x.impact == ValidationResult.Level.Error);
-                
+                int okCount = validations.CountOK;
+                int warningCount = validations.CountWarning;
+                int errorCount = validations.CountError;
+
                 string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " ok)";
 
                 showMainValidation = EditorGUILayout.Foldout(showMainValidation, title);
@@ -110,6 +100,39 @@ namespace wizardscode.editor
             }
         }
 
+        private void CreateTestData()
+        {
+            ValidationResult result = validations.GetOrCreate("Error 1");
+            result.impact = ValidationResult.Level.Error;
+            validations.AddOrUpdate(result);
+            result = validations.GetOrCreate("Error 2");
+            result.impact = ValidationResult.Level.Error;
+            validations.AddOrUpdate(result);
+            result = validations.GetOrCreate("Error 3");
+            result.impact = ValidationResult.Level.Error;
+            validations.AddOrUpdate(result);
+
+            result = validations.GetOrCreate("Warning 1");
+            result.impact = ValidationResult.Level.Warning;
+            validations.AddOrUpdate(result);
+            result = validations.GetOrCreate("Warning 2");
+            result.impact = ValidationResult.Level.Warning;
+            validations.AddOrUpdate(result);
+            result = validations.GetOrCreate("Warning 3");
+            result.impact = ValidationResult.Level.Warning;
+            validations.AddOrUpdate(result);
+
+            result = validations.GetOrCreate("OK 1");
+            result.impact = ValidationResult.Level.OK;
+            validations.AddOrUpdate(result);
+            result = validations.GetOrCreate("OK 2");
+            result.impact = ValidationResult.Level.OK;
+            validations.AddOrUpdate(result);
+            result = validations.GetOrCreate("OK 3");
+            result.impact = ValidationResult.Level.OK;
+            validations.AddOrUpdate(result);
+        }
+
         public void OnInspectorUpdate()
         {
             this.Repaint();
@@ -118,25 +141,23 @@ namespace wizardscode.editor
         
 
         /// <summary>
-        /// Test to see if the Digital Painting is setup correctly in the current scene. 
+        /// Test to see if the Digital Painting is setup correctly in the current scene. Results of all 
+        /// the validation tests are stored in an internal cache.
         /// </summary>
         //were found.</returns>
-        public virtual List<ValidationResult> Validate()
+        public virtual void Validate()
         {
-            List<ValidationResult> validations = new List<ValidationResult>();
-
-            ValidationResult result = null;
+            ValidationResult result = validations.GetOrCreate("Shadows are correctly setup.");
             if (QualitySettings.shadowDistance >= 500)
             {
-                result = new ValidationResult("Shadows are correctly setup.", ValidationResult.Level.OK);
+                result.impact = ValidationResult.Level.OK;
             }
             else
             {
-                result = new ValidationResult("Shadows can be improved.", ValidationResult.Level.Warning, ConfigureShadows);
+                result.impact = ValidationResult.Level.Warning;
+                result.resolutionCallback = ConfigureShadows;
             }
-            validations.Add(result);
-
-            return validations;
+            validations.AddOrUpdate(result);
         }
 
         private void ConfigureShadows()
@@ -199,6 +220,7 @@ namespace wizardscode.editor
         static Request _request;
         static Action<Request> _callback;
         private bool showMainValidation;
+        private ValidationResultCollection validations = new ValidationResultCollection();
 
         public static void AddPackage(string packageId, Action<Request> callback = null)
         {
