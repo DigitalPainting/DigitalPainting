@@ -10,6 +10,7 @@ namespace wizardscode.utility
     public class ValidationHelper
     {
         public delegate void ProfileCallback();
+        public static ValidationResultCollection Validations = new ValidationResultCollection();
 
 #if UNITY_EDITOR
         static bool showErrors = true;
@@ -149,6 +150,15 @@ namespace wizardscode.utility
         {
             get { return collection.Values.Where(x => x.impact == ValidationResult.Level.OK).ToList(); }
         }
+    }
+
+    /// <summary>
+    /// A test that can be executed in order to validate that the DigitalPainting system and/or its plugins are setup correctly.
+    /// Each ValidationTest tests one specific requirement.
+    /// </summary>
+    public abstract class ValidationTest
+    {
+        public abstract ValidationResult Execute();
     }
     
     /// <summary>
