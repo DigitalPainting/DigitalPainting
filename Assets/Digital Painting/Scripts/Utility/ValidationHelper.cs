@@ -72,12 +72,25 @@ namespace wizardscode.utility
         /// Create a Validation object.
         /// </summary>
         /// <param name="message">A human readable message describing the validation state.</param>
-        /// <param name="error">Indicates the level of severity of the message. From OK, meaning all good, to Error meaning it won't work like this.</param>
-        public ValidationResult(string message, Level impact, ProfileCallback callback = null)
+        /// <param name="impact">The importance of the result from OK to Error.</param>
+        public ValidationResult(string message, Level impact)
         {
             this.message = message;
             this.impact = impact;
-            this.resolutionCallback = callback;
+            this.resolutionCallback = null;
+        }
+
+        /// <summary>
+        /// Create a Validation object.
+        /// </summary>
+        /// <param name="message">A human readable message describing the validation state.</param>
+        /// <param name="impact">The importance of the result from OK to Error.</param>
+        /// <param name="callbackToFix">A callback method that will allow the result to be corrected if possible.</param>
+        public ValidationResult(string message, Level impact, ProfileCallback callbackToFix)
+        {
+            this.message = message;
+            this.impact = impact;
+            this.resolutionCallback = callbackToFix;
         }
     }
 }

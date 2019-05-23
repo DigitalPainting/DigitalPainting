@@ -74,14 +74,14 @@ namespace wizardscode.editor
 
         private void ValidationGUI()
         {
-            List<ValidationResult> results = Validate();
-            if (results.Count > 0)
+            List<ValidationResult> validations = Validate();
+            if (validations.Count > 0)
             {
                 int okCount = 0;
                 int warningCount = 0;
                 int errorCount = 0;
 
-                foreach (ValidationResult result in results)
+                foreach (ValidationResult result in validations)
                 {
                     switch (result.impact)
                     {
@@ -103,11 +103,14 @@ namespace wizardscode.editor
                 if (errorCount > 0)
                 {
                     showMainValidation = true;
+                } else if (errorCount + warningCount == 0)
+                {
+                    showMainValidation = false;
                 }
 
                 if (showMainValidation)
                 {
-                    ValidationHelper.ShowValidationResults(results);
+                    ValidationHelper.ShowValidationResults(validations);
                 }
             }
         }
@@ -116,18 +119,34 @@ namespace wizardscode.editor
         {
             this.Repaint();
         }
+        
+        
 
         /// <summary>
         /// Test to see if the Digital Painting is setup correctly in the current scene. 
         /// </summary>
-        /// <returns>A list of ValidationResults that describe any problems found. If the list is empty then no errors were found.</returns>
+        //were found.</returns>
         public virtual List<ValidationResult> Validate()
-        {   
+        {
             List<ValidationResult> validations = new List<ValidationResult>();
 
-            
+            ValidationResult result = null;
+            if (QualitySettings.shadowDistance >= 500)
+            {
+                result = new ValidationResult("Shadows are correctly setup.", ValidationResult.Level.OK);
+            }
+            else
+            {
+                result = new ValidationResult("Shadows can be improved.", ValidationResult.Level.Warning, ConfigureShadows);
+            }
+            validations.Add(result);
 
             return validations;
+        }
+
+        private void ConfigureShadows()
+        {
+            QualitySettings.shadowDistance = 500;
         }
 
         private void StandardTabGUI()
@@ -182,7 +201,7 @@ namespace wizardscode.editor
             }
         }
 
-        static AddRequest _request;
+        static Request _request;
         static Action<Request> _callback;
         private bool showMainValidation;
 
@@ -191,10 +210,10 @@ namespace wizardscode.editor
             _request = Client.Add(packageId);
             _callback = callback;
             EditorUtility.DisplayProgressBar("Add Package", "Cloning " + packageId, 0.5f);
-            EditorApplication.update += UpdatePackageRequest;
+            EditorApplication.update += UpdateAddPackageRequest;
         }
 
-        static void UpdatePackageRequest()
+        static void UpdateAddPackageRequest()
         {
             if (_request.Status != StatusCode.InProgress)
             {
@@ -203,7 +222,7 @@ namespace wizardscode.editor
                     Debug.LogErrorFormat("Error: {0} ({1})", _request.Error.message, _request.Error.errorCode);
                 }
 
-                EditorApplication.update -= UpdatePackageRequest;
+                EditorApplication.update -= UpdateAddPackageRequest;
                 EditorUtility.ClearProgressBar();
                 if (_callback != null)
                 {
