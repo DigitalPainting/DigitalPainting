@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 using wizardscode.plugin;
-using wizardscode.utility;
 
 namespace wizardscode.environment
 {
@@ -28,29 +23,6 @@ namespace wizardscode.environment
 
         protected DayNightPluginManager manager;
 
-        public override ValidationResultCollection Validate()
-        {
-            ValidationResultCollection validation = base.Validate();
-            
-            if (skybox == null)
-            {
-                validation.AddOrUpdate(new ValidationResult("No skybox is set in the Day Night Profile", ValidationResult.Level.Warning, null));
-            } else
-            {
-                if (RenderSettings.skybox != skybox)
-                {
-                    validation.AddOrUpdate(new ValidationResult("Skybox set in RenderSettings is not the same as the one set in the Day Night Profile", ValidationResult.Level.Error, SetSkybox));
-                }
-            }
-
-            if (sunPrefab == null)
-            {
-                validation.AddOrUpdate(new ValidationResult("No sun prefab is set in the Day Night Profile", ValidationResult.Level.Warning, null));
-            }
-
-            return validation;
-        }
-
         private Light _sun;
         internal Light Sun
         {
@@ -69,14 +41,6 @@ namespace wizardscode.environment
         {
             Light sun = Instantiate(sunPrefab);
             RenderSettings.sun = sun;
-        }
-
-        /// <summary>
-        /// Set the RenderSettings.skybox to that set in the profile.
-        /// </summary>
-        public void SetSkybox()
-        {
-            RenderSettings.skybox = skybox;
         }
 
         /// <summary>

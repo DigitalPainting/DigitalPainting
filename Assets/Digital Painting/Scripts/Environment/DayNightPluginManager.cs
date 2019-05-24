@@ -35,7 +35,7 @@ namespace wizardscode.environment
             get { return Profile.GetTime();  }
         }
 
-        internal AbstractDayNightProfile Profile
+        public AbstractDayNightProfile Profile
         {
             get { return (AbstractDayNightProfile)m_pluginProfile; }
         }

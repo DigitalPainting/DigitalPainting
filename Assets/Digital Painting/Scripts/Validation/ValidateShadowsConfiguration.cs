@@ -7,19 +7,22 @@ public class ValidateShadowsConfiguration : IValidationTest
 {
     public IValidationTest Instance => new ValidateShadowsConfiguration();
 
-    public ValidationResult Execute()
+    public ValidationResultCollection Execute()
     {
-        ValidationResult result = ValidationHelper.Validations.GetOrCreate("Shadows are correctly setup.");
+        ValidationResultCollection localCollection = new ValidationResultCollection();
+
+        ValidationResult result = ValidationHelper.Validations.GetOrCreate("Shadows");
         if (QualitySettings.shadowDistance >= 500)
         {
             result.impact = ValidationResult.Level.OK;
         }
         else
         {
+            result.Message = "Shadows are not setup in the recommended way.";
             result.impact = ValidationResult.Level.Warning;
             result.resolutionCallback = ConfigureShadows;
         }
-        return result;
+        return localCollection;
     }
 
     private void ConfigureShadows()

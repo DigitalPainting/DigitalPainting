@@ -77,7 +77,7 @@ namespace wizardscode.editor
         {
             Validate();
             
-            CreateTestData();
+            //CreateTestData();
 
             if (ValidationHelper.Validations.Count > 0)
             {
@@ -149,7 +149,7 @@ namespace wizardscode.editor
         {
             IEnumerable<IValidationTest> tests = ReflectiveEnumerator.GetEnumerableOfInterfaceImplementors<IValidationTest>() as IEnumerable<IValidationTest>;
             foreach (IValidationTest test in tests) {
-                ValidationHelper.Validations.AddOrUpdate(test.Instance.Execute());
+                ValidationHelper.Validations.AddOrUpdateAll(test.Instance.Execute());
             }
         }
 

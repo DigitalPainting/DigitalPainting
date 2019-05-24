@@ -68,24 +68,30 @@ namespace wizardscode.utility
             EditorGUI.indentLevel--;
         }
 
-        private static void ValidationResultGUI(ValidationResult msg, MessageType messageType)
+        private static void ValidationResultGUI(ValidationResult result, MessageType messageType)
         {
-            if (msg.ignore)
+            if (result.ignore)
             {
                 return;
             }
 
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.HelpBox(msg.message, messageType, true);
+            EditorGUILayout.HelpBox(result.name, messageType, true);
 
-            if (msg.resolutionCallback != null)
+            if (result.Message != null)
+            {
+                EditorStyles.label.wordWrap = true;
+                EditorGUILayout.LabelField(result.Message);
+            }
+
+            if (result.resolutionCallback != null)
             {
                 if (GUILayout.Button("Fix It!"))
                 {
-                    msg.resolutionCallback();
+                    result.resolutionCallback();
                 }
             }
-            msg.ignore = EditorGUILayout.Toggle("Ignore", msg.ignore);
+            result.ignore = EditorGUILayout.Toggle("Ignore", result.ignore);
             EditorGUILayout.EndVertical();
         }
 #endif
@@ -115,6 +121,19 @@ namespace wizardscode.utility
         public void AddOrUpdate(ValidationResult result)
         {
             collection[result.id] = result;
+        }
+
+        public void AddOrUpdateAll(ValidationResultCollection results)
+        {
+            foreach (ValidationResult result in results.collection.Values)
+            {
+                collection[result.id] = result;
+            }
+        }
+
+        public void Remove(string name)
+        {
+            collection.Remove(name.GetHashCode());
         }
 
         public int Count
@@ -160,7 +179,7 @@ namespace wizardscode.utility
     {
         IValidationTest Instance { get; }
 
-        ValidationResult Execute();
+        ValidationResultCollection Execute();
     }
     
     /// <summary>
@@ -172,39 +191,46 @@ namespace wizardscode.utility
         public enum Level { OK, Warning, Error, Untested }
 
         public int id;
+        public string name;
+        private string m_message;
         public Level impact;
-        public string message;
         public ProfileCallback resolutionCallback;
         public bool ignore = false;
+
+        public string Message
+        {
+            get { return m_message; }
+            set { m_message = value; }
+        }
 
         /// <summary>
         /// Create a Validation object in an untested state.
         /// </summary>
-        /// <param name="message">A human readable message describing the validation state.</param>
+        /// <param name="name">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
-        internal ValidationResult(string message) : this(message, Level.Untested, null)
+        internal ValidationResult(string name) : this(name, Level.Untested, null)
         {
         }
 
         /// <summary>
         /// Create a Validation object.
         /// </summary>
-        /// <param name="message">A human readable message describing the validation state.</param>
+        /// <param name="name">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
-        internal ValidationResult(string message, Level impact) : this(message, impact, null)
+        internal ValidationResult(string name, Level impact) : this(name, impact, null)
         {
         }
 
         /// <summary>
         /// Create a Validation object.
         /// </summary>
-        /// <param name="message">A human readable message describing the validation state.</param>
+        /// <param name="name">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
         /// <param name="callbackToFix">A callback method that will allow the result to be corrected if possible.</param>
-        internal ValidationResult(string message, Level impact, ProfileCallback callbackToFix)
+        internal ValidationResult(string name, Level impact, ProfileCallback callbackToFix)
         {
-            this.id = message.GetHashCode();
-            this.message = message;
+            this.id = name.GetHashCode();
+            this.name = name;
             this.impact = impact;
             this.resolutionCallback = callbackToFix;
         }
