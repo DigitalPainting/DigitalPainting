@@ -156,9 +156,11 @@ namespace wizardscode.utility
     /// A test that can be executed in order to validate that the DigitalPainting system and/or its plugins are setup correctly.
     /// Each ValidationTest tests one specific requirement.
     /// </summary>
-    public abstract class ValidationTest
+    public interface IValidationTest
     {
-        public abstract ValidationResult Execute();
+        IValidationTest Instance { get; }
+
+        ValidationResult Execute();
     }
     
     /// <summary>

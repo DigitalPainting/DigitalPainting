@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.utility;
 
-public class ValidateShadowsConfiguration : ValidationTest
+public class ValidateShadowsConfiguration : IValidationTest
 {
-    public static ValidateShadowsConfiguration Instance = new ValidateShadowsConfiguration();
+    public IValidationTest Instance => new ValidateShadowsConfiguration();
 
-    public override ValidationResult Execute()
+    public ValidationResult Execute()
     {
         ValidationResult result = ValidationHelper.Validations.GetOrCreate("Shadows are correctly setup.");
         if (QualitySettings.shadowDistance >= 500)

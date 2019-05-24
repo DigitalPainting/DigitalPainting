@@ -139,13 +139,18 @@ namespace wizardscode.editor
         }
         
         /// <summary>
-        /// Test to see if the Digital Painting is setup correctly in the current scene. Results of all 
+        /// Test to see if the Digital Painting is setup correctly in the current scene. 
+        /// Tests are discovered automatically as long as they implement the SingletonValidationTest
+        /// Results of all 
         /// the validation tests are stored in an internal cache.
         /// </summary>
         //were found.</returns>
         public virtual void Validate()
         {
-            ValidationHelper.Validations.AddOrUpdate(ValidateShadowsConfiguration.Instance.Execute());
+            IEnumerable<IValidationTest> tests = ReflectiveEnumerator.GetEnumerableOfInterfaceImplementors<IValidationTest>() as IEnumerable<IValidationTest>;
+            foreach (IValidationTest test in tests) {
+                ValidationHelper.Validations.AddOrUpdate(test.Instance.Execute());
+            }
         }
 
         private void StandardTabGUI()
