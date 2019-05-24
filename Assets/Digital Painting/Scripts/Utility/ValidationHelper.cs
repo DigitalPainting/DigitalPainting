@@ -75,7 +75,7 @@ namespace wizardscode.utility
             {
                 return;
             }
-
+            
             EditorGUILayout.BeginVertical();
             EditorGUILayout.HelpBox(result.name, messageType, true);
 

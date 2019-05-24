@@ -14,6 +14,8 @@ namespace wizardscode.editor
     public class DigitalPaintingManagerEditorWindow : EditorWindow
     {
         private DigitalPaintingManager manager;
+
+        private static Vector2 scrollPosition = Vector2.zero;
         int selectedTab = 0;
         private GUIStyle m_LinkStyle;
         private EditorConfigScriptableObject m_config;
@@ -39,6 +41,7 @@ namespace wizardscode.editor
 
         void OnGUI()
         {
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
             if (Application.isPlaying)
             {
                 IsPlayingGUI();
@@ -71,13 +74,14 @@ namespace wizardscode.editor
                         break;
                 }
             }
+            EditorGUILayout.EndScrollView();
         }
 
         private void ValidationGUI()
         {
             Validate();
             
-            //CreateTestData();
+            // CreateTestData();
 
             if (ValidationHelper.Validations.Count > 0)
             {
