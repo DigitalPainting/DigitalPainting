@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using wizardscode.environment;
 using wizardscode.utility;
@@ -48,6 +49,7 @@ namespace wizardscode.validation
                 result = ValidationHelper.Validations.GetOrCreate(PROFILE_KEY);
                 result.Message = "Day Night Plugin is enabled, but there is no profile assigned to it.";
                 result.impact = ValidationResult.Level.Error;
+                result.resolutionCallback = SelectDayNightPluginManager;
                 localCollection.AddOrUpdate(result);
                 return localCollection;
             } else
@@ -61,6 +63,7 @@ namespace wizardscode.validation
                 result = ValidationHelper.Validations.GetOrCreate(SKYBOX_KEY);
                 result.Message = "No skybox is defined in the Day Night Profile.";
                 result.impact = ValidationResult.Level.Warning;
+                result.resolutionCallback = SelectDayNightPluginManager;
                 localCollection.AddOrUpdate(result);
             }
             else if (RenderSettings.skybox != manager.Profile.skybox)
@@ -83,6 +86,7 @@ namespace wizardscode.validation
                 result = ValidationHelper.Validations.GetOrCreate(SUN_KEY);
                 result.Message = "No sun prefab is set in the Day Night Profile";
                 result.impact = ValidationResult.Level.Warning;
+                result.resolutionCallback = SelectDayNightPluginManager;
                 localCollection.AddOrUpdate(result);
             }
             else
@@ -93,12 +97,23 @@ namespace wizardscode.validation
             return localCollection;
         }
 
+        void SelectDayNightPluginManager()
+        {
+            Selection.activeGameObject = manager.gameObject;
+        }
+
         /// <summary>
         /// Set the RenderSettings.skybox to that set in the profile.
         /// </summary>
-        public void SetSkybox()
+        void SetSkybox()
         {
             RenderSettings.skybox = manager.Profile.skybox;
+        }
+
+        void AddSun()
+        {
+            Light sun = GameObject.Instantiate(manager.Profile.sunPrefab);
+            RenderSettings.sun = sun;
         }
     }
 }

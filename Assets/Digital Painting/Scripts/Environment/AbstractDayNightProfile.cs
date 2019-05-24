@@ -37,12 +37,6 @@ namespace wizardscode.environment
             }
         }
 
-        public void AddSun()
-        {
-            Light sun = Instantiate(sunPrefab);
-            RenderSettings.sun = sun;
-        }
-
         /// <summary>
         /// Initialize the Day Night Cycle to start at the given time.
         /// </summary>

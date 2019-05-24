@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using static wizardscode.utility.ValidationHelper;
@@ -86,7 +87,8 @@ namespace wizardscode.utility
 
             if (result.resolutionCallback != null)
             {
-                if (GUILayout.Button("Fix It!"))
+                string name = Regex.Replace(result.resolutionCallback.Method.Name, "(\\B[A-Z])", " $1");
+                if (GUILayout.Button(name))
                 {
                     result.resolutionCallback();
                 }
@@ -194,7 +196,7 @@ namespace wizardscode.utility
         public string name;
         private string m_message;
         public Level impact;
-        public ProfileCallback resolutionCallback;
+        public ProfileCallback resolutionCallback; // A callback that attempts to resolve the problem automatically
         public bool ignore = false;
 
         public string Message
