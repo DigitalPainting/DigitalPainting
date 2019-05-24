@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using wizardscode.digitalpainting;
 using wizardscode.environment;
 using wizardscode.utility;
 
@@ -9,7 +11,19 @@ namespace wizardscode.validation
 {
     public class ValidateDayNightProfile : IValidationTest
     {
-        private DayNightPluginManager manager;
+        private DayNightPluginManager m_manager;
+
+        private DayNightPluginManager Manager
+        {
+            get
+            {
+                if (m_manager == null)
+                {
+                    m_manager = GameObject.FindObjectOfType<DayNightPluginManager>(); ;
+                }
+                return m_manager;
+            }
+        }
 
         public IValidationTest Instance => new ValidateDayNightProfile();
         
@@ -25,12 +39,12 @@ namespace wizardscode.validation
             ValidationResult result;
 
             // Is plugin enabled
-            manager = GameObject.FindObjectOfType<DayNightPluginManager>();
-            if (manager == null)
+            if (Manager == null)
             {
                 result = ValidationHelper.Validations.GetOrCreate(PLUGIN_KEY);
                 result.Message = "Day Night Plugin not enabled (click ignore if you don't want to use it)";
                 result.impact = ValidationResult.Level.Warning;
+                result.resolutionCallback = EnableDayNightPlugin;
                 localCollection.AddOrUpdate(result);
 
                 ValidationHelper.Validations.Remove(PROFILE_KEY);
@@ -44,7 +58,7 @@ namespace wizardscode.validation
             }
             
             // Has profile?
-            if (manager.Profile == null)
+            if (Manager.Profile == null)
             {
                 result = ValidationHelper.Validations.GetOrCreate(PROFILE_KEY);
                 result.Message = "Day Night Plugin is enabled, but there is no profile assigned to it.";
@@ -58,7 +72,7 @@ namespace wizardscode.validation
             }
             
             // Skybox setup correctly?
-            if (manager.Profile.skybox == null)
+            if (Manager.Profile.skybox == null)
             {
                 result = ValidationHelper.Validations.GetOrCreate(SKYBOX_KEY);
                 result.Message = "No skybox is defined in the Day Night Profile.";
@@ -66,7 +80,7 @@ namespace wizardscode.validation
                 result.resolutionCallback = SelectDayNightPluginManager;
                 localCollection.AddOrUpdate(result);
             }
-            else if (RenderSettings.skybox != manager.Profile.skybox)
+            else if (RenderSettings.skybox != Manager.Profile.skybox)
             {
                 result = ValidationHelper.Validations.GetOrCreate(SKYBOX_KEY);
                 result.Message = "Skybox set in RenderSettings is not the same as the one set in the Day Night Profile";
@@ -81,7 +95,7 @@ namespace wizardscode.validation
 
             // Sun setup correctly?
 
-            if (manager.Profile.sunPrefab == null)
+            if (Manager.Profile.sunPrefab == null)
             {
                 result = ValidationHelper.Validations.GetOrCreate(SUN_KEY);
                 result.Message = "No sun prefab is set in the Day Night Profile";
@@ -97,9 +111,16 @@ namespace wizardscode.validation
             return localCollection;
         }
 
+        private void EnableDayNightPlugin()
+        {
+            GameObject dpManager = GameObject.FindObjectOfType<DigitalPaintingManager>().gameObject;
+            dpManager.AddComponent(typeof(DayNightPluginManager));
+            SelectDayNightPluginManager();
+        }
+
         void SelectDayNightPluginManager()
         {
-            Selection.activeGameObject = manager.gameObject;
+            Selection.activeGameObject = Manager.gameObject;
         }
 
         /// <summary>
@@ -107,12 +128,12 @@ namespace wizardscode.validation
         /// </summary>
         void SetSkybox()
         {
-            RenderSettings.skybox = manager.Profile.skybox;
+            RenderSettings.skybox = Manager.Profile.skybox;
         }
 
         void AddSun()
         {
-            Light sun = GameObject.Instantiate(manager.Profile.sunPrefab);
+            Light sun = GameObject.Instantiate(Manager.Profile.sunPrefab);
             RenderSettings.sun = sun;
         }
     }
