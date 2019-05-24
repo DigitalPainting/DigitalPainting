@@ -7,8 +7,8 @@ using System;
 using wizardscode.utility;
 
 namespace wizardscode.editor {
-    [CustomEditor(typeof(DayNightPluginManager))]
-    public class DayNightPluginManagerEditor : AbstractPluginManagerEditor
+    [CustomEditor(typeof(WeatherPluginManager))]
+    public class WeatherPluginManagerEditor : AbstractPluginManagerEditor
     {
     }
 }

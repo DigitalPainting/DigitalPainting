@@ -11,7 +11,7 @@ namespace wizardscode.environment
     /// Retrieves the weather (current or forecasted) from DarkSky and feeds it into a Digital Paintings weather system implementation.
     /// </summary>
     [CreateAssetMenu(fileName = "DarkSkyWeatherSystem", menuName = "Wizards Code/Weather/Dark Sky Weather System")]
-    public class DarkSkyApi : AbstractWeatherSystem
+    public class DarkSkyApi : AbstractWeatherProfile
     {
         [Header("Dark Sky Settings (powered by Dark Sky - see https://darksky.net/poweredby/")]
         [Tooltip("DarkSky API key, see https://darksky.net/dev")]
@@ -31,7 +31,7 @@ namespace wizardscode.environment
 
         [Header("Weather System")]
         [Tooltip("The Weather System to delegate rendering of the weather to. If left blank then the weather will simply be logged to the console.")]
-        public AbstractWeatherSystem delegateWeatherSystem;
+        public AbstractWeatherProfile delegateWeatherSystem;
 
         string apiRequestURL;
         string apiRequestTemplate = "https://api.darksky.net/forecast/{0}/{1},{2}?exclude=alerts,flags";

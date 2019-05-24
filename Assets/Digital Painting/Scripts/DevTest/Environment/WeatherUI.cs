@@ -15,12 +15,12 @@ namespace wizardscode.environment.test
         [Tooltip("The UI elements to disable when Is Auto is on (checked).")]
         public GameObject manualControls;
 
-        WeatherManager manager;
+        WeatherPluginManager manager;
 
         // Use this for initialization
         void Start()
         {
-            manager = GameObject.FindObjectOfType<WeatherManager>();
+            manager = GameObject.FindObjectOfType<WeatherPluginManager>();
             if (manager == null)
             {
                 gameObject.SetActive(false);
@@ -45,13 +45,13 @@ namespace wizardscode.environment.test
 
             if (!isAuto.isOn)
             {
-                precipitationTypeDropdown.value = (int)manager.configuration.CurrentProfile.PrecipitationType;
+                precipitationTypeDropdown.value = (int)manager.Profile.CurrentProfile.PrecipitationType;
             }
         }
 
         public void OnPrecipitationIntensityChanged(float newValue)
         {
-            manager.configuration.CurrentProfile.PrecipitationIntensity = newValue;
+            manager.Profile.CurrentProfile.PrecipitationIntensity = newValue;
             manager.UpdateNow();
         }
 
@@ -62,7 +62,7 @@ namespace wizardscode.environment.test
 
         public void OnPrecipitationTypeChanged(int typeIndex)
         {
-            manager.configuration.CurrentProfile.PrecipitationType = (WeatherProfile.PrecipitationTypeEnum)Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum)).GetValue(typeIndex);
+            manager.Profile.CurrentProfile.PrecipitationType = (WeatherProfile.PrecipitationTypeEnum)Enum.GetValues(typeof(WeatherProfile.PrecipitationTypeEnum)).GetValue(typeIndex);
             manager.UpdateNow();
         }
     }

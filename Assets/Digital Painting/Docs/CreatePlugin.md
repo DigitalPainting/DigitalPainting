@@ -4,25 +4,28 @@ For the purposes of this document we will explore the Day Night Plugins. The Dig
 
 # Plugin Definition
 
-Within the Digital Painting Asset Plugins must have a class that describes how to find and integrate with the plugin. These definitions are stored in `Scritps/Plugin` and should implement the Abstract class `AbstractPluginDefinition`. Since there will often be multiple possible implementations type of plugin it often makes sense to create a second abstract class that extends `AbstractPluginDefinition`, for example see `AbstractDayNightPluginDefinition`. Specific plugin definitions will then implement this class. 
+Create script that defines the plugin you want to make available. This should implement the Abstract class `AbstractPluginDefinition` and is stored in the `Scritps/Plugin` folder of Digital Painting. This definition provides information useful in the UI, e.g. a human readable name, and information useful for enabling the plugin, e.g. the class that must be present in the Assembly for the plugin to be available.
 
-The definition provides information useful in the UI, e.g. a human readable name, and information useful for enabling the plugin, e.g. the class that must be present in the Assembly for the plugin to be available.
-
-pFor guidance on how to implement a plugin definition take a look at `BasicDayNightPluginDefinition` which describes the built in Day Night cycle and the `WeatherMakerDayNightPluginDefinition` which describes a day night cycle provided as part of Digital Ruby's Weather Maker asset.
+For guidance on how to implement a plugin definition take a look at `SimpleDayNightPluginDefinition` which describes the built in Day Night cycle and the `WeatherMakerDayNightPluginDefinition` which describes a day night cycle provided as part of Digital Ruby's Weather Maker asset.
 
 # Plugin Configuration
 
-Plugins are designed to have a consistent configuration across all differing implementations. This configuration is stored in a Scriptable Object. For example, the Day Night plugins have their profiles in a class that implements the `AbstractDayNightProfile`. In the case of our built in `BasicDayNightPluginDefinition` we provide an example configuration file in `SimpleDayNightProfile`. 
+Plugins are designed to have a consistent configuration across all differing implementations. This configuration is stored in a Scriptable Object. The Digital Painting provides abstract classes that provides the common functionality across all implementations. The final profile class must be provided by the plugin implementation and can contain any customizations specific to that implementation of the plugin feature. For example, the Day Night plugins have their profiles in a class that implements the `AbstractDayNightProfile`. In the case of our built in `SimpleayNightPluginDefinition` we provide an example configuration file in `SimpleDayNightProfile`. The Scriptable Ovject is defined in the `Scripts` folder of the plugin directory.
 
-# Plugin Implementation
+```
+namespace wizardscode.environment.weather
+{
+    [CreateAssetMenu(fileName = "WeatherMakerDayNightProfile", menuName = "Wizards Code/Day Night/Weather Maker")]
+    public class WeatherMakerDayNightProfile : AbstractWeatherProfile
+    {
+      ...
+    }
+}
+```
 
-The majority of the implementation code for a plugin will come from an external asset. However, we do need some glue code to translate the base Digital Painting configuration to the assets expected format. In some cases we will also need some code to interface between the two systems. This code will be provided in the same class as the configuration discussed in the previous section. For example, for our Day Night plugin the setup code is in the implementation of `AbstractDayNightProfile`.
+## Enablement and Validation code
 
-## Enable
-
-FIXME: Install the plugin package
-FIXME: run the Enable script in the Plugin Definition - adds the manager component, does required config
-FIXME: add the configuration to the manager
+Digital Painting tries to provide sensible defaults for all plugins, along with hints on how to configure things. The is done through one or more classes that implement `IValidationTest`. The Digital Painting provides core validation tests for each pluging type in `Scripts/Validation`. Plugins can provide their own additional tests. Each validation can provide an action that will help the user resolve any problems find. For more details see `Scripts/Validation/ValidateDayNightProfile`.
 
 # Using a Plugin
 
@@ -43,35 +46,3 @@ FIXME: make step 4 automatic... select an existing profile or offer to create a 
 FIXME: make setp 5 automatic... select an existing profile, duplicate it into `profiles/weathermaker`
 FIXME: Provide an editor for the plugin profile and expose it in the plugin manager
 
-# LEGACY: Building a Plugin or Scene
-
-FIXME: replace the custom build system with a Package Manager system
-
-The Digital Painting asset can be extended using plugins, for example, you can add support for your favorite Weather asset. It's also possible to package Scenes using this same mechanism. Plugins and Scenes can be built to use paid for assets without redistributing those assets. Of course users will need to install those assets before using the plugin or scene. These plugins and scenes are distributed as Unity Packages in the `Plugins` folder.
-
-To create a new plugin you need to consult the documentation for that kind of plugin, for example [Weather](Weather.md), [Day Night Cycle](DayNightCycle.md) or [Scene](CreatingAScene.md).
-
-In order to build a Unity Package for your plugin you should provide a menu command. The Digital Painting provides a easy way to do this. Basically create a script in your plugins `Scripts/Editor` folder called `PLUGINNAMEPackageBuild`. This script should extend the `PackageBuilder` class and provide a new implementation of the static `Build` method. This method will use the `MoveExcludedFiles` method to move everything that should not be packaged out of the way, then it will Build the package, finally it will use the `RecoverExcludedFiles` method to restore the previous state.
-
-Be sure to update the `MenuItem` line to create a new Build menu item.
-
-```
-using UnityEditor;
-using UnityEngine;
-
-public class RainMakerPackageBuilder : PackageBuilder {
-    [MenuItem("Digital Painting/Build/Build RainMaker Plugin")]
-    new public static void Build()
-    {
-        string rootDir = "Assets\\Digital Painting\\Plugins\\Weather_RainMaker";
-        string packageName = "Weather_RainMaker.unitypackage";
-
-        MoveExcludedFiles(rootDir);
-
-        AssetDatabase.ExportPackage(rootDir, packageName, ExportPackageOptions.Interactive | ExportPackageOptions.Recurse);
-        Debug.Log("Exported " + packageName);
-
-        RecoverExcludedFiles(rootDir);
-    }
-}
-```

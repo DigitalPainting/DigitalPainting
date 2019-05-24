@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace wizardscode.plugin
 {
-    public class WeatherMakerPluginDefinition : AbstractWeatherPluginDefinition
+    public class WeatherMakerWeatherPluginDefinition : AbstractWeatherPluginDefinition
     {
         public override string GetPluginImplementationClassName()
         {
-            return "WeatherMakerWeatherSystem";
+            return "WeatherMakerScript";
         }
 
         public override String GetProfileTypeName()
         {
-            throw new NotImplementedException();
+            return "WeatherMakerWeatherProfile";
         }
 
         public override string GetReadableName()

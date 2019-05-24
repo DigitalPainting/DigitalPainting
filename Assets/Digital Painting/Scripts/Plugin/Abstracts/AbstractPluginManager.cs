@@ -11,7 +11,7 @@ namespace wizardscode.plugin
     /// </summary>
     public abstract class AbstractPluginManager : MonoBehaviour 
     {
-        [Tooltip("The Day Night Cycle configuration you want to use. Ensure that the asset required to support this is imported and setup.")]
+        [Tooltip("The plugin profile you want to use. The profile defines the plugin implementation to use and contains the configuration.")]
         [Expandable(isRequired: true, isRequiredMessage: "Select or create a plugin profile.")]
         public AbstractPluginProfile m_pluginProfile;
     }

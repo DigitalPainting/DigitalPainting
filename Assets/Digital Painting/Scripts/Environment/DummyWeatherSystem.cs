@@ -5,7 +5,7 @@ using UnityEngine;
 namespace wizardscode.environment
 {
     [CreateAssetMenu(fileName = "DummyWeatherSystem", menuName = "Wizards Code/Weather/Dummy Weather System (for testing only)")]
-    public class DummyWeatherSystem : AbstractWeatherSystem
+    public class DummyWeatherSystem : AbstractWeatherProfile
     {   
         internal override void Initialize()
         {

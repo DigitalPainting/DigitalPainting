@@ -10,7 +10,7 @@ namespace wizardscode.plugin
     {
         public override Type GetManagerType()
         {
-            return Type.GetType("wizardscode.environment.WeatherManager");
+            return Type.GetType("wizardscode.environment.WeatherPluginManager");
         }
     }
 }
