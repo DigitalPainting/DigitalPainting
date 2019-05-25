@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.environment;
@@ -33,7 +30,6 @@ namespace wizardscode.validation
             const string PROFILE_KEY = PLUGIN_KEY + " Profile";
 
             ValidationResultCollection localCollection = new ValidationResultCollection();
-
             ValidationResult result;
 
             // Is plugin enabled
@@ -66,7 +62,7 @@ namespace wizardscode.validation
             {
                 ValidationHelper.Validations.Remove(PROFILE_KEY);
             }
-
+            
             return localCollection;
         }
 
