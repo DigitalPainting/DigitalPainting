@@ -1,14 +1,16 @@
 ﻿using System;
 using UnityEngine;
+using wizardscode.editor;
 using wizardscode.plugin;
+using wizardscode.validation;
 
 namespace wizardscode.environment
 {
     public abstract class AbstractWeatherProfile : AbstractPluginProfile
     {
-        [Header("General Weather System")]
-        [Tooltip("Skybox material")]
-        public Material skyboxMaterial;
+        [Header("Environment settings")]
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested skybox setting.")]
+        public SkyBoxSettingsSO Skybox;
         
         private WeatherProfile _currentProfile;
         public virtual WeatherProfile CurrentProfile

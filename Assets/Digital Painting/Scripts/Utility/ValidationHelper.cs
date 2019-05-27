@@ -1,102 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using wizardscode.plugin;
+using wizardscode.validation;
 using static wizardscode.utility.ValidationHelper;
 
 namespace wizardscode.utility
 {
     public class ValidationHelper
     {
-        public delegate void ProfileCallback();
-        public static ValidationResultCollection Validations = new ValidationResultCollection();
 
-#if UNITY_EDITOR
-        static bool showErrors = true;
-        static bool showWarnings = true;
-        static bool showOk = false;
-
-        public static void ShowValidationResults(ValidationResultCollection messages)
-        {
-            if (messages.Count == 0)
-            {
-                return;
-            }
-
-            EditorGUI.indentLevel++;
-            EditorGUILayout.BeginVertical();
-
-            List<ValidationResult> msgs = messages.ErrorList;
-            showErrors = EditorGUILayout.Foldout(showErrors, "Errors: " + msgs.Count());
-            if (showErrors)
-            {
-                EditorGUI.indentLevel++;
-                foreach (ValidationResult msg in msgs)
-                {
-
-                    ValidationResultGUI(msg, MessageType.Error);
-                }
-                EditorGUI.indentLevel--;
-            }
-
-            msgs = messages.WarningList;
-            showWarnings = EditorGUILayout.Foldout(showWarnings, "Warnings: " + msgs.Count());
-            if (showWarnings)
-            {
-                EditorGUI.indentLevel++;
-                foreach (ValidationResult msg in msgs)
-                {
-                    ValidationResultGUI(msg, MessageType.Warning);
-                }
-                EditorGUI.indentLevel--;
-            }
-
-            msgs = messages.OKList;
-            showOk = EditorGUILayout.Foldout(showOk, "OK: " + msgs.Count());
-            if (showOk)
-            {
-                EditorGUI.indentLevel++;
-                foreach (ValidationResult msg in msgs)
-                {
-                    ValidationResultGUI(msg, MessageType.None);
-                }
-                EditorGUI.indentLevel--;
-            }
-
-            EditorGUILayout.EndVertical();
-            EditorGUI.indentLevel--;
-        }
-
-        private static void ValidationResultGUI(ValidationResult result, MessageType messageType)
-        {
-            if (result.ignore)
-            {
-                return;
-            }
-            
-            EditorGUILayout.BeginVertical();
-            EditorGUILayout.HelpBox(result.name, messageType, true);
-
-            if (result.Message != null)
-            {
-                EditorStyles.label.wordWrap = true;
-                EditorGUILayout.LabelField(result.Message);
-            }
-
-            if (result.resolutionCallback != null)
-            {
-                string name = Regex.Replace(result.resolutionCallback.Method.Name, "(\\B[A-Z])", " $1");
-                if (GUILayout.Button(name))
-                {
-                    result.resolutionCallback();
-                }
-            }
-            result.ignore = EditorGUILayout.Toggle("Ignore", result.ignore);
-            EditorGUILayout.EndVertical();
-        }
-#endif
     }
 
     public class ValidationResultCollection
@@ -122,6 +40,7 @@ namespace wizardscode.utility
 
         public void AddOrUpdate(ValidationResult result)
         {
+            Remove(result.name);
             collection[result.id] = result;
         }
 
@@ -129,7 +48,10 @@ namespace wizardscode.utility
         {
             foreach (ValidationResult result in results.collection.Values)
             {
-                collection[result.id] = result;
+                if (result.impact != ValidationResult.Level.OK)
+                {
+                    collection[result.id] = result;
+                }
             }
         }
 
@@ -141,11 +63,6 @@ namespace wizardscode.utility
         public int Count
         {
             get { return collection.Count(); }
-        }
-
-        public int CountOK
-        {
-            get { return collection.Values.Count(x => x.impact == ValidationResult.Level.OK); }
         }
 
         public int CountWarning
@@ -177,64 +94,54 @@ namespace wizardscode.utility
     /// A test that can be executed in order to validate that the DigitalPainting system and/or its plugins are setup correctly.
     /// Each ValidationTest tests one specific requirement.
     /// </summary>
-    public interface IValidationTest
+    public class ValidationTest<T> where T : AbstractPluginManager
     {
-        IValidationTest Instance { get; }
+        private AbstractPluginManager m_manager;
 
-        ValidationResultCollection Execute();
-    }
-    
-    /// <summary>
-    /// A ValidationResult captures the results of a validation test.
-    /// These can be used to help the designer improve on their scene.
-    /// </summary>
-    public class ValidationResult
-    {
-        public enum Level { OK, Warning, Error, Untested }
-
-        public int id;
-        public string name;
-        private string m_message;
-        public Level impact;
-        public ProfileCallback resolutionCallback; // A callback that attempts to resolve the problem automatically
-        public bool ignore = false;
-
-        public string Message
+        private AbstractPluginManager Manager
         {
-            get { return m_message; }
-            set { m_message = value; }
+            get
+            {
+                if (m_manager == null)
+                {
+                    m_manager = GameObject.FindObjectOfType<T>(); ;
+                }
+                return m_manager;
+            }
         }
+        public ValidationTest<T> Instance => new ValidationTest<T>();
 
-        /// <summary>
-        /// Create a Validation object in an untested state.
-        /// </summary>
-        /// <param name="name">A human readable message describing the validation state.</param>
-        /// <param name="impact">The importance of the result from OK to Error.</param>
-        internal ValidationResult(string name) : this(name, Level.Untested, null)
+        public ValidationResultCollection Execute()
         {
-        }
+            ValidationResultCollection localCollection = new ValidationResultCollection();
+            IEnumerable<FieldInfo> fields = Manager.Profile.GetType().GetFields()
+                .Where(field => field.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
 
-        /// <summary>
-        /// Create a Validation object.
-        /// </summary>
-        /// <param name="name">A human readable message describing the validation state.</param>
-        /// <param name="impact">The importance of the result from OK to Error.</param>
-        internal ValidationResult(string name, Level impact) : this(name, impact, null)
-        {
-        }
+            foreach (FieldInfo field in fields)
+            {
+                ValidationResult result;
+                object instance = field.GetValue(Manager.Profile);
+                if (instance == null)
+                {
+                    result = localCollection.GetOrCreate(field.Name);
+                    result.Message = "Must provide a Setting Scriptable Object";
+                    result.impact = ValidationResult.Level.Error;
+                }
+                else
+                {
+                    localCollection.Remove(field.Name);
 
-        /// <summary>
-        /// Create a Validation object.
-        /// </summary>
-        /// <param name="name">A human readable message describing the validation state.</param>
-        /// <param name="impact">The importance of the result from OK to Error.</param>
-        /// <param name="callbackToFix">A callback method that will allow the result to be corrected if possible.</param>
-        internal ValidationResult(string name, Level impact, ProfileCallback callbackToFix)
-        {
-            this.id = name.GetHashCode();
-            this.name = name;
-            this.impact = impact;
-            this.resolutionCallback = callbackToFix;
+                    Type type = field.FieldType;
+                    result = (ValidationResult)type.InvokeMember("Validate",
+                        BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                        null, instance, null);
+                }
+                localCollection.AddOrUpdate(result);
+            }
+
+            // FIXME: ensure all tests are moved to the new model
+            // localCollection.AddOrUpdateAll(ExecuteOriginal());
+            return localCollection;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -8,12 +10,16 @@ using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.plugin;
 using wizardscode.utility;
+using wizardscode.validation;
 
 namespace wizardscode.editor
 {
     public class DigitalPaintingManagerEditorWindow : EditorWindow
     {
         private DigitalPaintingManager manager;
+        private ValidationResultCollection Validations = new ValidationResultCollection();
+
+        public List<string> ignoredTests = new List<string>();
 
         private static Vector2 scrollPosition = Vector2.zero;
         int selectedTab = 0;
@@ -56,7 +62,7 @@ namespace wizardscode.editor
 
                 selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Standard", "Advanced", "Experimental", "More..." });
                 
-                ValidationGUI();
+                ValidationResultsGUI();
 
                 switch (selectedTab)
                 {
@@ -77,64 +83,187 @@ namespace wizardscode.editor
             EditorGUILayout.EndScrollView();
         }
 
-        private void ValidationGUI()
+        static bool showErrors = true;
+        static bool showIgnoredErrors = false;
+        static bool showWarnings = true;
+        private bool showIgnoredWarnings = false;
+
+        public void ShowValidationResults(ValidationResultCollection messages)
         {
-            Validate();
-            
-            // CreateTestData();
-
-            if (ValidationHelper.Validations.Count > 0)
+            if (messages.Count == 0)
             {
-                int okCount = ValidationHelper.Validations.CountOK;
-                int warningCount = ValidationHelper.Validations.CountWarning;
-                int errorCount = ValidationHelper.Validations.CountError;
+                return;
+            }
 
-                string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " ok)";
+            EditorGUI.indentLevel++;
+            EditorGUILayout.BeginVertical();
 
-                showMainValidation = EditorGUILayout.Foldout(showMainValidation, title);
-                if (errorCount > 0)
+            List<ValidationResult> ignored = new List<ValidationResult>();
+            List<ValidationResult> msgs = messages.ErrorList;
+            showErrors = EditorGUILayout.Foldout(showErrors, "Errors: " + msgs.Count());
+            if (showErrors)
+            {
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in msgs)
                 {
-                    showMainValidation = true;
+                    if (!ignoredTests.Contains(msg.name))
+                    {
+                        ValidationResultGUI(msg);
+                    }
+                    else
+                    {
+                        ignored.Add(msg);
+                    }
                 }
 
-                if (showMainValidation)
+                showIgnoredErrors = EditorGUILayout.Foldout(showIgnoredErrors, "Ignored Errors: " + ignored.Count());
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in ignored)
                 {
-                    ValidationHelper.ShowValidationResults(ValidationHelper.Validations);
+                    if (showIgnoredErrors)
+                    {
+                        ValidationResultGUI(msg, true);
+                    }
+                }
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+            }
+
+            ignored = new List<ValidationResult>();
+            msgs = messages.WarningList;
+            showWarnings = EditorGUILayout.Foldout(showWarnings, "Warnings: " + msgs.Count());
+            if (showWarnings)
+            {
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in msgs)
+                {
+                    if (!ignoredTests.Contains(msg.name))
+                    {
+                        ValidationResultGUI(msg);
+                    } else
+                    {
+                        ignored.Add(msg);
+                    }
+                }
+
+                showIgnoredWarnings = EditorGUILayout.Foldout(showIgnoredWarnings, "Ignored Warnings: " + ignored.Count());
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in ignored)
+                {
+                    if (showIgnoredWarnings)
+                    {
+                        ValidationResultGUI(msg, true);
+                    }
+                }
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+            }
+
+            EditorGUILayout.EndVertical();
+            EditorGUI.indentLevel--;
+        }
+
+        private void ValidationResultGUI(ValidationResult result, bool isIgnored = false)
+        {
+            EditorGUILayout.BeginVertical();
+            MessageType messageType;
+            switch (result.impact) {
+                case ValidationResult.Level.Error:
+                    messageType = MessageType.Error;
+                    break;
+                case ValidationResult.Level.Warning:
+                    messageType = MessageType.Warning;
+                    break;
+                default:
+                    messageType = MessageType.Info;
+                    break;
+            }
+
+            EditorGUILayout.HelpBox(result.name, messageType, true);
+
+            if (result.Message != null)
+            {
+                EditorStyles.label.wordWrap = true;
+                EditorGUILayout.LabelField(result.Message);
+            }
+
+            if (result.Callback != null)
+            {
+                if (GUILayout.Button(result.Callback.Label))
+                {
+                    Validations.Remove(result.name);
+                    result.Callback.ProfileCallback();
+                }
+            }
+
+            if (!isIgnored)
+            {
+                if (GUILayout.Button("Ignore"))
+                {
+                    ignoredTests.Add(result.name);
+                }
+            } else
+            {
+                if (GUILayout.Button("Do Not Ignore"))
+                {
+                    ignoredTests.Remove(result.name);
+                }
+            }
+            EditorGUILayout.EndVertical();
+        }
+
+        private void ValidationResultsGUI()
+        {
+            Validate();
+
+            // CreateTestData();
+            
+            int warningCount = Validations.CountWarning;
+            int errorCount = Validations.CountError;
+            string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings)";
+
+            showMainValidation = EditorGUILayout.Foldout(showMainValidation, title);
+
+            if (Validations.Count > 0)
+            {   
+                if (showMainValidation || errorCount > 0)
+                {
+                    ShowValidationResults(Validations);
                 }
             }
         }
 
         private void CreateTestData()
         {
-            ValidationResult result = ValidationHelper.Validations.GetOrCreate("Error 1");
+            ValidationResult result = Validations.GetOrCreate("Error 1");
             result.impact = ValidationResult.Level.Error;
-            ValidationHelper.Validations.AddOrUpdate(result);
-            result = ValidationHelper.Validations.GetOrCreate("Error 2");
+            Validations.AddOrUpdate(result);
+            result = Validations.GetOrCreate("Error 2");
             result.impact = ValidationResult.Level.Error;
-            ValidationHelper.Validations.AddOrUpdate(result);
-            result = ValidationHelper.Validations.GetOrCreate("Error 3");
+            Validations.AddOrUpdate(result);
+            result = Validations.GetOrCreate("Error 3");
             result.impact = ValidationResult.Level.Error;
-            ValidationHelper.Validations.AddOrUpdate(result);
+            Validations.AddOrUpdate(result);
 
-            result = ValidationHelper.Validations.GetOrCreate("Warning 1");
+            result = Validations.GetOrCreate("Warning 1");
             result.impact = ValidationResult.Level.Warning;
-            ValidationHelper.Validations.AddOrUpdate(result);
-            result = ValidationHelper.Validations.GetOrCreate("Warning 2");
+            Validations.AddOrUpdate(result);
+            result = Validations.GetOrCreate("Warning 2");
             result.impact = ValidationResult.Level.Warning;
-            ValidationHelper.Validations.AddOrUpdate(result);
-            result = ValidationHelper.Validations.GetOrCreate("Warning 3");
+            Validations.AddOrUpdate(result);
+            result = Validations.GetOrCreate("Warning 3");
             result.impact = ValidationResult.Level.Warning;
-            ValidationHelper.Validations.AddOrUpdate(result);
+            Validations.AddOrUpdate(result);
 
-            result = ValidationHelper.Validations.GetOrCreate("OK 1");
+            result = Validations.GetOrCreate("OK 1");
             result.impact = ValidationResult.Level.OK;
-            ValidationHelper.Validations.AddOrUpdate(result);
-            result = ValidationHelper.Validations.GetOrCreate("OK 2");
+            Validations.AddOrUpdate(result);
+            result = Validations.GetOrCreate("OK 2");
             result.impact = ValidationResult.Level.OK;
-            ValidationHelper.Validations.AddOrUpdate(result);
-            result = ValidationHelper.Validations.GetOrCreate("OK 3");
+            Validations.AddOrUpdate(result);
+            result = Validations.GetOrCreate("OK 3");
             result.impact = ValidationResult.Level.OK;
-            ValidationHelper.Validations.AddOrUpdate(result);
+            Validations.AddOrUpdate(result);
         }
 
         public void OnInspectorUpdate()
@@ -151,9 +280,20 @@ namespace wizardscode.editor
         //were found.</returns>
         public virtual void Validate()
         {
-            IEnumerable<IValidationTest> tests = ReflectiveEnumerator.GetEnumerableOfInterfaceImplementors<IValidationTest>() as IEnumerable<IValidationTest>;
-            foreach (IValidationTest test in tests) {
-                ValidationHelper.Validations.AddOrUpdateAll(test.Instance.Execute());
+            IEnumerable<Type> types = from x in Assembly.GetAssembly(typeof(ValidationResult)).GetTypes()
+                                        let y = x.BaseType
+                                        where !x.IsAbstract && !x.IsInterface &&
+                                            y != null && y.IsGenericType &&
+                                            y.GetGenericTypeDefinition() == typeof(ValidationTest<>)
+                                        select x;
+
+            foreach (Type type in types) {
+                var test = Activator.CreateInstance(type);
+
+                MethodInfo method = type.GetMethod("Execute");
+                ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { });
+                
+                Validations.AddOrUpdateAll(results);
             }
         }
 

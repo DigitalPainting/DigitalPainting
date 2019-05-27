@@ -44,7 +44,7 @@ namespace wizardscode.digitalpainting.devtest {
         
         public void OnTimeOfDayChanged()
         {
-            dayNightManager.Profile.SetTime(timeOfDaySlider.value);
+            dayNightManager.DayNightProfile.SetTime(timeOfDaySlider.value);
         }
     }
 }

@@ -29,15 +29,15 @@ namespace wizardscode.environment
             get { return _currentPhase; }
             set { _currentPhase = value; }
         }
+        
+        public AbstractDayNightProfile DayNightProfile
+        {
+            get { return (AbstractDayNightProfile)m_pluginProfile; }
+        }
 
         public float CurrentTime
         {
-            get { return Profile.GetTime();  }
-        }
-
-        public AbstractDayNightProfile Profile
-        {
-            get { return (AbstractDayNightProfile)m_pluginProfile; }
+            get { return DayNightProfile.GetTime();  }
         }
 
         private void Awake()
@@ -55,7 +55,7 @@ namespace wizardscode.environment
             {
                 Debug.LogError("You have not configured the Day Night Cycle.");
             }
-            Profile.Initialize();
+            DayNightProfile.Initialize();
 
             dawnStartTime = 0;
             dayStartTime = dawnStartTime + DayNightPluginManager.QUARTER_DAY_AS_SECONDS;
@@ -67,7 +67,7 @@ namespace wizardscode.environment
 
         public float DayCycleInMinutes
         {
-            get { return Profile.dayCycleInMinutes; }
+            get { return DayNightProfile.dayCycleInMinutes; }
         }               
 
         public string ImplementationName
@@ -81,7 +81,7 @@ namespace wizardscode.environment
         public string CurrentTimeAsLabel
         {
             get {
-                TimeSpan t = TimeSpan.FromSeconds(Profile.GetTime());
+                TimeSpan t = TimeSpan.FromSeconds(DayNightProfile.GetTime());
                 string result = string.Format("{0:D2}:{1:D2}",
                                         t.Hours,
                                         t.Minutes);
@@ -91,7 +91,7 @@ namespace wizardscode.environment
         
         private void Update()
         {
-            Profile.Update();
+            DayNightProfile.Update();
             SetPhase();
         }
 

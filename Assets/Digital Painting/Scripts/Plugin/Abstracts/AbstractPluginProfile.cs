@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.utility;
+using wizardscode.validation;
 
 namespace wizardscode.plugin
 {
@@ -14,8 +15,8 @@ namespace wizardscode.plugin
         {
             ValidationResultCollection validations = new ValidationResultCollection();
 
-            IEnumerable<IValidationTest> tests = ReflectiveEnumerator.GetEnumerableOfInterfaceImplementors<IValidationTest>() as IEnumerable<IValidationTest>;
-            foreach (IValidationTest test in tests)
+            IEnumerable<ValidationTest<AbstractPluginManager>> tests = ReflectiveEnumerator.GetEnumerableOfInterfaceImplementors<ValidationTest<AbstractPluginManager>>() as IEnumerable<ValidationTest<AbstractPluginManager>>;
+            foreach (ValidationTest<AbstractPluginManager> test in tests)
             {
                 validations.AddOrUpdateAll(test.Instance.Execute());
             }

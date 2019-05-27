@@ -7,8 +7,7 @@ using System.Reflection;
 public static class ReflectiveEnumerator
 {
     static ReflectiveEnumerator() { }
-
-
+    
     /// <summary>
     /// Find all class of a given type (including by inheritance).
     /// </summary>

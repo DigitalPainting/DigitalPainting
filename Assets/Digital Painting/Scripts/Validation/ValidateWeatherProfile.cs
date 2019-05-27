@@ -6,7 +6,7 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public class ValidateWeatherProfile : IValidationTest
+    public class ValidateWeatherProfile : ValidationTest<WeatherPluginManager>
     {
         private WeatherPluginManager m_manager;
 
@@ -21,15 +21,17 @@ namespace wizardscode.validation
                 return m_manager;
             }
         }
-
-        public IValidationTest Instance => new ValidateWeatherProfile();
         
+        
+            /*
+             * FIXME: Move to new SettingSO model
         public ValidationResultCollection Execute()
         {
             const string PLUGIN_KEY = "Weather Plugin";
             const string PROFILE_KEY = PLUGIN_KEY + " Profile";
 
             ValidationResultCollection localCollection = new ValidationResultCollection();
+
             ValidationResult result;
 
             // Is plugin enabled
@@ -62,7 +64,6 @@ namespace wizardscode.validation
             {
                 ValidationHelper.Validations.Remove(PROFILE_KEY);
             }
-            
             return localCollection;
         }
 
@@ -77,5 +78,6 @@ namespace wizardscode.validation
         {
             Selection.activeGameObject = Manager.gameObject;
         }
+            */
     }
 }

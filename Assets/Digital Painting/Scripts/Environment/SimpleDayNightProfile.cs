@@ -25,12 +25,7 @@ namespace wizardscode.environment
 
         override internal void InitializeSun()
         {
-            if (sunPrefab == null)
-            {
-                Debug.LogError("You have not defined a sun in your SimpleDayNightCycle Configuration");
-            }
-            Sun = Instantiate(sunPrefab).GetComponent<Light>();
-            sunInitialIntensity = Sun.intensity;
+            sunInitialIntensity = RenderSettings.sun.intensity;
         }
 
         override internal void Update()

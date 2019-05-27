@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using wizardscode.editor;
 using wizardscode.plugin;
+using wizardscode.validation;
 
 namespace wizardscode.environment
 {
@@ -9,10 +11,13 @@ namespace wizardscode.environment
     public abstract class AbstractDayNightProfile : AbstractPluginProfile
     {
         [Header("Environment settings")]
-        [Tooltip("Skybox materials to use.")]
-        public Material skybox;
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested skybox setting.")]
+        public SkyBoxSettingsSO Skybox;
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
         [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
-        public Light sunPrefab;
+        public SunSettingsSO SunPrefab;
+
+        [Header("Old Settings Method")]
 
         [Header("Timing")]
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]

@@ -3,7 +3,10 @@ guid: d6d234b33cb227c4788868c04885ae87
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - ValidationSteps: {fileID: 11400000, guid: 675db49c893007344ab074892aedcca9, type: 2}
+  - skybox: {instanceID: 0}
+  - sunPrefab: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
