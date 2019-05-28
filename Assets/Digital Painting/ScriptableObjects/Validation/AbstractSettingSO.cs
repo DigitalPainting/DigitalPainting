@@ -22,22 +22,22 @@ namespace wizardscode.validation
         public bool Nullable = false;
 
         [SerializeField]
-        private ValidationResultCollection validations;
+        private ValidationResultCollection validationCollection;
 
-        private ValidationResultCollection Validations
+        private ValidationResultCollection ValidationCollection
         {
             get
             {
-                if (validations == null)
+                if (validationCollection == null)
                 {
-                    validations = new ValidationResultCollection(); ;
+                    validationCollection = new ValidationResultCollection(); ;
                 }
-                return validations;
+                return validationCollection;
             }
         }
 
         /// <summary>
-        /// The key used when storing in a dictionary.
+        /// A human readable name for this setting.
         /// </summary>
         public abstract string Name { get; }
 
@@ -45,7 +45,7 @@ namespace wizardscode.validation
         /// Test to see if the setting is valid or not. 
         /// </summary>
         /// <returns>A ValidationResult. This will have an impact of "OK" if the setting is set to an acceptable value.</returns>
-        public abstract ValidationResult Validate();
+        public abstract ValidationResult Validate(Type validationTest);
 
         /// <summary>
         /// Test to see if the setting is valid or not. It's not necessary to test for null values here, 
@@ -63,7 +63,7 @@ namespace wizardscode.validation
 
         private ValidationResult GetResult(string testName, string message)
         {
-            ValidationResult result = Validations.GetOrCreate(Name + " - " + testName);
+            ValidationResult result = ValidationCollection.GetOrCreate(Name + " - " + testName);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
             result.Callback = new ResolutionCallback(Fix, "Automatically Resolve");

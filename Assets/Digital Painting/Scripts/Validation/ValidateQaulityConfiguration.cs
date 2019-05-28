@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.plugin;
 using wizardscode.utility;
+using wizardscode.validation;
 
 namespace wizardscode.digitalpainting
 {
     public class ValidateQualityConfiguration : ValidationTest<AbstractPluginManager>
     {
+
+        public override ValidationTest<AbstractPluginManager> Instance => new ValidateQualityConfiguration();
+
+        internal override string ProfileType { get { return "FIXME: QA Config does not have a profile."; } }
+
+        /*
+         * FIXME: move to the new settings SO model
         const string MAIN_KEY = "Digital Painting";
         const string QUALITY_KEY = MAIN_KEY + " Quality Settings";
 
 
-        /*
-         * FIXME: move to the new settings SO model
     public ValidationResultCollection Execute()
     {
         ValidationResultCollection localCollection = new ValidationResultCollection();

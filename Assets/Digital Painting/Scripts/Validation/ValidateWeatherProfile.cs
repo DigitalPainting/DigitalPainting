@@ -8,6 +8,11 @@ namespace wizardscode.validation
 {
     public class ValidateWeatherProfile : ValidationTest<WeatherPluginManager>
     {
+
+        public override ValidationTest<WeatherPluginManager> Instance => new ValidateWeatherProfile();
+
+        internal override string ProfileType { get { return "WeatherProfile"; } }
+
         private WeatherPluginManager m_manager;
 
         private WeatherPluginManager Manager

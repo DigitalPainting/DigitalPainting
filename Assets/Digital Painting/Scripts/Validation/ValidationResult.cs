@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using wizardscode.extension;
 using wizardscode.plugin;
 
 namespace wizardscode.validation
@@ -16,7 +18,7 @@ namespace wizardscode.validation
 
         public int id;
         public string name;
-        public AbstractPluginManager PluginManager;
+        public Type Test;
         public Level impact;
         public ResolutionCallback Callback;
 
@@ -81,7 +83,7 @@ namespace wizardscode.validation
             ProfileCallback = callback;
             if (callback != null)
             {
-                Label = Regex.Replace(ProfileCallback.Method.Name, "(\\B[A-Z])", " $1");
+                Label = ProfileCallback.Method.Name.BreakCamelCase();
             }
             else
             {

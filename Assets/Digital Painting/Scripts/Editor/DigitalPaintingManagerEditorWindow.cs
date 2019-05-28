@@ -8,6 +8,7 @@ using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using wizardscode.digitalpainting;
+using wizardscode.extension;
 using wizardscode.plugin;
 using wizardscode.utility;
 using wizardscode.validation;
@@ -187,6 +188,11 @@ namespace wizardscode.editor
                 EditorGUILayout.LabelField(result.Message);
             }
 
+            if (result.Test != null)
+            {
+                EditorGUILayout.LabelField("Reported by: " + result.Test.Name.BreakCamelCase());
+            }
+
             if (result.Callback != null)
             {
                 if (GUILayout.Button(result.Callback.Label))
@@ -280,6 +286,8 @@ namespace wizardscode.editor
         //were found.</returns>
         public virtual void Validate()
         {
+            Validations = new ValidationResultCollection();
+
             IEnumerable<Type> types = from x in Assembly.GetAssembly(typeof(ValidationResult)).GetTypes()
                                         let y = x.BaseType
                                         where !x.IsAbstract && !x.IsInterface &&
@@ -291,7 +299,7 @@ namespace wizardscode.editor
                 var test = Activator.CreateInstance(type);
 
                 MethodInfo method = type.GetMethod("Execute");
-                ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { });
+                ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type });
                 
                 Validations.AddOrUpdateAll(results);
             }

@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d234b33cb227c4788868c04885ae87, type: 3}
   m_Name: SimpleDayNightProfileSO
   m_EditorClassIdentifier: 
-  skybox: {fileID: 2100000, guid: 4074ef2f68c9e1e4ebeb126f0af53116, type: 2}
-  sunPrefab: {fileID: 108792081150906930, guid: 935ed1b2f6a62904888782218dd03f07,
-    type: 3}
+  Skybox: {fileID: 11400000, guid: faa5f6072b9e6324c9cf997201fa463e, type: 2}
+  SunPrefab: {fileID: 11400000, guid: 3884fe791cf2e9a4d90afaab5a1ddf3e, type: 2}
   startTime: 18000
   dayCycleInMinutes: 5
   dawnDuskFog: {r: 0.5943396, g: 0.47457296, b: 0.3504361, a: 1}

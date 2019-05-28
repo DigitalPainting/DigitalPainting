@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using wizardscode.extension;
 using wizardscode.utility;
 
 namespace wizardscode.validation
@@ -20,12 +22,12 @@ namespace wizardscode.validation
 
         protected abstract T ActualValue { get; set;  }
 
-        public override ValidationResult Validate()
+        public override ValidationResult Validate(Type validationTest)
         {
             ValidationResult result;
             if (!Nullable)
-            {
-                string testName = "Suggested Value";
+            {; 
+                string testName = "Suggested Value (" + validationTest.Name.BreakCamelCase() + ")";
                 if (SuggestedValue is UnityEngine.Object)
                 {
                     if (SuggestedValue as UnityEngine.Object == null)
