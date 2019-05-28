@@ -52,7 +52,7 @@ namespace wizardscode.validation
         /// that is done automatically.
         /// </summary>
         /// <returns>True or false depending on whether the setting is correctly set (true) or not (false)</returns>
-        internal abstract ValidationResult ValidateSetting();
+        internal abstract ValidationResult ValidateSetting(Type validationTest);
 
         /// <summary>
         /// This method will be executed when the user clicks a button to automatically fix the setting.

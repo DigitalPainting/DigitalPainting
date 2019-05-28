@@ -12,7 +12,7 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public class ValidateDayNightProfile : ValidationTest<DayNightPluginManager>
+    public class ValidateSimpleDayNightProfile : ValidationTest<DayNightPluginManager>
     {
 
         /**
@@ -29,7 +29,7 @@ namespace wizardscode.validation
             Selection.activeGameObject = Manager.gameObject;
         }
     */
-        public override ValidationTest<DayNightPluginManager> Instance => new ValidateDayNightProfile();
+        public override ValidationTest<DayNightPluginManager> Instance => new ValidateSimpleDayNightProfile();
 
         internal override string ProfileType { get { return "SimpleDayNightProfile"; } }
     }

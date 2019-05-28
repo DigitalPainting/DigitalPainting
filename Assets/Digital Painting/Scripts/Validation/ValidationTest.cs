@@ -82,6 +82,7 @@ namespace wizardscode.validation
                 {
                     result = localCollection.GetOrCreate(field.Name);
                     result.Message = "Must provide a Setting Scriptable Object";
+                    result.Test = validationTest;
                     result.impact = ValidationResult.Level.Error;
                 }
                 else

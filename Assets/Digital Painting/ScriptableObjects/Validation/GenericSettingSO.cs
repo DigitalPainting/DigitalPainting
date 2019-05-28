@@ -33,6 +33,7 @@ namespace wizardscode.validation
                     if (SuggestedValue as UnityEngine.Object == null)
                     {
                         result = GetErrorResult(testName, "Suggested value cannot be null.");
+                        result.Test = validationTest;
                         return result;
                     } else
                     {
@@ -41,6 +42,7 @@ namespace wizardscode.validation
                 } else if (SuggestedValue == null)
                 {
                     result = GetErrorResult(testName, "Suggested value cannot be null.");
+                    result.Test = validationTest;
                     return result;
                 }
                 else
@@ -48,7 +50,7 @@ namespace wizardscode.validation
                     result = GetPassResult(testName);
                 }
             }
-            return ValidateSetting();
+            return ValidateSetting(validationTest);
         }
 
         public override void Fix()
@@ -56,7 +58,7 @@ namespace wizardscode.validation
             ActualValue = SuggestedValue;
         }
 
-        internal override ValidationResult ValidateSetting()
+        internal override ValidationResult ValidateSetting(Type validationTest)
         {
             ValidationResult result = null;
 
@@ -64,11 +66,13 @@ namespace wizardscode.validation
             if (!object.Equals(ActualValue, SuggestedValue))
             {
                 result = GetWarningResult("Setting Value", "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.");
+                result.Test = validationTest;
             }
 
             if (result == null)
             {
                 result = new ValidationResult("Full Suite", ValidationResult.Level.OK);
+                result.Test = validationTest;
             }
             return result;
         }
