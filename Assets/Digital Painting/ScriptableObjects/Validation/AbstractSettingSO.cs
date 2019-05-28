@@ -66,7 +66,8 @@ namespace wizardscode.validation
             ValidationResult result = ValidationCollection.GetOrCreate(Name + " - " + testName, reportingTest);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
-            result.Callback = new ResolutionCallback(Fix, "Automatically Resolve");
+            ResolutionCallback callback = new ResolutionCallback(Fix, "Automatically Resolve");
+            result.AddCallback(callback);
             return result;
         }
 

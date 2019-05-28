@@ -186,12 +186,12 @@ namespace wizardscode.editor
             EditorGUILayout.HelpBox(result.name, messageType, true);
 
             EditorGUILayout.BeginVertical();
-            if (result.Callback != null)
+            foreach (ResolutionCallback callback in result.Callbacks)
             {
-                if (GUILayout.Button(result.Callback.Label))
+                if (GUILayout.Button(callback.Label))
                 {
                     Validations.Remove(result.name);
-                    result.Callback.ProfileCallback();
+                    callback.ProfileCallback();
                 }
             }
 

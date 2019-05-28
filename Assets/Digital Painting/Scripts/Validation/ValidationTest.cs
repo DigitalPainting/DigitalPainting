@@ -47,7 +47,7 @@ namespace wizardscode.validation
                 result.Message = "FIXME: Plugin type is not enabled (click ignore if you don't want to use it)";
                 result.impact = ValidationResult.Level.Warning;
                 // FIXME: offer a way to enable the plugin
-                result.Callback = null;
+                result.Callbacks = null;
                 Collection.AddOrUpdate(result, validationTest.Name);
 
                 return Collection;
@@ -60,13 +60,12 @@ namespace wizardscode.validation
                 result.Message = "You need to provide a plugin profile for " + Manager.GetType().Name.BreakCamelCase();
                 result.ReportingTest.Add(validationTest.Name);
                 result.impact = ValidationResult.Level.Error;
-                result.Callback = null;
+                result.Callbacks = null;
                 Collection.AddOrUpdate(result, validationTest.Name);
 
                 return Collection;
             }
 
-            // FIXME: Check that the profile is of the correct type
             if (Manager.Profile.GetType().Name != ProfileType) {
                 return Collection;
             }

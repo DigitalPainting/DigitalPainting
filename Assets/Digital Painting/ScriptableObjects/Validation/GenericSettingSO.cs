@@ -61,19 +61,19 @@ namespace wizardscode.validation
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
             ValidationResult result = null;
+            string testName = "Setting Value";
 
             // Actual Value is correctly set
             if (!object.Equals(ActualValue, SuggestedValue))
             {
-                result = GetWarningResult("Setting Value", "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.", validationTest.Name);
+                result = GetWarningResult(testName, "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.", validationTest.Name);
                 result.ReportingTest.Add(validationTest.Name);
+            }
+            else
+            {
+                result = GetPassResult(testName, validationTest.Name);
             }
 
-            if (result == null)
-            {
-                result = new ValidationResult("Full Suite", ValidationResult.Level.OK);
-                result.ReportingTest.Add(validationTest.Name);
-            }
             return result;
         }
     }

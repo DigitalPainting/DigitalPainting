@@ -20,7 +20,7 @@ namespace wizardscode.validation
         public string name;
         public HashSet<string> ReportingTest = new HashSet<string>();
         public Level impact;
-        public ResolutionCallback Callback;
+        public List<ResolutionCallback> Callbacks = new List<ResolutionCallback>();
 
         private string m_message;
 
@@ -59,7 +59,20 @@ namespace wizardscode.validation
             this.id = name.GetHashCode();
             this.name = name;
             this.impact = impact;
-            this.Callback = new ResolutionCallback(callbackToFix);
+            if (callbackToFix != null)
+            {
+                this.Callbacks.Add(new ResolutionCallback(callbackToFix));
+            }
+        }
+
+        public void AddCallback(ResolutionCallback callback)
+        {
+            bool alreadyExists = Callbacks.Exists(item =>
+                    item.Label == callback.Label);
+            if (!alreadyExists)
+            {
+                Callbacks.Add(callback);
+            }
         }
     }
 
