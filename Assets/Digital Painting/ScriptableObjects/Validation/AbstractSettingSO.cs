@@ -61,32 +61,32 @@ namespace wizardscode.validation
         /// </summary>
         public abstract void Fix();
 
-        private ValidationResult GetResult(string testName, string message)
+        private ValidationResult GetResult(string testName, string message, string reportingTest)
         {
-            ValidationResult result = ValidationCollection.GetOrCreate(Name + " - " + testName);
+            ValidationResult result = ValidationCollection.GetOrCreate(Name + " - " + testName, reportingTest);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
             result.Callback = new ResolutionCallback(Fix, "Automatically Resolve");
             return result;
         }
 
-        internal ValidationResult GetErrorResult(string testName, string message)
+        internal ValidationResult GetErrorResult(string testName, string message, string reportingTest)
         {
-            ValidationResult result = GetResult(testName, message);
+            ValidationResult result = GetResult(testName, message, reportingTest);
             result.impact = ValidationResult.Level.Error;
             return result;
         }
 
-        internal ValidationResult GetWarningResult(string testName, string message)
+        internal ValidationResult GetWarningResult(string testName, string message, string reportingTest)
         {
-            ValidationResult result = GetResult(testName, message);
+            ValidationResult result = GetResult(testName, message, reportingTest);
             result.impact = ValidationResult.Level.Warning;
             return result;
         }
 
-        internal ValidationResult GetPassResult(string testName)
+        internal ValidationResult GetPassResult(string testName, string reportingTest)
         {
-            ValidationResult result = GetResult(testName, "Looks good.");
+            ValidationResult result = GetResult(testName, "Looks good.", reportingTest);
             result.impact = ValidationResult.Level.OK;
             return result;
         }

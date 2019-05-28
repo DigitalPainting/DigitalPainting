@@ -18,7 +18,7 @@ namespace wizardscode.validation
 
         public int id;
         public string name;
-        public Type Test;
+        public HashSet<string> ReportingTest = new HashSet<string>();
         public Level impact;
         public ResolutionCallback Callback;
 

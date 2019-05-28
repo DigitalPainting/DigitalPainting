@@ -32,22 +32,22 @@ namespace wizardscode.validation
                 {
                     if (SuggestedValue as UnityEngine.Object == null)
                     {
-                        result = GetErrorResult(testName, "Suggested value cannot be null.");
-                        result.Test = validationTest;
+                        result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
+                        result.ReportingTest.Add(validationTest.Name);
                         return result;
                     } else
                     {
-                        result = GetPassResult(testName);
+                        result = GetPassResult(testName, validationTest.Name);
                     }
                 } else if (SuggestedValue == null)
                 {
-                    result = GetErrorResult(testName, "Suggested value cannot be null.");
-                    result.Test = validationTest;
+                    result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
+                    result.ReportingTest.Add(validationTest.Name);
                     return result;
                 }
                 else
                 {
-                    result = GetPassResult(testName);
+                    result = GetPassResult(testName, validationTest.Name);
                 }
             }
             return ValidateSetting(validationTest);
@@ -65,14 +65,14 @@ namespace wizardscode.validation
             // Actual Value is correctly set
             if (!object.Equals(ActualValue, SuggestedValue))
             {
-                result = GetWarningResult("Setting Value", "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.");
-                result.Test = validationTest;
+                result = GetWarningResult("Setting Value", "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.", validationTest.Name);
+                result.ReportingTest.Add(validationTest.Name);
             }
 
             if (result == null)
             {
                 result = new ValidationResult("Full Suite", ValidationResult.Level.OK);
-                result.Test = validationTest;
+                result.ReportingTest.Add(validationTest.Name);
             }
             return result;
         }

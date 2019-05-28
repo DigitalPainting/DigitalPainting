@@ -8,27 +8,50 @@ namespace wizardscode.validation
     public class ValidationResultCollection
     {
         Dictionary<int, ValidationResult> collection = new Dictionary<int, ValidationResult>();
-
-
+       
         /// <summary>
-        /// Get or create a ValidationResult for a named validation test.
+        /// Get or create a ValidationResult for a setting and a specific validation test.
         /// </summary>
-        /// <param name="name">The name of the validation test.</param>
+        /// <param name="settingTest">The name of the setting test this is a result for.</param>
+        /// <param name="reportingTest">The name of the ValidationTest that this result is generated for.</param>
         /// <returns>An existing ValidationResult if the test has already been run, or a new validation result with an untested state.</returns>
-        public ValidationResult GetOrCreate(string name)
+        public ValidationResult GetOrCreate(string settingTest, string reportingTest)
         {
             ValidationResult result;
-            if (!collection.TryGetValue(name.GetHashCode(), out result))
+            if (!collection.TryGetValue(settingTest.GetHashCode(), out result))
             {
-                result = new ValidationResult(name);
-                AddOrUpdate(result);
+                result = new ValidationResult(settingTest);
+                result.ReportingTest.Add(reportingTest);
+                AddOrUpdate(result, reportingTest);
             }
             return result;
         }
 
-        public void AddOrUpdate(ValidationResult result)
+        public void AddOrUpdate(ValidationResult result, string reportingTest)
         {
-            Remove(result.name);
+            ValidationResult existing;
+            if (collection.TryGetValue(result.id, out existing))
+            {
+                if (existing.ReportingTest.Count > 1 && existing.ReportingTest.Contains(reportingTest))
+                {
+                    existing.ReportingTest.Remove(reportingTest);
+                    switch (existing.impact)
+                    {
+                        case ValidationResult.Level.Error:
+                            result.impact = ValidationResult.Level.Error;
+                            break;
+                        case ValidationResult.Level.Warning:
+                            if (result.impact == ValidationResult.Level.OK)
+                            {
+                                result.impact = ValidationResult.Level.Warning;
+                            }
+                            break;
+                    }
+                } else
+                {
+                    Remove(result);
+                }
+            }
             collection[result.id] = result;
         }
 
@@ -41,6 +64,11 @@ namespace wizardscode.validation
                     collection[result.id] = result;
                 }
             }
+        }
+
+        public void Remove(ValidationResult result)
+        {
+            Remove(result.name);
         }
 
         public void Remove(string name)

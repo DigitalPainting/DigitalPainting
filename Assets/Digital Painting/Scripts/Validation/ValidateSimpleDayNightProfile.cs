@@ -14,7 +14,6 @@ namespace wizardscode.validation
 {
     public class ValidateSimpleDayNightProfile : ValidationTest<DayNightPluginManager>
     {
-
         /**
          * FIXME: move all loging to new SO model
         private void EnableDayNightPlugin()

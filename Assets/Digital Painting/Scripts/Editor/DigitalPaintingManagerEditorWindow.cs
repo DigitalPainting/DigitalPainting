@@ -18,7 +18,6 @@ namespace wizardscode.editor
     public class DigitalPaintingManagerEditorWindow : EditorWindow
     {
         private DigitalPaintingManager manager;
-        private ValidationResultCollection Validations = new ValidationResultCollection();
 
         public List<string> ignoredTests = new List<string>();
 
@@ -34,6 +33,8 @@ namespace wizardscode.editor
         private float frequencyOfPluginRefresh = 5;
         private DateTime timeOfNextPluginRefresh = DateTime.Now;
         private string configAssetPath = "Assets/Digital Painting Editor Config.asset";
+        
+        private ValidationResultCollection Validations = new ValidationResultCollection();
 
         private void OnEnable()
         {
@@ -218,9 +219,20 @@ namespace wizardscode.editor
                 EditorGUILayout.LabelField(result.Message);
             }
 
-            if (result.Test != null)
+            if (result.ReportingTest != null)
             {
-                EditorGUILayout.LabelField("Reported by: " + result.Test.Name.BreakCamelCase());
+                string tests = "";
+                foreach (string test in result.ReportingTest)
+                {
+                    if (tests.Length > 0)
+                    {
+                        tests += ", " + test.BreakCamelCase();
+                    } else
+                    {
+                        tests = test.BreakCamelCase();
+                    }
+                }
+                EditorGUILayout.LabelField("Reported by: " + tests);
             }
 
             EditorGUILayout.EndVertical();
@@ -229,8 +241,6 @@ namespace wizardscode.editor
         private void ValidationResultsGUI()
         {
             Validate();
-
-            // CreateTestData();
             
             int warningCount = Validations.CountWarning;
             int errorCount = Validations.CountError;
@@ -246,40 +256,7 @@ namespace wizardscode.editor
                 }
             }
         }
-
-        private void CreateTestData()
-        {
-            ValidationResult result = Validations.GetOrCreate("Error 1");
-            result.impact = ValidationResult.Level.Error;
-            Validations.AddOrUpdate(result);
-            result = Validations.GetOrCreate("Error 2");
-            result.impact = ValidationResult.Level.Error;
-            Validations.AddOrUpdate(result);
-            result = Validations.GetOrCreate("Error 3");
-            result.impact = ValidationResult.Level.Error;
-            Validations.AddOrUpdate(result);
-
-            result = Validations.GetOrCreate("Warning 1");
-            result.impact = ValidationResult.Level.Warning;
-            Validations.AddOrUpdate(result);
-            result = Validations.GetOrCreate("Warning 2");
-            result.impact = ValidationResult.Level.Warning;
-            Validations.AddOrUpdate(result);
-            result = Validations.GetOrCreate("Warning 3");
-            result.impact = ValidationResult.Level.Warning;
-            Validations.AddOrUpdate(result);
-
-            result = Validations.GetOrCreate("OK 1");
-            result.impact = ValidationResult.Level.OK;
-            Validations.AddOrUpdate(result);
-            result = Validations.GetOrCreate("OK 2");
-            result.impact = ValidationResult.Level.OK;
-            Validations.AddOrUpdate(result);
-            result = Validations.GetOrCreate("OK 3");
-            result.impact = ValidationResult.Level.OK;
-            Validations.AddOrUpdate(result);
-        }
-
+        
         public void OnInspectorUpdate()
         {
             this.Repaint();
@@ -308,7 +285,7 @@ namespace wizardscode.editor
 
                 MethodInfo method = type.GetMethod("Execute");
                 ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type });
-                
+
                 Validations.AddOrUpdateAll(results);
             }
         }

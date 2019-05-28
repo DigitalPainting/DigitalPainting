@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
+using wizardscode.editor;
 using wizardscode.production;
+using wizardscode.validation;
 using Random = UnityEngine.Random;
 
 namespace wizardscode.digitalpainting
