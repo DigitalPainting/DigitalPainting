@@ -166,7 +166,7 @@ namespace wizardscode.editor
 
         private void ValidationResultGUI(ValidationResult result, bool isIgnored = false)
         {
-            EditorGUILayout.BeginVertical();
+            EditorGUILayout.BeginVertical("Box");
             MessageType messageType;
             switch (result.impact) {
                 case ValidationResult.Level.Error:
@@ -180,19 +180,11 @@ namespace wizardscode.editor
                     break;
             }
 
+            EditorGUILayout.BeginHorizontal();
+
             EditorGUILayout.HelpBox(result.name, messageType, true);
 
-            if (result.Message != null)
-            {
-                EditorStyles.label.wordWrap = true;
-                EditorGUILayout.LabelField(result.Message);
-            }
-
-            if (result.Test != null)
-            {
-                EditorGUILayout.LabelField("Reported by: " + result.Test.Name.BreakCamelCase());
-            }
-
+            EditorGUILayout.BeginVertical();
             if (result.Callback != null)
             {
                 if (GUILayout.Button(result.Callback.Label))
@@ -208,13 +200,29 @@ namespace wizardscode.editor
                 {
                     ignoredTests.Add(result.name);
                 }
-            } else
+            }
+            else
             {
                 if (GUILayout.Button("Do Not Ignore"))
                 {
                     ignoredTests.Remove(result.name);
                 }
             }
+
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
+
+            if (result.Message != null)
+            {
+                EditorStyles.label.wordWrap = true;
+                EditorGUILayout.LabelField(result.Message);
+            }
+
+            if (result.Test != null)
+            {
+                EditorGUILayout.LabelField("Reported by: " + result.Test.Name.BreakCamelCase());
+            }
+
             EditorGUILayout.EndVertical();
         }
 
