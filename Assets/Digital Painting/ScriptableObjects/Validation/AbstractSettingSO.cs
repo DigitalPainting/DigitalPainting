@@ -21,6 +21,9 @@ namespace wizardscode.validation
         [Tooltip("Is a null value allowable? Set to true if setting can left unconfigured.")]
         public bool Nullable = false;
 
+        [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
+        public bool AddToScene = false;
+
         [SerializeField]
         private ValidationResultCollection validationCollection;
 

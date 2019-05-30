@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp:wizardscode.validation:SunSettingsSO
   Description: The Sun object to illuminate the scene.
   Nullable: 0
+  AddToScene: 1
   SuggestedValue: {fileID: 108792081150906930, guid: 935ed1b2f6a62904888782218dd03f07,
     type: 3}
