@@ -36,7 +36,7 @@ namespace wizardscode.validation
 
         public abstract ValidationTest<T> Instance { get; }
 
-        public ValidationResultCollection Execute(Type validationTest)
+        public ValidationResultCollection Validate(Type validationTest)
         {
             ValidationResult result;
             

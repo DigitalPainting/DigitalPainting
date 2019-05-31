@@ -14,20 +14,6 @@ namespace wizardscode.validation
 {
     public class ValidateSimpleDayNightProfile : ValidationTest<DayNightPluginManager>
     {
-        /**
-         * FIXME: move all loging to new SO model
-        private void EnableDayNightPlugin()
-        {
-            GameObject dpManager = GameObject.FindObjectOfType<DigitalPaintingManager>().gameObject;
-            dpManager.AddComponent(typeof(DayNightPluginManager));
-            SelectDayNightPluginManager();
-        }
-
-        void SelectDayNightPluginManager()
-        {
-            Selection.activeGameObject = Manager.gameObject;
-        }
-    */
         public override ValidationTest<DayNightPluginManager> Instance => new ValidateSimpleDayNightProfile();
 
         internal override string ProfileType { get { return "SimpleDayNightProfile"; } }
