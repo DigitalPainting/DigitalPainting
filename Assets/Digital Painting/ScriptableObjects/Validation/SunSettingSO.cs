@@ -8,7 +8,8 @@ namespace wizardscode.validation
     [CreateAssetMenu(fileName = "SunSettingSO", menuName = "Wizards Code/Validation/Sun Setting")]
     public class SunSettingsSO : GenericSettingSO<Light>
     {
-        public override string Name
+
+        public override string SettingName
         {
             get { return "Sun"; }
         }

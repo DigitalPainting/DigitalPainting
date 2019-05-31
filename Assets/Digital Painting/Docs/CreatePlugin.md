@@ -23,10 +23,9 @@ namespace wizardscode.environment.weather
 }
 ```
 
-The plugin profile will provide 1 or more parameters defined by a ScriptableObject that implements `GenericSettingSO`. There are a number of these Scriptable Objects defined in `ScriptableObjects/Validation`. For exammple:
+The plugin profile will provide 1 or more parameters defined by a ScriptableObject that implements `GenericSettingSO`. There are a number of these Scriptable Objects defined in `ScriptableObjects/Validation` (see next section for more information on these settings objects). For exammple:
 
 ```
-
         [Header("Environment settings")]
         [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested skybox setting.")]
         public SkyBoxSettingsSO Skybox;
@@ -37,6 +36,16 @@ The plugin profile will provide 1 or more parameters defined by a ScriptableObje
 ```
 
 Note the use of the \[Expandable\] attribute here. This is a useful attribute that does two things. Firstly, it makes the attribute in the Inspecter expadandable, when expanded it will display the editor for this attribute type. Secondly it optionally marks the attribute as required. If `isRequired` is set to true then Digital Painting will display an error in the inspector if no value is provided.
+
+## Settings Scriptable Objects
+
+The classes that extend the `GenericSettingSO` provide the code needed to validate a setting and the plugin configuration. Each setting will carry a suggested value that will be used to configure the plugin. In the above example we see that we have two settings objects, one for the Skybox and one for the Sun prefab. The implementations of these classes simply implement the `TestName`, `ActualValue` and `Fix` methods. This is the minimum needed to create an Settings object, the role of these methods is:
+
+`TestName`: returns a human readable name for the setting that will be used in the UI
+`ActualValue`: a getter and setter for the value that is set in Unity
+`Fix`: a default method used to fix the plugin setup to use the suggested values.
+
+Some plugins will also want to override the `ValidateSetting(Type validationTest)` method. The default solution provided will work in cases where we only need to check that a setting matches the selected value and if the suggested value is a prefab, it has been instantiated in the scene (when required). For more complex validation steps override this method.
 
 # Plugin Manager
 
@@ -50,7 +59,7 @@ The existinence of a plugin manager class, whether provided by the core Digital 
 
 Digital Painting tries to provide sensible defaults for all plugin types, along with hints on how to configure things. The goal is to make it as easy as possible to setup key assets to get started, without preventing the user from dropping into the advanced configuration offered by the assets themselves.
 
-This is done through one or more classes that implement `ValidationTest<T>` where T is an implementation of AbstractPluginManager. When an instance of a plugin manager is found in the scene the `Validate` method of the `ValidationTest` class is called. The `ValidationTest` class provides basic validation steps, but in most cases plugin authors will want to override this an associated methods to provide more detailed validation.
+This is done through one or more classes that implement `ValidationTest<T>` where T is an implementation of AbstractPluginManager. When an instance of a plugin manager is found in the scene the `Validate` method of the `ValidationTest` class is called. The `ValidationTest` manages the execution of the `Validate` method in the implementation of the `GenericSettingSO` object (see above).
 
 The results of these tests are presented in the Digital Painting Manager Window in the Editor and will often provide helpers that can be assigned to buttons that, when clicked, attempt to resolve problems found. Users will also be able to mark a test as ignored. This allows them to create setups that go beyond the default settings provided by the Digital Painting asset.
 

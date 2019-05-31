@@ -74,7 +74,7 @@ namespace wizardscode.validation
             IEnumerable<FieldInfo> fields = Manager.Profile.GetType().GetFields()
                 .Where(field => field.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
 
-            // Validate them individually
+            // Validate the fields
             foreach (FieldInfo field in fields)
             {
                 object instance = field.GetValue(Manager.Profile);
@@ -96,8 +96,6 @@ namespace wizardscode.validation
                 Collection.AddOrUpdate(result, validationTest.Name);
             }
 
-            // FIXME: ensure all tests are moved to the new model
-            // localCollection.AddOrUpdateAll(ExecuteOriginal());
             return Collection;
         }
     }

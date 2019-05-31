@@ -22,10 +22,6 @@ namespace wizardscode.validation
 
         protected abstract T ActualValue { get; set; }
 
-        protected virtual string TestName {
-            get { return "Generic Setting Test Suite (replace this name by overriding the TestName getter in you *SettingSO)"; }
-        }
-
         public override ValidationResult Validate(Type validationTest)
         {
             ValidationResult result;

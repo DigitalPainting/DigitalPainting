@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb272ebb3827ac047babf7e66e18f8e9, type: 3}
+  m_Name: WeatherMakerWeatherProfile
+  m_EditorClassIdentifier: 
+  Skybox: {fileID: 11400000, guid: 7dcbeb36cfe0e6540b881e997329363c, type: 2}
+  WeatherMakerPrefab: {fileID: 11400000, guid: 987edeb1539e7654e85ce67a14cb6f28, type: 2}
+  automatedGroupProfile: {fileID: 11400000, guid: 926503a315dbbfa46b363ceb1366ca70,
+    type: 2}
+  clearProfile: {fileID: 11400000, guid: 5735a14d9dca55d4a8a67186abe9bf2a, type: 2}
+  rainProfile: {fileID: 11400000, guid: ceb9d13b7427d6a428841b6580eaa1aa, type: 2}
+  snowProfile: {fileID: 11400000, guid: 1987f67a1ab9d574e9dcfb3b30d16bce, type: 2}
+  sleetProfile: {fileID: 11400000, guid: 827ff530f97f2ed4684e505e78c9058a, type: 2}
+  hailProfile: {fileID: 11400000, guid: 64d26dbd2a60cc341ba4d7aba2fc840d, type: 2}

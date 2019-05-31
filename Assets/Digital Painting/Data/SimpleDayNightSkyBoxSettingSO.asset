@@ -16,4 +16,5 @@ MonoBehaviour:
     requires that the skybox be correctly set. However, almost any SkyBox will be
     acceptable.
   Nullable: 0
+  AddToScene: 0
   SuggestedValue: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}

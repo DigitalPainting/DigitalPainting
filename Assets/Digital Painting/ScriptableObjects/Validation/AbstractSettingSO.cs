@@ -42,7 +42,15 @@ namespace wizardscode.validation
         /// <summary>
         /// A human readable name for this setting.
         /// </summary>
-        public abstract string Name { get; }
+        public abstract string SettingName { get; }
+
+        /// <summary>
+        /// A human readable name for the default test.
+        /// </summary>
+        public virtual string TestName
+        {
+            get { return "Default Setting Test Suite (replace this name by overriding the TestName getter in you *SettingSO)"; }
+        }
 
         /// <summary>
         /// Test to see if the setting is valid or not. 
@@ -66,7 +74,7 @@ namespace wizardscode.validation
 
         private ValidationResult GetResult(string testName, string message, string reportingTest)
         {
-            ValidationResult result = ValidationCollection.GetOrCreate(Name + " - " + testName, reportingTest);
+            ValidationResult result = ValidationCollection.GetOrCreate(SettingName + " - " + testName, reportingTest);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
             AddDefaultFixCallback(result);

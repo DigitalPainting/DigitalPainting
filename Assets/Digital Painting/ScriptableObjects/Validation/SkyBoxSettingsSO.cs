@@ -7,7 +7,7 @@ namespace wizardscode.validation
     [CreateAssetMenu(fileName = "SkyboxSettingSO", menuName = "Wizards Code/Validation/Skybox Setting")]
     public class SkyBoxSettingsSO : GenericSettingSO<Material>
     {
-        public override string Name
+        public override string SettingName
         {
             get { return "Skybox"; }
         }
