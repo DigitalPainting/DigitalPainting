@@ -60,7 +60,7 @@ namespace wizardscode.validation
                 result.Message = "You need to provide a plugin profile for " + Manager.GetType().Name.BreakCamelCase();
                 result.ReportingTest.Add(validationTest.Name);
                 result.impact = ValidationResult.Level.Error;
-                result.Callbacks = null;
+                result.RemoveCallbacks();
                 Collection.AddOrUpdate(result, validationTest.Name);
 
                 return Collection;

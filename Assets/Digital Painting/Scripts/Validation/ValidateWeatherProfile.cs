@@ -32,29 +32,6 @@ namespace wizardscode.validation
              * FIXME: Move to new SettingSO model
         public ValidationResultCollection Execute()
         {
-            const string PLUGIN_KEY = "Weather Plugin";
-            const string PROFILE_KEY = PLUGIN_KEY + " Profile";
-
-            ValidationResultCollection localCollection = new ValidationResultCollection();
-
-            ValidationResult result;
-
-            // Is plugin enabled
-            if (Manager == null)
-            {
-                result = ValidationHelper.Validations.GetOrCreate(PLUGIN_KEY);
-                result.Message = "Weather Plugin not enabled (click ignore if you don't want to use it)";
-                result.impact = ValidationResult.Level.Warning;
-                result.resolutionCallback = EnableWeatherPlugin;
-                localCollection.AddOrUpdate(result);
-
-                ValidationHelper.Validations.Remove(PROFILE_KEY);
-
-                return localCollection;
-            } else
-            {
-                ValidationHelper.Validations.Remove(PLUGIN_KEY);
-            }
             
             // Has profile?
             if (Manager.Profile == null)

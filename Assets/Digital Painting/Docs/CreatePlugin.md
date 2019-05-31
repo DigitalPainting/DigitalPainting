@@ -1,4 +1,4 @@
-﻿The Digital Painting supports a number of third party assets as integrated plugins and, since it is open source, it is relateively easy for you to add your own plugins. The Plugin system provides a unified way to easily configure plugin assets, while the full asset is still accessible through the edito and extension code. This document describes how to implement a plugin and integrate it into the Editor UI.
+﻿The Digital Painting supports a number of third party assets as integrated plugins and, since it is open source, it is relateively easy for you to add your own plugins. The Plugin system provides a unified way to easily configure plugin assets, while the full asset is still accessible through the editor and extension code. This document describes how to implement a plugin and integrate it into the Editor UI.
 
 For the purposes of this document we will explore the Day Night Plugins. The Digital Painting asset provides a Simple Day Night Plugin by default, you can also opt to use a paid implementation if you so desire. 
 
@@ -23,9 +23,36 @@ namespace wizardscode.environment.weather
 }
 ```
 
-## Enablement and Validation code
+The plugin profile will provide 1 or more parameters defined by a ScriptableObject that implements `GenericSettingSO`. There are a number of these Scriptable Objects defined in `ScriptableObjects/Validation`. For exammple:
 
-Digital Painting tries to provide sensible defaults for all plugins, along with hints on how to configure things. The is done through one or more classes that implement `IValidationTest`. The Digital Painting provides core validation tests for each pluging type in `Scripts/Validation`. Plugins can provide their own additional tests. Each validation can provide an action that will help the user resolve any problems find. For more details see `Scripts/Validation/ValidateDayNightProfile`.
+```
+
+        [Header("Environment settings")]
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested skybox setting.")]
+        public SkyBoxSettingsSO Skybox;
+        
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
+        [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
+        public SunSettingsSO SunPrefab;
+```
+
+Note the use of the \[Expandable\] attribute here. This is a useful attribute that does two things. Firstly, it makes the attribute in the Inspecter expadandable, when expanded it will display the editor for this attribute type. Secondly it optionally marks the attribute as required. If `isRequired` is set to true then Digital Painting will display an error in the inspector if no value is provided.
+
+# Plugin Manager
+
+Each plugin should provide an implementation of `AbstractPluginManager`, this is a `MonoBehavior` that manages the plugin implementation. This is added to a game object in the scene communicates between the Digital Painting engine and the plugin, passing appropriate values back and forth. That is the plugin manager is the glue between the external asset and the Digital Painting asset.
+
+Users must provide a plugin profile (see above) to the plugin manager.
+
+The existinence of a plugin manager class, whether provided by the core Digital Painting asset or by some plugin enablement code from a third party, will result in the Digital Painting Manager Window in the editor displaying a list of available plugins, grouped by type. The UI will also provide buttons to enable a plugin from each available group.
+
+## Validating the plugin setup
+
+Digital Painting tries to provide sensible defaults for all plugin types, along with hints on how to configure things. The goal is to make it as easy as possible to setup key assets to get started, without preventing the user from dropping into the advanced configuration offered by the assets themselves.
+
+This is done through one or more classes that implement `ValidationTest<T>` where T is an implementation of AbstractPluginManager. When an instance of a plugin manager is found in the scene the `Validate` method of the `ValidationTest` class is called. The `ValidationTest` class provides basic validation steps, but in most cases plugin authors will want to override this an associated methods to provide more detailed validation.
+
+The results of these tests are presented in the Digital Painting Manager Window in the Editor and will often provide helpers that can be assigned to buttons that, when clicked, attempt to resolve problems found. Users will also be able to mark a test as ignored. This allows them to create setups that go beyond the default settings provided by the Digital Painting asset.
 
 # Using a Plugin
 
@@ -34,14 +61,12 @@ Once all this is done it's really easy for users to use the plugin.
   1. Click the button to view the asset in the store
   2. Purchase and install the asset
   3. Click the button to enable the plugin in your scene
-  3.5. Add the WeatherMakerScript to your DigitalPaintingManager
   4. Create a day night profile using `Assets -> Create -> Wizards Code/Weather Maker Day Night Profile`
   5. Duplicate a Weather Profile provided by Weather Maker
   5. Drag the Weather profile into the `Weather Maker Profile` slot of the plugin profile
   6. Drag the plugin profile into the `Day Night Cycle Manager` on the `Digital Painting Manager`
   6. Play the Scene
 
-FIXME: make step 3.5 automatic... provide a prefab and make it a child of the Digital Painting Manager?
 FIXME: make step 4 automatic... select an existing profile or offer to create a new one in a known location - `profiles/plugins`
 FIXME: make setp 5 automatic... select an existing profile, duplicate it into `profiles/weathermaker`
 FIXME: Provide an editor for the plugin profile and expose it in the plugin manager

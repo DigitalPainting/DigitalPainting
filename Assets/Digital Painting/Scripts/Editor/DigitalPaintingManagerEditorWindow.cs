@@ -184,7 +184,7 @@ namespace wizardscode.editor
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.HelpBox(result.name, messageType, true);
-
+            
             EditorGUILayout.BeginVertical();
             foreach (ResolutionCallback callback in result.Callbacks)
             {
