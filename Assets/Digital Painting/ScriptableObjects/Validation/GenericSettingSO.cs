@@ -20,6 +20,27 @@ namespace wizardscode.validation
         [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
         public T SuggestedValue;
 
+        public override string TestName
+        {
+            get
+            {
+                if (IsPrefabSetting)
+                {
+                    return "Validate prefab setup.";
+                }
+                else
+                {
+                    return "Validate setting value.";
+                }
+            }
+        }
+
+        private bool IsPrefabSetting
+        {
+            get { return (SuggestedValue as UnityEngine.Object) != null 
+                    && PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object); }
+        }
+
         protected abstract T ActualValue { get; set; }
 
         public override ValidationResult Validate(Type validationTest)
@@ -56,7 +77,7 @@ namespace wizardscode.validation
 
         public override void Fix()
         {
-            if (PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object))
+            if (IsPrefabSetting)
             {
                 throw new Exception("The suggested value is a prefab, you need to override the Fix method in your *SettingSO to fix the failed test.");
             }
@@ -101,7 +122,7 @@ namespace wizardscode.validation
         {
             ValidationResult result = null;
 
-            if (PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object)) {
+            if (IsPrefabSetting) {
                 GameObject go = GetFirstInstanceInScene();
 
                 ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);

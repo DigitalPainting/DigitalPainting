@@ -25,6 +25,7 @@ namespace wizardscode.environment
 
         override internal void InitializeSun()
         {
+            Sun = RenderSettings.sun;
             sunInitialIntensity = RenderSettings.sun.intensity;
         }
 
