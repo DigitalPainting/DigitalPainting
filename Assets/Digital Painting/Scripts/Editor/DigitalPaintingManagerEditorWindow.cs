@@ -34,7 +34,7 @@ namespace wizardscode.editor
         private DateTime timeOfNextPluginRefresh = DateTime.Now;
         private string configAssetPath = "Assets/Digital Painting Editor Config.asset";
         
-        private ValidationResultCollection Validations = new ValidationResultCollection();
+        protected static ValidationResultCollection Validations = new ValidationResultCollection();
 
         private void OnEnable()
         {

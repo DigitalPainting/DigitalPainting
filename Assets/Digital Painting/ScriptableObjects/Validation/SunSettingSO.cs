@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace wizardscode.validation
@@ -20,8 +21,7 @@ namespace wizardscode.validation
 
         public override void Fix()
         {
-            Light sun = GameObject.Instantiate(SuggestedValue);
-            RenderSettings.sun = sun;
+            RenderSettings.sun = GetFirstInstanceInScene().GetComponent<Light>();
         }
     }
 }

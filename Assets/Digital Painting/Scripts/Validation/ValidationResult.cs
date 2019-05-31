@@ -74,6 +74,11 @@ namespace wizardscode.validation
                 Callbacks.Add(callback);
             }
         }
+
+        public void RemoveCallbacks()
+        {
+            Callbacks = new List<ResolutionCallback>();
+        }
     }
 
     public delegate void ProfileCallback();
@@ -81,7 +86,7 @@ namespace wizardscode.validation
     /// <summary>
     /// ResolutionCallback is a method that can be called to resolve a problem.
     /// </summary>
-    public class ResolutionCallback
+    public class ResolutionCallback : IEquatable<ResolutionCallback>
     {
         public ProfileCallback ProfileCallback; // A callback that attempts to resolve the problem automatically
         public string Label;
@@ -112,6 +117,16 @@ namespace wizardscode.validation
         {
             ProfileCallback = callback;
             Label = label;
+        }
+
+        public static implicit operator string(ResolutionCallback callback)
+        {
+            return callback.ProfileCallback.ToString();
+        }
+
+        public bool Equals(ResolutionCallback other)
+        {
+            return ProfileCallback.Equals(other.ProfileCallback);
         }
     }
 }

@@ -20,7 +20,11 @@ namespace wizardscode.validation
         [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
         public T SuggestedValue;
 
-        protected abstract T ActualValue { get; set;  }
+        protected abstract T ActualValue { get; set; }
+
+        protected virtual string TestName {
+            get { return "Generic Setting Test Suite (replace this name by overriding the TestName getter in you *SettingSO)"; }
+        }
 
         public override ValidationResult Validate(Type validationTest)
         {
@@ -50,12 +54,20 @@ namespace wizardscode.validation
                     result = GetPassResult(testName, validationTest.Name);
                 }
             }
+
             return ValidateSetting(validationTest);
         }
 
         public override void Fix()
         {
-            ActualValue = SuggestedValue;
+            if (PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object))
+            {
+                throw new Exception("The suggested value is a prefab, you need to override the Fix method in your *SettingSO to fix the failed test.");
+            }
+            else
+            {
+                ActualValue = SuggestedValue;
+            }
         }
 
         private void InstantiatePrefab()
@@ -67,7 +79,7 @@ namespace wizardscode.validation
         /// Get an instance object that was created by the Suggested Value (assuming it is a Prefab).
         /// </summary>
         /// <returns></returns>
-        private GameObject GetFirstInstanceInScene()
+        internal GameObject GetFirstInstanceInScene()
         {
             GameObject go = null;
             UnityEngine.Object[] gos = GameObject.FindObjectsOfType(SuggestedValue.GetType());
@@ -91,43 +103,47 @@ namespace wizardscode.validation
 
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
-            string testName = "Generic Setting Test Suite";
             ValidationResult result = null;
 
             if (PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object)) {
                 GameObject go = GetFirstInstanceInScene();
 
-
                 ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
                 if (AddToScene) {
                     if (go == null)
                     {
-                        result = GetErrorResult(testName, "The object required doesn't currently exist in the scene", validationTest.Name);
+                        result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
                         List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
                         callbacks.Add(callback);
                         result.Callbacks = callbacks;
                         return result;
                     }
-                } else
-                {
-                    result.Callbacks.Remove(callback);
                 }
 
-                if (PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object))
+                GameObject actualGO;
+                if (ActualValue is Component)
                 {
-                    if (ActualValue as UnityEngine.Object == null || !ReferenceEquals(ActualValue, go))
-                    {
-                        result = GetWarningResult(testName, "The value set is not an object in the scene that has been instantiated from the suggested value prefab. This may be OK, in which case click the ignore button.", validationTest.Name);
-                        return result;
-                    }
+                    actualGO = (ActualValue as Component).gameObject;
+                }
+                else
+                {
+                    actualGO = ActualValue as GameObject;
+                }
+
+                if (actualGO as UnityEngine.Object == null || !ReferenceEquals(actualGO, go))
+                {
+                    result = GetWarningResult(TestName, "The value set is not an object in the scene that has been instantiated from the suggested value prefab. This may be OK, in which case click the ignore button.", validationTest.Name);
+                    result.RemoveCallbacks();
+                    AddDefaultFixCallback(result);
+                    return result;
                 }
             } else if (!object.Equals(ActualValue, SuggestedValue))
             {
-                result = GetWarningResult(testName, "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.", validationTest.Name);
+                result = GetWarningResult(TestName, "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.", validationTest.Name);
                 return result;
             }
 
-            return GetPassResult(testName, validationTest.Name);
+            return GetPassResult(TestName, validationTest.Name);
         }
     }
 }
