@@ -38,6 +38,7 @@ namespace wizardscode.validation
 
         public ValidationResultCollection Validate(Type validationTest)
         {
+            Collection = new ValidationResultCollection();
             ValidationResult result;
             
             // Is plugin enabled, If not offer an easy way to enable it

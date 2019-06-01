@@ -186,12 +186,15 @@ namespace wizardscode.editor
             EditorGUILayout.HelpBox(result.name, messageType, true);
             
             EditorGUILayout.BeginVertical();
-            foreach (ResolutionCallback callback in result.Callbacks)
+            if (result.Callbacks != null)
             {
-                if (GUILayout.Button(callback.Label))
+                foreach (ResolutionCallback callback in result.Callbacks)
                 {
-                    Validations.Remove(result.name);
-                    callback.ProfileCallback();
+                    if (GUILayout.Button(callback.Label))
+                    {
+                        Validations.Remove(result.name);
+                        callback.ProfileCallback();
+                    }
                 }
             }
 
@@ -273,12 +276,20 @@ namespace wizardscode.editor
         {
             Validations = new ValidationResultCollection();
 
-            IEnumerable<Type> types = from x in Assembly.GetAssembly(typeof(ValidationResult)).GetTypes()
-                                        let y = x.BaseType
-                                        where !x.IsAbstract && !x.IsInterface &&
-                                            y != null && y.IsGenericType &&
-                                            y.GetGenericTypeDefinition() == typeof(ValidationTest<>)
+            Type baseType = typeof(ValidationTest<>);
+
+            IEnumerable<Type> candidates = from x in Assembly.GetAssembly(baseType).GetTypes()
+                                        where !x.IsAbstract && !x.IsInterface && x != baseType 
                                         select x;
+
+            List<Type> types = new List<Type>();
+            foreach (Type candidate in candidates)
+            {
+                if (ReflectionHelper.IsAssignableToGenericType(candidate, baseType))
+                {
+                    types.Add(candidate);
+                }
+            }
 
             foreach (Type type in types) {
                 var test = Activator.CreateInstance(type);
@@ -413,7 +424,7 @@ namespace wizardscode.editor
                 enabledPlugins = new List<AbstractPluginDefinition>();
                 supportedPlugins = new List<AbstractPluginDefinition>();
 
-                IEnumerable<Type> plugins = ReflectiveEnumerator.GetEnumerableOfType<T>();
+                IEnumerable<Type> plugins = ReflectionHelper.GetEnumerableOfType<T>();
                 foreach (Type pluginType in plugins)
                 {
                     AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;

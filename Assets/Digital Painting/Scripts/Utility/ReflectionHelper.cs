@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 
 
-public static class ReflectiveEnumerator
+public static class ReflectionHelper
 {
-    static ReflectiveEnumerator() { }
+    static ReflectionHelper() { }
     
     /// <summary>
     /// Find all class of a given type (including by inheritance).
@@ -24,5 +24,24 @@ public static class ReflectiveEnumerator
                         where t.GetInterfaces().Contains(typeof(T))
                                  && t.GetConstructor(Type.EmptyTypes) != null
                         select Activator.CreateInstance(t) as T;
+    }
+
+    public static bool IsAssignableToGenericType(Type givenType, Type genericType)
+    {
+        var interfaceTypes = givenType.GetInterfaces();
+
+        foreach (var it in interfaceTypes)
+        {
+            if (it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
+                return true;
+        }
+
+        if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == genericType)
+            return true;
+
+        Type baseType = givenType.BaseType;
+        if (baseType == null) return false;
+
+        return IsAssignableToGenericType(baseType, genericType);
     }
 }

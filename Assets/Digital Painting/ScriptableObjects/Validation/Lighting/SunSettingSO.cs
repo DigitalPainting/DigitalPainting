@@ -6,7 +6,7 @@ using UnityEngine;
 namespace wizardscode.validation
 {
     [CreateAssetMenu(fileName = "SunSettingSO", menuName = "Wizards Code/Validation/Sun Prefab")]
-    public class SunSettingsSO : GenericSettingSO<Light>
+    public class SunSettingSO : GenericSettingSO<Light>
     {
 
         public override string SettingName

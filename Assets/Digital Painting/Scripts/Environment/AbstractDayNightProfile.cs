@@ -13,12 +13,10 @@ namespace wizardscode.environment
         [Header("Environment settings")]
         [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested skybox setting.")]
         public SkyBoxSettingsSO Skybox;
-        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
         [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
-        public SunSettingsSO SunPrefab;
-
-        [Header("Old Settings Method")]
-
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
+        public SunSettingSO SunPrefab;
+        
         [Header("Timing")]
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]
         [Range(0, 86400)]
