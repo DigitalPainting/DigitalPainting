@@ -15,8 +15,9 @@ namespace wizardscode.validation
     /// </summary>
     public abstract class AbstractSettingSO : ScriptableObject
     {
-        [Tooltip("A description of the setting and why it should be set this way.")]
-        public string Description;
+
+        [Tooltip("A human readable name for this setting.")]
+        public string SettingName;
 
         [Tooltip("Is a null value allowable? Set to true if setting can left unconfigured.")]
         public bool Nullable = false;
@@ -24,11 +25,11 @@ namespace wizardscode.validation
         [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
         public bool AddToScene = false;
 
-        [Tooltip("The name of the class containing the property we want to set. For example, `QualitySettings`.")]
-        public string propertyAccessorClassName;
+        [Tooltip("The name of the class containing the property or field to set. For example, `QualitySettings`.")]
+        public string valueClassName;
 
-        [Tooltip("The name of the property we want to set. For example, `shadowDistance`.")]
-        public string propertyAccessorName;
+        [Tooltip("The name of the property or field to set. For example, `shadowDistance`.")]
+        public string valueName;
 
         [SerializeField]
         private ValidationResultCollection validationCollection;
@@ -44,11 +45,6 @@ namespace wizardscode.validation
                 return validationCollection;
             }
         }
-
-        /// <summary>
-        /// A human readable name for this setting.
-        /// </summary>
-        public abstract string SettingName { get; }
 
         /// <summary>
         /// A human readable name for the default test.

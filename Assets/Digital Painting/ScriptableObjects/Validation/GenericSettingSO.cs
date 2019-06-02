@@ -12,7 +12,7 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public abstract class GenericSettingSO<T> : AbstractSettingSO
+    public class GenericSettingSO<T> : AbstractSettingSO
     {
         /// <summary>
         /// A GenericSettingsSO defines a desired setting for a 
@@ -28,11 +28,11 @@ namespace wizardscode.validation
             {
                 if (IsPrefabSetting)
                 {
-                    return "Validate prefab setup : " + Description;
+                    return "Validate prefab setup : " + SettingName;
                 }
                 else
                 {
-                    return "Validate setting value : " + Description;
+                    return "Validate setting value : " + SettingName;
                 }
             }
         }
@@ -85,18 +85,18 @@ namespace wizardscode.validation
         {
             IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
                                                from candidate in assembly.GetTypes()
-                                               where candidate.Name == propertyAccessorClassName
+                                               where candidate.Name == valueClassName
                                                select candidate);
             Type propertyType = propertyTypes.FirstOrDefault();
 
-            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(propertyAccessorName);
+            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(valueName);
             if (accessorPropertyInfo != null)
             {
                 return accessorPropertyInfo;
             }
             else
             {
-                return propertyType.GetField(propertyAccessorName);
+                return propertyType.GetField(valueName);
             }
         }
 

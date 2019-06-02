@@ -8,12 +8,6 @@ namespace wizardscode.validation
     [CreateAssetMenu(fileName = "SunSettingSO", menuName = "Wizards Code/Validation/Sun Prefab")]
     public class SunSettingSO : GenericSettingSO<Light>
     {
-
-        public override string SettingName
-        {
-            get { return "Sun"; }
-        }
-
         protected override Light ActualValue
         {
             get { return RenderSettings.sun; }

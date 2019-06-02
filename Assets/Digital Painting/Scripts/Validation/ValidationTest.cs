@@ -83,8 +83,8 @@ namespace wizardscode.validation
                     Collection.Remove(field.Name);
                     
                     // if a PropertyAccessorName is provided ensure it exists
-                    string className = fieldInstance.propertyAccessorClassName;
-                    string accessorName = fieldInstance.propertyAccessorName;
+                    string className = fieldInstance.valueClassName;
+                    string accessorName = fieldInstance.valueName;
                     
                     if ((className != null && className.Length > 0) 
                         || (accessorName != null && accessorName.Length > 0))
@@ -123,7 +123,6 @@ namespace wizardscode.validation
                     result = (ValidationResult)type.InvokeMember("Validate",
                         BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                         null, fieldInstance, new object[] { validationTest });
-                    Collection.AddOrUpdate(result, validationTest.Name);
                 }
                 Collection.AddOrUpdate(result, validationTest.Name);
             }

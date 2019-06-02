@@ -9,12 +9,6 @@ namespace wizardscode.validation
     [CreateAssetMenu(fileName = "ReflectionModeSettingSO", menuName = "Wizards Code/Validation/Lighting/Reflection Mode")]
     public class ReflectionModeSettingSO : GenericSettingSO<DefaultReflectionMode>
     {
-
-        public override string SettingName
-        {
-            get { return "Reflection Mode"; }
-        }
-
         protected override DefaultReflectionMode ActualValue
         {
             get { return RenderSettings.defaultReflectionMode; }

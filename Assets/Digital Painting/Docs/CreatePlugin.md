@@ -65,12 +65,13 @@ Note the use of the \[Expandable\] attribute here. This is a useful attribute th
 
 ### Creating new Setting Scriptable Objects
 
-Settings are defined by defined by a ScriptableObject that implements the abstract generic class `GenericSettingSO<T>`. At a minimum this required you to implement the `TestName` and `ActualValue` methods:
+Settings are defined by defined by a ScriptableObject that implements the abstract generic class `GenericSettingSO<T>`. At a minimum this required you to implement the `TestName` method:
 
 `TestName`: returns a human readable name for the setting that will be used in the UI, we will use `Normal Speed`
-`ActualValue`: a getter and setter for the value that is set in Unity
 
 Many settings will also need to overide:
+
+`ActualValue`: a getter and setter for the value that is set in Unity. By default the `GenericSettingSO` will use the accessor defined in the `Value Accessor Class` and `Value Accessor Name`.
 
 `Fix`: a default method used to fix the plugin setup to use the suggested value provided in the profile. The default implementation of this will simply set the desired value by using the `ActualValue` setter and the provided `SuggestedValue` in the profile.
 
@@ -93,7 +94,7 @@ Once all this is done it's really easy for users to use the plugin. In a test sc
 
   1. If the plugin has a dependency on another asset and that button is not present in the project there will be a button to take you to the location where you can obtain the asset. This location is defined in the plugin profile `GetURL()` method.
   2. Click the button to enable the plugin in your scene, by default this will add the plugin manager to the `Wizards Code/Digital Painting Manager`, if your plugin requires different behaviour then override the `Enable()` method in the plugin definition.
-  3. If you already have a suitable plugin profile defined assign that to the Plugin Manager created in the previous step, if no such profile exists then create one using `Assets -> Create -> Wizards Code -> TYPE -> DESCRIPTIVENAME Plugin Profile` (if the option is not available it is because you forgot to add `[CreateAssetMenu(...")])` to the Plugin Profile script (see above).
+  3. If you already have a suitable plugin profile defined assign that to the Plugin Manager created in the previous step, if no such profile exists then create one using `Assets -> Create -> Wizards Code -> TYPE -> DESCRIPTIVENAME Plugin Profile` (if the option is not available it is because you forgot to add `[CreateAssetMenu(...)])` to the Plugin Profile script (see above).
   4. Drag the chosen profile into the `Plugin Profile` slot of the plugin manager created in step 2
   5. Resolve any issues reported in the Digital Painting editor window (for user convenience there is an editor presented in the plugin manager component, see below for more on how to do this)
   6. Play the Scene

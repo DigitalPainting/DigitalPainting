@@ -10,8 +10,6 @@ namespace wizardscode.validation
             get { return "Configuration"; }
         }
 
-        public override string SettingName { get { return "Weather Maker Camera"; } }
-
         protected override Camera ActualValue
         {
             get { return Camera.main; }
