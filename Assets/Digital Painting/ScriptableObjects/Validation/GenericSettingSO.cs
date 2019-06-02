@@ -49,10 +49,16 @@ namespace wizardscode.validation
         protected virtual T ActualValue {
             get
             {
+                if (IsPrefabSetting)
+                {
+                    return default(T);
+                }
+
                 if (Accessor == null)
                 {
                     throw new Exception("No accessor set and ActualValue getter is not overriden in " + GetType());
                 }
+
                 object value;
                 if (Accessor.MemberType == MemberTypes.Property)
                 {
@@ -67,9 +73,9 @@ namespace wizardscode.validation
             }
             set
             {
-                if (Accessor == null)
+                if (IsPrefabSetting)
                 {
-                    throw new Exception("No accessor set and ActualValue setter is not overriden in " + GetType());
+                    return;
                 }
 
                 if (Accessor.MemberType == MemberTypes.Property)
@@ -209,12 +215,12 @@ namespace wizardscode.validation
 
             if (IsPrefabSetting)
             {
-                GameObject go = GetFirstInstanceInScene();
+                GameObject sceneGO = GetFirstInstanceInScene();
 
                 ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
                 if (AddToScene)
                 {
-                    if (go == null)
+                    if (sceneGO == null)
                     {
                         result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
                         List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
@@ -224,21 +230,23 @@ namespace wizardscode.validation
                     }
                 }
 
-                GameObject actualGO;
-                if (value is Component)
+                GameObject suggestedGO;
+                if (SuggestedValue is Component)
                 {
-                    actualGO = (value as Component).gameObject;
+                    suggestedGO = (SuggestedValue as Component).gameObject;
                 }
                 else
                 {
-                    actualGO = value as GameObject;
+                    suggestedGO = SuggestedValue as GameObject;
                 }
 
-                if (actualGO as UnityEngine.Object == null || !ReferenceEquals(actualGO, go))
+                if (suggestedGO as UnityEngine.Object == null || !ReferenceEquals(suggestedGO, PrefabUtility.GetCorrespondingObjectFromSource(sceneGO)))
                 {
-                    result = GetWarningResult(TestName, "The value set is not an object in the scene that has been instantiated from the suggested value prefab. This may be OK, in which case click the ignore button.", validationTest.Name);
+                    result = GetWarningResult(TestName, "There is no object in the scene that was instantiated from the suggested prefab.\n"
+                        + "Suggested value = " + suggestedGO + "\n"
+                        + "Actual Value = " + sceneGO + "\n"
+                        + "This may be OK, in which case click the ignore button.", validationTest.Name);
                     result.RemoveCallbacks();
-                    AddDefaultFixCallback(result);
                     return result;
                 }
             }
