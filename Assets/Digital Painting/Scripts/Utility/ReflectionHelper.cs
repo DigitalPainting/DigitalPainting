@@ -16,6 +16,25 @@ public static class ReflectionHelper
         return typeof(T)
                     .Assembly.GetTypes()
                     .Where(t => t.IsSubclassOf(typeof(T)) && !t.IsAbstract);
+    }    
+    /// <summary>
+    /// Find all class of a given type (including by inheritance).
+    /// </summary>
+    public static IEnumerable<Type> GetEnumerableOfType(Type T)
+    {
+        return T.Assembly.GetTypes()
+                .Where(t => (t == T || t.IsSubclassOf(T)) && !t.IsAbstract);
+    }
+
+    /// <summary>
+    /// Get all classes, including abstract classes that have a given base class.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IEnumerable<Type> GetClassesWithBaseType<T>()
+    {
+        return typeof(T).Assembly.GetTypes()
+            .Where(x => x.IsClass && x != typeof(T) && x.BaseType == typeof(T));
     }
 
     public static IEnumerable<T> GetEnumerableOfInterfaceImplementors<T>() where T : class

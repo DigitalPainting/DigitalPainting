@@ -7,7 +7,7 @@ namespace wizardscode.environment
     /// <summary>
     /// A simple day/night controller inspired by wiki.unity3d.com/index.php/DayNightController
     /// </summary>
-    [CreateAssetMenu(fileName = "SimpleDayNightProfile", menuName = "Wizards Code/Day Night Cycle/Simple Day Night Profile")]
+    [CreateAssetMenu(fileName = "SimpleDayNightProfile", menuName = "Wizards Code/Day Night Cycle/Simple Day Night Plugin Profile")]
     public class SimpleDayNightProfile : AbstractDayNightProfile
     {
         [Header("Simple Day Night Config")]

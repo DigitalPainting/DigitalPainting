@@ -41,16 +41,9 @@ namespace wizardscode.validation
             Collection = new ValidationResultCollection();
             ValidationResult result;
             
-            // Is plugin enabled, If not offer an easy way to enable it
+            // Is plugin enabled, If not we don't need to test it
             if (Manager == null)
             {
-                result = Collection.GetOrCreate("Plugin Manager", validationTest.Name);
-                result.Message = "FIXME: Plugin type is not enabled (click ignore if you don't want to use it)";
-                result.impact = ValidationResult.Level.Warning;
-                // FIXME: offer a way to enable the plugin
-                result.Callbacks = null;
-                Collection.AddOrUpdate(result, validationTest.Name);
-
                 return Collection;
             }
 
@@ -78,8 +71,8 @@ namespace wizardscode.validation
             // Validate the fields
             foreach (FieldInfo field in fields)
             {
-                object instance = field.GetValue(Manager.Profile);
-                if (instance == null)
+                AbstractSettingSO fieldInstance = field.GetValue(Manager.Profile) as AbstractSettingSO;
+                if (fieldInstance == null)
                 {
                     result = Collection.GetOrCreate(field.Name, validationTest.Name);
                     result.Message = "Must provide a Setting Scriptable Object";
@@ -88,11 +81,49 @@ namespace wizardscode.validation
                 else
                 {
                     Collection.Remove(field.Name);
-
+                    
+                    // if a PropertyAccessorName is provided ensure it exists
+                    string className = fieldInstance.propertyAccessorClassName;
+                    string accessorName = fieldInstance.propertyAccessorName;
+                    
+                    if ((className != null && className.Length > 0) 
+                        || (accessorName != null && accessorName.Length > 0))
+                    {
+                        IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                                          from candidate in assembly.GetTypes()
+                                                          where candidate.Name == className
+                                                          select candidate);
+                        Type propertyType = propertyTypes.FirstOrDefault();
+                        
+                        if (propertyType == null)
+                        {
+                            result = Collection.GetOrCreate(field.Name, validationTest.Name);
+                            result.Message = "A property accessor is provided but the class identified, `" 
+                                + className + "`, cannot be found in the Assembly.";
+                            result.impact = ValidationResult.Level.Error;
+                            Collection.AddOrUpdate(result, validationTest.Name);
+                        }
+                        else
+                        {
+                            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(accessorName);
+                            FieldInfo acessorFieldInfo = propertyType.GetField(accessorName);
+                            if (accessorPropertyInfo == null && acessorFieldInfo == null)
+                            {
+                                result = Collection.GetOrCreate(field.Name, validationTest.Name);
+                                result.Message = "A property accessor is provided but the accessor identified, `" 
+                                    + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
+                                result.impact = ValidationResult.Level.Error;
+                                Collection.AddOrUpdate(result, validationTest.Name);
+                            }
+                        }
+                    }
+                    
                     Type type = field.FieldType;
+                    // Validate the field according to the SO validation setting.
                     result = (ValidationResult)type.InvokeMember("Validate",
                         BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                        null, instance, new object[] { validationTest });
+                        null, fieldInstance, new object[] { validationTest });
+                    Collection.AddOrUpdate(result, validationTest.Name);
                 }
                 Collection.AddOrUpdate(result, validationTest.Name);
             }

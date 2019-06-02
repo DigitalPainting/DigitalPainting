@@ -260,11 +260,6 @@ namespace wizardscode.editor
             }
         }
         
-        public void OnInspectorUpdate()
-        {
-            this.Repaint();
-        }
-        
         /// <summary>
         /// Test to see if the Digital Painting is setup correctly in the current scene. 
         /// Tests are discovered automatically as long as they implement the SingletonValidationTest
@@ -312,8 +307,22 @@ namespace wizardscode.editor
             }
             else
             {
-                PluginSelectionGUI<AbstractDayNightPluginDefinition>("Day Night");
-                PluginSelectionGUI<AbstractWeatherPluginDefinition>("Weather");
+                
+                IEnumerable<Type> types = ReflectionHelper.GetClassesWithBaseType<AbstractPluginDefinition>();
+
+                if (DateTime.Now >= timeOfNextPluginRefresh)
+                {
+                    foreach (Type type in types)
+                    {
+                        UpdatePluginStatus(type);
+                    }
+                    timeOfNextPluginRefresh = DateTime.Now.AddSeconds(frequencyOfPluginRefresh);
+                }
+
+                foreach (Type type in types)
+                {
+                    PluginSelectionGUI(type);
+                }
             }
         }
 
@@ -411,91 +420,48 @@ namespace wizardscode.editor
         /// Find all the plugins of a a given type known to the system and display
         /// buttons to set them up, disable them or find out more information.
         /// </summary>
-        /// <typeparam name="T">Plugin definition type</typeparam>
-        private void PluginSelectionGUI<T>(string name) where T : AbstractPluginDefinition
+        /// <param name="T">The type of plugin to display in the GUI</param>
+        private void PluginSelectionGUI (Type T)
         {
-            List<AbstractPluginDefinition> availablePlugins = new List<AbstractPluginDefinition>();
-            List<AbstractPluginDefinition> enabledPlugins = new List<AbstractPluginDefinition>();
-            List<AbstractPluginDefinition> supportedPlugins = new List<AbstractPluginDefinition>();
-
-            if (DateTime.Now >= timeOfNextPluginRefresh || !availablePluginsCache.TryGetValue(name, out availablePlugins) || !supportedPluginsCache.TryGetValue(name, out supportedPlugins))
-            {
-                availablePlugins = new List<AbstractPluginDefinition>();
-                enabledPlugins = new List<AbstractPluginDefinition>();
-                supportedPlugins = new List<AbstractPluginDefinition>();
-
-                IEnumerable<Type> plugins = ReflectionHelper.GetEnumerableOfType<T>();
-                foreach (Type pluginType in plugins)
-                {
-                    AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;
-                    if (pluginDef.AvailableForUse)
-                    {
-                        AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponent(pluginDef.GetManagerType());
-                        if (pluginManager)
-                        {
-                            AbstractPluginProfile pluginProfile = pluginManager.m_pluginProfile;
-                            if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
-                            {
-                                enabledPlugins.Add(pluginDef);
-                            } else
-                            {
-                                availablePlugins.Add(pluginDef);
-                            }
-                        }
-                        else
-                        {
-                            availablePlugins.Add(pluginDef);
-                        }
-                    }
-                    else
-                    {
-                        supportedPlugins.Add(pluginDef);
-                    }
-                }
-
-                enabledPluginsCache[name] = enabledPlugins;
-                availablePluginsCache[name] = availablePlugins;
-                supportedPluginsCache[name] = supportedPlugins;
-                timeOfNextPluginRefresh = DateTime.Now.AddSeconds(frequencyOfPluginRefresh);
-            }
-
+            // Update the GUI for the plugins
             GUILayout.BeginVertical("Box");
-            GUILayout.Label(name + " Plugins", EditorStyles.boldLabel);
+            string categoryName = T.Name.BreakCamelCase();
+            categoryName = categoryName.Substring(categoryName.IndexOf(' '));
+            categoryName = categoryName.Substring(0, categoryName.Length - " Plugin Definition".Length);
 
+            GUILayout.Label(categoryName + " Plugins", EditorStyles.boldLabel);
 
-            if (enabledPluginsCache[name].Count + availablePluginsCache[name].Count > 0)
+            if (enabledPluginsCache[T.Name].Count + availablePluginsCache[T.Name].Count > 0)
             {
                 GUILayout.BeginVertical("Box");
 
-                if (enabledPluginsCache[name].Count > 0)
+                if (enabledPluginsCache[T.Name].Count > 0)
                 {
                     GUILayout.Label("Currently Enabled");
-                    for (int i = enabledPluginsCache[name].Count - 1; i >= 0; i--)
+                    for (int i = enabledPluginsCache[T.Name].Count - 1; i >= 0; i--)
                     {
-                        AbstractPluginDefinition defn = enabledPluginsCache[name][i];
+                        AbstractPluginDefinition defn = enabledPluginsCache[T.Name][i];
                         if (GUILayout.Button("Disable " + defn.GetReadableName()))
                         {
                             DestroyImmediate(manager.gameObject.GetComponent(defn.GetManagerType()));
-                            enabledPluginsCache[name].Remove(defn);
-                            availablePluginsCache[name].Add(defn);
+                            enabledPluginsCache[T.Name].Remove(defn);
+                            availablePluginsCache[T.Name].Add(defn);
                         }
                     }
                 }
 
-                if (availablePluginsCache[name].Count > 0)
+                if (availablePluginsCache[T.Name].Count > 0)
                 {
                     GUILayout.Label("Available for use");
-                    for (int i = availablePluginsCache[name].Count - 1; i >= 0; i--)
+                    for (int i = availablePluginsCache[T.Name].Count - 1; i >= 0; i--)
                     {
-                        AbstractPluginDefinition defn = availablePluginsCache[name][i];
+                        AbstractPluginDefinition defn = availablePluginsCache[T.Name][i];
                         bool hasManager = manager.gameObject.GetComponent(defn.GetManagerType()) != null;
                         using (new EditorGUI.DisabledScope(hasManager))
                         {
                             if (GUILayout.Button("Enable " + defn.GetReadableName()))
                             {
-                                manager.gameObject.AddComponent(defn.GetManagerType());
-                                enabledPluginsCache[name].Add(defn);
-                                availablePluginsCache[name].Remove(defn);
+                                defn.Enable();
                             }
                         }
                     }
@@ -504,11 +470,11 @@ namespace wizardscode.editor
                 GUILayout.EndVertical();
             }
 
-            if (supportedPluginsCache[name].Count > 0)
+            if (supportedPluginsCache[T.Name].Count > 0)
             {
                 GUILayout.BeginVertical("Box");
                 GUILayout.Label("Supported but not installed");
-                foreach (AbstractPluginDefinition defn in supportedPluginsCache[name])
+                foreach (AbstractPluginDefinition defn in supportedPluginsCache[T.Name])
                 {
                     if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
                     {
@@ -519,6 +485,53 @@ namespace wizardscode.editor
             }
             GUILayout.EndVertical();
         }
+
+        private void UpdatePluginStatus(Type T)
+        {
+            List<AbstractPluginDefinition> availablePlugins = new List<AbstractPluginDefinition>();
+            List<AbstractPluginDefinition> enabledPlugins = new List<AbstractPluginDefinition>();
+            List<AbstractPluginDefinition> supportedPlugins = new List<AbstractPluginDefinition>();
+
+            // Use reflection to find all the plugins
+            availablePlugins = new List<AbstractPluginDefinition>();
+            enabledPlugins = new List<AbstractPluginDefinition>();
+            supportedPlugins = new List<AbstractPluginDefinition>();
+
+            IEnumerable<Type> plugins = ReflectionHelper.GetEnumerableOfType(T);
+            foreach (Type pluginType in plugins)
+            {
+                AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;
+                if (pluginDef.AvailableForUse)
+                {
+                    AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponent(pluginDef.GetManagerType());
+                    if (pluginManager)
+                    {
+                        AbstractPluginProfile pluginProfile = pluginManager.m_pluginProfile;
+                        if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
+                        {
+                            enabledPlugins.Add(pluginDef);
+                        }
+                        else
+                        {
+                            availablePlugins.Add(pluginDef);
+                        }
+                    }
+                    else
+                    {
+                        availablePlugins.Add(pluginDef);
+                    }
+                }
+                else
+                {
+                    supportedPlugins.Add(pluginDef);
+                }
+            }
+
+            enabledPluginsCache[T.Name] = enabledPlugins;
+            availablePluginsCache[T.Name] = availablePlugins;
+            supportedPluginsCache[T.Name] = supportedPlugins;
+        }
+
         private void NotImplementedTabGUI()
         {
             string message = "This tab has no functionality at this time.";

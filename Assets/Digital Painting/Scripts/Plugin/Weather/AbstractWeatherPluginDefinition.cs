@@ -12,5 +12,10 @@ namespace wizardscode.plugin
         {
             return Type.GetType("wizardscode.environment.WeatherPluginManager");
         }
+
+        public override PluginCategory GetCategory()
+        {
+            return PluginCategory.Weather;
+        }
     }
 }

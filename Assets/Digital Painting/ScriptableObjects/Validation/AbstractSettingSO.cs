@@ -24,6 +24,12 @@ namespace wizardscode.validation
         [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
         public bool AddToScene = false;
 
+        [Tooltip("The name of the class containing the property we want to set. For example, `QualitySettings`.")]
+        public string propertyAccessorClassName;
+
+        [Tooltip("The name of the property we want to set. For example, `shadowDistance`.")]
+        public string propertyAccessorName;
+
         [SerializeField]
         private ValidationResultCollection validationCollection;
 

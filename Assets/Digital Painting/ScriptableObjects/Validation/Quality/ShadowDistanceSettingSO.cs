@@ -11,10 +11,12 @@ namespace wizardscode.validation
             get { return "Shadow Distance"; }
         }
 
+        /* replacing with genericso
         protected override float ActualValue
         {
             get { return QualitySettings.shadowDistance; }
             set { QualitySettings.shadowDistance = value; }
         }
+        */
     }
 }

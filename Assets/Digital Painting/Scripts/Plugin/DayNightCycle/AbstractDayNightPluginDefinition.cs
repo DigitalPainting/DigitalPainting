@@ -16,5 +16,10 @@ namespace wizardscode.plugin
         {
             return Type.GetType("wizardscode.environment.DayNightPluginManager");
         }
+
+        public override PluginCategory GetCategory()
+        {
+            return PluginCategory.DayNightCycle;
+        }
     }
 }

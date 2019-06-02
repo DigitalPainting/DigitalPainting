@@ -6,7 +6,7 @@ namespace wizardscode.environment
 {
     public abstract class AbstractDayNightCycle : ScriptableObject
     {
-        protected DayNightCycleManager manager;
+        protected DayNightPluginManager manager;
 
         private Light _sun;
         internal Light Sun
@@ -32,7 +32,7 @@ namespace wizardscode.environment
         {
             this.startTime = startTime;
 
-            manager = GameObject.FindObjectOfType<DayNightCycleManager>();
+            manager = GameObject.FindObjectOfType<DayNightPluginManager>();
             if (manager == null)
             {
                 Debug.LogError("Cannot find DayNightCycleManager.");

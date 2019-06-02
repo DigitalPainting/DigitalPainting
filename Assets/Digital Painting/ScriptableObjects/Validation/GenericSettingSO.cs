@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
@@ -26,11 +28,11 @@ namespace wizardscode.validation
             {
                 if (IsPrefabSetting)
                 {
-                    return "Validate prefab setup.";
+                    return "Validate prefab setup : " + Description;
                 }
                 else
                 {
-                    return "Validate setting value.";
+                    return "Validate setting value : " + Description;
                 }
             }
         }
@@ -41,7 +43,62 @@ namespace wizardscode.validation
                     && PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object); }
         }
 
-        protected abstract T ActualValue { get; set; }
+        MemberInfo m_actuaValueAccessor;
+        protected virtual T ActualValue {
+            get
+            {
+                if (m_actuaValueAccessor == null)
+                {
+                    m_actuaValueAccessor = GetAccessor();
+                }
+
+                object value;
+                if (m_actuaValueAccessor.MemberType == MemberTypes.Property)
+                {
+                    value = ((PropertyInfo)m_actuaValueAccessor).GetValue(default(QualitySettings));
+                } else
+                {
+                    value = ((FieldInfo)m_actuaValueAccessor).GetValue(default(QualitySettings));
+                }
+
+                return (T)value;
+            }
+            set
+            {
+                if (m_actuaValueAccessor == null)
+                {
+                    m_actuaValueAccessor = GetAccessor();
+                }
+
+                if (m_actuaValueAccessor.MemberType == MemberTypes.Property)
+                {
+                    ((PropertyInfo)m_actuaValueAccessor).SetValue(default(QualitySettings), value);
+                }
+                else
+                {
+                    ((FieldInfo)m_actuaValueAccessor).SetValue(default(QualitySettings), value);
+                }
+            }
+        }
+
+        private MemberInfo GetAccessor()
+        {
+            IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                               from candidate in assembly.GetTypes()
+                                               where candidate.Name == propertyAccessorClassName
+                                               select candidate);
+            Type propertyType = propertyTypes.FirstOrDefault();
+
+            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(propertyAccessorName);
+            if (accessorPropertyInfo != null)
+            {
+                return accessorPropertyInfo;
+            }
+            else
+            {
+                return propertyType.GetField(propertyAccessorName);
+            }
+        }
 
         public override ValidationResult Validate(Type validationTest)
         {
