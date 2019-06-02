@@ -51,7 +51,7 @@ namespace wizardscode.validation
             {
                 if (Accessor == null)
                 {
-                    throw new Exception("No accessor set and ActualValue getter is no overriden");
+                    throw new Exception("No accessor set and ActualValue getter is not overriden in " + GetType());
                 }
                 object value;
                 if (Accessor.MemberType == MemberTypes.Property)
@@ -69,7 +69,7 @@ namespace wizardscode.validation
             {
                 if (Accessor == null)
                 {
-                    throw new Exception("No accessor set and ActualValue setter is no overriden");
+                    throw new Exception("No accessor set and ActualValue setter is not overriden in " + GetType());
                 }
 
                 if (Accessor.MemberType == MemberTypes.Property)
