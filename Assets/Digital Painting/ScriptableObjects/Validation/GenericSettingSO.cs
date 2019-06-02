@@ -12,7 +12,7 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public class GenericSettingSO<T> : AbstractSettingSO
+    public abstract class GenericSettingSO<T> : AbstractSettingSO
     {
         /// <summary>
         /// A GenericSettingsSO defines a desired setting for a 
@@ -43,60 +43,76 @@ namespace wizardscode.validation
                     && PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object); }
         }
 
-        MemberInfo m_actuaValueAccessor;
+        /// <summary>
+        /// Gets the actual value of the setting in the game engine.
+        /// </summary>
         protected virtual T ActualValue {
             get
             {
-                if (m_actuaValueAccessor == null)
+                if (Accessor == null)
                 {
-                    m_actuaValueAccessor = GetAccessor();
+                    throw new Exception("No accessor set and ActualValue getter is no overriden");
                 }
-
                 object value;
-                if (m_actuaValueAccessor.MemberType == MemberTypes.Property)
+                if (Accessor.MemberType == MemberTypes.Property)
                 {
-                    value = ((PropertyInfo)m_actuaValueAccessor).GetValue(default(QualitySettings));
-                } else
+                    value = ((PropertyInfo)Accessor).GetValue(default(QualitySettings));
+                }
+                else
                 {
-                    value = ((FieldInfo)m_actuaValueAccessor).GetValue(default(QualitySettings));
+                    value = ((FieldInfo)m_Accessor).GetValue(default(QualitySettings));
                 }
 
                 return (T)value;
             }
             set
             {
-                if (m_actuaValueAccessor == null)
+                if (Accessor == null)
                 {
-                    m_actuaValueAccessor = GetAccessor();
+                    throw new Exception("No accessor set and ActualValue setter is no overriden");
                 }
 
-                if (m_actuaValueAccessor.MemberType == MemberTypes.Property)
+                if (Accessor.MemberType == MemberTypes.Property)
                 {
-                    ((PropertyInfo)m_actuaValueAccessor).SetValue(default(QualitySettings), value);
+                    ((PropertyInfo)Accessor).SetValue(default(QualitySettings), value);
                 }
                 else
                 {
-                    ((FieldInfo)m_actuaValueAccessor).SetValue(default(QualitySettings), value);
+                    ((FieldInfo)Accessor).SetValue(default(QualitySettings), value);
                 }
             }
         }
 
-        private MemberInfo GetAccessor()
+        MemberInfo m_Accessor = null;
+        private MemberInfo Accessor
         {
-            IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                                               from candidate in assembly.GetTypes()
-                                               where candidate.Name == valueClassName
-                                               select candidate);
-            Type propertyType = propertyTypes.FirstOrDefault();
+            get
+            {
+                if (m_Accessor == null)
+                {
+                    IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                                       from candidate in assembly.GetTypes()
+                                                       where candidate.Name == valueClassName
+                                                       select candidate);
+                    Type propertyType = propertyTypes.FirstOrDefault();
 
-            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(valueName);
-            if (accessorPropertyInfo != null)
-            {
-                return accessorPropertyInfo;
-            }
-            else
-            {
-                return propertyType.GetField(valueName);
+                    if (propertyType == null)
+                    {
+                        return null;
+                    }
+
+                    PropertyInfo accessorPropertyInfo = propertyType.GetProperty(valueName);
+                    if (accessorPropertyInfo != null)
+                    {
+                        m_Accessor = accessorPropertyInfo;
+                    }
+                    else
+                    {
+                        m_Accessor = propertyType.GetField(valueName);
+                    }
+                }
+
+                return m_Accessor;
             }
         }
 
@@ -178,12 +194,26 @@ namespace wizardscode.validation
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
             ValidationResult result = null;
+            T value;
 
-            if (IsPrefabSetting) {
+            try
+            {
+                value = ActualValue;
+            }
+            catch (Exception e)
+            {
+                result = GetErrorResult(TestName, e.Message, validationTest.Name);
+                result.RemoveCallbacks();
+                return result;
+            }
+
+            if (IsPrefabSetting)
+            {
                 GameObject go = GetFirstInstanceInScene();
 
                 ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
-                if (AddToScene) {
+                if (AddToScene)
+                {
                     if (go == null)
                     {
                         result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
@@ -195,13 +225,13 @@ namespace wizardscode.validation
                 }
 
                 GameObject actualGO;
-                if (ActualValue is Component)
+                if (value is Component)
                 {
-                    actualGO = (ActualValue as Component).gameObject;
+                    actualGO = (value as Component).gameObject;
                 }
                 else
                 {
-                    actualGO = ActualValue as GameObject;
+                    actualGO = value as GameObject;
                 }
 
                 if (actualGO as UnityEngine.Object == null || !ReferenceEquals(actualGO, go))
@@ -211,10 +241,17 @@ namespace wizardscode.validation
                     AddDefaultFixCallback(result);
                     return result;
                 }
-            } else if (!object.Equals(ActualValue, SuggestedValue))
+            }
+            else
             {
-                result = GetWarningResult(TestName, "The value set is not the same as the suggested value. This may be OK, in which case click the ignore checkbox.", validationTest.Name);
-                return result;
+                if (!object.Equals(value, SuggestedValue))
+                {
+                    result = GetWarningResult(TestName, "The value set is not the same as the suggested value.\n"
+                        + "Suggested value = " + SuggestedValue + "\n"
+                        + "Actual Value = " + value + "\n"
+                        + "This may be OK, in which case click the ignore button.", validationTest.Name);
+                    return result;
+                }
             }
 
             return GetPassResult(TestName, validationTest.Name);

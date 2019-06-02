@@ -106,6 +106,7 @@ namespace wizardscode.editor
 
             if (decorator.Required && property.objectReferenceValue == null)
             {
+                /**
                 string msg;
                 if (decorator.IsRequiredMessage != null)
                 {
@@ -116,6 +117,7 @@ namespace wizardscode.editor
                     msg = label.text + " is required.";
                 }
                 EditorGUILayout.HelpBox(msg, MessageType.Error);
+    */
                 return;
             }
 

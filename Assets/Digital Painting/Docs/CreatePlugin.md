@@ -53,6 +53,8 @@ The plugin profile will provide 0 or more parameters defined by a ScriptableObje
 
 For our plugin we will, for example, set the movement speed of our agent. To do this we will create a settings such as `NormalSpeedSettingSO`. For plugin types that the Digital Painting core asset are aware of you will find pre-existing implementations of these settings in the `ScriptableObjects/Validation/TYPE` folder. If there are settings that are unique to your plugin you can create them by creating classes that extend `GenericSettingSO`, see the next section for more details. 
 
+The naming convention for Setting Scriptable Objects is `TYPE_DESCRIPTIVENAME_Setting`.
+
 Parameters are defined in the profile scriptable object as follows:
 
 ```
