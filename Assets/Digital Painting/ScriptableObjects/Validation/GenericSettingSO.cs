@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScriptableObjectArchitecture;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,7 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public abstract class GenericSettingSO<T> : AbstractSettingSO
+    public abstract class GenericSettingSO<T> : AbstractSettingSO 
     {
         /// <summary>
         /// A GenericSettingsSO defines a desired setting for a 
@@ -22,25 +23,15 @@ namespace wizardscode.validation
         [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
         public T SuggestedValue;
 
+        [Tooltip("The event to fire whenever the value is correctly set. Note that this will only ever be fired in the editor and thus listeners must be active in the editor.")]
+        public GameEventBase<T> OnSetEvent;
+
         public override string TestName
         {
             get
             {
-                if (IsPrefabSetting)
-                {
-                    return "Validate prefab setup : " + SettingName;
-                }
-                else
-                {
-                    return "Validate setting value : " + SettingName;
-                }
+                return "Validate setting value : " + SettingName;
             }
-        }
-
-        private bool IsPrefabSetting
-        {
-            get { return (SuggestedValue as UnityEngine.Object) != null 
-                    && PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object); }
         }
 
         /// <summary>
@@ -49,11 +40,6 @@ namespace wizardscode.validation
         protected virtual T ActualValue {
             get
             {
-                if (IsPrefabSetting)
-                {
-                    return default(T);
-                }
-
                 if (Accessor == null)
                 {
                     throw new Exception("No accessor set and ActualValue getter is not overriden in " + GetType());
@@ -73,11 +59,6 @@ namespace wizardscode.validation
             }
             set
             {
-                if (IsPrefabSetting)
-                {
-                    return;
-                }
-
                 if (Accessor.MemberType == MemberTypes.Property)
                 {
                     ((PropertyInfo)Accessor).SetValue(default(QualitySettings), value);
@@ -86,6 +67,16 @@ namespace wizardscode.validation
                 {
                     ((FieldInfo)Accessor).SetValue(default(QualitySettings), value);
                 }
+
+                FireOnSetEvent();
+            }
+        }
+
+        private void FireOnSetEvent()
+        {
+            if (OnSetEvent != null)
+            {
+                OnSetEvent.Raise(ActualValue);
             }
         }
 
@@ -156,45 +147,7 @@ namespace wizardscode.validation
 
         public override void Fix()
         {
-            if (IsPrefabSetting)
-            {
-                throw new Exception("The suggested value is a prefab, you need to override the Fix method in your *SettingSO to fix the failed test.");
-            }
-            else
-            {
-                ActualValue = SuggestedValue;
-            }
-        }
-
-        private void InstantiatePrefab()
-        {
-            PrefabUtility.InstantiatePrefab(SuggestedValue as UnityEngine.Object);
-        }
-
-        /// <summary>
-        /// Get an instance object that was created by the Suggested Value (assuming it is a Prefab).
-        /// </summary>
-        /// <returns></returns>
-        internal GameObject GetFirstInstanceInScene()
-        {
-            GameObject go = null;
-            UnityEngine.Object[] gos = GameObject.FindObjectsOfType(SuggestedValue.GetType());
-            foreach (UnityEngine.Object candidate in gos)
-            {
-                if (UnityEngine.Object.ReferenceEquals(PrefabUtility.GetCorrespondingObjectFromOriginalSource(candidate), SuggestedValue))
-                {
-                    if (candidate is Component)
-                    {
-                        go = ((Component)candidate).gameObject;
-                    } else
-                    {
-                        go = (GameObject)candidate;
-                    }
-                    break;
-                }
-            }
-
-            return go;
+            ActualValue = SuggestedValue;
         }
 
         internal override ValidationResult ValidateSetting(Type validationTest)
@@ -212,54 +165,14 @@ namespace wizardscode.validation
                 result.RemoveCallbacks();
                 return result;
             }
-
-            if (IsPrefabSetting)
+            
+            if (!object.Equals(value, SuggestedValue))
             {
-                GameObject sceneGO = GetFirstInstanceInScene();
-
-                ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
-                if (AddToScene)
-                {
-                    if (sceneGO == null)
-                    {
-                        result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
-                        List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
-                        callbacks.Add(callback);
-                        result.Callbacks = callbacks;
-                        return result;
-                    }
-                }
-
-                GameObject suggestedGO;
-                if (SuggestedValue is Component)
-                {
-                    suggestedGO = (SuggestedValue as Component).gameObject;
-                }
-                else
-                {
-                    suggestedGO = SuggestedValue as GameObject;
-                }
-
-                if (suggestedGO as UnityEngine.Object == null || !ReferenceEquals(suggestedGO, PrefabUtility.GetCorrespondingObjectFromSource(sceneGO)))
-                {
-                    result = GetWarningResult(TestName, "There is no object in the scene that was instantiated from the suggested prefab.\n"
-                        + "Suggested value = " + suggestedGO + "\n"
-                        + "Actual Value = " + sceneGO + "\n"
-                        + "This may be OK, in which case click the ignore button.", validationTest.Name);
-                    result.RemoveCallbacks();
-                    return result;
-                }
-            }
-            else
-            {
-                if (!object.Equals(value, SuggestedValue))
-                {
-                    result = GetWarningResult(TestName, "The value set is not the same as the suggested value.\n"
-                        + "Suggested value = " + SuggestedValue + "\n"
-                        + "Actual Value = " + value + "\n"
-                        + "This may be OK, in which case click the ignore button.", validationTest.Name);
-                    return result;
-                }
+                result = GetWarningResult(TestName, "The value set is not the same as the suggested value.\n"
+                    + "Suggested value = " + SuggestedValue + "\n"
+                    + "Actual Value = " + value + "\n"
+                    + "This may be OK, in which case click the ignore button.", validationTest.Name);
+                return result;
             }
 
             return GetPassResult(TestName, validationTest.Name);

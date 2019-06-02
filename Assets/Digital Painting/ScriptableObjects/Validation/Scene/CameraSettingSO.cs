@@ -3,17 +3,12 @@
 namespace wizardscode.validation
 {
     [CreateAssetMenu(fileName = "CameraSettingSO", menuName = "Wizards Code/Validation/Scene/Camera")]
-    public class CameraSettingSO : GenericSettingSO<Camera>
+    public class CameraSettingSO : PrefabSettingSO<Camera>
     {
-        public override string TestName
-        {
-            get { return "Configuration"; }
-        }
-
-        protected override Camera ActualValue
+        protected override UnityEngine.Object ActualValue
         {
             get { return Camera.main; }
-            set { GetFirstInstanceInScene().tag = "MainCamera"; }
+            set { ((GameObject)Instance).tag = "MainCamera"; }
         }
     }
 }

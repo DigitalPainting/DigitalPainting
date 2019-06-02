@@ -33,15 +33,10 @@ namespace wizardscode.production
                 if (_agentWithFocus != value)
                 {
                     _agentWithFocus = value;
-                    OnAgentWithFocusChanged();
+                    defaultCameraRig.Follow = _agentWithFocus.transform;
+                    defaultCameraRig.LookAt = _agentWithFocus.transform;
                 }
             }
-        }
-
-        public void OnAgentWithFocusChanged()
-        {
-            defaultCameraRig.Follow = _agentWithFocus.transform;
-            defaultCameraRig.LookAt = _agentWithFocus.transform;
         }
 
         /// <summary>
