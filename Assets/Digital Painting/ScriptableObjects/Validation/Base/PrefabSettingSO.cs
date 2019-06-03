@@ -78,27 +78,6 @@ namespace wizardscode.validation
             return go;
         }
 
-        /// <summary>
-        /// If the candidate object is a Component return the GameObject it is attached to.
-        /// If the candidate is already a Game Object return it.
-        /// </summary>
-        /// <param name="candidate">The object that is either a component or a GameObject</param>
-        /// <returns></returns>
-        private static GameObject ConvertToGameObject(UnityEngine.Object candidate)
-        {
-            GameObject go;
-            if (candidate is Component)
-            {
-                go = ((Component)candidate).gameObject;
-            }
-            else
-            {
-                go = (GameObject)candidate;
-            }
-
-            return go;
-        }
-
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
             ValidationResult result = null;

@@ -11,12 +11,18 @@ namespace wizardscode.environment
     public abstract class AbstractDayNightProfile : AbstractPluginProfile
     {
         [Header("Environment settings")]
+        [Tooltip("A skybox setting that provides access to the Skybox material.")]
         [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested skybox setting.")]
         public SkyBoxSettingsSO Skybox;
-        [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
+
+        [Tooltip("A prefab setting for the directional light that acts as the sun.")]
         [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
         public PrefabSettingSO SunPrefab;
         
+        [Tooltip("A setting that will ensure the Lighting is correctly setup for the Sun in the scene.")]
+        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
+        public SceneObjectSettingSO SunSource;
+
         [Header("Timing")]
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]
         [Range(0, 86400)]

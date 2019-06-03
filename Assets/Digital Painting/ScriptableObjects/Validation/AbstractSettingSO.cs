@@ -20,9 +20,17 @@ namespace wizardscode.validation
         public bool Nullable = false;
 
         [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
-        public T SuggestedValue;
+        public T m_suggestedValue;
 
-        [SerializeField]
+        public virtual T SuggestedValue
+        {
+            get
+            {
+                return m_suggestedValue;
+            }
+        }
+
+            [SerializeField]
         private ValidationResultCollection validationCollection;
 
         private ValidationResultCollection ValidationCollection
@@ -47,7 +55,7 @@ namespace wizardscode.validation
             ValidationResult result;
             if (!Nullable)
             {
-                string testName = "Suggested Value (" + validationTest.Name.BreakCamelCase() + ")";
+                string testName = "Suggested Value error in " + validationTest.Name.BreakCamelCase();
                 if (SuggestedValue is UnityEngine.Object)
                 {
                     if (SuggestedValue as UnityEngine.Object == null)
@@ -138,6 +146,29 @@ namespace wizardscode.validation
             result.impact = ValidationResult.Level.OK;
             return result;
         }
+
+        #region Helpers
+        /// <summary>
+        /// If the candidate object is a Component return the GameObject it is attached to.
+        /// If the candidate is already a Game Object return it.
+        /// </summary>
+        /// <param name="candidate">The object that is either a component or a GameObject</param>
+        /// <returns></returns>
+        internal GameObject ConvertToGameObject(UnityEngine.Object candidate)
+        {
+            GameObject go;
+            if (candidate is Component)
+            {
+                go = ((Component)candidate).gameObject;
+            }
+            else
+            {
+                go = (GameObject)candidate;
+            }
+
+            return go;
+        }
+        #endregion
     }
 
     /// <summary>
@@ -145,4 +176,5 @@ namespace wizardscode.validation
     /// for reflection (it's much easier to do reflection without generics).
     /// </summary>
     public abstract class AbstractSettingSO : ScriptableObject { }
+
 }

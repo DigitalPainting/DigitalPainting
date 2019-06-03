@@ -76,7 +76,7 @@ namespace wizardscode.validation
             }
         }
 
-        private void FireOnSetEvent()
+        internal void FireOnSetEvent()
         {
             if (OnSetEvent != null)
             {
@@ -84,8 +84,8 @@ namespace wizardscode.validation
             }
         }
 
-        MemberInfo m_Accessor = null;
-        private MemberInfo Accessor
+        internal MemberInfo m_Accessor = null;
+        internal MemberInfo Accessor
         {
             get
             {
@@ -133,12 +133,12 @@ namespace wizardscode.validation
             }
             catch (Exception e)
             {
-                result = GetErrorResult(TestName, e.Message, validationTest.Name);
+                result = GetErrorResult(TestName, e.Message + "\n" + e.StackTrace, validationTest.Name);
                 result.RemoveCallbacks();
                 return result;
             }
             
-            if (!object.Equals(value, SuggestedValue))
+            if (!UnityEngine.Object.ReferenceEquals(value, SuggestedValue))
             {
                 result = GetWarningResult(TestName, "The value set is not the same as the suggested value.\n"
                     + "Suggested value = " + SuggestedValue + "\n"
