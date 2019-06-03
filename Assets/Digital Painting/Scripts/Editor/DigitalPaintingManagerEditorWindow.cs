@@ -272,7 +272,7 @@ namespace wizardscode.editor
             Validations = new ValidationResultCollection();
 
             Type baseType = typeof(ValidationTest<>);
-
+            
             IEnumerable<Type> candidates = from x in Assembly.GetAssembly(baseType).GetTypes()
                                         where !x.IsAbstract && !x.IsInterface && x != baseType 
                                         select x;

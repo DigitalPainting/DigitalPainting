@@ -1,6 +1,7 @@
 ﻿using ScriptableObjectArchitecture;
 using System;
 using UnityEngine;
+using wizardscode.extension;
 
 namespace wizardscode.validation
 {
@@ -9,7 +10,7 @@ namespace wizardscode.validation
     /// single value. These are used in the validation system to find the optimal
     /// settings when different plugins demand different settings.
     /// </summary>
-    public abstract class AbstractSettingSO : ScriptableObject
+    public abstract class AbstractSettingSO<T> : AbstractSettingSO
     {
 
         [Tooltip("A human readable name for this setting.")]
@@ -18,14 +19,8 @@ namespace wizardscode.validation
         [Tooltip("Is a null value allowable? Set to true if setting can left unconfigured.")]
         public bool Nullable = false;
 
-        [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
-        public bool AddToScene = false;
-
-        [Tooltip("The name of the class containing the property or field to set. For example, `QualitySettings`.")]
-        public string valueClassName;
-
-        [Tooltip("The name of the property or field to set. For example, `shadowDistance`.")]
-        public string valueName;
+        [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
+        public T SuggestedValue;
 
         [SerializeField]
         private ValidationResultCollection validationCollection;
@@ -42,6 +37,45 @@ namespace wizardscode.validation
             }
         }
 
+
+        /// <summary>
+        /// Test to see if the setting is valid or not. 
+        /// </summary>
+        /// <returns>A ValidationResult. This will have an impact of "OK" if the setting is set to an acceptable value.</returns>
+        public virtual ValidationResult Validate(Type validationTest)
+        {
+            ValidationResult result;
+            if (!Nullable)
+            {
+                string testName = "Suggested Value (" + validationTest.Name.BreakCamelCase() + ")";
+                if (SuggestedValue is UnityEngine.Object)
+                {
+                    if (SuggestedValue as UnityEngine.Object == null)
+                    {
+                        result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
+                        result.ReportingTest.Add(validationTest.Name);
+                        return result;
+                    }
+                    else
+                    {
+                        result = GetPassResult(testName, validationTest.Name);
+                    }
+                }
+                else if (SuggestedValue == null)
+                {
+                    result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
+                    result.ReportingTest.Add(validationTest.Name);
+                    return result;
+                }
+                else
+                {
+                    result = GetPassResult(testName, validationTest.Name);
+                }
+            }
+
+            return ValidateSetting(validationTest);
+        }
+
         /// <summary>
         /// A human readable name for the default test.
         /// </summary>
@@ -49,12 +83,6 @@ namespace wizardscode.validation
         {
             get { return "Default Setting Test Suite (replace this name by overriding the TestName getter in you *SettingSO)"; }
         }
-
-        /// <summary>
-        /// Test to see if the setting is valid or not. 
-        /// </summary>
-        /// <returns>A ValidationResult. This will have an impact of "OK" if the setting is set to an acceptable value.</returns>
-        public abstract ValidationResult Validate(Type validationTest);
 
         /// <summary>
         /// Test to see if the setting is valid or not. It's not necessary to test for null values here, 
@@ -111,4 +139,10 @@ namespace wizardscode.validation
             return result;
         }
     }
+
+    /// <summary>
+    /// This AbstreactSettingSO is an empty class that is used as a convenience
+    /// for reflection (it's much easier to do reflection without generics).
+    /// </summary>
+    public abstract class AbstractSettingSO : ScriptableObject { }
 }

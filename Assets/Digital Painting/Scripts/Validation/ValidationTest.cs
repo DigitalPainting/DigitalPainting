@@ -67,10 +67,17 @@ namespace wizardscode.validation
             // Get all the SettingSO fields
             IEnumerable<FieldInfo> fields = Manager.Profile.GetType().GetFields()
                 .Where(field => field.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
-
+                
             // Validate the fields
             foreach (FieldInfo field in fields)
             {
+                Type[] genericTypes = field.GetValue(Manager.Profile).GetType().BaseType.GetGenericArguments();
+                if (genericTypes.Count() == 0)
+                {
+                    return Collection;
+                }
+
+                Type genericType = genericTypes[0];
                 AbstractSettingSO fieldInstance = field.GetValue(Manager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
@@ -81,39 +88,42 @@ namespace wizardscode.validation
                 else
                 {
                     Collection.Remove(field.Name);
-                    
+
                     // if a PropertyAccessorName is provided ensure it exists
-                    string className = fieldInstance.valueClassName;
-                    string accessorName = fieldInstance.valueName;
-                    
-                    if ((className != null && className.Length > 0) 
-                        || (accessorName != null && accessorName.Length > 0))
+                    if (field.FieldType == typeof(GenericSettingSO<>))
                     {
-                        IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                                                          from candidate in assembly.GetTypes()
-                                                          where candidate.Name == className
-                                                          select candidate);
-                        Type propertyType = propertyTypes.FirstOrDefault();
-                        
-                        if (propertyType == null)
+                        string className = ((GenericSettingSO<T>)fieldInstance).valueClassName;
+                        string accessorName = ((GenericSettingSO<T>)fieldInstance).valueName;
+
+                        if ((className != null && className.Length > 0)
+                            || (accessorName != null && accessorName.Length > 0))
                         {
-                            result = Collection.GetOrCreate(field.Name, validationTest.Name);
-                            result.Message = "A property accessor is provided but the class identified, `" 
-                                + className + "`, cannot be found in the Assembly.";
-                            result.impact = ValidationResult.Level.Error;
-                            Collection.AddOrUpdate(result, validationTest.Name);
-                        }
-                        else
-                        {
-                            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(accessorName);
-                            FieldInfo acessorFieldInfo = propertyType.GetField(accessorName);
-                            if (accessorPropertyInfo == null && acessorFieldInfo == null)
+                            IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                                               from candidate in assembly.GetTypes()
+                                                               where candidate.Name == className
+                                                               select candidate);
+                            Type propertyType = propertyTypes.FirstOrDefault();
+
+                            if (propertyType == null)
                             {
                                 result = Collection.GetOrCreate(field.Name, validationTest.Name);
-                                result.Message = "A property accessor is provided but the accessor identified, `" 
-                                    + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
+                                result.Message = "A property accessor is provided but the class identified, `"
+                                    + className + "`, cannot be found in the Assembly.";
                                 result.impact = ValidationResult.Level.Error;
                                 Collection.AddOrUpdate(result, validationTest.Name);
+                            }
+                            else
+                            {
+                                PropertyInfo accessorPropertyInfo = propertyType.GetProperty(accessorName);
+                                FieldInfo acessorFieldInfo = propertyType.GetField(accessorName);
+                                if (accessorPropertyInfo == null && acessorFieldInfo == null)
+                                {
+                                    result = Collection.GetOrCreate(field.Name, validationTest.Name);
+                                    result.Message = "A property accessor is provided but the accessor identified, `"
+                                        + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
+                                    result.impact = ValidationResult.Level.Error;
+                                    Collection.AddOrUpdate(result, validationTest.Name);
+                                }
                             }
                         }
                     }

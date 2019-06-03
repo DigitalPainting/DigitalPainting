@@ -13,15 +13,19 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public abstract class GenericSettingSO<T> : AbstractSettingSO 
+
+    /// <summary>
+    /// A GenericSettingsSO defines a desired setting for a 
+    /// single value. These are used in the validation system to find the optimal
+    /// settings when different plugins demand different settings.
+    /// </summary>
+    public abstract class GenericSettingSO<T> : AbstractSettingSO<T>
     {
-        /// <summary>
-        /// A GenericSettingsSO defines a desired setting for a 
-        /// single value. These are used in the validation system to find the optimal
-        /// settings when different plugins demand different settings.
-        /// </summary>
-        [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
-        public T SuggestedValue;
+        [Tooltip("The name of the class containing the property or field to set. For example, `QualitySettings`.")]
+        public string valueClassName;
+
+        [Tooltip("The name of the property or field to set. For example, `shadowDistance`.")]
+        public string valueName;
 
         [Tooltip("The event to fire whenever the value is correctly set. Note that this will only ever be fired in the editor and thus listeners must be active in the editor.")]
         public GameEventBase<T> OnSetEvent;
@@ -111,38 +115,6 @@ namespace wizardscode.validation
 
                 return m_Accessor;
             }
-        }
-
-        public override ValidationResult Validate(Type validationTest)
-        {
-            ValidationResult result;
-            if (!Nullable)
-            { 
-                string testName = "Suggested Value (" + validationTest.Name.BreakCamelCase() + ")";
-                if (SuggestedValue is UnityEngine.Object)
-                {
-                    if (SuggestedValue as UnityEngine.Object == null)
-                    {
-                        result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
-                        result.ReportingTest.Add(validationTest.Name);
-                        return result;
-                    } else
-                    {
-                        result = GetPassResult(testName, validationTest.Name);
-                    }
-                } else if (SuggestedValue == null)
-                {
-                    result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
-                    result.ReportingTest.Add(validationTest.Name);
-                    return result;
-                }
-                else
-                {
-                    result = GetPassResult(testName, validationTest.Name);
-                }
-            }
-
-            return ValidateSetting(validationTest);
         }
 
         public override void Fix()

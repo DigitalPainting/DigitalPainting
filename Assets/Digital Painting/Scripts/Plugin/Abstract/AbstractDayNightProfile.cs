@@ -15,7 +15,7 @@ namespace wizardscode.environment
         public SkyBoxSettingsSO Skybox;
         [Tooltip("A prefab containing the directional light that acts as the sun. If blank a light with the name `Sun` will be used.")]
         [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
-        public SunSettingSO SunPrefab;
+        public PrefabSettingSO SunPrefab;
         
         [Header("Timing")]
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]

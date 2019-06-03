@@ -13,12 +13,15 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    public abstract class PrefabSettingSO<T> : GenericSettingSO<UnityEngine.Object> where T : UnityEngine.Object
+    [CreateAssetMenu(fileName = "PrefabSettingSO", menuName = "Wizards Code/Validation/Prefab")]
+    public class PrefabSettingSO : AbstractSettingSO<UnityEngine.Object>
     {
+        [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
+        public bool AddToScene = false;
 
-        private UnityEngine.Object m_instance;
+        private GameObject m_instance;
        
-        internal UnityEngine.Object Instance
+        internal GameObject Instance
         {
             get
             {
@@ -33,9 +36,13 @@ namespace wizardscode.validation
                 if (!UnityEngine.Object.ReferenceEquals(m_instance, value))
                 {
                     m_instance = value;
-                    FireOnSetEvent();
                 }
             }
+        }
+        
+        public override void Fix()
+        {
+            throw new NotImplementedException();
         }
 
         public override string TestName
@@ -46,31 +53,9 @@ namespace wizardscode.validation
             }
         }
 
-        /**
-        private bool IsPrefabSetting
-        {
-            get { return (SuggestedValue as UnityEngine.Object) != null 
-                    && PrefabUtility.IsPartOfAnyPrefab(SuggestedValue as UnityEngine.Object); }
-        }
-    */
-
-        private void FireOnSetEvent()
-        {
-            if (OnSetEvent != null)
-            {
-                OnSetEvent.Raise(GetFirstInstanceInScene());
-            }
-        }
-
-        public override void Fix()
-        {
-            throw new Exception("The suggested value is a prefab, you need to override the Fix method in your *SettingSO to fix the failed test.");
-        }
-
         private void InstantiatePrefab()
         {
-            Instance = PrefabUtility.InstantiatePrefab(SuggestedValue);
-            FireOnSetEvent();
+            Instance = ConvertToGameObject(PrefabUtility.InstantiatePrefab(SuggestedValue));
         }
 
         /// <summary>
@@ -85,15 +70,30 @@ namespace wizardscode.validation
             {
                 if (UnityEngine.Object.ReferenceEquals(PrefabUtility.GetCorrespondingObjectFromOriginalSource(candidate), SuggestedValue))
                 {
-                    if (candidate is Component)
-                    {
-                        go = ((Component)candidate).gameObject;
-                    } else
-                    {
-                        go = (GameObject)candidate;
-                    }
+                    go = ConvertToGameObject(candidate);
                     break;
                 }
+            }
+
+            return go;
+        }
+
+        /// <summary>
+        /// If the candidate object is a Component return the GameObject it is attached to.
+        /// If the candidate is already a Game Object return it.
+        /// </summary>
+        /// <param name="candidate">The object that is either a component or a GameObject</param>
+        /// <returns></returns>
+        private static GameObject ConvertToGameObject(UnityEngine.Object candidate)
+        {
+            GameObject go;
+            if (candidate is Component)
+            {
+                go = ((Component)candidate).gameObject;
+            }
+            else
+            {
+                go = (GameObject)candidate;
             }
 
             return go;
@@ -102,51 +102,14 @@ namespace wizardscode.validation
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
             ValidationResult result = null;
-            UnityEngine.Object value;
 
-            try
+            if (AddToScene && Instance == null)
             {
-                value = ActualValue;
-            }
-            catch (Exception e)
-            {
-                result = GetErrorResult(TestName, e.Message, validationTest.Name);
-                result.RemoveCallbacks();
-                return result;
-            }
-
-            GameObject sceneGO = GetFirstInstanceInScene();
-
-            ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
-            if (AddToScene)
-            {
-                if (sceneGO == null)
-                {
-                    result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
-                    List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
-                    callbacks.Add(callback);
-                    result.Callbacks = callbacks;
-                    return result;
-                }
-            }
-
-            GameObject suggestedGO;
-            if (SuggestedValue is Component)
-            {
-                suggestedGO = (SuggestedValue as Component).gameObject;
-            }
-            else
-            {
-                suggestedGO = SuggestedValue as GameObject;
-            }
-
-            if (suggestedGO as UnityEngine.Object == null || !ReferenceEquals(suggestedGO, PrefabUtility.GetCorrespondingObjectFromSource(sceneGO)))
-            {
-                result = GetWarningResult(TestName, "There is no object in the scene that was instantiated from the suggested prefab.\n"
-                    + "Suggested value = " + suggestedGO + "\n"
-                    + "Actual Value = " + sceneGO + "\n"
-                    + "This may be OK, in which case click the ignore button.", validationTest.Name);
-                result.RemoveCallbacks();
+                result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
+                List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
+                ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
+                callbacks.Add(callback);
+                result.Callbacks = callbacks;
                 return result;
             }
 
