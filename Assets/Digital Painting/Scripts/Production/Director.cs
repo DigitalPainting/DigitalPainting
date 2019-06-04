@@ -23,11 +23,18 @@ namespace wizardscode.production
         private void Awake()
         {
             SetupMainCamera();
+            AgentWithFocus = FindObjectOfType<BaseAgentController>();
         }
 
+        /// <summary>
+        /// Gets the current agent with the directors focus, this is what cameras will
+        /// look at unless the Director is giving some other instruction at the time.
+        /// </summary>
         public BaseAgentController AgentWithFocus
         {
-            get { return _agentWithFocus; }
+            get {
+                return _agentWithFocus;
+            }
             set
             {
                 if (_agentWithFocus != value)
@@ -86,6 +93,7 @@ namespace wizardscode.production
         private void CreateDefaultClearShot()
         {
             GameObject go = new GameObject("Default follow ClearShot");
+
             defaultCameraRig = go.AddComponent<CinemachineClearShot>();
             defaultCameraRig.m_Priority = 100;
             go.AddComponent<CinemachineCollider>();
@@ -94,14 +102,9 @@ namespace wizardscode.production
             go.transform.SetParent(defaultCameraRig.transform);
             CinemachineVirtualCamera vcam = go.AddComponent<CinemachineVirtualCamera>();
 
-            CinemachineFramingTransposer transposer = vcam.AddCinemachineComponent<CinemachineFramingTransposer>();
-            transposer.m_DeadZoneWidth = 0.3f;
-            transposer.m_DeadZoneHeight = 0.35f;
-            transposer.m_DeadZoneDepth = 3f;
-
-            CinemachineComposer composer = vcam.AddCinemachineComponent<CinemachineComposer>();
-            composer.m_DeadZoneWidth = 0.5f;
-            composer.m_DeadZoneWidth = 0.5f;
+            CinemachineTransposer transposer = vcam.AddCinemachineComponent<CinemachineTransposer>();
+            transposer.m_FollowOffset.y = 1.8f;
+            transposer.m_FollowOffset.z = -7;
         }
     }
 }
