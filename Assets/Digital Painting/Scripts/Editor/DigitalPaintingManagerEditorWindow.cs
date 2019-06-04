@@ -167,7 +167,7 @@ namespace wizardscode.editor
             ignored = new List<ValidationResult>();
             msgs = messages.OKList;
             showOKs = EditorGUILayout.Foldout(showOKs, "OK: " + msgs.Count());
-            if (showWarnings)
+            if (showOKs)
             {
                 EditorGUI.indentLevel++;
                 foreach (ValidationResult msg in msgs)
