@@ -22,6 +22,11 @@ namespace wizardscode.validation
         [Tooltip("The suggested value for the setting. Other values may work, but if in doubt use this setting.")]
         public T m_suggestedValue;
 
+        /// <summary>
+        /// Gets the actual value of the setting in the game engine.
+        /// </summary>
+        protected abstract T ActualValue { get; set; }
+
         public virtual T SuggestedValue
         {
             get
@@ -30,7 +35,7 @@ namespace wizardscode.validation
             }
         }
 
-            [SerializeField]
+        [SerializeField]
         private ValidationResultCollection validationCollection;
 
         private ValidationResultCollection ValidationCollection
@@ -145,6 +150,11 @@ namespace wizardscode.validation
             ValidationResult result = GetResult(testName, "Looks good.", reportingTest);
             result.impact = ValidationResult.Level.OK;
             return result;
+        }
+
+        internal void NotifyPass(string reportingTest)
+        {
+            ValidationCollection.SetStatus(TestName, reportingTest, ValidationResult.Level.OK);
         }
 
         #region Helpers

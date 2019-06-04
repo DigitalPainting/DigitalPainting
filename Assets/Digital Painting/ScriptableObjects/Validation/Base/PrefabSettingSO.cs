@@ -13,11 +13,11 @@ using wizardscode.utility;
 
 namespace wizardscode.validation
 {
-    [CreateAssetMenu(fileName = "PrefabSettingSO", menuName = "Wizards Code/Validation/Prefab")]
+    [CreateAssetMenu(fileName = "DESCRIPTIVENAME_PrefabSettingSO", menuName = "Wizards Code/Validation/Prefab")]
     public class PrefabSettingSO : AbstractSettingSO<UnityEngine.Object>
     {
         [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
-        public bool AddToScene = false;
+        public bool AddToScene = true;
 
         private GameObject m_instance;
        
@@ -38,6 +38,12 @@ namespace wizardscode.validation
                     m_instance = value;
                 }
             }
+        }
+
+        protected override UnityEngine.Object ActualValue
+        { 
+            get { return Instance; }
+            set { Instance = (GameObject)value; }
         }
         
         public override void Fix()
@@ -81,7 +87,7 @@ namespace wizardscode.validation
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
             ValidationResult result = null;
-
+            
             if (AddToScene && Instance == null)
             {
                 result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);

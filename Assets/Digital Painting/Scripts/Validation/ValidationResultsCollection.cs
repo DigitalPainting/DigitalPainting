@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,6 +26,19 @@ namespace wizardscode.validation
                 AddOrUpdate(result, reportingTest);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Either updates a result or creates a new one with the given status.
+        /// </summary>
+        /// <param name="settingTest">The name of the setting test this is a result for.</param>
+        /// <param name="reportingTest">The name of the ValidationTest that this result is generated for.</param>
+        /// <param name="status">The status of the result.</param>
+        public void SetStatus(string settingTest, string reportingTest, ValidationResult.Level status)
+        {
+            ValidationResult result = GetOrCreate(settingTest, reportingTest);
+            result.impact = status;
+            AddOrUpdate(result, reportingTest);
         }
 
         public void AddOrUpdate(ValidationResult result, string reportingTest)
@@ -104,6 +118,12 @@ namespace wizardscode.validation
         public List<ValidationResult> OKList
         {
             get { return collection.Values.Where(x => x.impact == ValidationResult.Level.OK).ToList(); }
+        }
+
+        internal void Pass(string testName, string reportingTest)
+        {
+            Remove(testName);
+            AddOrUpdate(new ValidationResult(testName, ValidationResult.Level.OK), reportingTest);
         }
     }
 }

@@ -27,9 +27,6 @@ namespace wizardscode.validation
         [Tooltip("The name of the property or field to set. For example, `shadowDistance`.")]
         public string valueName;
 
-        [Tooltip("The event to fire whenever the value is correctly set. Note that this will only ever be fired in the editor and thus listeners must be active in the editor.")]
-        public GameEventBase<T> OnSetEvent;
-
         public override string TestName
         {
             get
@@ -41,7 +38,7 @@ namespace wizardscode.validation
         /// <summary>
         /// Gets the actual value of the setting in the game engine.
         /// </summary>
-        protected virtual T ActualValue {
+        protected override T ActualValue {
             get
             {
                 if (Accessor == null)
@@ -71,16 +68,6 @@ namespace wizardscode.validation
                 {
                     ((FieldInfo)Accessor).SetValue(default(QualitySettings), value);
                 }
-
-                FireOnSetEvent();
-            }
-        }
-
-        internal void FireOnSetEvent()
-        {
-            if (OnSetEvent != null)
-            {
-                OnSetEvent.Raise(ActualValue);
             }
         }
 
@@ -138,7 +125,7 @@ namespace wizardscode.validation
                 return result;
             }
             
-            if (!UnityEngine.Object.ReferenceEquals(value, SuggestedValue))
+            if (!object.Equals(value, SuggestedValue))
             {
                 result = GetWarningResult(TestName, "The value set is not the same as the suggested value.\n"
                     + "Suggested value = " + SuggestedValue + "\n"

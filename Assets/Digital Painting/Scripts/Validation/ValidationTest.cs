@@ -81,11 +81,13 @@ namespace wizardscode.validation
                     return Collection;
                 }
 
+                /**
                 Type[] genericTypes = fieldInstance.GetType().BaseType.GetGenericArguments();
                 if (genericTypes.Count() == 0)
                 {
                     return Collection;
                 }
+    */
 
                 Collection.Remove(field.Name);
 

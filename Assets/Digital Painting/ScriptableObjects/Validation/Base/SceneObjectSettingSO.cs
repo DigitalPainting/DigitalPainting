@@ -50,8 +50,6 @@ namespace wizardscode.validation
                     ((FieldInfo)Accessor).SetValue(default(QualitySettings), 
                         value.GetComponent(((FieldInfo)Accessor).FieldType));
                 }
-
-                FireOnSetEvent();
             }
         }
     }

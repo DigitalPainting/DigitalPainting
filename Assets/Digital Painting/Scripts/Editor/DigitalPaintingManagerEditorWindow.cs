@@ -288,7 +288,6 @@ namespace wizardscode.editor
 
             foreach (Type type in types) {
                 var test = Activator.CreateInstance(type);
-
                 MethodInfo method = type.GetMethod("Validate");
                 ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type });
 
