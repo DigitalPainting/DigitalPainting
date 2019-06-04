@@ -62,20 +62,23 @@ namespace wizardscode.editor
                     manager = go.GetComponent<DigitalPaintingManager>();
                 }
 
-                selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Standard", "Advanced", "Experimental", "More..." });
+                selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Status", "Standard", "Advanced", "Experimental", "More..." });
                 
                 switch (selectedTab)
                 {
                     case 0:
-                        StandardTabGUI();
+                        ValidationResultsGUI();
                         break;
                     case 1:
-                        NotImplementedTabGUI();
+                        StandardTabGUI();
                         break;
                     case 2:
-                        ExperimentalTabGUI();
+                        NotImplementedTabGUI();
                         break;
                     case 3:
+                        ExperimentalTabGUI();
+                        break;
+                    case 4:
                         MoreTabGUI();
                         break;
                 }
@@ -87,6 +90,8 @@ namespace wizardscode.editor
         static bool showIgnoredErrors = false;
         static bool showWarnings = true;
         private bool showIgnoredWarnings = false;
+        static bool showOKs = true;
+        private bool showIgnoredOKs = false;
 
         public void ShowValidationResults(ValidationResultCollection messages)
         {
@@ -159,6 +164,37 @@ namespace wizardscode.editor
                 EditorGUI.indentLevel--;
             }
 
+            ignored = new List<ValidationResult>();
+            msgs = messages.OKList;
+            showOKs = EditorGUILayout.Foldout(showOKs, "OK: " + msgs.Count());
+            if (showWarnings)
+            {
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in msgs)
+                {
+                    if (!ignoredTests.Contains(msg.name))
+                    {
+                        ValidationResultGUI(msg);
+                    }
+                    else
+                    {
+                        ignored.Add(msg);
+                    }
+                }
+
+                showIgnoredOKs = EditorGUILayout.Foldout(showIgnoredWarnings, "Ignored OK: " + ignored.Count());
+                EditorGUI.indentLevel++;
+                foreach (ValidationResult msg in ignored)
+                {
+                    if (showIgnoredOKs)
+                    {
+                        ValidationResultGUI(msg, true);
+                    }
+                }
+                EditorGUI.indentLevel--;
+                EditorGUI.indentLevel--;
+            }
+
             EditorGUILayout.EndVertical();
             EditorGUI.indentLevel--;
         }
@@ -196,18 +232,21 @@ namespace wizardscode.editor
                 }
             }
 
-            if (!isIgnored)
+            if (result.impact != ValidationResult.Level.OK)
             {
-                if (GUILayout.Button("Ignore"))
+                if (!isIgnored)
                 {
-                    ignoredTests.Add(result.name);
+                    if (GUILayout.Button("Ignore"))
+                    {
+                        ignoredTests.Add(result.name);
+                    }
                 }
-            }
-            else
-            {
-                if (GUILayout.Button("Do Not Ignore"))
+                else
                 {
-                    ignoredTests.Remove(result.name);
+                    if (GUILayout.Button("Do Not Ignore"))
+                    {
+                        ignoredTests.Remove(result.name);
+                    }
                 }
             }
 
@@ -242,10 +281,11 @@ namespace wizardscode.editor
         private void ValidationResultsGUI()
         {
             Validate();
-            
+
+            int okCount = Validations.Count;
             int warningCount = Validations.CountWarning;
             int errorCount = Validations.CountError;
-            string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings)";
+            string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " OK)";
 
             showMainValidation = EditorGUILayout.Foldout(showMainValidation, title);
 
@@ -417,7 +457,6 @@ namespace wizardscode.editor
         private void ExperimentalTabGUI()
         {
             EditorGUILayout.HelpBox("The features on this tab are experimental and in development. They may or may not work. Play with them if you wish, but back up your project first.", MessageType.Warning);
-            ValidationResultsGUI();
         }
 
         /// <summary>

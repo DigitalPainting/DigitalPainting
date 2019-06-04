@@ -73,10 +73,11 @@ namespace wizardscode.validation
         {
             foreach (ValidationResult result in results.collection.Values)
             {
-                if (result.impact != ValidationResult.Level.OK)
+                if (result.impact == ValidationResult.Level.OK)
                 {
-                    collection[result.id] = result;
+                    result.RemoveCallbacks();
                 }
+                collection[result.id] = result;
             }
         }
 
@@ -93,6 +94,11 @@ namespace wizardscode.validation
         public int Count
         {
             get { return collection.Count(); }
+        }
+
+        public int CountOK
+        {
+            get { return collection.Values.Count(x => x.impact == ValidationResult.Level.OK); }
         }
 
         public int CountWarning
