@@ -4,7 +4,8 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
 ## Features of the Digital Painting
 
-  * Automated Drone Exploration - see `Scripts/Agent/DroneController`
+  * Intelligent assistance in setting up your scene enables you to get to a "good enough" state very quickly, then it's time to have your designers dive in and make it as close to "perfect" as possible
+  * Automated Scene Exploration - see `Scripts/Agent/DroneController`
   * Designate items as [Interesting Things](./Assets/Digital%20Painting/Docs/InterestingThings.md) in the scene to be explored by the drone
   * Support for spawning items into the world using a [SimpleSpawner](./Assets/Digital%20Painting/Docs/SpawnableObjects.md)
   * [Pluggable Day Night Cycle](./Assets/Digital%20Painting/Docs/DayNightCycle.md)
@@ -20,7 +21,14 @@ A Unity project that provides a "Digital Painting", a scene that is automaticall
 
 The Digital Painting asset comes with functional scenes that are designed for development and demonstration use. These scenes are very basic in their nature, using only primitives that comes with Unity by default. They are not designed to be pretty. There are some additional [demo scenes](./Assets/Digital%20Painting/Plugins/Scenes/README.md) included that are prettier, in some cases beautiful, though each of these has some additional dependencies that must be installed - some of which are not free. The [demo scenes](./Assets/Digital%20Painting/Plugins/Scenes/README.md) document details these.
 
+Have a play with those scenes and then, when you are ready create your own as described in the next section.
+
 ### Creating your First Scene
+
+1. Open the Digital Painting window using `Windows -> Wizards Code -> Open Digital Painting Manager Window`
+2. Ensure the `Standard` tab is selected
+3. Click the `Add Digital Painting Manager` button - this will add a `Wizards Code` game object to your scene
+3. Check to see if there are any errors and resolve them or ignore them as appropriate for your scene.
 
 To create your own Digital Painting scene you can start with any Unity scene that has a terrain. To add the Digital Painting asset to your scene open the Digital Painting Manager Window using `Window > Wizards Code > Open Digital Painting Manager`, ensure the `Standard` tab is selected and click `Add Digital Painting Manager`. This will add the necessary components to your scene and present an interface for adding plugins to enhance your scene.
 

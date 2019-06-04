@@ -5,7 +5,6 @@ using UnityEngine;
 namespace wizardscode.plugin
 {
     public class Agent_PluginManager : AbstractPluginManager
-
     {
     }
 }

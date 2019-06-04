@@ -337,8 +337,14 @@ namespace wizardscode.editor
             manager.name = Config.ManagerName;
 
             // Flying Pathfinding
-            Octree octree = Instantiate(Config.FlyingPathfinderPrefab, parent.transform);
-            octree.FitToTerrain(Terrain.activeTerrain);
+            if (Config.FlyingPathfinderPrefab != null)
+            {
+                Octree octree = Instantiate(Config.FlyingPathfinderPrefab, parent.transform);
+                octree.FitToTerrain(Terrain.activeTerrain);
+            } else
+            {
+                throw new Exception("DigitalPaintingManager tries to instantiate Octree but it's not set in the config. Ignoring for now as we plan to move the Octree into a plugin");
+            }
         }
 
         /// <summary>
