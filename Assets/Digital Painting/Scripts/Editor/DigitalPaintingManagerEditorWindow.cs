@@ -64,8 +64,6 @@ namespace wizardscode.editor
 
                 selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Standard", "Advanced", "Experimental", "More..." });
                 
-                ValidationResultsGUI();
-
                 switch (selectedTab)
                 {
                     case 0:
@@ -413,6 +411,7 @@ namespace wizardscode.editor
         private void ExperimentalTabGUI()
         {
             EditorGUILayout.HelpBox("The features on this tab are experimental and in development. They may or may not work. Play with them if you wish, but back up your project first.", MessageType.Warning);
+            ValidationResultsGUI();
         }
 
         /// <summary>

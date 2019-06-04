@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using wizardscode.digitalpainting;
 
@@ -17,10 +18,13 @@ public class EditorConfigScriptableObject : ScriptableObject
     public string DocsIndexURL = "https://github.com/DigitalPainting/DigitalPainting/tree/master/Assets/Digital%20Painting/Docs";
     
     internal string version;
+    string rootPath = "Assets/DigitalPainting/Assets/Digital Painting/";
+    string managerPrefabPath = "Prefabs/DigitalPaintingManager.prefab";
 
     public void Init()
     {
-        version = EditorConfigScriptableObject.LatestVersion; 
+        version = EditorConfigScriptableObject.LatestVersion;
+        ManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(rootPath + managerPrefabPath).GetComponent<DigitalPaintingManager>();
     }
 
     /// <summary>
