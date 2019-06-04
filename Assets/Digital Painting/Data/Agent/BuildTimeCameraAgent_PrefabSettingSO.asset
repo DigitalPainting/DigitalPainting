@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SettingName: Player controlled Agent for testing
   Nullable: 0
-  m_suggestedValue: {fileID: 7217901980947890511, guid: c678223a283d8a24ba58ed587b20ce95,
+  m_suggestedValue: {fileID: 3499297650445676225, guid: cd001c1b4a9eb334a92011d475a2fd9b,
     type: 3}
   AddToScene: 1
