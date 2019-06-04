@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e30612029f71a8e4d8cee30d3b90c5bc, type: 3}
-  m_Name: BuildTimeCameraAgent_PrefabSettingSO
+  m_Name: DefaultPlayerControlledAgent_PrefabSettingSO
   m_EditorClassIdentifier: 
   SettingName: Player controlled Agent for testing
   Nullable: 0
