@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db09cccdc8a65574da2929810f047b49, type: 3}
+  m_Name: Digital Painting Editor Config
+  m_EditorClassIdentifier: 
+  ManagerPrefab: {fileID: 114192318843746294, guid: 892bb710e0f33aa468c5f743c6ab07dc,
+    type: 3}
+  FlyingPathfinderPrefab: {fileID: 114313452888132310, guid: 60e43b29053340448bd33cb55fecb101,
+    type: 3}
+  ManagerName: Digital Painting Manager
+  DocsIndexURL: https://github.com/DigitalPainting/DigitalPainting/tree/master/Assets/Digital%20Painting/Docs

@@ -1,16 +1,14 @@
-﻿using Cinemachine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using wizardscode.agent;
 using wizardscode.digitalpainting.agent;
+using wizardscode.editor;
+using wizardscode.plugin;
 using wizardscode.production;
 using Random = UnityEngine.Random;
 
 namespace wizardscode.digitalpainting
 {
-    public class DigitalPaintingManager : MonoBehaviour
+    public class DigitalPaintingManager : AbstractPluginManager
     {
         [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
         public AgentScriptableObject[] agentObjectDefs;

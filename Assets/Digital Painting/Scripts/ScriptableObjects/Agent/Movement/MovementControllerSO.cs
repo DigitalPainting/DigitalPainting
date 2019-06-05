@@ -26,6 +26,8 @@ namespace wizardscode.agent.movement
         public float rotationSpeed = 90;
 
         [Header("Air Movement")]
+        [Tooltip("Allow character to fly.")]
+        public bool CanFly = false;
         [Tooltip("If the target is greater than this distance away then always fly, regardless of the type of waypoint.")]
         public float ToFly = 8;
         [Tooltip("Minimum Height at which this agent will fly. Below this and the agent is considered to be landing.")]

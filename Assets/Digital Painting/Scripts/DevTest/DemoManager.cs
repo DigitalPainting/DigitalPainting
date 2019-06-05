@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using ScriptableObjectArchitecture;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,8 +11,7 @@ namespace wizardscode.devtest
     {
         [Tooltip("Prefab for Demo UI")]
         public GameObject demoUI;
-
-
+        
         void Start()
         {
             // Place the demo UI in the scene	
