@@ -14,8 +14,19 @@ namespace wizardscode.agent
         [Tooltip("Mouse look sensitivity.")]
         public float mouseLookSensitivity = 100;
 
+        internal Rigidbody rb;
+        internal float targetHeight = 0;
         internal float rotationX = 0;
         internal float rotationY = 0;
+        internal bool isFlying = false;
+        internal float timeUntilNextFlightTransitionPossible = 0;
+        internal float debounceDelay = 0.25f;
+
+        internal override void Awake()
+        {
+            base.Awake();
+            rb = GetComponent<Rigidbody>();
+        }
 
         override internal void Update()
         {
@@ -57,27 +68,67 @@ namespace wizardscode.agent
                 transform.position += transform.forward * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
                 transform.position += transform.right * (MovementController.normalMovementSpeed * MovementController.slowMovementFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
-            else
+            else 
             {
                 transform.position += transform.forward * MovementController.normalMovementSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
                 transform.position += transform.right * MovementController.normalMovementSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
             }
-
-            if (Input.GetKey(KeyCode.Q))
+            
+            if (MovementController.CanFly) 
             {
-                MovementController.heightOffset += MovementController.climbSpeed * Time.deltaTime;
-            }
+                timeUntilNextFlightTransitionPossible -= Time.deltaTime;
+                if (timeUntilNextFlightTransitionPossible < 0 && Input.GetKey(KeyCode.T))
+                {
+                    ToggleFlight();
+                }
 
-            if (Input.GetKey(KeyCode.E))
-            {
-                MovementController.heightOffset -= MovementController.climbSpeed * Time.deltaTime;
+                if (isFlying)
+                {
+                    if (Input.GetKey(KeyCode.Q))
+                    {
+                        targetHeight = targetHeight + (MovementController.climbSpeed * Time.deltaTime);
+                    }
+
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        targetHeight = targetHeight - (MovementController.climbSpeed * Time.deltaTime);
+                    }
+                }
+
+                float heightDifference = targetHeight - transform.position.y;
+                if (!Mathf.Approximately(targetHeight, 0))
+                {
+                    Vector3 pos = transform.position;
+                    pos.y = pos.y + (heightDifference * Time.deltaTime);
+                    transform.position = pos;
+
+                    if (pos.y <= 0.1f && targetHeight <= 0.1f)
+                    {
+                        ToggleFlight();
+                    }
+                }
             }
+        }
+
+        private void ToggleFlight()
+        {
+            isFlying = !isFlying;
+            rb.useGravity = !isFlying;
+            if (isFlying)
+            {
+                targetHeight = 1.5f;
+            }
+            else
+            {
+                targetHeight = 0;
+            }
+            timeUntilNextFlightTransitionPossible = debounceDelay;
         }
 
         private void MouseLook()
         {
             rotationX += Input.GetAxis("Mouse X") * mouseLookSensitivity * Time.deltaTime;
-            rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
+            //rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
             rotationY = Mathf.Clamp(rotationY, -90, 90);
             transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
             transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);

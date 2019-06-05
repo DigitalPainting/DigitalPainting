@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 5928752311467227900}
   - component: {fileID: 1448038024}
   m_Layer: 0
-  m_Name: Neo
+  m_Name: Neo Player Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,7 +130,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &5928752311467227900
 CapsuleCollider:
