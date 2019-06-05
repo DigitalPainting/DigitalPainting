@@ -16,4 +16,4 @@ MonoBehaviour:
   Nullable: 0
   m_suggestedValue: {fileID: 3499297650445676225, guid: cd001c1b4a9eb334a92011d475a2fd9b,
     type: 3}
-  AddToScene: 1
+  AddToScene: 0

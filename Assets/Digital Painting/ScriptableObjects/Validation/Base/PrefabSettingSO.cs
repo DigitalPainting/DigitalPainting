@@ -88,9 +88,15 @@ namespace wizardscode.validation
         {
             ValidationResult result = null;
             
-            if (AddToScene && Instance == null)
+            if (Instance == null)
             {
-                result = GetErrorResult(TestName, "The object required doesn't currently exist in the scene", validationTest.Name);
+                if (AddToScene)
+                {
+                    result = GetErrorResult(TestName, SuggestedValue.name + " is required but doesn't currently exist in the scene", validationTest.Name);
+                } else
+                {
+                    result = GetWarningResult(TestName, SuggestedValue.name + " doesn't currently exist in the scene. It is not required, if you don't want it then click the ignore button.", validationTest.Name);
+                }
                 List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
                 ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
                 callbacks.Add(callback);
