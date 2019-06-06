@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEditor.Rendering;
 using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.extension;

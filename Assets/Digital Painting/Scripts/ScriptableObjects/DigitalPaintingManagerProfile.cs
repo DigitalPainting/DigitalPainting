@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using wizardscode.editor;
 using wizardscode.plugin;
 using wizardscode.validation;
@@ -28,6 +26,25 @@ namespace wizardscode.digitalpainting
         [Tooltip("The default terrain for a standard Digital Painting.")]
         [Expandable(isRequired: true)]
         public PrefabSettingSO DefaultTerrainPrefab;
+
+        [Header("Lighting Defaults")]
+        [Tooltip("The default color space for the painting.")]
+        [Expandable(isRequired: true)]
+        public ColorSpaceSettingSO colorSpace;
+
+
+        [Header("Graphics Defaults")]
+        [Tooltip("Screen space shadows setting.")]
+        [Expandable(isRequired: true)]
+        public ScreenSpaceShadowSettingSO screenSpace;
+
+        /**
+         * FIXME: can't figure out how to set HDR on 
+        [Header("Graphics Defaults")]
+        [Tooltip("Whether to use HDR or not, remember this can be overwritten by individual cameras.")]
+        [Expandable(isRequired: true)]
+        public BoolSettingSO hdr;
+        */
 
         [Header("Agent Defaults")]
         [Tooltip("The default agent for the scene. All scenes should have at least one agent.")]
