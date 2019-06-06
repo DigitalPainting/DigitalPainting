@@ -104,7 +104,10 @@ namespace wizardscode.production
 
             CinemachineTransposer transposer = vcam.AddCinemachineComponent<CinemachineTransposer>();
             transposer.m_FollowOffset.y = 1.8f;
-            transposer.m_FollowOffset.z = -7;
+            transposer.m_FollowOffset.z = -6;
+            transposer.m_BindingMode = CinemachineTransposer.BindingMode.LockToTargetWithWorldUp;
+
+            vcam.AddCinemachineComponent<CinemachinePOV>();
         }
     }
 }
