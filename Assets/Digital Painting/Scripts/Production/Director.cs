@@ -107,7 +107,7 @@ namespace wizardscode.production
             transposer.m_FollowOffset.z = -6;
             transposer.m_BindingMode = CinemachineTransposer.BindingMode.LockToTargetWithWorldUp;
 
-            vcam.AddCinemachineComponent<CinemachinePOV>();
+            vcam.AddCinemachineComponent<CinemachineHardLookAt>();
         }
     }
 }
