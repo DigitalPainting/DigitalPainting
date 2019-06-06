@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEditor.Rendering;
 using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.extension;
@@ -307,16 +308,21 @@ namespace wizardscode.editor
         //were found.</returns>
         public virtual void Validate()
         {
-            Validations = new ValidationResultCollection();
-            List<Type> types = GetValidationTestsToRun();
-
-            foreach (Type type in types)
+            timeToNextValidation -= Time.deltaTime;
+            if (timeToNextValidation <= 0)
             {
-                var test = Activator.CreateInstance(type);
-                MethodInfo method = type.GetMethod("Validate");
-                ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type });
+                Validations = new ValidationResultCollection();
+                List<Type> types = GetValidationTestsToRun();
 
-                Validations.AddOrUpdateAll(results);
+                foreach (Type type in types)
+                {
+                    var test = Activator.CreateInstance(type);
+                    MethodInfo method = type.GetMethod("Validate");
+                    ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type });
+
+                    Validations.AddOrUpdateAll(results);
+                }
+                timeToNextValidation = frequencyOfValidation;
             }
         }
 
@@ -351,6 +357,8 @@ namespace wizardscode.editor
             }
             else
             {
+                ShowStatusSummaryGUI();
+
                 IEnumerable<Type> types = GetAllPluginDefinitions();
 
                 foreach (Type type in types)
@@ -358,6 +366,34 @@ namespace wizardscode.editor
                     PluginSelectionGUI(type);
                 }
             }
+        }
+
+        /// <summary>
+        /// Shows a small panel with a summary of errors. Intended for inclusion at the top of
+        /// each GUI panel.
+        /// </summary>
+        private void ShowStatusSummaryGUI()
+        {
+            Validate();
+
+            int okCount = Validations.Count;
+            int warningCount = Validations.CountWarning;
+            int errorCount = Validations.CountError;
+            string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " OK)";
+            MessageType type = MessageType.Info;
+
+            if(errorCount > 0)
+            {
+                type = MessageType.Error;
+            } else if (warningCount > 0)
+            {
+                type = MessageType.Warning;
+            } else
+            {
+                title = "Everything looks to be set up correctly.";
+            }
+
+            EditorGUILayout.HelpBox(title, type);
         }
 
         /// <summary>
@@ -431,6 +467,8 @@ namespace wizardscode.editor
         static Request _request;
         static Action<Request> _callback;
         private bool showMainValidation;
+        private float timeToNextValidation = 0;
+        private float frequencyOfValidation = 1;
 
         public static void AddPackage(string packageId, Action<Request> callback = null)
         {
@@ -480,6 +518,7 @@ namespace wizardscode.editor
         private void ExperimentalTabGUI()
         {
             EditorGUILayout.HelpBox("The features on this tab are experimental and in development. They may or may not work. Play with them if you wish, but back up your project first.", MessageType.Warning);
+            ShowStatusSummaryGUI();
         }
 
         /// <summary>

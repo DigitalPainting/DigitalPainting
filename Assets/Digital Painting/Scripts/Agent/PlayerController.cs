@@ -128,7 +128,7 @@ namespace wizardscode.agent
         private void MouseLook()
         {
             rotationX += Input.GetAxis("Mouse X") * mouseLookSensitivity * Time.deltaTime;
-            //rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
+            rotationY += Input.GetAxis("Mouse Y") * mouseLookSensitivity * Time.deltaTime;
             rotationY = Mathf.Clamp(rotationY, -90, 90);
             transform.localRotation = Quaternion.AngleAxis(rotationX, Vector3.up);
             transform.localRotation *= Quaternion.AngleAxis(rotationY, Vector3.left);

@@ -16,7 +16,7 @@ namespace wizardscode.environment
         public SkyBoxSettingsSO Skybox;
 
         [Tooltip("A prefab setting for the directional light that acts as the sun.")]
-        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
+        [Expandable(isRequired: false, isRequiredMessage: "Must provide a suggested Sun setting.")]
         public PrefabSettingSO SunPrefab;
         
         [Tooltip("A setting that will ensure the Lighting is correctly setup for the Sun in the scene.")]

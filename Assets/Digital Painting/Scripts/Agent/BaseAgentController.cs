@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using wizardscode.agent.movement;
+using wizardscode.editor;
 
 namespace wizardscode.digitalpainting.agent
 {
@@ -13,6 +14,7 @@ namespace wizardscode.digitalpainting.agent
     public class BaseAgentController : MonoBehaviour
     { 
         [Tooltip("The movement controller that will manage movement for this agent.")]
+        [Expandable(isRequired: true)]
         [SerializeField]
         internal MovementControllerSO _movementController;
 

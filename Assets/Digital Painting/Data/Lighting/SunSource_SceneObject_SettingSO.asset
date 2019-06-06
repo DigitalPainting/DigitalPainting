@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SunSource_SceneObject_SettingSO
   m_EditorClassIdentifier: 
   SettingName: Sun Source
-  Nullable: 0
+  Nullable: 1
   m_suggestedValue: {fileID: 0}
   valueClassName: RenderSettings
   valueName: sun
