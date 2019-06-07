@@ -8,7 +8,7 @@ TODO: push the camera agent plugin to GitHub
 
 Plugins are built as separate Unity projects to be imported into your Digital Painting application. For convenience we use a naming convention to make it easy to identify different components in the Digital Painting setup. You are not forced to use these conventions but it is advisable.
 
-Plugin projects are named `Plugin_CATEGORY_NAME`, where `Plugin` identifies this is a plugin project. `CATEGORY` is one of the values that describe what kind of plugin this is (listed below) and NAME is any name you want to use to uniquely identify this plugin.
+Plugin projects are named `Plugin_CATEGORY_DESCRIPTIVENAME`, where `Plugin` identifies this is a plugin project. `CATEGORY` is one of the values that describe what kind of plugin this is (listed below) and NAME is any name you want to use to uniquely identify this plugin.
 
 Known categories (at the time of writing) are listed below. If there is no suitable category label already you can create your own. Please issue a pull request against this document and against the `PluginCategory` enum in `AbstractPluginDefinition`.
 
@@ -25,9 +25,9 @@ TODO: Rename existing plugins to conform to this naming convention.
 
 Each type of plugin must have an implementation of `AbstractPluginManager`, this is a `MonoBehavior` that manages the plugin implementation. When the plugin is installed into a scene, this is added as a component on a manager game object. The plugin managers role is to communicate between the Digital Painting engine and the plugin implementation, passing appropriate values back and forth. That is the plugin manager is the glue between the external asset and the Digital Painting asset.
 
-The Digital Painting asset provides a number of these managers "out of the box", but they can also be provided by the plugin itself. In our example we will be using the `Agent_PluginManager`, you can find the source for this in `Scripts/Plugin/TYPE`, where type is as described in the naming convention above. 
+The Digital Painting asset provides a number of these managers "out of the box", but they can also be provided by the plugin itself. In our example we will be using the `Agent_PluginManager`, you can find the source for this in `Scripts/Plugin/CATEGORY`, where CATEGORY is as described in the naming convention above. 
 
-Implementing the plugin manager is, usually, the most complicated part of building a plugin. However, it is nothing more than a standard MonoBehavior so anyone reasonably familiar with Unity should be able to implement on.
+Implementing the plugin manager is, usually, the most complicated part of building a plugin. It is MonoBehavior that provides the interface between the Digital Painting core and the implementation of that feature.
 
 TODO: Rename all plugin manager implementations to match the naming convention of `Type_PluginManager`
 

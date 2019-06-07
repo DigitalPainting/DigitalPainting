@@ -21,7 +21,7 @@ namespace wizardscode.digitalpainting
         [Header("Scene Defaults")]
         [Tooltip("The default camera for Digital Painting.")]
         [Expandable(isRequired: true)]
-        public PrefabSettingSO DefaultCameraPrefab;
+        public CameraSettingSO DefaultCameraPrefab;
 
         [Tooltip("The default terrain for a standard Digital Painting.")]
         [Expandable(isRequired: true)]
@@ -50,5 +50,6 @@ namespace wizardscode.digitalpainting
         [Tooltip("The default agent for the scene. All scenes should have at least one agent.")]
         [Expandable(isRequired: true)]
         public PrefabSettingSO DefaultAgentPrefab;
+        
     }
 }

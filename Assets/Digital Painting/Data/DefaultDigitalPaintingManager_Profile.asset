@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c97578dd625743247ba5b96407687cec, type: 3}
   m_Name: DefaultDigitalPaintingManager_Profile
   m_EditorClassIdentifier: 
-  DefaultCameraPrefab: {fileID: 11400000, guid: 363cd5a7045a57a4e8788f69c096f327,
+  DefaultCameraPrefab: {fileID: 11400000, guid: 3ff57546b87291c45a94d0d20e5e97b8,
     type: 2}
   DefaultTerrainPrefab: {fileID: 11400000, guid: ac9bd176701996549b36fb568b146fe2,
     type: 2}
