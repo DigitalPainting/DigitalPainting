@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using UnityEngine;
 using wizardscode.digitalpainting.agent;
+using wizardscode.validation;
 
 namespace wizardscode.production
 {
@@ -15,9 +16,10 @@ namespace wizardscode.production
     {
         [SerializeField] [Tooltip("Main Cinemachine camera rig. This can either be a rig in the scene, a prefab that will be instantiated or null. In the case of a null a Default follow camera setup will be created.")]
         private CinemachineVirtualCameraBase defaultCameraSetup;
-        [SerializeField]
 
-        private CinemachineVirtualCameraBase defaultCameraRig;
+        private CinemachineVirtualCameraBase cameraRig;
+    private GameObject followClearshotGO;
+
         private BaseAgentController _agentWithFocus;
 
         private void Awake()
@@ -40,9 +42,51 @@ namespace wizardscode.production
                 if (_agentWithFocus != value)
                 {
                     _agentWithFocus = value;
-                    defaultCameraRig.Follow = _agentWithFocus.transform;
-                    defaultCameraRig.LookAt = _agentWithFocus.transform;
+                    cameraRig.Follow = _agentWithFocus.transform;
+                    cameraRig.LookAt = _agentWithFocus.transform;
+
+                    SetCameraAimMode();
                 }
+            }
+        }
+
+        private void SetCameraAimMode()
+        {
+            CinemachineVirtualCamera vcam = followClearshotGO.GetComponent<CinemachineVirtualCamera>();
+            CinemachineComponentBase current = vcam.GetCinemachineComponent(CinemachineCore.Stage.Aim);
+            if (current.GetType() == _agentWithFocus.Settings.cameraAimMode.GetType())
+            {
+                return;
+            } else
+            {
+                // Destroy the existing component (have to try to destroy all as its a generic method)
+                vcam.DestroyCinemachineComponent<CinemachineHardLookAt>();
+                vcam.DestroyCinemachineComponent<CinemachineGroupComposer>();
+                vcam.DestroyCinemachineComponent<CinemachineHardLookAt>();
+                vcam.DestroyCinemachineComponent<CinemachineHardLookAt>();
+                vcam.DestroyCinemachineComponent<CinemachinePOV>();
+            }
+
+            switch (_agentWithFocus.Settings.cameraAimMode)
+            {
+                case AgentSettingSO.CameraAimMode.Composer:
+                    vcam.AddCinemachineComponent<CinemachineComposer>();
+                    break;
+                case AgentSettingSO.CameraAimMode.GroupComposer:
+                    vcam.AddCinemachineComponent<CinemachineGroupComposer>();
+                    break;
+                case AgentSettingSO.CameraAimMode.HardLookAt:
+                    vcam.AddCinemachineComponent<CinemachineHardLookAt>();
+                    break;
+                case AgentSettingSO.CameraAimMode.POV:
+                    vcam.AddCinemachineComponent<CinemachinePOV>();
+                    break;
+                case AgentSettingSO.CameraAimMode.SameAsFollowTarget:
+                    vcam.AddCinemachineComponent<CinemachineSameAsFollowTarget>();
+                    break;
+                default:
+                    Debug.LogError("Sorry, don't know how to use a camera Aim policy of " + _agentWithFocus.Settings.cameraAimMode);
+                    break;
             }
         }
 
@@ -60,12 +104,12 @@ namespace wizardscode.production
             {
                 if (defaultCameraSetup.gameObject.scene.IsValid())
                 {
-                    defaultCameraRig = defaultCameraSetup;
+                    cameraRig = defaultCameraSetup;
                 }
                 else
                 {
-                    defaultCameraRig = Instantiate(defaultCameraSetup);
-                    defaultCameraRig.gameObject.name = "Default Cinemachine ClearShot Camera";
+                    cameraRig = Instantiate(defaultCameraSetup);
+                    cameraRig.gameObject.name = "Default Cinemachine ClearShot Camera";
                 }
             }
 
@@ -92,15 +136,15 @@ namespace wizardscode.production
 
         private void CreateDefaultClearShot()
         {
-            GameObject go = new GameObject("Default follow ClearShot");
+            followClearshotGO = new GameObject("Default follow ClearShot");
 
-            defaultCameraRig = go.AddComponent<CinemachineClearShot>();
-            defaultCameraRig.m_Priority = 100;
-            go.AddComponent<CinemachineCollider>();
+            cameraRig = followClearshotGO.AddComponent<CinemachineClearShot>();
+            cameraRig.m_Priority = 100;
+            followClearshotGO.AddComponent<CinemachineCollider>();
 
-            go = new GameObject("Default follow Virtual Camera");
-            go.transform.SetParent(defaultCameraRig.transform);
-            CinemachineVirtualCamera vcam = go.AddComponent<CinemachineVirtualCamera>();
+            followClearshotGO = new GameObject("Default follow Virtual Camera");
+            followClearshotGO.transform.SetParent(cameraRig.transform);
+            CinemachineVirtualCamera vcam = followClearshotGO.AddComponent<CinemachineVirtualCamera>();
 
             CinemachineTransposer transposer = vcam.AddCinemachineComponent<CinemachineTransposer>();
             transposer.m_FollowOffset.y = 1.8f;

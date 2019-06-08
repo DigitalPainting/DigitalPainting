@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30612029f71a8e4d8cee30d3b90c5bc, type: 3}
-  m_Name: DefaultPlayerControlledAgent_PrefabSettingSO
+  m_Script: {fileID: 11500000, guid: 02c48f64a7d34ed4f96b048f63c5f2be, type: 3}
+  m_Name: DefaultThirdPerson_AgentSettingSO
   m_EditorClassIdentifier: 
-  SettingName: Player controlled Agent for testing
+  SettingName: Default Third Party
   Nullable: 0
-  m_suggestedValue: {fileID: 8040185288115679517, guid: e6fdd65cb0e69ba43985ff06e8f8c063,
+  m_suggestedValue: {fileID: 3499297650445676225, guid: cd001c1b4a9eb334a92011d475a2fd9b,
     type: 3}
   AddToScene: 1
+  cameraAimMode: 3

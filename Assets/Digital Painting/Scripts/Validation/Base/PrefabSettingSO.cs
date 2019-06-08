@@ -60,7 +60,7 @@ namespace wizardscode.validation
             }
         }
 
-        private void InstantiatePrefab()
+        internal virtual void InstantiatePrefab()
         {
             Instance = ConvertToGameObject(PrefabUtility.InstantiatePrefab(SuggestedValue));
         }
