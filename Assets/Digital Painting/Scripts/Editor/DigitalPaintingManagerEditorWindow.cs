@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
-using UnityEditor.Rendering;
 using UnityEngine;
 using wizardscode.digitalpainting;
 using wizardscode.extension;
 using wizardscode.plugin;
-using wizardscode.utility;
 using wizardscode.validation;
 
 namespace wizardscode.editor
@@ -64,24 +61,35 @@ namespace wizardscode.editor
                 }
 
                 selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Status", "Standard", "Advanced", "Experimental", "More..." });
-                
-                switch (selectedTab)
+
+
+                if (!manager)
                 {
-                    case 0:
-                        ValidationResultsGUI();
-                        break;
-                    case 1:
-                        StandardTabGUI();
-                        break;
-                    case 2:
-                        NotImplementedTabGUI();
-                        break;
-                    case 3:
-                        ExperimentalTabGUI();
-                        break;
-                    case 4:
-                        MoreTabGUI();
-                        break;
+                    if (GUILayout.Button("Add Digital Painting Manager"))
+                    {
+                        AddDigitalPainting();
+                    }
+                }
+                else
+                {
+                    switch (selectedTab)
+                    {
+                        case 0:
+                            ValidationResultsGUI();
+                            break;
+                        case 1:
+                            StandardTabGUI();
+                            break;
+                        case 2:
+                            NotImplementedTabGUI();
+                            break;
+                        case 3:
+                            ExperimentalTabGUI();
+                            break;
+                        case 4:
+                            MoreTabGUI();
+                            break;
+                    }
                 }
             }
             EditorGUILayout.EndScrollView();
@@ -348,23 +356,13 @@ namespace wizardscode.editor
 
         private void StandardTabGUI()
         {
-            if (!manager)
-            {
-                if (GUILayout.Button("Add Digital Painting Manager"))
-                {
-                    AddDigitalPainting();
-                }
-            }
-            else
-            {
-                ShowStatusSummaryGUI();
+            ShowStatusSummaryGUI();
 
-                IEnumerable<Type> types = GetAllPluginDefinitions();
+            IEnumerable<Type> types = GetAllPluginDefinitions();
 
-                foreach (Type type in types)
-                {
-                    PluginSelectionGUI(type);
-                }
+            foreach (Type type in types)
+            {
+                PluginSelectionGUI(type);
             }
         }
 
