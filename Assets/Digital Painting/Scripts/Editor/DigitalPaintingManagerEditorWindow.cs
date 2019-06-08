@@ -226,7 +226,16 @@ namespace wizardscode.editor
 
             EditorGUILayout.BeginHorizontal();
 
-            EditorGUILayout.HelpBox(result.name, messageType, true);
+            string helpMsg;
+            if (result.Message != null)
+            {
+                helpMsg = result.Message;
+            } else
+            {
+                helpMsg = result.name;
+            }
+
+            EditorGUILayout.HelpBox(helpMsg, messageType, true);
             
             EditorGUILayout.BeginVertical();
             if (result.Callbacks != null)
@@ -261,12 +270,6 @@ namespace wizardscode.editor
 
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
-
-            if (result.Message != null)
-            {
-                EditorStyles.label.wordWrap = true;
-                EditorGUILayout.LabelField(result.Message);
-            }
 
             if (result.ReportingTest != null)
             {
