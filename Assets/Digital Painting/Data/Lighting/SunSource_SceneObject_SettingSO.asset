@@ -17,4 +17,4 @@ MonoBehaviour:
   m_suggestedValue: {fileID: 0}
   valueClassName: RenderSettings
   valueName: sun
-  prefabSetting: {fileID: 11400000, guid: 564c35b24db761e4392f2fa01222bee4, type: 2}
+  prefabSetting: {fileID: 11400000, guid: c08522ecaeb0b4640a36dd322971e3d8, type: 2}

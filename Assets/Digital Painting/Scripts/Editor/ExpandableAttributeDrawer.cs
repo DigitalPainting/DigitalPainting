@@ -124,13 +124,16 @@ namespace wizardscode.editor
             property.isExpanded = EditorGUI.Foldout(fieldRect, property.isExpanded, GUIContent.none, true);
 
             if (!property.isExpanded)
+            {
                 return;
+            }
 
-            SerializedObject targetObject = new SerializedObject(property.objectReferenceValue);
+            SerializedObject target = new SerializedObject(property.objectReferenceValue);
 
-            if (targetObject == null)
+            if (target.targetObject == null)
+            {
                 return;
-
+            }
 
             #region Format Field Rects
             List<Rect> propertyRects = new List<Rect>();
@@ -141,7 +144,7 @@ namespace wizardscode.editor
             bodyRect.yMin += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing
                 + OUTER_SPACING;
 
-            SerializedProperty field = targetObject.GetIterator();
+            SerializedProperty field = target.GetIterator();
             field.NextVisible(true);
 
             marchingRect.y += INNER_SPACING + OUTER_SPACING;
@@ -170,7 +173,7 @@ namespace wizardscode.editor
             EditorGUI.indentLevel++;
 
             int index = 0;
-            field = targetObject.GetIterator();
+            field = target.GetIterator();
             field.NextVisible(true);
 
             if (SHOW_SCRIPT_FIELD)
@@ -199,7 +202,7 @@ namespace wizardscode.editor
                 index++;
             }
 
-            targetObject.ApplyModifiedProperties();
+            target.ApplyModifiedProperties();
 
             EditorGUI.indentLevel--;
             #endregion
