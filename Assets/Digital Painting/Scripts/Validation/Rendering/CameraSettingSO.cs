@@ -27,6 +27,10 @@ namespace wizardscode.validation
                 {
                     return GetErrorResult(TestName, "Camera does not have a post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessing));
                 }
+
+                if (volume.profile != postProcessingProfile) {
+                    return GetErrorResult(TestName, "Camera does not have the correct post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessingProfile));
+                }
             }
             return GetPassResult(TestName, validationTest.Name);
         }
@@ -36,14 +40,23 @@ namespace wizardscode.validation
             GameObject go = (GameObject)ActualValue;
 
             PostProcessVolume volume = go.AddComponent<PostProcessVolume>();
-            volume.isGlobal = true;
-            volume.profile = postProcessingProfile;
+            AddPostProcessingProfile();
 
             PostProcessLayer postProcessLayer = go.AddComponent<PostProcessLayer>();
             postProcessLayer.volumeLayer = LayerMask.NameToLayer("PostProcessing");
             postProcessLayer.antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
 
             //postProcessLayer.Init(resources);
+        }
+
+        private void AddPostProcessingProfile()
+        {
+            GameObject go = (GameObject)ActualValue;
+
+            PostProcessVolume volume = go.GetComponent<PostProcessVolume>();
+            
+            volume.isGlobal = true;
+            volume.profile = postProcessingProfile;
         }
     }
 }
