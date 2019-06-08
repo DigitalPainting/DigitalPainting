@@ -43,10 +43,47 @@ namespace wizardscode.production
                 {
                     _agentWithFocus = value;
                     cameraRig.Follow = _agentWithFocus.transform;
-                    cameraRig.LookAt = _agentWithFocus.transform;
 
-                    SetCameraAimMode();
+                    SetupCameraAim();
                 }
+            }
+        }
+
+        private void SetupCameraAim()
+        {
+
+            if (_agentWithFocus.Settings != null)
+            {
+                SetCameraFollowOffset();
+                SetCameraAimMode();
+                SetCameraLookAt();
+            } 
+            else
+            {
+                cameraRig.LookAt = _agentWithFocus.transform;
+            }
+        }
+
+        public void SetCameraFollowOffset()
+        {
+            CinemachineVirtualCamera vcam = followClearshotGO.GetComponent<CinemachineVirtualCamera>();
+            CinemachineTransposer transposer = vcam.GetCinemachineComponent<CinemachineTransposer>();
+            if (transposer != null)
+            {
+                transposer.m_FollowOffset = _agentWithFocus.Settings.cameraFollowOffset;
+            }
+        }
+
+        private void SetCameraLookAt()
+        {
+            Transform target = _agentWithFocus.transform.Find(_agentWithFocus.Settings.lookAtName);
+            if (target != null)
+            {
+                cameraRig.LookAt = target;
+            }
+            else
+            {
+                cameraRig.LookAt = _agentWithFocus.transform;
             }
         }
 
@@ -57,7 +94,8 @@ namespace wizardscode.production
             if (current.GetType() == _agentWithFocus.Settings.cameraAimMode.GetType())
             {
                 return;
-            } else
+            }
+            else
             {
                 // Destroy the existing component (have to try to destroy all as its a generic method)
                 vcam.DestroyCinemachineComponent<CinemachineHardLookAt>();
@@ -147,9 +185,6 @@ namespace wizardscode.production
             CinemachineVirtualCamera vcam = followClearshotGO.AddComponent<CinemachineVirtualCamera>();
 
             CinemachineTransposer transposer = vcam.AddCinemachineComponent<CinemachineTransposer>();
-            transposer.m_FollowOffset.y = 1.8f;
-            transposer.m_FollowOffset.z = -6;
-            transposer.m_BindingMode = CinemachineTransposer.BindingMode.LockToTargetWithWorldUp;
 
             vcam.AddCinemachineComponent<CinemachineHardLookAt>();
         }

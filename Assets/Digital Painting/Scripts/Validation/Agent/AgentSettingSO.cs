@@ -12,8 +12,12 @@ namespace wizardscode.validation
         public enum CameraAimMode { Composer, GroupComposer, HardLookAt, POV, SameAsFollowTarget }
 
         [Header("Camera Settings")]
+        [Tooltip("Name of look at target in the prefab.")]
+        public string lookAtName;
         [Tooltip("The look at camera type")]
         public CameraAimMode cameraAimMode;
+        [Tooltip("Camera offset from agent.")]
+        public Vector3 cameraFollowOffset = Vector3.zero;
 
         internal override void InstantiatePrefab()
         {

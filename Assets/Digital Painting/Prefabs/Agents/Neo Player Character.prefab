@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2373179324946265126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 354859754594111503}
+  m_Layer: 0
+  m_Name: Look At Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &354859754594111503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2373179324946265126}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.58, z: 0.042}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3499297650445644513}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3499297650445676205
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,11 +119,12 @@ Transform:
   m_GameObject: {fileID: 3499297650445676225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.014}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.8310363, y: 2.8310363, z: 2.8310363}
   m_Children:
   - {fileID: 3499297650445644515}
   - {fileID: 3499297650445644495}
   - {fileID: 3499297650445644493}
+  - {fileID: 354859754594111503}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -160,6 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementController: {fileID: 11400000, guid: 162324b491843d949b829867a05adadb,
     type: 2}
+  _Settings: {fileID: 11400000, guid: d1e860d5683a88044b998180b4a4478d, type: 2}
   home: {fileID: 0}
   mouseLookMode: 2
   mouseLookSensitivity: 100
