@@ -6,10 +6,14 @@ using wizardscode.digitalpainting.agent;
 
 namespace wizardscode.validation
 {
-    [CreateAssetMenu(fileName = "DESCRIPTIVENAME_AgentSettingSO", menuName = "Wizards Code/Validation/Game Objects/Agent")]
+    [CreateAssetMenu(fileName = "AgentSettingSO_DESCRIPTIVENAME", menuName = "Wizards Code/Validation/Game Objects/Agent")]
     public class AgentSettingSO : PrefabSettingSO
     {
         public enum CameraAimMode { Composer, GroupComposer, HardLookAt, POV, SameAsFollowTarget }
+
+        [Header("Agent")]
+        [Tooltip("The name of the game object for this UMA agent.")]
+        public string agentName = "Agent";
 
         [Header("Camera Settings")]
         [Tooltip("Name of look at target in the prefab.")]
@@ -24,6 +28,7 @@ namespace wizardscode.validation
             base.InstantiatePrefab();
             BaseAgentController controller = Instance.GetComponent<BaseAgentController>();
             controller.Settings = this;
+            Instance.name = agentName;
         }
     }
 }
