@@ -49,6 +49,14 @@ namespace wizardscode.production
             }
         }
 
+        private void Update()
+        {
+            if (AgentWithFocus == null)
+            {
+                AgentWithFocus = GameObject.FindObjectOfType<BaseAgentController>();
+            }
+        }
+
         private void SetupCameraAim()
         {
 
