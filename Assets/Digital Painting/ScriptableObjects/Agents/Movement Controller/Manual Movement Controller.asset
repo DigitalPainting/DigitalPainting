@@ -17,7 +17,7 @@ MonoBehaviour:
   fastMovementFactor: 4
   slowMovementFactor: 0.2
   climbSpeed: 1
-  heightOffset: 2.227403
+  heightOffset: 0
   rotationSpeed: 90
   CanFly: 1
   ToFly: 8

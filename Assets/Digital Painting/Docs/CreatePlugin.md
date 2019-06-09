@@ -25,7 +25,7 @@ TODO: Rename existing plugins to conform to this naming convention.
 
 Each type of plugin must have an implementation of `AbstractPluginManager`, this is a `MonoBehavior` that manages the plugin implementation. When the plugin is installed into a scene, this is added as a component on a manager game object. The plugin managers role is to communicate between the Digital Painting engine and the plugin implementation, passing appropriate values back and forth. That is the plugin manager is the glue between the external asset and the Digital Painting asset.
 
-The Digital Painting asset provides a number of these managers "out of the box", but they can also be provided by the plugin itself. In our example we will be using the `Agent_PluginManager`, you can find the source for this in `Scripts/Plugin/CATEGORY`, where CATEGORY is as described in the naming convention above. 
+The Digital Painting asset provides a number of these managers "out of the box". In some cases this will be all you need. However, more complex plugins will require you to implement one. In our example we will be using the `Agent_PluginManager`, you can find the source for this in `Scripts/Plugin/CATEGORY`, where CATEGORY is as described in the naming convention above. 
 
 Implementing the plugin manager is, usually, the most complicated part of building a plugin. It is MonoBehavior that provides the interface between the Digital Painting core and the implementation of that feature.
 
@@ -33,20 +33,22 @@ TODO: Rename all plugin manager implementations to match the naming convention o
 
 ## Plugin Definition
 
-A plugin definition script describes the plugin to the Digital Painting core system. Create a new script following the naming convention of `Agent_ManualFlyingCamera_PluginDefinition` that implements the Abstract class `AbstractPluginDefinition` and is stored in the `Scripts` folder of your plugin project (you can put it anywhere in the scripts folder). 
+A plugin definition script describes the plugin to the Digital Painting core system. Create a new script (in the `Scripts` folder of your plugin project) following the naming convention of `Agent_ManualFlyingCamera_PluginDefinition`. Open the file up and make it implement the Abstract class `AbstractPluginDefinition`. 
 
-Note that at this stage you won't have created some of the scripts you need in order to fully implement this class, don't worry, you will create them below.
+This definition provides information useful in the UI, e.g. a human readable name, and information useful for enabling the plugin, e.g. the class that must be present in the Assembly for the plugin to be available. The `AbstractPluginDefinition` file should be well commented. Simply implement each of the methods and properties required. 
 
-This definition provides information useful in the UI, e.g. a human readable name, and information useful for enabling the plugin, e.g. the class that must be present in the Assembly for the plugin to be available. The `AbstractPluginDefinition` file should be well commented. Simply implement each of the methods and properties required. The existience of a plugin definition class, whether provided by the core Digital Painting asset or by an external plugin project will result in the Digital Painting Manager Window in the editor displaying athe plugin in the list of available plugins. The UI will also provide buttons to enable a plugin from each available group.
+Note that at this stage you won't have created some of the scripts you need in order to fully implement this class, don't worry..
+
+The existience of a plugin definition class, whether provided by the core Digital Painting asset or by an external plugin project will result in the Digital Painting Manager Window in the editor displaying athe plugin in the list of available plugins. The UI will also provide buttons to enable a plugin from each available group.
 
 ## Plugin Profile
 
-Plugins are designed to have a consistent configuration across all differing implementations. This configuration is stored in a Profile Scriptable Object. To create a plugin profile create a file in your plugin scripts directory called `TYPE_DESCRIPTIVENAME_Profile`. You can have as many different profiles as you like, each will make the plugin behave in different ways. For our camera we will create `Agent_ManualFlyingCamera_PluginProfile`.
+Plugins are designed to have a consistent configuration across all differing implementations. This configuration is stored in a Profile Scriptable Object that implements `AbstractPluginProfile`. To create a plugin profile create a file in your plugin scripts directory called `DESCRIPTIVENAME_TYPE_Profile`. 
 
 This class should provide a menu option for creating different profiles for the plugin:
 
 ```
-[CreateAssetMenu(fileName = "Agent_ManuallyControlledFlyingCamer_Profile", menuName = "Wizards Code/Agent/Manually Controller Flying Camera")]
+[CreateAssetMenu(fileName = "ManuallyControlledFlyingCamera_Agent_Profile", menuName = "Wizards Code/Agent/Manually Controller Flying Camera")]
 ```
 
 The plugin profile will provide 0 or more parameters defined by a ScriptableObject that implements the abstract generic class `GenericSettingSO<T>`. These parameters provide the code needed to configure the plugin and validate everything is setup correctly. Each setting will carry a suggested value that will be used to configure the plugin. They are used to provide feedback to the designer on how their Digital Painting should be configured and highlight places within which different plugins expect different settings.

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c97578dd625743247ba5b96407687cec, type: 3}
-  m_Name: Default_DigitalPaintingManager_Profile
+  m_Name: DigitalPaintingManagerProfile_Default
   m_EditorClassIdentifier: 
   DefaultCameraPrefab: {fileID: 11400000, guid: 3ff57546b87291c45a94d0d20e5e97b8,
     type: 2}

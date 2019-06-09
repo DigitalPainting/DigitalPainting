@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d674c69a99e0ca429b4c0f8cf4d2829, type: 3}
-  m_Name: Default_CameraSettingSO
+  m_Name: CameraSettingSO_Default
   m_EditorClassIdentifier: 
   SettingName: Default Camera
   Nullable: 0

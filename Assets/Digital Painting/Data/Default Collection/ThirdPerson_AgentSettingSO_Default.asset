@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02c48f64a7d34ed4f96b048f63c5f2be, type: 3}
-  m_Name: Default_ThirdPerson_AgentSettingSO
+  m_Name: ThirdPerson_AgentSettingSO_Default
   m_EditorClassIdentifier: 
   SettingName: Default Third Party
   Nullable: 0

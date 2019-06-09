@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e30612029f71a8e4d8cee30d3b90c5bc, type: 3}
-  m_Name: Default_FlatTerrain_PrefabSettingSO
+  m_Script: {fileID: 11500000, guid: 162ea9e7c627f0d48abb63c8225ec73b, type: 3}
+  m_Name: SunSettingSO_Default
   m_EditorClassIdentifier: 
-  SettingName: Default flat terrain
+  Description: Default Sun Setting
   Nullable: 0
-  m_suggestedValue: {fileID: 8065311485451557558, guid: 664b44494914b6e4aaf5dc9d575e75ae,
+  AddToScene: 1
+  SuggestedValue: {fileID: 108792081150906930, guid: 935ed1b2f6a62904888782218dd03f07,
     type: 3}
-  AddToScene: 0
