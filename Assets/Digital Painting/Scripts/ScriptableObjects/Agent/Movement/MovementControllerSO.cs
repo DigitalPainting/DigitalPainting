@@ -13,17 +13,17 @@ namespace wizardscode.agent.movement
 
         [Header("Ground Movement")]
         [Tooltip("Walking speed under normal circumstances")]
-        public float normalMovementSpeed = 1;
+        public float normalMovementMultiplier = 0.5f;
         [Tooltip("The factor by which to multiply the walking speed when moving fast.")]
-        public float fastMovementFactor = 4;
+        public float fastMovementMultiplier = 1;
         [Tooltip("The factor by which to multiply the walking speed when moving slowly.")]
-        public float slowMovementFactor = 0.2f;
+        public float slowMovementMultiplier = 0.2f;
         [Tooltip("Speed at which the agent will climb/drop in flight. Set to 0 if you don't want them to fly.")]
         public float climbSpeed = 1;
-        [Tooltip("The height above the terrain this agent should be.")]
+        [Tooltip("If you model does not have the origin at the base then the height offset will enable you to position it higher or lower.")]
         public float heightOffset = 0;
         [Tooltip("Speed at which the agent will rotate.")]
-        public float rotationSpeed = 90;
+        public float maxRotationSpeed = 360;
 
         [Header("Air Movement")]
         [Tooltip("Allow character to fly.")]

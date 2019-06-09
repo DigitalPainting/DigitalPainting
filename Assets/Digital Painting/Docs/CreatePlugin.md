@@ -60,8 +60,8 @@ The naming convention for Setting Scriptable Objects is `TYPE_DESCRIPTIVENAME_Se
 Parameters are defined in the profile scriptable object as follows:
 
 ```
-        [Expandable(isRequired: true)]
         [Tooltip("The speed the camera should move under normal circumstances.")]
+        [Expandable(isRequired: true)]
         public NormalSpeedSettingSO normalSpeed;
 ```
 

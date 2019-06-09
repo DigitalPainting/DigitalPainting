@@ -1,7 +1,4 @@
-﻿using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using wizardscode.digitalpainting.agent;
 
 namespace wizardscode.validation
@@ -14,6 +11,12 @@ namespace wizardscode.validation
         [Header("Agent")]
         [Tooltip("The name of the game object for this UMA agent.")]
         public string agentName = "Agent";
+
+        [Header("Animation Settings")]
+        [Tooltip("The Speed parameter in the animation controller. This will be changed to reflect the current move speed of the character.")]
+        public string speedParameter = "Speed";
+        [Tooltip("The Direction parameter in the animation controller. This will be changed to reflect the current move direction of the character.")]
+        public string turnParameter = "Direction";
 
         [Header("Camera Settings")]
         [Tooltip("Name of look at target in the prefab.")]
@@ -29,6 +32,7 @@ namespace wizardscode.validation
             BaseAgentController controller = Instance.GetComponent<BaseAgentController>();
             controller.Settings = this;
             Instance.name = agentName;
+
         }
     }
 }
