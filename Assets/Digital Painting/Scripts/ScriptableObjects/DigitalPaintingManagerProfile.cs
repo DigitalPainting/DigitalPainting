@@ -48,7 +48,6 @@ namespace wizardscode.digitalpainting
 
         [Header("Agent Defaults")]
         [Tooltip("The default agent for the scene. All scenes should have at least one agent.")]
-        [Expandable(isRequired: true)]
         public PrefabSettingSO DefaultAgentPrefab;
         
     }
