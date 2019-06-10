@@ -112,7 +112,7 @@ namespace wizardscode.plugin
         /// </summary>
         public virtual void Enable()
         {
-            GameObject go = new GameObject(GetManagerType().Name.ToString().PrettifySpring());
+            GameObject go = new GameObject(GetManagerType().Name.ToString().Prettify());
             go.AddComponent(GetManagerType());
             go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
         }

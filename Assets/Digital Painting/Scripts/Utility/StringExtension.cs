@@ -35,7 +35,7 @@ namespace wizardscode.extension
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string PrettifySpring(this string value)
+        public static string Prettify(this string value)
         {
             string result = value.Replace("_", " ");
             result.BreakCamelCase();
