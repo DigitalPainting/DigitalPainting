@@ -8,6 +8,9 @@ namespace wizardscode.extension
 {
     public static class StringExtension
     {
+        /// <summary>
+        /// Remove all leading and spaces.
+        /// </summary>
         public static string TrimAndReduce(this string str)
         {
             return ConvertWhitespacesToSingleSpaces(str).Trim();
@@ -25,6 +28,19 @@ namespace wizardscode.extension
         public static string BreakCamelCase(this string value)
         {
             return Regex.Replace(value, "(\\B[A-Z])", " $1");
+        }
+
+        /// <summary>
+        /// Take a string with underscores and camel case and prettify it for display by breaking into words.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string PrettifySpring(this string value)
+        {
+            string result = value.Replace("_", " ");
+            result.BreakCamelCase();
+            result.TrimAndReduce();
+            return result;
         }
     }
 }

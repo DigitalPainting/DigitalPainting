@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using wizardscode.digitalpainting;
+using wizardscode.extension;
 
 namespace wizardscode.plugin
 {
@@ -111,7 +112,9 @@ namespace wizardscode.plugin
         /// </summary>
         public virtual void Enable()
         {
-            DigitalPaintingManager.gameObject.AddComponent(GetManagerType());
+            GameObject go = new GameObject(GetManagerType().Name.ToString().PrettifySpring());
+            go.AddComponent(GetManagerType());
+            go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
         }
     }
 }
