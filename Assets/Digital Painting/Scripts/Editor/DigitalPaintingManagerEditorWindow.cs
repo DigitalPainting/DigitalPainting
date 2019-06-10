@@ -573,7 +573,7 @@ namespace wizardscode.editor
                 for (int i = availablePluginsCache[pluginDefinitionType.Name].Count - 1; i >= 0; i--)
                 {
                     AbstractPluginDefinition defn = availablePluginsCache[pluginDefinitionType.Name][i];
-                    bool hasManager = manager.gameObject.GetComponent(defn.GetManagerType()) != null;
+                    bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
                     using (new EditorGUI.DisabledScope(hasManager))
                     {
                         if (GUILayout.Button("Enable " + defn.GetReadableName()))
@@ -595,7 +595,7 @@ namespace wizardscode.editor
                     AbstractPluginDefinition defn = enabledPluginsCache[pluginDefinitionType.Name][i];
                     if (GUILayout.Button("Disable " + defn.GetReadableName()))
                     {
-                        DestroyImmediate(manager.gameObject.GetComponent(defn.GetManagerType()));
+                        defn.Disable();
                         enabledPluginsCache[pluginDefinitionType.Name].Remove(defn);
                         availablePluginsCache[pluginDefinitionType.Name].Add(defn);
                     }
@@ -628,7 +628,7 @@ namespace wizardscode.editor
                 AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;
                 if (pluginDef.AvailableForUse)
                 {
-                    AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponent(pluginDef.GetManagerType());
+                    AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponentInChildren(pluginDef.GetManagerType());
                     if (pluginManager)
                     {
                         AbstractPluginProfile pluginProfile = pluginManager.m_pluginProfile;

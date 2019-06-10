@@ -116,5 +116,11 @@ namespace wizardscode.plugin
             go.AddComponent(GetManagerType());
             go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
         }
+
+        public virtual void Disable()
+        {
+            GameObject go = DigitalPaintingManager.gameObject.GetComponentInChildren(GetManagerType()).gameObject;
+            GameObject.DestroyImmediate(go);
+        }
     }
 }
