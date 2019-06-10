@@ -61,7 +61,7 @@ namespace wizardscode.validation
             ValidationResult result;
             if (!Nullable)
             {
-                string testName = "Suggested Value error in " + validationTest.Name.BreakCamelCase();
+                string testName = "Suggested Value error in " + validationTest.Name.Prettify();
                 if (SuggestedValue is UnityEngine.Object)
                 {
                     if (SuggestedValue as UnityEngine.Object == null)

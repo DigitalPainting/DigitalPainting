@@ -50,7 +50,7 @@ namespace wizardscode.validation
             // Is a plugin profile provided?
             if(Manager.Profile == null)
             {
-                result = Collection.GetOrCreate(Manager.GetType().Name.BreakCamelCase() + " - Missing Profile", validationTest.Name);
+                result = Collection.GetOrCreate(Manager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
                 result.Message = "You need to provide a plugin profile for " + Manager.GetType().Name.BreakCamelCase();
                 result.ReportingTest.Add(validationTest.Name);
                 result.impact = ValidationResult.Level.Error;

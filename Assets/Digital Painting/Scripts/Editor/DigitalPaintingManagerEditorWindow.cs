@@ -278,10 +278,10 @@ namespace wizardscode.editor
                 {
                     if (tests.Length > 0)
                     {
-                        tests += ", " + test.BreakCamelCase();
+                        tests += ", " + test.Prettify();
                     } else
                     {
-                        tests = test.BreakCamelCase();
+                        tests = test.Prettify();
                     }
                 }
                 EditorGUILayout.LabelField("Reported by: " + tests);
@@ -530,7 +530,7 @@ namespace wizardscode.editor
         private void PluginSelectionGUI (Type pluginDefinitionType)
         {
             GUILayout.BeginVertical("Box");
-            string categoryName = pluginDefinitionType.Name.BreakCamelCase();
+            string categoryName = pluginDefinitionType.Name.Prettify();
             categoryName = categoryName.Substring(categoryName.IndexOf(' '));
             categoryName = categoryName.Substring(0, categoryName.Length - " Plugin Definition".Length);
 

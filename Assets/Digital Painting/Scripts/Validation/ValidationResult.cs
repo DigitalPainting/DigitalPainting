@@ -101,7 +101,7 @@ namespace wizardscode.validation
             ProfileCallback = callback;
             if (callback != null)
             {
-                Label = ProfileCallback.Method.Name.BreakCamelCase();
+                Label = ProfileCallback.Method.Name.Prettify();
             }
             else
             {
