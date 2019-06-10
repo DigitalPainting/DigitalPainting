@@ -38,8 +38,8 @@ namespace wizardscode.extension
         public static string Prettify(this string value)
         {
             string result = value.Replace("_", " ");
-            result.BreakCamelCase();
-            result.TrimAndReduce();
+            result = result.BreakCamelCase();
+            result = result.TrimAndReduce();
             return result;
         }
     }
