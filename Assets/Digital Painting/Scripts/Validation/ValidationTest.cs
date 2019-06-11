@@ -18,7 +18,7 @@ namespace wizardscode.validation
     public abstract class ValidationTest<T> where T : AbstractPluginManager
     {
         private AbstractPluginManager m_manager;
-        static ValidationResultCollection Collection = new ValidationResultCollection();
+        internal static ValidationResultCollection Collection = new ValidationResultCollection();
 
         private AbstractPluginManager Manager
         {
@@ -121,6 +121,8 @@ namespace wizardscode.validation
                         }
                     }
                 }
+
+                CustomValidations();
                     
                 Type type = field.FieldType;
                 // Validate the field according to the SO validation setting.
@@ -133,5 +135,47 @@ namespace wizardscode.validation
 
             return Collection;
         }
+
+        /// <summary>
+        /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
+        /// objects it should override this method. Any successes or failures should be added to the `Collection`.
+        /// </summary>
+        internal virtual void CustomValidations() { }
+
+        #region ValidationResult creation methods
+        private ValidationResult GetResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        {
+            ValidationResult result = Collection.GetOrCreate(testName, reportingTest);
+            result.Message = message;
+            result.impact = ValidationResult.Level.Warning;
+            result.RemoveCallbacks();
+            if (callback != null)
+            {
+                result.AddCallback(callback);
+            }
+            return result;
+        }
+
+        internal ValidationResult GetErrorResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        {
+            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            result.impact = ValidationResult.Level.Error;
+            return result;
+        }
+
+        internal ValidationResult GetWarningResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        {
+            ValidationResult result = GetResult(testName, message, reportingTest);
+            result.impact = ValidationResult.Level.Warning;
+            return result;
+        }
+
+        internal ValidationResult GetPassResult(string testName, string message, string reportingTest)
+        {
+            ValidationResult result = GetResult(testName, message, reportingTest);
+            result.impact = ValidationResult.Level.OK;
+            return result;
+        }
+        #endregion
     }
 }
