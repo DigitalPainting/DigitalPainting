@@ -60,7 +60,7 @@ namespace wizardscode.validation
                 return Collection;
             }
 
-            if (Manager.Profile.GetType().Name != ProfileType) {
+            if (!ProfileType.EndsWith(Manager.Profile.GetType().Name)) {
                 return Collection;
             }
 
