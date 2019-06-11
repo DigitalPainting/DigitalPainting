@@ -3,8 +3,8 @@ using UnityEngine.Rendering;
 
 namespace wizardscode.validation
 {
-    [CreateAssetMenu(fileName = "DESCRIPTIVENAME_ScreenSpaceShadow_SettingSO", menuName = "Wizards Code/Validation/Graphics/Screen Space Shadow Mode")]
-    public class ScreenSpaceShadowSettingSO : GenericSettingSO<BuiltinShaderMode>
+    [CreateAssetMenu(fileName = "ScreenSpaceShadow_SettingSO_DESCRIPTIVENAME", menuName = "Wizards Code/Validation/Graphics/Screen Space Shadow Mode")]
+    public class ScreenSpaceShadowsSettingSO : GenericSettingSO<BuiltinShaderMode>
     {
         protected override BuiltinShaderMode ActualValue
         {
