@@ -36,7 +36,7 @@ namespace wizardscode.digitalpainting
         [Header("Graphics Defaults")]
         [Tooltip("Screen space shadows setting.")]
         [Expandable(isRequired: true)]
-        public ScreenSpaceShadowSettingSO screenSpace;
+        public ScreenSpaceShadowsSettingSO screenSpace;
 
         /**
          * FIXME: can't figure out how to set HDR on 
