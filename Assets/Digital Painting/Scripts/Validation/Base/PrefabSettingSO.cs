@@ -19,6 +19,8 @@ namespace wizardscode.validation
     {
         [Tooltip("If the suggested value is a prefab should a copy of the object be added to the scene.")]
         public bool AddToScene = true;
+        [Tooltip("The spawn location for the prefab.")]
+        public Vector3 spawnPosition;
     
         private GameObject m_instance;
        
@@ -63,6 +65,7 @@ namespace wizardscode.validation
         internal virtual void InstantiatePrefab()
         {
             Instance = ConvertToGameObject(PrefabUtility.InstantiatePrefab(SuggestedValue));
+            Instance.transform.position = spawnPosition;
         }
 
         /// <summary>
