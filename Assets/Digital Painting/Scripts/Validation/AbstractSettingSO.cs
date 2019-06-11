@@ -131,13 +131,8 @@ namespace wizardscode.validation
 
         internal void AddDefaultFixCallback(ValidationResult result)
         {
-            ResolutionCallback callback = AddDefaultCallback();
+            ResolutionCallback callback = new ResolutionCallback(Fix, "Automatically Resolve");
             result.AddCallback(callback);
-        }
-
-        private ResolutionCallback AddDefaultCallback()
-        {
-            return new ResolutionCallback(Fix, "Automatically Resolve");
         }
 
         internal ValidationResult GetErrorResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
@@ -159,11 +154,6 @@ namespace wizardscode.validation
             ValidationResult result = GetResult(testName, "Looks good.", reportingTest);
             result.impact = ValidationResult.Level.OK;
             return result;
-        }
-
-        internal void NotifyPass(string reportingTest)
-        {
-            ValidationCollection.SetStatus(TestName, reportingTest, ValidationResult.Level.OK);
         }
 
         #region Helpers
