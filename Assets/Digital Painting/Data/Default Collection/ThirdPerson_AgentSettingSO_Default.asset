@@ -17,6 +17,10 @@ MonoBehaviour:
   m_suggestedValue: {fileID: 3499297650445676225, guid: cd001c1b4a9eb334a92011d475a2fd9b,
     type: 3}
   AddToScene: 1
+  spawnPosition: {x: 500, y: 0, z: 500}
+  agentName: Agent
+  speedParameter: Speed
+  turnParameter: Direction
   lookAtName: Look At Target
-  cameraAimMode: 3
+  cameraAimMode: 0
   cameraFollowOffset: {x: 0, y: 5, z: -20}
