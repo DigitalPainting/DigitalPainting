@@ -83,6 +83,11 @@ namespace wizardscode.agent
 
         void UpdateAnimator(Vector3 move)
         {
+            if (m_Animator == null)
+            {
+                return;
+            }
+
             float turnAmount = Mathf.Atan2(move.x, move.z);
             float forwardSpeed = move.z;
 
