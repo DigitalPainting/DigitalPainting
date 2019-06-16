@@ -53,605 +53,722 @@ so that they can quickly prototype game features.
 
 Terrain generation code
 
---
+note:
+
+Lets take a quick look at the procedural code that will generate our terrain.
+
+Switch to [GitHub Project Page](https://github.com/DigitalPainting/Plugin_Terrain_ProceduralTerrain)
+
+"You can get the code from GitHub..."
+
+"This is based on work by Sebastian Lague's excellent [tutorial on YouTube](https://www.youtube.com/playlist?list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3)
+
+Go To Unity
+
+"We are in the procedural landmass generation project..."
+
+Open the "Terrain Generation Demo" scene
+
+Select the Terrain Preview and center the scene view on it.
+
+"Here a preview of the terrain I generated last time I was here."
+
+Double click the `Height Map Settings` and play around - it may be necessary to click `Generate Terrain` in the `Terrain Preview` inspector.
+
+"This is actually a mesh preview of the terrain, the texturing is generated to give us a feel for what it will look like, but won't be part of the final terrain."
+
+Zoom in and take a look around the terrain.
+
+Click `Create Terrain`
+
+Select the Terrain in the Hierarchy and hit f to zoom the scene view on it.
+
+"That's it, but how do we make this available in The Digital Painting asset?"
+
+END
+
+---
 
 ## Create The Plugin Project
 
 Convention is to name the project: `Plugin_CATEGORY_DESCRIPTIVENAME`
 
+Our plugin is therefore `Plugin_Terrain_ProceduralTerrain`
+
 note:
-test
+
+We already did this so we need to do a Git clone and a bunch of submodules
+
+cd Assets
+
+git submodule add git@github.com:DigitalPainting/DigitalPainting.git
+
+git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
+
+git submodule add git@github.com:rgardler/ScriptableObject-Architecture.git
+
+Open project in Unity
+
+Install Cinemachine
+
+Install Post Processing 2
+
+--
+
+## Prepare the Project
+Step 1 of 8
+
+```bash
+cd Assets
+```
+
+--
+
+## Prepare the Project
+Step 2 of 8
+
+```bash
+git submodule add git@github.com:DigitalPainting/DigitalPainting.git
+```
+
+--
+
+## Prepare the Project
+Step 3 of 8
+
+```bash
+git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
+```
+
+--
+
+## Prepare the Project
+Step 4 of 8
+
+```bash
+git submodule add git@github.com:rgardler/ScriptableObject-Architecture.git
+```
+
+--
+
+## Prepare the Project
+Step 5 of 8
+
+Open project in Unity
+
+--
+
+## Prepare the Project
+Step 6 of 8
+
+Install Cinemachine
+
+--
+
+## Prepare the Project
+Step 7 of 8
+
+Install Post Processing 2
+
+--
+
+## Prepare the Project
+Step 8 of 8
+
+Create and open a new Scene called "Digitial Painting"
 
 ---
 
+## Plugin Manager
+
+Provides integration code between the Digital Painting the plugin code.
+
+Digital Painting provides base class called `CATEGORY_PluginManager`
+
+Often this is all that is needed.
+
+---
+
+## Plugin Profile
+
+Scriptable Object for configuration of the Plugin. 
+
+Users set values here when adopting the plugin.
+
+---
+
+Extends `AbstractPluginProfile`
+
+Naming Convention: `CATEGORY_DESCRIPTIVENAME_Profile`
+
+---
+
+### Create from Asset Menu
+
+```cs
+[CreateAssetMenu(
+    fileName = "CATEGORY_DESCRIPTIVENAME_Profile",
+    menuName = "Wizards Code/CATEGORY/DESCRIPTIVENAME")]
+```
+
+---
+
+```cs
+using UnityEngine;
+
+namespace wizardscode.plugin.terrain
+{
+    [CreateAssetMenu(
+        fileName = "Terrain_ProceduralTerrain_Profile", 
+        menuName = "Wizards Code/Terrain/Procedural Generation")]
+    public class ProceduralTerrain_Terrain_Profile 
+        : AbstractPluginProfile
+    {
+    }
+}
+
+```
+
+---
+
+Later we will adding some settings parameters.
+
+For now, an empty profile is enough.
+
+---
+
+## Plugin Definition
+
+Script describing the plugin to the Digital Painting core system.
+
+---
+
+Extends `AbstractPluginDefinition`
+
+Naming Convention: `CATEGORY_DESCRIPTIVENAME_PluginDefinition`
+
+---
+
+```cs
+namespace wizardscode.plugin.terrain
+{
+    public class Terrain_ProceduralTerrain_PluginDefinition
+        : AbstractPluginDefinition
+    {
+
+      // Implement the abstract methods
+
+    }
+}
+```
+
+--
+
+```cs
+public override PluginCategory GetCategory()
+{
+    return PluginCategory.Terrain;
+}
+```
+
+note:
+
+This is primarily used to categorize plugins in the UI.
+
+--
+
+```cs
+public override Type GetManagerType()
+{
+    return typeof(Terrain_PluginManager);
+}
+```
+
+note:
+
+Digital Painting core provides implementations for each of the supported types of plugin. Often this is sufficient.
+
+If not then you should create a new class in your plugin that extends the base class provided by Digital Painting.
+
+--
+
+```cs
+public override string GetPluginImplementationClassName()
+{
+    return "wizardscode.terrain.TerrainGenerator";
+}
+```
+
+note:
+
+This is used to check whether dependencies for the plugin are available.
+
+If this class can be found then the UI for Digital Painting will allow the plugin to be enabled.
+
+--
+
+```cs
+public override string GetProfileTypeName()
+{
+    return typeof(ProceduralTerrain_Terrain_Profile).ToString();
+}
+```
+
+note:
+
+This is used to ensure that a valid profile is provided in the UI.
+
+It is also used to decide how to validate the plugins configuraion.
+
+--
+
+```cs
+public override string GetReadableName()
+{
+    return "Procedural Terrain Generator";
+}
+```
+
+note:
+
+This is simply a human friendly name used in the UI.
+
+--
+
+```cs
+public override string GetURL()
+{
+    return "https://github.com/DigitalPainting/Plugin_Terrain_ProceduralTerrain";
+}
+```
+
+note:
+
+Used in the UI to provide a link to more information about the plugin.
+
+---
+
+## Validation Tests
+
+Validation of the plugin configuration.
+
+Validation of the scene.
+
+---
+
+Extends `ValidationTest<CATEGORY_[DESCRIPTIVENAME_]PluginManager>`
+
+Naming Convention: `CATEGORY_DESCRIPTIVENAME_PluginDefinition`
+
+---
+
+```cs
+using wizardscode.plugin;
+
+namespace wizardscode.validation
+{
+    public class Terrain_ProceduralTerrain_PluginValidation : ValidationTest<Terrain_PluginManager>
+    {
+
+      // Implement the abstract methods
+
+    }
+}
+```
+
+--
+
+```cs
+public override ValidationTest<Terrain_PluginManager> Instance => new Terrain_ProceduralTerrain_PluginValidation();
+```
+
+--
+
+```cs
+internal override string ProfileType => typeof
+  (ProceduralTerrain_Terrain_Profile).ToString();
+```
+
+---
+
+The base `ValidationTest<T>` class will validation many settings automatically.
+
+In some cases specific validation tests will be implemented in this class.
+
+---
+
+## Digital Painting Configuration
+
+Provide default configuration for this plugin.
+
+Prevent accidental overwriting of settings for other plugins.
+
+---
+
+Create a directory called `Scenes/Digital Painting Data`
+
+---
+
+Copy the contents of `Digital Painting/Data/Default Collection` into the `Scenes/Digital Painting Data` folder
+
+---
+
+Rename all files in here:
+
+`s/_Default/_ProceduralTerrain_Default`
+
+---
+
+Open `DigitalPaintingManagerProfile_ProceduralTerrain_Default` in this folder
+
+---
+
+Update all settings to reflect the SOs in this folder
+
+---
+
+# Testing the Plugin Skeleton
+
+---
+
+Open the Digital Painting Manager Window
+
+`Window -> Wizards Code -> Digital Painting Manager`
+
+Click `Add Digital Painting Manager`
+
+---
+
+Fix the setup errors that occur using the data in the `Scenes/Digital Painting Data` folder
+
+---
+
+Should have an "Enable Procedural Terrain Generator" button.
+
+Click it!
+
+---
+
+New Game Object called "Terrain Plugin Manager" as a child of "Digital Painting Manager"
+
+This does not have a plugin profile yet.
+
+Error reported in Digital Painting Manager Window
+
+---
+
+Create a Profile `Scenes/Digital Painting Data` create a profile
+
+Use `Assets -> Create -> Wizards Code -> Terrain -> Procedural Generation Plugin Profile`
+
+---
+
+Add this to the Terrain Plugin Manager
+
+There is nothing to edit, yet
+
+Error report has gone
+
+---
+
+# Adding the Functionality
+
+We want to ensure a terrain is in the scene
+
+Need a validation check for a valid terrain
+
+---
+
+In `Terrain_ProceduralTerrain_PluginValidation`
+
+Override `CustomValidations()` 
+
+Check for a terrain object in the scene
+
+--
+
+```cs
+internal override void CustomValidations() {
+    ValidationResult result;
+    if (Terrain.activeTerrain)
+    {
+        result = GetPassResult("Terrain is required.", 
+            "There is a terrain in the scene.", 
+            this.GetType().Name);
+        ResultCollection.AddOrUpdate(result, this.GetType().Name);
+        return;
+    }
+    else
+    {
+        result = GetErrorResult("Terrain is required.", 
+            "There is no terrain in the scene.", 
+            this.GetType().Name);
+        ResultCollection.AddOrUpdate(result, this.GetType().Name);
+        return;
+    }
+}
+```
+
+---
+
+Now we see an error "There is no terrain in the scene"
+
+This is good, now we can automatically fix it.
+
+Create a placeholder method to call in order to fix the error
+
+--
+
+```cs
+private void GenerateTerrain()
+{
+    Debug.Log("Generate a terrain");
+}
+```
+
+--
+
+Add a callback to the error in `CustomerValidations`
+
+--
+
+```cs
+else
+{
+    result = GetErrorResult("Terrain is required.", 
+        "There is no terrain in the scene.", 
+        this.GetType().Name);
+    ProfileCallback cb = new ProfileCallback(GenerateTerrain);
+    result.AddCallback(new ResolutionCallback(cb));
+    ResultCollection.AddOrUpdate(result, this.GetType().Name);
+    return;
+}
+```   
+---
+
+A button labelled "Generate Terrain" will be provided in the UI
+
+Clicking it will display a message in the console
+
+---
+
+We now need to have the terrain generator in the scene
+
+We will do this by creating a Setting Scriptable Object to  define the Terrain Generator.
 
 
+---
+
+In the `Scenes/Digital Painting Data` folder create an instance of this Scriptable Object called `TerrainGenerator_PrefabSettingSO`
+
+Create -> Wizards Code -> Validation -> Prefab`
+
+---
+
+Setting name: "Terrain Generator"
+Nullable: False
+Suggested Value: (drag in `Prefabs/Terrain Preview`)
+Add to Scene: False
+Spawn Pos: -1500, 0, -1500 
+
+---
+
+Add a field for this Setting to the `ProceduralTerrain_Terrain_Profile`
+
+```cs
+[Tooltip("The prefab that provides the necessary components to procedurally generate a terrain.")]
+[Expandable(isRequired: true)]
+public PrefabSettingSO terrainGenerator;
+```
+
+---
+
+In the Inspector for Terrain Plugin Manager you will now have a slot for the Terrain Generato Prefab
+
+Drag you Scriptable Object into it
+
+---
+
+Nearly there...
+
+Need to wire up the terrain generation in the `GenerateTerrain` method:
+
+```cs
+private void GenerateTerrain()
+{
+  ...
+}
+```
+
+--
+
+First, get the `TerrainGeneratorPreview` Game Object:
+
+```cs
+
+bool destroyPreview = false;
+string terrainName = "Generated Terrain";
+
+TerrainGeneratorPreview terrainPreview = 
+    GameObject.FindObjectOfType<TerrainGeneratorPreview>();
+```
+
+--
+
+If there is no preview object, create one temporarily:
+
+```cs
+if (terrainPreview == null)
+{
+    destroyPreview = true;
+    Terrain_PluginManager manager = GameObject.FindObjectOfType<Terrain_PluginManager>();
+    Terrain_ProceduralTerrain_Profile profile = (Terrain_ProceduralTerrain_Profile)manager.Profile;
+    profile.terrainGenerator.InstantiatePrefab();
+    terrainPreview = profile.terrainGenerator.Instance.GetComponent< TerrainGeneratorPreview>();
+}
+```
+
+--
+
+Generate the terrain:
+
+```cs
+terrainPreview.DrawMapInEditor();
+
+TerrainData data = MeshToTerrain.CreateTerrainData(terrainName, 512, Vector3.zero, 0);
+GameObject terrainObject = Terrain.CreateTerrainGameObject(data);
+terrainObject.name = terrainName;
+```
+
+--
+
+If we temporarily created the preview then destroy it:
+
+```cs
+if (destroyPreview)
+{
+    GameObject.DestroyImmediate(terrainPreview.gameObject);
+}
+```
+
+---
+
+Now you can click "Generate Terrain" and voila - a terrain!
+
+But... it will always look the same, so let's add some customization.
+
+---
+
+Two approaches:
+
+  1. Create different TerrainPreview prefabs with different settings
+  2. Create a custom PrefabSettingSO that exposes customizations
+
+---
+
+There are no coding changes needed if you provide custom prefabs.
+
+Each prefab can set all settings in the TerrainGenerator.
+
+No code changes are needed for this approach.
+
+However, newcomers may be overwhelmed by the settings exposed.
+
+---
+
+Providing a custom SettingsSO enables us to expose specific features.
+
+This allows variety to be added, but keeps the learning curve low.
+
+Later users can graduate to using custom prefabs.
+
+---
+
+Create a new folder called `Settings`
+
+Within it create a class `TerrainGenerator_PrefabSettingSO`
+
+This class extends `PrefabSettingSO`
+
+---
+
+We will add an ability to set a custom seed, or generate a random seed.
+
+Add fields for this customization to the `TerrainGenerator_PrefabSettingSO`
+
+Override `InstantiatePrefab` to configure the Terrain Generator.
+
+--
+
+```cs
+[Header("Height Map Settings")]
+[Tooltip("Generate a random terrain. Note that if you check this then the `heightMapSeed` will be updated with the new seed.")]
+public bool randomTerrain = false;
+
+[Tooltip("The seed to use when generating the terrains height map. This allows us to have a predictable terrain. Note that if `Random Terrain` is set to true, this value will be overwritten with the seed generated. If set to 0 then whatever is set in the Terrain Generator prefab will be used.")]
+public int heightMapSeed;
+```
+
+--
+
+```cs
+internal override void InstantiatePrefab()
+{
+    base.InstantiatePrefab();
+    TerrainGeneratorPreview generator = Instance.GetComponent<TerrainGeneratorPreview>();
+    if (randomTerrain)
+    {
+        heightMapSeed = Random.Range(int.MinValue, int.MaxValue);
+        generator.heightMapSettings.noiseSettings.seed = heightMapSeed;
+    } else
+    {
+        if (heightMapSeed != 0)
+        {
+            generator.heightMapSettings.noiseSettings.seed = heightMapSeed;
+        }
+    }
+}
+```
+
+---
+
+Change the `terrainGenerator` field in `ProceduralTerrain_Terrain_Profile` to use this new SettingSo.
+
+--
+
+```cs
+[Tooltip("The prefab that provides the necessary components to procedurally generate a terrain.")]
+[Expandable(isRequired: true)]
+public TerrainGenerator_PrefabSettingSO terrainGenerator;
+```
+
+---
+
+In the `Scenes/Digital Painting Data` folder 
+
+Delete the old `TerrainGenerator_PrefabSettingSO`.
+
+Create an instance of the new `TerrainGenerator_PrefabSettingSO`
+
+Use `Create -> Wizards Code -> Validation -> Terrain -> Procedural Generation Prefab``
+
+--
+
+Setting name: "Terrain Generator"
+Nullable: False
+Suggested Value: (drag in `Prefabs/Terrain Preview`)
+Add to Scene: False
+Spawn Pos: -1500, 0, -1500 
+
+Random Terrain : true
+
+---
+
+Now, each time you can generate the terrain you create a random one.
+
+Delete the terrain to make the `Generate Terrain` button reappear.
+
+---
 
 # End
-
----
-
-# vscode-reveal
-
-### Awesome VS code extension using The HTML Presentation Framework Revealjs
-
-<small>Created by [Hakim El Hattab](http://hakim.se) / [@hakimel](http://twitter.com/hakimel)</small>
-
----
-
-## Hello There
-
-reveal.js enables you to create beautiful interactive slide decks using HTML. This presentation will show you examples of what it can do.
-
----
-
-## Vertical Slides
-
-Slides can be nested inside of each other.
-
-Use the _Space_ key to navigate through all slides.
-
-<a href="#" class="navigate-down">
-    <img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-</a>
-
---
-
-## Basement Level 1
-
-Nested slides are useful for adding additional detail underneath a high level horizontal slide.
-
---
-
-## Basement Level 2
-
-That's it, time to go back up.
-
-<a href="#/2">
-    <img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-</a>
-
----
-
-## Slides
-
-Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at [http://slides.com](http://slides.com).
-
----
-
-## Point of View
-
-Press **ESC** to enter the slide overview.
-
-Hold down alt and click on any element to zoom in on it using [zoom.js](http://lab.hakim.se/zoom-js). Alt + click anywhere to zoom back out.
-
----
-
-## Touch Optimized
-
-Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
-
----
-
-## Markdown support
-
-Write content using inline or external Markdown.
-Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
-
---
-
-```
-  ## Markdown support
-
-  Write content using inline or external Markdown.
-  Instructions and more info available in the 
-  [readme](https://github.com/hakimel/reveal.js#markdown).
-```
-
----
-
-## Fragments
-
-Hit the next arrow...
-
-... to step through ...
-<span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span>
-
-Note:
-This slide has fragments which are also stepped through in the notes window.
-
---
-
-## Fragment Styles
-
-There's different types of fragments, like:
-
-grow    <!-- .element: class="fragment grow" -->
-
-shrink  <!-- .element: class="fragment shrink" -->
-
-fade-out    <!-- .element: class="fragment fade-out " -->
-
-fade-up (also down, left and right!) <!-- .element: class="fragment fade-up" -->
-
-current-visible <!-- .element: class="fragment current-visible" -->
-
-Highlight <span class="fragment highlight-red">red</span> <span class="fragment highlight-blue">blue</span> <span class="fragment highlight-green">green</span>
-
----
-
-## Transition Styles
-
-You can select from different transitions, like:
-[None](?transition=none#/transitions) - [Fade](?transition=fade#/transitions) - [Slide](?transition=slide#/transitions) - [Convex](?transition=convex#/transitions) - [Concave](?transition=concave#/transitions) - [Zoom](?transition=zoom#/transitions)
-
----
-
-## Themes
-
-reveal.js comes with a few themes built in:
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
-<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
-
----
-
-<!-- .slide: data-background="#dddddd" -->
-## Slide Backgrounds
-
-Set `data-background="#dddddd"` on a slide to change the background color. All CSS color formats are supported.
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-
---
-
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" -->
-
-## Image Backgrounds
-
-```markdown
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" -->
-```
-
---
-
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px" -->
-
-## TILED BACKGROUNDS
-
-```markdown
-<!-- .slide: data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px" -->
-```
-
---
-
-<!-- .slide: data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000" -->
-
-## Video Backgrounds
-
-```markdown
-<!-- .slide: data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000" -->
-```
-
---
-
-<!-- .slide: data-background="http://i.giphy.com/90F8aUepslB84.gif" -->
-
-## ... and GIFs!
-
-```markdown
-<!-- .slide: data-background="http://i.giphy.com/90F8aUepslB84.gif" -->
-```
-
----
-
-<!-- .slide: data-transition="slide" data-background="#4d7e65" data-background-transition="zoom" -->
-
-## Background Transitions
-
-Different background transitions are available via the backgroundTransition option. This one's called "zoom".
-
----
-
-<!-- .slide: data-transition="slide" data-background="#b5533c" data-background-transition="zoom" -->
-
-## Background Transitions
-
-You can override background transitions per-slide.
-
----
-
-## Pretty Code
-```js
-function linkify( selector ) {
-  if( supports3DTransforms ) {
-
-    var nodes = document.querySelectorAll( selector );
-
-    for( var i = 0, len = nodes.length; i &lt; len; i++ ) {
-      var node = nodes[i];
-
-      if( !node.className ) {
-        node.className += ' roll';
-      }
-    }
-  }
-}
-```
-
-Code syntax highlighting courtesy of [highlight.js](http://softwaremaniacs.org/soft/highlight/en/description/).
-
----
-
-## Marvelous List
-
-*   No order here
-*   Or here
-*   Or here
-*   Or here
-
----
-
-## Fantastic Ordered List
-
-1.  One is smaller than...
-2.  Two is smaller than...
-3.  Three!
-
----
-
-## Tabular Tables
-| Tables        | Are           | Cool  |
-| ------------- | :-----------: | ----: |
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      | $12   |
-| zebra stripes | are neat      | $1    |
-
----
-
-## Clever Quotes
-
-These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">"The nice thing about standards is that there are so many to choose from"</q> and block:
-
-> "For years there has been a theory that millions of monkeys typing at random on millions of typewriters would reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue."
-
----
-
-## Intergalactic Interconnections
-
-You can link between slides internally, [like this](#/2/3).
-
----
-
-## Speaker View
-
-There's a [speaker view](https://github.com/hakimel/reveal.js#speaker-notes). It includes a timer, preview of the upcoming slide as well as your speaker notes.
-
-Press the _S_ key to try it out.
-
-<aside class="notes">Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).</aside>
-
----
-
-## Export to PDF
-
-Presentations can be [exported to PDF](https://github.com/hakimel/reveal.js#pdf-export), here's an example:
-
-<iframe data-src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen=""></iframe>
-
----
-
-## Global State
-
-Set `data-state="something"` on a slide and `"something"` will be added as a class to the document element when the slide is open. This lets you apply broader style changes, like switching the page background.
-
----
-
-<!-- .slide: data-state="customevent" -->
-
-## State Events
-
-Additionally custom events can be triggered on a per slide basis by binding to the `data-state` name.
-```js
-Reveal.addEventListener( 'customevent', function() {
-	console.log( '"customevent" has fired' );
-} );
-```
-
----
-
-## Take a Moment
-
-Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
-
----
-
-## Much more
-
-*   Right-to-left support
-*   [Extensive JavaScript API](https://github.com/hakimel/reveal.js#api)
-*   [Auto-progression](https://github.com/hakimel/reveal.js#auto-sliding)
-*   [Parallax backgrounds](https://github.com/hakimel/reveal.js#parallax-background)
-*   [Custom keyboard bindings](https://github.com/hakimel/reveal.js#keyboard-bindings)
-
----
-
-## Plugins
-
---
-
-## search
-
-Handles finding a text string anywhere in the slides and showing the next occurrence to the user by navigatating to that slide and highlighting it.
-
-**Shortcut : `CTRL + SHIFT + F`**
-
-
---
-
-## Zoom
-
-Zoom anywhere on your presentation
-
-**Shortcut : `alt + click`: Zoom in. Repeat to zoom back out.**
-
---
-
-## Notes
-
-Add note to speaker view.
-
-Default markdown syntaxe is
-
-```text
-note: a custom note here
-```
-
---
-
-## Chalkboard
-
-Have you ever missed the traditional classroom experience where you can quickly sketch something on a chalkboard?
-
-Just press 'b' or click on the pencil button to open and close your chalkboard.
-
---
-
-## Chalkboard
-
-- Click the `left mouse button` to write on the chalkboard
-- Click the `right mouse button` to wipe the chalkboard
-- Click the `DEL` key to clear the chalkboard
-
---
-
-## MAKE NOTES ON SLIDES
-
-Did you notice the <i class="fa fa-pencil"></i> button?
-
-By pressing 'c' or clicking the button you can start and stop the notes taking mode allowing you to write comments and notes directly on the slide.
-
---
-
-## Chart
-
-Add chart from simple string
-
---
-
-### Line chart from JSON string
-<canvas class="stretch" data-chart="line">
-<!--
-{
- "data": {
-  "labels": ["January"," February"," March"," April"," May"," June"," July"],
-  "datasets":[
-   {
-    "data":[65,59,80,81,56,55,40],
-    "label":"My first dataset","backgroundColor":"rgba(20,220,220,.8)"
-   },
-   {
-    "data":[28,48,40,19,86,27,90],
-    "label":"My second dataset","backgroundColor":"rgba(220,120,120,.8)"
-   }
-  ]
- }, 
- "options": { "responsive": "true" }
-}
--->
-</canvas>
-
---
-
-### Line chart with CSV data and JSON configuration
-
-<canvas class="stretch" data-chart="line">
-My first dataset,  65, 59, 80, 81, 56, 55, 40
-<!-- This is a comment -->
-My second dataset, 28, 48, 40, 19, 86, 27, 90
-<!-- 
-{ 
-"data" : {
-	"labels" : ["Enero", "Febrero", "Marzo", "Avril", "Mayo", "Junio", "Julio"],
-	"datasets" : [{ "borderColor": "#0f0", "borderDash": ["5","10"] }, { "borderColor": "#0ff" } ]
-	}
-}
--->
-</canvas>
-
---
-
-### Bar chart with CSV data
-
-<canvas class="stretch" data-chart="bar">
-,January, February, March, April, May, June, July
-My first dataset, 65, 59, 80, 81, 56, 55, 40
-My second dataset, 28, 48, 40, 19, 86, 27, 90
-</canvas>
-
---
-
-### Stacked bar chart from CSV file with JSON configuration
-<canvas class="stretch" data-chart="bar" data-chart-src="chart/data.csv">
-<!-- 
-{
-"data" : {
-"datasets" : [{ "backgroundColor": "#0f0" }, { "backgroundColor": "#0ff" } ]
-},
-"options": { "responsive": true, "scales": { "xAxes": [{ "stacked": true }], "yAxes": [{ "stacked": true }] } }
-}
--->
-</canvas>
-
---
-
-### Pie chart
-
-<canvas class="stretch" data-chart="pie">
-,Black, Red, Green, Yellow
-My first dataset, 40, 40, 20, 6
-My second dataset, 45, 40, 25, 4
-</canvas>
-
---
-
-## EMBEDDING A TWEET
-To embed a tweet, simply determine its URL and include the following code in your slides:
-
-```html
-<div class="tweet" data-src="TWEET_URL"></div>
-```
-
---
-
-<div class="tweet" data-src="https://twitter.com/Evilznet/status/1086984843056107525"></div>
-
---
-
-## menu
-
-A SLIDEOUT MENU FOR NAVIGATING REVEAL.JS PRESENTATIONS
-
---
-
-See the  <i class="fa fa-bars"></i>  in the corner?
-
-Click it and the menu will open from the side.
-
-Click anywhere on the slide to return to the presentation,
-or use the close button in the menu.
-
---
-
-If you don't like the menu button,
-you can use the slide number instead.
-
-Go on, give it a go.
-
-The menu button can be hidden using the options, 
-but you need to enable the slide number link.
-
---
-
-Or you can open the menu by pressing the m key.
-
-You can navigate the menu with the keyboard as well. 
-Just use the arrow keys and <space> or <enter> to change slides.
-
-You can disable the keyboard for the 
-menu in the options if you wish.
-
---
-
-## LEFT OR RIGHT
-You can configure the menu to slide in from the left or right
-
---
-
-### MARKERS
-The slide markers in the menu can be useful to show 
-you the progress through the presentation.
-
-You can hide them if you want.
-
-You can also show/hide slide numbers.
-
---
-
-### SLIDE TITLES
-The menu uses the first heading to label each slide
-but you can specify another label if you want.
-
-Use a data-menu-title attribute in the section element to give the slide a custom label, or add a menu-title class to any element in the slide you wish.
-
-You can change the titleSelector option and use
-any elements you like as the default for labelling each slide.
-
---
-
-## MathSVG
-
-An extension of the math.js plugin allowing to render LaTeX in SVG.
-
---
-
-### The Lorenz Equations
-
-\[\begin{aligned}
-\dot{x} &amp; = \sigma(y-x) \\
-\dot{y} &amp; = \rho x - y - xz \\
-\dot{z} &amp; = -\beta z + xy
-\end{aligned} \]
-
---
-
-### The Cauchy-Schwarz Inequality
-
-<script type="math/tex; mode=display">
-  \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)
-</script>
-
---
-
-### coucou footer
-
-Includes a footer in all the slides of a Reveal.js presentation (with optional exclusion of some slides) that will show the title of the presentation.
-
-
-
---
-
-## code-focus
-
-A plugin that allows focusing on specific lines of code blocks.
-
---
-
-### Code Focus Demo
-
-```js
-// Useless comment.
-alert('hi');
-```
-
-
-<span class="code-presenting-annotation fragment current-only" data-code-focus="1">Present code found within any repository source file.</span>
-<span class="code-presenting-annotation fragment current-only" data-code-focus="1-2">Without ever leaving your slideshow.</span>
-
----
-
-<!-- .slide: style="text-align: left;" -->
-# THE END
-
-- [Try the online editor](http://slides.com)
-- [Source code & documentation](https://github.com/hakimel/reveal.js)
 
