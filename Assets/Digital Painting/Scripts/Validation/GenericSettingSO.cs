@@ -45,7 +45,7 @@ namespace wizardscode.validation
                 {
                     throw new Exception("No accessor set and ActualValue getter is not overriden in " + GetType());
                 }
-
+                
                 object value;
                 if (Accessor.MemberType == MemberTypes.Property)
                 {
@@ -53,7 +53,15 @@ namespace wizardscode.validation
                 }
                 else
                 {
-                    value = ((FieldInfo)m_Accessor).GetValue(default(QualitySettings));
+                    FieldInfo field = (FieldInfo)Accessor;
+                    if (field.IsStatic)
+                    {
+                        value = field.GetValue(null);
+                    }
+                    else
+                    {
+                        value = field.GetValue(default(QualitySettings));
+                    }
                 }
 
                 return (T)value;
@@ -66,7 +74,15 @@ namespace wizardscode.validation
                 }
                 else
                 {
-                    ((FieldInfo)Accessor).SetValue(default(QualitySettings), value);
+                    FieldInfo field = (FieldInfo)Accessor;
+                    if (field.IsStatic)
+                    {
+                        field.SetValue(null, value);
+                    }
+                    else
+                    {
+                        field.SetValue(default(QualitySettings), value);
+                    }
                 }
             }
         }
@@ -120,7 +136,7 @@ namespace wizardscode.validation
             }
             catch (Exception e)
             {
-                result = GetErrorResult(TestName, e.Message + "\n" + e.StackTrace, validationTest.Name);
+                result = GetErrorResult(TestName, "Exception validating " + name + "\n" + e.Message + "\n" + e.StackTrace, validationTest.Name);
                 result.RemoveCallbacks();
                 return result;
             }

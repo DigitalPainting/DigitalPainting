@@ -18,7 +18,7 @@ namespace wizardscode.validation
     public abstract class ValidationTest<T> where T : AbstractPluginManager
     {
         private AbstractPluginManager m_manager;
-        internal static ValidationResultCollection Collection = new ValidationResultCollection();
+        internal static ValidationResultCollection ResultCollection = new ValidationResultCollection();
 
         private AbstractPluginManager Manager
         {
@@ -38,30 +38,30 @@ namespace wizardscode.validation
 
         public ValidationResultCollection Validate(Type validationTest)
         {
-            Collection = new ValidationResultCollection();
+            ResultCollection = new ValidationResultCollection();
             ValidationResult result;
             
             // Is plugin enabled, If not we don't need to test it
             if (Manager == null)
             {
-                return Collection;
+                return ResultCollection;
             }
 
             // Is a plugin profile provided?
             if(Manager.Profile == null)
             {
-                result = Collection.GetOrCreate(Manager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
+                result = ResultCollection.GetOrCreate(Manager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
                 result.Message = "You need to provide a plugin profile for " + Manager.GetType().Name.BreakCamelCase();
                 result.ReportingTest.Add(validationTest.Name);
                 result.impact = ValidationResult.Level.Error;
                 result.RemoveCallbacks();
-                Collection.AddOrUpdate(result, validationTest.Name);
+                ResultCollection.AddOrUpdate(result, validationTest.Name);
 
-                return Collection;
+                return ResultCollection;
             }
 
             if (!ProfileType.EndsWith(Manager.Profile.GetType().Name)) {
-                return Collection;
+                return ResultCollection;
             }
 
             // Get all the SettingSO fields
@@ -74,16 +74,13 @@ namespace wizardscode.validation
                 AbstractSettingSO fieldInstance = field.GetValue(Manager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
-                    result = Collection.GetOrCreate(field.Name, validationTest.Name);
-                    result.Message = "Must provide a Setting Scriptable Object";
-                    result.impact = ValidationResult.Level.Error;
-                    Collection.AddOrUpdate(result, validationTest.Name);
-                    return Collection;
+                    result = GetErrorResult(field.Name, "Must provide a Setting Scriptable Object", validationTest.Name);
+                    ResultCollection.AddOrUpdate(result, validationTest.Name);
+                    return ResultCollection;
                 }
 
-                Collection.Remove(field.Name);
+                ResultCollection.Remove(field.Name);
 
-                // if a PropertyAccessorName is provided ensure it exists
                 if (field.FieldType == typeof(GenericSettingSO<>))
                 {
                     string className = ((GenericSettingSO<T>)fieldInstance).valueClassName;
@@ -100,11 +97,10 @@ namespace wizardscode.validation
 
                         if (propertyType == null)
                         {
-                            result = Collection.GetOrCreate(field.Name, validationTest.Name);
-                            result.Message = "A property accessor is provided but the class identified, `"
+                            string msg = "A property accessor is provided but the class identified, `"
                                 + className + "`, cannot be found in the Assembly.";
-                            result.impact = ValidationResult.Level.Error;
-                            Collection.AddOrUpdate(result, validationTest.Name);
+                            result = GetErrorResult(field.Name, msg, validationTest.Name);
+                            ResultCollection.AddOrUpdate(result, validationTest.Name);
                         }
                         else
                         {
@@ -112,40 +108,54 @@ namespace wizardscode.validation
                             FieldInfo acessorFieldInfo = propertyType.GetField(accessorName);
                             if (accessorPropertyInfo == null && acessorFieldInfo == null)
                             {
-                                result = Collection.GetOrCreate(field.Name, validationTest.Name);
-                                result.Message = "A property accessor is provided but the accessor identified, `"
+                                string msg = "A property accessor is provided but the accessor identified, `"
                                     + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
-                                result.impact = ValidationResult.Level.Error;
-                                Collection.AddOrUpdate(result, validationTest.Name);
+                                result = GetErrorResult(field.Name, msg, validationTest.Name);
+                                ResultCollection.AddOrUpdate(result, validationTest.Name);
                             }
                         }
                     }
                 }
 
-                CustomValidations();
+                PreFieldCustomValidations();
                     
                 Type type = field.FieldType;
                 // Validate the field according to the SO validation setting.
                 result = (ValidationResult)type.InvokeMember("Validate",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                     null, fieldInstance, new object[] { validationTest });
-                
-                Collection.AddOrUpdate(result, validationTest.Name);
+
+                PostFieldCustomValidations();
+
+                ResultCollection.AddOrUpdate(result, validationTest.Name);
             }
 
-            return Collection;
+            if (fields.Count() == 0)
+            {
+                PreFieldCustomValidations();
+            }
+
+            return ResultCollection;
         }
 
         /// <summary>
         /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
-        /// objects it should override this method. Any successes or failures should be added to the `Collection`.
+        /// objects it should override this method if these validations are to be done before field validations. 
+        /// Any successes or failures should be added to the `Collection`.
         /// </summary>
-        internal virtual void CustomValidations() { }
+        internal virtual void PreFieldCustomValidations() { }
+
+        /// <summary>
+        /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
+        /// objects it should override this method if these validations are to be done after field validations. 
+        /// Any successes or failures should be added to the `Collection`.
+        /// </summary>
+        internal virtual void PostFieldCustomValidations() { }
 
         #region ValidationResult creation methods
         private ValidationResult GetResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
-            ValidationResult result = Collection.GetOrCreate(testName, reportingTest);
+            ValidationResult result = ResultCollection.GetOrCreate(testName, reportingTest);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
             result.RemoveCallbacks();

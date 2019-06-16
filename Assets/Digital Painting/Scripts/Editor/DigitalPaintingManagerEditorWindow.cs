@@ -211,81 +211,81 @@ namespace wizardscode.editor
         private void ValidationResultGUI(ValidationResult result, bool isIgnored = false)
         {
             EditorGUILayout.BeginVertical("Box");
-            MessageType messageType;
-            switch (result.impact) {
-                case ValidationResult.Level.Error:
-                    messageType = MessageType.Error;
-                    break;
-                case ValidationResult.Level.Warning:
-                    messageType = MessageType.Warning;
-                    break;
-                default:
-                    messageType = MessageType.Info;
-                    break;
-            }
-
-            EditorGUILayout.BeginHorizontal();
-
-            string helpMsg;
-            if (result.Message != null)
-            {
-                helpMsg = result.Message;
-            } else
-            {
-                helpMsg = result.name;
-            }
-
-            EditorGUILayout.HelpBox(helpMsg, messageType, true);
-            
-            EditorGUILayout.BeginVertical();
-            if (result.Callbacks != null)
-            {
-                foreach (ResolutionCallback callback in result.Callbacks)
-                {
-                    if (GUILayout.Button(callback.Label))
-                    {
-                        Validations.Remove(result.name);
-                        callback.ProfileCallback();
-                    }
+                MessageType messageType;
+                switch (result.impact) {
+                    case ValidationResult.Level.Error:
+                        messageType = MessageType.Error;
+                        break;
+                    case ValidationResult.Level.Warning:
+                        messageType = MessageType.Warning;
+                        break;
+                    default:
+                        messageType = MessageType.Info;
+                        break;
                 }
-            }
 
-            if (result.impact != ValidationResult.Level.OK)
-            {
-                if (!isIgnored)
-                {
-                    if (GUILayout.Button("Ignore"))
-                    {
-                        ignoredTests.Add(result.name);
-                    }
-                }
-                else
-                {
-                    if (GUILayout.Button("Do Not Ignore"))
-                    {
-                        ignoredTests.Remove(result.name);
-                    }
-                }
-            }
+                EditorGUILayout.BeginHorizontal();
 
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
-
-            if (result.ReportingTest != null)
-            {
-                string tests = "";
-                foreach (string test in result.ReportingTest)
-                {
-                    if (tests.Length > 0)
+                    string helpMsg;
+                    if (result.Message != null)
                     {
-                        tests += ", " + test.Prettify();
+                        helpMsg = result.Message;
                     } else
                     {
-                        tests = test.Prettify();
+                        helpMsg = result.name;
                     }
+
+                    EditorGUILayout.HelpBox(helpMsg, messageType, true);
+            
+                    EditorGUILayout.BeginVertical();
+                        if (result.Callbacks != null)
+                        {
+                            foreach (ResolutionCallback callback in result.Callbacks)
+                            {
+                                if (GUILayout.Button(callback.Label))
+                                {
+                                    Validations.Remove(result.name);
+                                    callback.ProfileCallback();
+                                }
+                            }
+                        }
+
+                        if (result.impact != ValidationResult.Level.OK)
+                        {
+                            if (!isIgnored)
+                            {
+                                if (GUILayout.Button("Ignore"))
+                                {
+                                    ignoredTests.Add(result.name);
+                                }
+                            }
+                            else
+                            {
+                                if (GUILayout.Button("Do Not Ignore"))
+                                {
+                                    ignoredTests.Remove(result.name);
+                                }
+                            }
+                        }
+
+                    EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+
+                if (result.ReportingTest != null)
+                {
+                    string tests = "";
+                    foreach (string test in result.ReportingTest)
+                    {
+                        if (tests.Length > 0)
+                        {
+                            tests += ", " + test.Prettify();
+                        } else
+                        {
+                            tests = test.Prettify();
+                        }
+                    }
+                    EditorGUILayout.LabelField("Reported by: " + tests);
                 }
-                EditorGUILayout.LabelField("Reported by: " + tests);
-            }
 
             EditorGUILayout.EndVertical();
         }
@@ -580,6 +580,10 @@ namespace wizardscode.editor
                         {
                             defn.Enable();
                         }
+                        if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
+                        {
+                            Application.OpenURL(defn.GetURL());
+                        }
                     }
                 }
             }
@@ -598,6 +602,10 @@ namespace wizardscode.editor
                         defn.Disable();
                         enabledPluginsCache[pluginDefinitionType.Name].Remove(defn);
                         availablePluginsCache[pluginDefinitionType.Name].Add(defn);
+                    }
+                    if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
+                    {
+                        Application.OpenURL(defn.GetURL());
                     }
                 }
             }
