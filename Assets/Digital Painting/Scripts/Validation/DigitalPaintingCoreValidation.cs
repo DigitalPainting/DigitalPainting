@@ -5,14 +5,13 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using wizardscode.extension;
 using wizardscode.validation;
 
 namespace wizardscode.digitalpainting
 {
     public class DigitalPaintingCoreValidation : ValidationTest<DigitalPaintingManager>
     {
-        string dataFolderName = "Digital Painting Data";
-
         public override ValidationTest<DigitalPaintingManager> Instance => new DigitalPaintingCoreValidation();
 
         internal override string ProfileType { get { return "DigitalPaintingManagerProfile"; } }
@@ -22,7 +21,7 @@ namespace wizardscode.digitalpainting
             bool isPass = base.InitialCustomValidations();
 
             string path = GetPathToScene();
-            if (AssetDatabase.IsValidFolder(path + "/" + dataFolderName))
+            if (AssetDatabase.IsValidFolder(path + "/" + AssetDatabaseUtility.dataFolderName))
             {
                 AddOrUpdateAsPass("Data Directory Existence", "The Digital Painting Data exists.");
             }
@@ -30,7 +29,7 @@ namespace wizardscode.digitalpainting
             {
                 ResolutionCallback callback = new ResolutionCallback(new ProfileCallback(CreateDataDirectory));
                 AddOrUpdateAsWarning("Data Directory Existence", "The Digital Painting Data folder does not exist.", callback);
-                isPass = false;
+                return false;
             }
 
             return isPass;
@@ -39,10 +38,8 @@ namespace wizardscode.digitalpainting
         private void CreateDataDirectory()
         {
             string path = GetPathToScene();
-            AssetDatabase.CreateFolder(path, dataFolderName);
-            
-            //AssetDatabase.CopyAsset("Assets/DigitalPainting/Assets/Digital Painting/Data/Default Collection/CameraSettingSO_Default.asset", path + "/" + dataFolderName + "/CameraSettingSO_Default.asset");
-            //AssetDatabase.SaveAssets();
+            AssetDatabase.CreateFolder(path, AssetDatabaseUtility.dataFolderName);
+            AssetDatabaseUtility.CopyDefaultSettingSOs(path, EditorSceneManager.GetActiveScene().name);
         }
 
         private static string GetPathToScene()
