@@ -12,7 +12,13 @@ namespace wizardscode.plugin
     /// </summary>
     public abstract class AbstractPluginDefinition
     {
-        public enum PluginCategory { Agent, DayNightCycle, Weather, Other }
+        public enum PluginCategory {
+            Other,
+            Agent,
+            DayNightCycle,
+            Weather,
+            Terrain
+        }
 
         /// <summary>
         /// Get the Type of the plugin manager, that is the Type of the MonoBehaviour that
@@ -74,10 +80,22 @@ namespace wizardscode.plugin
                     // there is no dependency on external assets, so it's avaialble
                     return true;
                 }
-                IEnumerable<Type> types = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                                           from type in assembly.GetTypes()
-                                           where type.Name == className
-                                           select type);
+                IEnumerable<Type> types;
+                if (className.Contains('.'))
+                {
+                    types = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                from type in assembly.GetTypes()
+                                where type.FullName == className
+                                select type);
+                }
+                else
+                {
+                    types = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                             from type in assembly.GetTypes()
+                             where type.Name == className
+                             select type);
+                }
+
                 if (types != null && types.Count() != 0)
                 {
                     if (types.Count<Type>() > 1)
