@@ -5,7 +5,9 @@ using System.Reflection;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using wizardscode.digitalpainting;
 using wizardscode.extension;
 using wizardscode.plugin;
@@ -65,9 +67,16 @@ namespace wizardscode.editor
 
                 if (!manager)
                 {
-                    if (GUILayout.Button("Add Digital Painting Manager"))
+                    if (EditorSceneManager.GetActiveScene().name.Length == 0)
                     {
-                        AddDigitalPainting();
+                        EditorGUILayout.LabelField("Save the scene if you want to add the Digital Painting Manager.");
+                    }
+                    else
+                    {
+                        if (GUILayout.Button("Add Digital Painting Manager"))
+                        {
+                            AddDigitalPainting();
+                        }
                     }
                 }
                 else
@@ -429,21 +438,21 @@ namespace wizardscode.editor
         private void AddDigitalPainting()
         {
             // Parent Game Object
-            GameObject parent = new GameObject();
-            parent.name = "Wizards Code";
+            // GameObject parent = new GameObject();
+            // parent.name = "Wizards Code";
 
             // Digital Painting Manager
-            manager = Instantiate(Config.ManagerPrefab, parent.transform);
+            manager = Instantiate(Config.ManagerPrefab);
             manager.name = Config.ManagerName;
 
             // Flying Pathfinding
             if (Config.FlyingPathfinderPrefab != null)
             {
-                Octree octree = Instantiate(Config.FlyingPathfinderPrefab, parent.transform);
+                Octree octree = Instantiate(Config.FlyingPathfinderPrefab, manager.transform);
                 octree.FitToTerrain(Terrain.activeTerrain);
             } else
             {
-                throw new Exception("DigitalPaintingManager tries to instantiate Octree but it's not set in the config. Ignoring for now as we plan to move the Octree into a plugin");
+                Debug.LogError("DigitalPaintingManager tries to instantiate Octree but it's not set in the config. Ignoring for now as we plan to move the Octree into a plugin");
             }
         }
 

@@ -47,6 +47,11 @@ namespace wizardscode.validation
                 return ResultCollection;
             }
 
+            if (!InitialCustomValidations())
+            {
+                return ResultCollection;
+            }
+
             // Is a plugin profile provided?
             if(Manager.Profile == null)
             {
@@ -74,8 +79,7 @@ namespace wizardscode.validation
                 AbstractSettingSO fieldInstance = field.GetValue(Manager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
-                    result = GetErrorResult(field.Name, "Must provide a Setting Scriptable Object", validationTest.Name);
-                    ResultCollection.AddOrUpdate(result, validationTest.Name);
+                    AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");
                     return ResultCollection;
                 }
 
@@ -99,8 +103,7 @@ namespace wizardscode.validation
                         {
                             string msg = "A property accessor is provided but the class identified, `"
                                 + className + "`, cannot be found in the Assembly.";
-                            result = GetErrorResult(field.Name, msg, validationTest.Name);
-                            ResultCollection.AddOrUpdate(result, validationTest.Name);
+                            AddOrUpdateAsError(field.Name, msg);
                         }
                         else
                         {
@@ -110,24 +113,28 @@ namespace wizardscode.validation
                             {
                                 string msg = "A property accessor is provided but the accessor identified, `"
                                     + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
-                                result = GetErrorResult(field.Name, msg, validationTest.Name);
-                                ResultCollection.AddOrUpdate(result, validationTest.Name);
+                                AddOrUpdateAsError(field.Name, msg);
                             }
                         }
                     }
                 }
 
-                PreFieldCustomValidations();
-                    
+                if (PreFieldCustomValidations())
+                {
+                    return ResultCollection;
+                }
+
                 Type type = field.FieldType;
                 // Validate the field according to the SO validation setting.
                 result = (ValidationResult)type.InvokeMember("Validate",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                     null, fieldInstance, new object[] { validationTest });
-
-                PostFieldCustomValidations();
-
                 ResultCollection.AddOrUpdate(result, validationTest.Name);
+
+                if (PostFieldCustomValidations())
+                {
+                    return ResultCollection;
+                }
             }
 
             if (fields.Count() == 0)
@@ -140,19 +147,71 @@ namespace wizardscode.validation
 
         /// <summary>
         /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
-        /// objects it should override this method if these validations are to be done before field validations. 
+        /// objects it should override this method if these validations are to be done before any other validations.
         /// Any successes or failures should be added to the `Collection`.
         /// </summary>
-        internal virtual void PreFieldCustomValidations() { }
+        /// <returns>True if validations passed. False if one ore more warning or error occurs.</returns>
+        internal virtual bool InitialCustomValidations() { return true; }
+
+        /// <summary>
+        /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
+        /// objects it should override this method if these validations are to be done after profile validation but before 
+        /// field validations. Any successes or failures should be added to the `Collection`.
+        /// </summary>
+        /// <returns>True if validations passed. False if one ore more warning or error occurs.</returns>
+        internal virtual bool PreFieldCustomValidations() { return true; }
 
         /// <summary>
         /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
         /// objects it should override this method if these validations are to be done after field validations. 
         /// Any successes or failures should be added to the `Collection`.
         /// </summary>
-        internal virtual void PostFieldCustomValidations() { }
+        /// <returns>True if validations passed. False if one ore more warning or error occurs.</returns>
+        internal virtual bool PostFieldCustomValidations() { return true; }
 
         #region ValidationResult creation methods
+
+
+        /// <summary>
+        /// Set the testName conducted by this ValidationTest to a Pass.
+        /// </summary>
+        /// <param name="testName">Human readable test name.</param>
+        /// <param name="message">Human readable message describing the test status.</param>
+        internal void AddOrUpdateAsPass(string testName, string message)
+        {
+            string reportingTest = this.GetType().Name;
+            ValidationResult result = GetResult(testName, message, reportingTest);
+            result.impact = ValidationResult.Level.OK;
+            ResultCollection.AddOrUpdate(result, reportingTest);
+        }
+
+
+        /// <summary>
+        /// Set the testName conducted by this ValidationTest to a Warning.
+        /// </summary>
+        /// <param name="testName">Human readable test name.</param>
+        /// <param name="message">Human readable message describing the test status.</param>
+        internal void AddOrUpdateAsWarning(string testName, string message, ResolutionCallback callback = null)
+        {
+            string reportingTest = this.GetType().Name;
+            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            result.impact = ValidationResult.Level.Warning;
+            ResultCollection.AddOrUpdate(result, reportingTest);
+        }
+
+        /// <summary>
+        /// Set the testName conducted by this ValidationTest to an Error.
+        /// </summary>
+        /// <param name="testName">Human readable test name.</param>
+        /// <param name="message">Human readable message describing the test status.</param>
+        internal void AddOrUpdateAsError(string testName, string message, ResolutionCallback callback = null)
+        {
+            string reportingTest = this.GetType().Name;
+            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            result.impact = ValidationResult.Level.Error;
+            ResultCollection.AddOrUpdate(result, reportingTest);
+        }
+
         private ValidationResult GetResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
             ValidationResult result = ResultCollection.GetOrCreate(testName, reportingTest);
@@ -165,7 +224,8 @@ namespace wizardscode.validation
             }
             return result;
         }
-
+        
+        [Obsolete("Use AddOrUpdateAsError instead. This will also replace the subsequent call to AddOrUpdate.")]
         internal ValidationResult GetErrorResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
             ValidationResult result = GetResult(testName, message, reportingTest, callback);
@@ -173,13 +233,15 @@ namespace wizardscode.validation
             return result;
         }
 
+        [Obsolete("Use AddOrUpdateAsWarning instead. This will also replace the subsequent call to AddOrUpdate.")]
         internal ValidationResult GetWarningResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
             ValidationResult result = GetResult(testName, message, reportingTest);
             result.impact = ValidationResult.Level.Warning;
             return result;
         }
-
+        
+        [Obsolete("Use AddOrUpdateAsPass instead. This will also replace the subsequent call to AddOrUpdate.")]
         internal ValidationResult GetPassResult(string testName, string message, string reportingTest)
         {
             ValidationResult result = GetResult(testName, message, reportingTest);
