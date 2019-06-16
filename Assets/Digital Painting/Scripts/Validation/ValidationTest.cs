@@ -224,7 +224,8 @@ namespace wizardscode.validation
             }
             return result;
         }
-
+        
+        [Obsolete("Use AddOrUpdateAsError instead. This will also replace the subsequent call to AddOrUpdate.")]
         internal ValidationResult GetErrorResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
             ValidationResult result = GetResult(testName, message, reportingTest, callback);
@@ -232,13 +233,15 @@ namespace wizardscode.validation
             return result;
         }
 
+        [Obsolete("Use AddOrUpdateAsWarning instead. This will also replace the subsequent call to AddOrUpdate.")]
         internal ValidationResult GetWarningResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
             ValidationResult result = GetResult(testName, message, reportingTest);
             result.impact = ValidationResult.Level.Warning;
             return result;
         }
-
+        
+        [Obsolete("Use AddOrUpdateAsPass instead. This will also replace the subsequent call to AddOrUpdate.")]
         internal ValidationResult GetPassResult(string testName, string message, string reportingTest)
         {
             ValidationResult result = GetResult(testName, message, reportingTest);
