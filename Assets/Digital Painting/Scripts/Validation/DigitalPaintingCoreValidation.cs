@@ -21,8 +21,6 @@ namespace wizardscode.digitalpainting
         {
             bool isPass = base.InitialCustomValidations();
 
-            ValidationResult result;
-
             string path = GetPathToScene();
             if (AssetDatabase.IsValidFolder(path + "/" + dataFolderName))
             {

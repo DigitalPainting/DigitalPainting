@@ -79,8 +79,7 @@ namespace wizardscode.validation
                 AbstractSettingSO fieldInstance = field.GetValue(Manager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
-                    result = GetErrorResult(field.Name, "Must provide a Setting Scriptable Object", validationTest.Name);
-                    ResultCollection.AddOrUpdate(result, validationTest.Name);
+                    AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");
                     return ResultCollection;
                 }
 
@@ -104,8 +103,7 @@ namespace wizardscode.validation
                         {
                             string msg = "A property accessor is provided but the class identified, `"
                                 + className + "`, cannot be found in the Assembly.";
-                            result = GetErrorResult(field.Name, msg, validationTest.Name);
-                            ResultCollection.AddOrUpdate(result, validationTest.Name);
+                            AddOrUpdateAsError(field.Name, msg);
                         }
                         else
                         {
@@ -115,8 +113,7 @@ namespace wizardscode.validation
                             {
                                 string msg = "A property accessor is provided but the accessor identified, `"
                                     + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
-                                result = GetErrorResult(field.Name, msg, validationTest.Name);
-                                ResultCollection.AddOrUpdate(result, validationTest.Name);
+                                AddOrUpdateAsError(field.Name, msg);
                             }
                         }
                     }
@@ -183,7 +180,8 @@ namespace wizardscode.validation
         internal void AddOrUpdateAsPass(string testName, string message)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetPassResult(testName, message, reportingTest);
+            ValidationResult result = GetResult(testName, message, reportingTest);
+            result.impact = ValidationResult.Level.OK;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }
 
@@ -196,7 +194,8 @@ namespace wizardscode.validation
         internal void AddOrUpdateAsWarning(string testName, string message)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetWarningResult(testName, message, reportingTest);
+            ValidationResult result = GetResult(testName, message, reportingTest);
+            result.impact = ValidationResult.Level.Warning;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }
 
@@ -205,10 +204,11 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="testName">Human readable test name.</param>
         /// <param name="message">Human readable message describing the test status.</param>
-        internal void AddOrUpdateAsError(string testName, string message)
+        internal void AddOrUpdateAsError(string testName, string message, ResolutionCallback callback = null)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetErrorResult(testName, message, reportingTest);
+            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            result.impact = ValidationResult.Level.Error;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }
 
