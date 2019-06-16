@@ -17,5 +17,6 @@ MonoBehaviour:
   m_suggestedValue: {fileID: 1700515615886734, guid: 1a97a61a83f662b4489e298cb2027fc5,
     type: 3}
   AddToScene: 1
+  spawnPosition: {x: 0, y: 0, z: 0}
   postProcessingProfile: {fileID: 11400000, guid: e9a609707786fa049916ed9e65395ad8,
     type: 2}
