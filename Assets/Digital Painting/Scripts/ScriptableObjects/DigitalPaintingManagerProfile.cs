@@ -21,22 +21,22 @@ namespace wizardscode.digitalpainting
         [Header("Scene Defaults")]
         [Tooltip("The default camera for Digital Painting.")]
         [Expandable(isRequired: true)]
-        public CameraSettingSO DefaultCameraPrefab;
+        public CameraSettingSO CameraSettings;
 
         [Tooltip("The default terrain for a standard Digital Painting.")]
         [Expandable(isRequired: true)]
-        public PrefabSettingSO DefaultTerrainPrefab;
+        public PrefabSettingSO TerrainSettings;
 
         [Header("Lighting Defaults")]
         [Tooltip("The default color space for the painting.")]
         [Expandable(isRequired: true)]
-        public ColorSpaceSettingSO colorSpace;
+        public ColorSpaceSettingSO ColorSpaceSettings;
 
 
         [Header("Graphics Defaults")]
         [Tooltip("Screen space shadows setting.")]
         [Expandable(isRequired: true)]
-        public ScreenSpaceShadowsSettingSO screenSpace;
+        public ScreenSpaceShadowsSettingSO ScreenSpaceSettings;
 
         /**
          * FIXME: can't figure out how to set HDR on 
@@ -49,7 +49,7 @@ namespace wizardscode.digitalpainting
         [Header("Agent Defaults")]
         [Tooltip("The default agent for the scene. All scenes should have at least one agent.")]
         [Expandable]
-        public PrefabSettingSO DefaultAgentPrefab;
+        public PrefabSettingSO AgentSettings;
         
     }
 }

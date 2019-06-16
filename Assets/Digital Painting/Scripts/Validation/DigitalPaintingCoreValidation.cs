@@ -14,7 +14,13 @@ namespace wizardscode.digitalpainting
     {
         public override ValidationTest<DigitalPaintingManager> Instance => new DigitalPaintingCoreValidation();
 
-        internal override string ProfileType { get { return "DigitalPaintingManagerProfile"; } }
+        internal override Type ProfileType
+        {
+            get
+            {
+                return typeof(DigitalPaintingManagerProfile);
+            }
+        }
 
         internal override bool InitialCustomValidations()
         {
@@ -27,7 +33,7 @@ namespace wizardscode.digitalpainting
             }
             else
             {
-                ResolutionCallback callback = new ResolutionCallback(new ProfileCallback(CreateDataDirectory));
+                ResolutionCallback callback = new ResolutionCallback(new ProfileCallback(CreateDefaultSettingsData));
                 AddOrUpdateAsWarning("Data Directory Existence", "The Digital Painting Data folder does not exist.", callback);
                 return false;
             }
@@ -35,11 +41,13 @@ namespace wizardscode.digitalpainting
             return isPass;
         }
 
-        private void CreateDataDirectory()
+        private void CreateDefaultSettingsData()
         {
             string path = GetPathToScene();
             AssetDatabase.CreateFolder(path, AssetDatabaseUtility.dataFolderName);
-            AssetDatabaseUtility.CopyDefaultSettingSOs(path, EditorSceneManager.GetActiveScene().name);
+            DigitalPaintingManagerProfile profile = AssetDatabaseUtility.SetupDefaultSettings(path, EditorSceneManager.GetActiveScene().name);
+            DigitalPaintingManager manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
+            manager.m_pluginProfile = profile;
         }
 
         private static string GetPathToScene()

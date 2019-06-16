@@ -32,7 +32,7 @@ namespace wizardscode.validation
             }
         }
 
-        internal abstract string ProfileType { get; }
+        internal abstract Type ProfileType { get; }
 
         public abstract ValidationTest<T> Instance { get; }
 
@@ -65,7 +65,7 @@ namespace wizardscode.validation
                 return ResultCollection;
             }
 
-            if (!ProfileType.EndsWith(Manager.Profile.GetType().Name)) {
+            if (!ProfileType.Name.EndsWith(Manager.Profile.GetType().Name)) {
                 return ResultCollection;
             }
 
