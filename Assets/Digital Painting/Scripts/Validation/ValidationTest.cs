@@ -191,10 +191,10 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="testName">Human readable test name.</param>
         /// <param name="message">Human readable message describing the test status.</param>
-        internal void AddOrUpdateAsWarning(string testName, string message)
+        internal void AddOrUpdateAsWarning(string testName, string message, ResolutionCallback callback = null)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetResult(testName, message, reportingTest);
+            ValidationResult result = GetResult(testName, message, reportingTest, callback);
             result.impact = ValidationResult.Level.Warning;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }

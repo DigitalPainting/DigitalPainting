@@ -28,20 +28,21 @@ namespace wizardscode.digitalpainting
             }
             else
             {
-                AddOrUpdateAsWarning("Data Directory Existence", "The Digital Painting Data does not exist.");
+                ResolutionCallback callback = new ResolutionCallback(new ProfileCallback(CreateDataDirectory));
+                AddOrUpdateAsWarning("Data Directory Existence", "The Digital Painting Data folder does not exist.", callback);
                 isPass = false;
             }
 
             return isPass;
         }
 
-        private void CopyDefaultSOCollection()
+        private void CreateDataDirectory()
         {
             string path = GetPathToScene();
             AssetDatabase.CreateFolder(path, dataFolderName);
-
-            AssetDatabase.CopyAsset("Assets/DigitalPainting/Assets/Digital Painting/Data/Default Collection/CameraSettingSO_Default.asset", path + "/" + dataFolderName + "/CameraSettingSO_Default.asset");
-            AssetDatabase.SaveAssets();
+            
+            //AssetDatabase.CopyAsset("Assets/DigitalPainting/Assets/Digital Painting/Data/Default Collection/CameraSettingSO_Default.asset", path + "/" + dataFolderName + "/CameraSettingSO_Default.asset");
+            //AssetDatabase.SaveAssets();
         }
 
         private static string GetPathToScene()
