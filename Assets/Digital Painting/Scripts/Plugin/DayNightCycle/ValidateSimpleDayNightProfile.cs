@@ -1,4 +1,5 @@
-﻿using wizardscode.environment;
+﻿using System;
+using wizardscode.environment;
 
 namespace wizardscode.validation
 {
@@ -6,6 +7,6 @@ namespace wizardscode.validation
     {
         public override ValidationTest<DayNightPluginManager> Instance => new ValidateSimpleDayNightProfile();
 
-        internal override string ProfileType { get { return "SimpleDayNightProfile"; } }
+        internal override Type ProfileType => typeof(SimpleDayNightProfile);
     }
 }
