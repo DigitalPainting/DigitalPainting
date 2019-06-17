@@ -11,7 +11,6 @@ namespace wizardscode.digitalpainting
 
         [Header("Prefabs")]
         public DigitalPaintingManager ManagerPrefab;
-        public Octree FlyingPathfinderPrefab;
 
         [Header("Informational")]
         public string ManagerName = "Digital Painting Manager";

@@ -12,13 +12,11 @@ namespace wizardscode.digitalpainting
     {
         [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
         public AgentScriptableObject[] agentObjectDefs;
-
-        private Octree octree;
+        
         private Director director;
 
         void Awake()
         {
-            octree = GameObject.FindObjectOfType<Octree>();
             director = GameObject.FindObjectOfType<Director>();
         }
 
@@ -51,10 +49,6 @@ namespace wizardscode.digitalpainting
             }
 
             Vector3 position = GetSpawnPositionCandidate(controller);
-            while(!octree.IsTraversableCell(position))
-            {
-                position = GetSpawnPositionCandidate(controller);
-            }
             agent.transform.position = position;
 
             return controller;

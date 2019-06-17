@@ -61,7 +61,7 @@ namespace wizardscode.devtest
         private void Update()
         {
             PopulateInterestingThingsDropdown();
-
+            /*
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
             Thing thing = agent.Target ? agent.Target.GetComponentInParent<Thing>() : null;
             if (thing)
@@ -72,10 +72,12 @@ namespace wizardscode.devtest
             {
                 distanceToThingOfInterestText.text = "Wandering";
             }
+            */
         }
 
         private void LateUpdate()
         {
+            /*
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
             Thing thing = agent.Target ? agent.Target.GetComponentInParent<Thing>() : null;
             if (thing)
@@ -86,10 +88,12 @@ namespace wizardscode.devtest
             {
                 thingOfInterestDropdown.value = 0;
             }
+            */
         }
 
         public void OnThingSelectionChanged()
         {
+            /*
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
 
             if (thingOfInterestDropdown.value == 0)
@@ -100,10 +104,12 @@ namespace wizardscode.devtest
             {
                 agent.Target = thingsManager.allTheThings[thingOfInterestDropdown.value - 1].transform;
             }
+            */
         }
 
         public void OnAddThingClicked()
         {
+            /*
             AIAgentController agent = (AIAgentController)director.AgentWithFocus;
 
             Thing newThing = GameObject.Instantiate<Thing>(addableThings[0]);
@@ -118,6 +124,7 @@ namespace wizardscode.devtest
             newThing.transform.LookAt(new Vector3(lookAt.x, newThing.transform.position.y, lookAt.z));
 
             thingsManager.allTheThings.Add(newThing);
+            */
         }
     }
 }
