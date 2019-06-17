@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+
 using wizardscode.digitalpainting.agent;
 
 namespace wizardscode.validation
 {
+    /// <summary>
+    /// The AgentSettignSO class describes an agent in the game. This is a reasonably generic description,
+    /// specific agent types might subclass this to provide more details that are exclusive to that type.
+    /// </summary>
     [CreateAssetMenu(fileName = "AgentSettingSO_DESCRIPTIVENAME", menuName = "Wizards Code/Validation/Game Objects/Agent")]
     public class AgentSettingSO : PrefabSettingSO
     {
@@ -30,9 +35,19 @@ namespace wizardscode.validation
         {
             base.InstantiatePrefab();
             BaseAgentController controller = Instance.GetComponent<BaseAgentController>();
-            controller.Settings = this;
+            if (controller) {
+              controller.Settings = this;
+            }
             Instance.name = agentName;
 
+            PositionOnGround(Instance.transform.position);
+        }
+
+        internal void PositionOnGround(Vector3 pos)
+        {
+            float terrainHeight = Terrain.activeTerrain.SampleHeight(pos);
+            pos.y = terrainHeight;
+            Instance.transform.position = pos;
         }
     }
 }
