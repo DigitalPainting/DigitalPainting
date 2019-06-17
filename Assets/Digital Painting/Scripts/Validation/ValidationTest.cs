@@ -53,7 +53,7 @@ namespace wizardscode.validation
             }
 
             // Is a plugin profile provided?
-            if(Manager.Profile == null)
+            if (Manager.Profile == null)
             {
                 result = ResultCollection.GetOrCreate(Manager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
                 result.Message = "You need to provide a plugin profile for " + Manager.GetType().Name.BreakCamelCase();
@@ -84,6 +84,11 @@ namespace wizardscode.validation
                 }
 
                 ResultCollection.Remove(field.Name);
+
+                if (!PreFieldCustomValidations())
+                {
+                    return ResultCollection;
+                }
 
                 if (field.FieldType == typeof(GenericSettingSO<>))
                 {
@@ -119,19 +124,15 @@ namespace wizardscode.validation
                     }
                 }
 
-                if (PreFieldCustomValidations())
-                {
-                    return ResultCollection;
-                }
-
                 Type type = field.FieldType;
                 // Validate the field according to the SO validation setting.
                 result = (ValidationResult)type.InvokeMember("Validate",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                     null, fieldInstance, new object[] { validationTest });
+                
                 ResultCollection.AddOrUpdate(result, validationTest.Name);
 
-                if (PostFieldCustomValidations())
+                if (!PostFieldCustomValidations())
                 {
                     return ResultCollection;
                 }
