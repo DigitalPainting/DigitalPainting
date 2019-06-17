@@ -77,7 +77,7 @@ namespace wizardscode.plugin
                 string className = GetPluginImplementationClassName();
                 if(className == null)
                 {
-                    // there is no dependency on external assets, so it's avaialble
+                    // there is no dependency on external assets, so it's available
                     return true;
                 }
                 IEnumerable<Type> types;
