@@ -77,8 +77,7 @@ Please see the license details within git submodules. Only permissively licensed
 
 In addition to the repositories and libraries in the credit section here is another list of useful resources:
 
-  * TreeIt a free tree generator
-  * 
+  * [TreeIt](http://www.evolved-software.com/treeit) a free tree generator
 
 
 
