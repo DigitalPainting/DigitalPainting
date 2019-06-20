@@ -65,13 +65,20 @@ depend on paid assets.
 
 ### Credits
 
-All textures included with this package are available from [opengameart.org](https://opengameart.org/textures/all) under a [CC0 license](https://creativecommons.org/share-your-work/public-domain/) and can therefore be reused without restriction. 
+Various resources in this asset come from one or more of the following and come under a public domain license.
 
-All icons provided in this asset are available from [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
+  * [opengameart.org](https://opengameart.org/textures/all) under a [CC0 license](https://creativecommons.org/share-your-work/public-domain/) and can therefore be reused without restriction. 
+  * [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
+  * [keijiro/PuppetTest ](https://github.com/keijiro/PuppetTest) and is under a [CC0 license](https://creativecommons.org/share-your-work/public-domain/).
 
-The NeoLowMan model is from [keijiro/PuppetTest ](https://github.com/keijiro/PuppetTest) and is under a [CC0 license](https://creativecommons.org/share-your-work/public-domain/).
+Please see the license details within git submodules. Only permissively licensed code is included. Changes to these submodules should be submitted upstream for inclusion in the originating project (at the owners discretion).
 
-Please see the license details within git submodules. Only permissively licensed code is included. Changes to these submodules should be submitted upstream for inclusion in the originating project (at the owners disretion).
+### Potentially Useful Resources
+
+In addition to the repositories and libraries in the credit section here is another list of useful resources:
+
+  * TreeIt a free tree generator
+  * 
 
 
 
