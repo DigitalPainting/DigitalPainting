@@ -402,17 +402,19 @@ namespace wizardscode.editor
             MessageType type = MessageType.Info;
 
             ValidationResult result;
-            if(totalErrorCount > 0)
+            if(notIgnoredErrorCount > 0)
             {
                 type = MessageType.Error;
                 result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
-            } else if (totalWarningCount > 0)
+            } else if (notIgnoredWarningCount > 0)
             {
                 type = MessageType.Warning;
                 result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
             } else
             {
-                title = "Everything looks to be set up correctly.";
+                title = "Everything looks to be set up correctly.\n";
+                title += (totalErrorCount - notIgnoredErrorCount) + " ignored errors.\n";
+                title += (totalWarningCount - notIgnoredWarningCount) + " ignored warnings.\n";
                 result = null;
             }
             
