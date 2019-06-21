@@ -9,6 +9,30 @@ namespace wizardscode.validation
     public class ValidationResultCollection
     {
         Dictionary<int, ValidationResult> collection = new Dictionary<int, ValidationResult>();
+
+        /// <summary>
+        /// Search for the highest priority result that is either an Error or a Warning that
+        /// is not being ignored.
+        /// If there are no errors or warnings that are not ignored returns null.
+        /// </summary>
+        /// <param name="ignoredTests">A list of test names that should be ignored.</param>
+        /// <returns>Highest priority error or warning (not ignored) or null if none exists.</returns>
+        public ValidationResult GetHighestPriorityErrorOrWarning(List<string> ignoredTests)
+        {
+            IEnumerable<KeyValuePair<int, ValidationResult>> candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Error && !ignoredTests.Contains(z.Value.name));
+
+            if (candidates.Count() > 0) {
+                return candidates.First().Value;
+            }
+
+            candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Warning && !ignoredTests.Contains(z.Value.name));
+            if (candidates.Count() > 0)
+            {
+                return candidates.First().Value;
+            }
+
+            return null;
+        }
        
         /// <summary>
         /// Get or create a ValidationResult for a setting and a specific validation test.

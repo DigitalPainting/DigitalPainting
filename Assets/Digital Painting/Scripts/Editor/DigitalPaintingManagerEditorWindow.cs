@@ -392,18 +392,27 @@ namespace wizardscode.editor
             string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " OK)";
             MessageType type = MessageType.Info;
 
+            ValidationResult result;
             if(errorCount > 0)
             {
                 type = MessageType.Error;
+                result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
             } else if (warningCount > 0)
             {
                 type = MessageType.Warning;
+                result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
             } else
             {
                 title = "Everything looks to be set up correctly.";
+                result = null;
             }
-
+            
             EditorGUILayout.HelpBox(title, type);
+
+            if (result != null)
+            {
+                ValidationResultGUI(result);
+            }
         }
 
         /// <summary>
