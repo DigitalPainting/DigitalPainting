@@ -27,9 +27,13 @@ namespace wizardscode.agent
         internal override void Awake()
         {
             base.Awake();
+            m_Camera = Camera.main;
+        }
+
+        private void Start()
+        {
             m_RigidBody = GetComponent<Rigidbody>();
             m_Animator = GetComponent<Animator>();
-            m_Camera = Camera.main;
         }
 
         override internal void Update()
