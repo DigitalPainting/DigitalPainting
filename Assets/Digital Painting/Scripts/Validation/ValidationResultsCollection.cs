@@ -21,7 +21,8 @@ namespace wizardscode.validation
         {
             IEnumerable<KeyValuePair<int, ValidationResult>> candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Error && !ignoredTests.Contains(z.Value.name));
 
-            if (candidates.Count() > 0) {
+            if (candidates.Count() > 0)
+            {
                 return candidates.First().Value;
             }
 

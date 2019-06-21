@@ -21,7 +21,6 @@ namespace wizardscode.validation
         public HashSet<string> ReportingTest = new HashSet<string>();
         public Level impact;
         public List<ResolutionCallback> Callbacks = new List<ResolutionCallback>();
-        public bool Ignore = false;
 
         private string m_message;
 

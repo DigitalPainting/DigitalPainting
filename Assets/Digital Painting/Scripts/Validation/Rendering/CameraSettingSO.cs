@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
@@ -10,6 +11,17 @@ namespace wizardscode.validation
         [Header("Camera Settings")]
         [Tooltip("The Post Processing Profile to add to use on the camera.")]
         public PostProcessProfile postProcessingProfile;
+
+        internal override void InstantiatePrefab()
+        {
+            Camera camera = GameObject.FindObjectOfType<Camera>();
+            if (camera)
+            {
+                Undo.DestroyObjectImmediate(camera.gameObject);
+            }
+
+            base.InstantiatePrefab();
+        }
 
         internal override ValidationResult ValidateSetting(Type validationTest)
         {
