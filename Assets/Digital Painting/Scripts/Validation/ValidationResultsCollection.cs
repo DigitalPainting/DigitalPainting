@@ -15,18 +15,18 @@ namespace wizardscode.validation
         /// is not being ignored.
         /// If there are no errors or warnings that are not ignored returns null.
         /// </summary>
-        /// <param name="ignoredTests">A list of test names that should be ignored.</param>
+        /// <param name="exclude">A list of test names that should be ignored.</param>
         /// <returns>Highest priority error or warning (not ignored) or null if none exists.</returns>
-        public ValidationResult GetHighestPriorityErrorOrWarning(List<string> ignoredTests)
+        public ValidationResult GetHighestPriorityErrorOrWarning(List<string> exclude)
         {
-            IEnumerable<KeyValuePair<int, ValidationResult>> candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Error && !ignoredTests.Contains(z.Value.name));
+            IEnumerable<KeyValuePair<int, ValidationResult>> candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Error && !exclude.Contains(z.Value.name));
 
             if (candidates.Count() > 0)
             {
                 return candidates.First().Value;
             }
 
-            candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Warning && !ignoredTests.Contains(z.Value.name));
+            candidates = collection.Where(z => z.Value.impact == ValidationResult.Level.Warning && !exclude.Contains(z.Value.name));
             if (candidates.Count() > 0)
             {
                 return candidates.First().Value;
@@ -126,14 +126,44 @@ namespace wizardscode.validation
             get { return collection.Values.Count(x => x.impact == ValidationResult.Level.OK); }
         }
 
+        /// <summary>
+        /// Get a List of OK results.
+        /// </summary>
+        /// <param name="exclude">A list of result names that should be excluded from the result set.</param>
+        /// <returns>All OK results not in the exclude list.</returns>
+        public List<ValidationResult> GetOKs(List<String> exclude)
+        {
+            return collection.Values.Where(z => z.impact == ValidationResult.Level.OK && !exclude.Contains(z.name)).ToList();
+        }
+
         public int CountWarning
         {
             get { return collection.Values.Count(x => x.impact == ValidationResult.Level.Warning); }
         }
 
+        /// <summary>
+        /// Get a List of Warning results.
+        /// </summary>
+        /// <param name="exclude">A list of result names that should be excluded from the result set.</param>
+        /// <returns>All Warning results not in the exclude list.</returns>
+        public List<ValidationResult> GetWarnings(List<String> exclude)
+        {
+            return collection.Values.Where(z => z.impact == ValidationResult.Level.Warning && !exclude.Contains(z.name)).ToList();
+        }
+
         public int CountError
         {
             get { return collection.Values.Count(x => x.impact == ValidationResult.Level.Error); }
+        }
+
+        /// <summary>
+        /// Get List of Error results.
+        /// </summary>
+        /// <param name="exclude">A list of result names that should be excluded from the result set.</param>
+        /// <returns>All Error results not in the exclude list.</returns>
+        public List<ValidationResult> GetErrors(List<String> exclude)
+        {
+            return collection.Values.Where(z => z.impact == ValidationResult.Level.Error && !exclude.Contains(z.name)).ToList();
         }
 
         public List<ValidationResult> ErrorList

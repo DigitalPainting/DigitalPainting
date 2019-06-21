@@ -386,18 +386,27 @@ namespace wizardscode.editor
         {
             Validate();
 
-            int okCount = Validations.Count;
-            int warningCount = Validations.CountWarning;
-            int errorCount = Validations.CountError;
-            string title = "Validation (" + errorCount + " Errors, " + warningCount + " warnings, " + okCount + " OK)";
+            int totalOKCount = Validations.CountOK;
+            int notIgnoredOKCount = Validations.GetOKs(ignoredTests).Count();
+
+            int totalWarningCount = Validations.CountWarning;
+            int notIgnoredWarningCount = Validations.GetWarnings(ignoredTests).Count();
+
+            int totalErrorCount = Validations.CountError;
+            int notIgnoredErrorCount = Validations.GetErrors(ignoredTests).Count();
+
+            string title = "Errors: " + notIgnoredErrorCount + " + (" + (totalErrorCount - notIgnoredErrorCount) + " ignored)\n";
+            title += "Warnings: " + notIgnoredWarningCount + " + (" + (totalWarningCount - notIgnoredWarningCount) + " ignored)\n";
+            title += "OK: " + totalOKCount;
+
             MessageType type = MessageType.Info;
 
             ValidationResult result;
-            if(errorCount > 0)
+            if(totalErrorCount > 0)
             {
                 type = MessageType.Error;
                 result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
-            } else if (warningCount > 0)
+            } else if (totalWarningCount > 0)
             {
                 type = MessageType.Warning;
                 result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
