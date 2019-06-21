@@ -588,22 +588,32 @@ namespace wizardscode.editor
         {
             if (availablePluginsCache[pluginDefinitionType.Name].Count > 0)
             {
-                GUILayout.Label("Available for use");
+                EditorGUILayout.LabelField("Available for use");
                 for (int i = availablePluginsCache[pluginDefinitionType.Name].Count - 1; i >= 0; i--)
                 {
                     AbstractPluginDefinition defn = availablePluginsCache[pluginDefinitionType.Name][i];
+
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUI.indentLevel++;
+
+                    float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                    EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
+
                     bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
                     using (new EditorGUI.DisabledScope(hasManager))
                     {
-                        if (GUILayout.Button("Enable " + defn.GetReadableName()))
+                        if (GUILayout.Button("Enable"))
                         {
                             defn.Enable();
                         }
-                        if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
+                        if (GUILayout.Button("Learn more"))
                         {
                             Application.OpenURL(defn.GetURL());
                         }
                     }
+
+                    EditorGUI.indentLevel--;
+                    EditorGUILayout.EndHorizontal();
                 }
             }
         }
@@ -616,16 +626,26 @@ namespace wizardscode.editor
                 for (int i = enabledPluginsCache[pluginDefinitionType.Name].Count - 1; i >= 0; i--)
                 {
                     AbstractPluginDefinition defn = enabledPluginsCache[pluginDefinitionType.Name][i];
-                    if (GUILayout.Button("Disable " + defn.GetReadableName()))
+                    
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUI.indentLevel++;
+
+                    float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                    EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
+
+                    if (GUILayout.Button("Disable"))
                     {
                         defn.Disable();
                         enabledPluginsCache[pluginDefinitionType.Name].Remove(defn);
                         availablePluginsCache[pluginDefinitionType.Name].Add(defn);
                     }
-                    if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
+                    if (GUILayout.Button("Learn more"))
                     {
                         Application.OpenURL(defn.GetURL());
                     }
+
+                    EditorGUI.indentLevel--;
+                    EditorGUILayout.EndHorizontal();
                 }
             }
         }
