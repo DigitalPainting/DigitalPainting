@@ -144,7 +144,7 @@ namespace wizardscode.validation
 
         internal ValidationResult GetWarningResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
         {
-            ValidationResult result = GetResult(testName, message, reportingTest);
+            ValidationResult result = GetResult(testName, message, reportingTest, callback);
             result.impact = ValidationResult.Level.Warning;
             return result;
         }
