@@ -136,7 +136,7 @@ namespace wizardscode.plugin
         public virtual void Enable()
         {
             GameObject go = new GameObject(GetManagerType().Name.ToString().Prettify());
-            go.AddComponent(GetManagerType());
+            AbstractPluginManager manager = (AbstractPluginManager)go.AddComponent(GetManagerType());
             go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
 
             MonoScript script = MonoScript.FromScriptableObject(this);
@@ -145,6 +145,11 @@ namespace wizardscode.plugin
             string fromPath = scriptPath.Substring("Assets/".Length, lastIndex - 7) + AssetDatabaseUtility.dataFolderName;
             string toPath = GetPathToScene();
 
+            SetupDefaultSettings(manager, fromPath, toPath);
+        }
+
+        private void SetupDefaultSettings(AbstractPluginManager manager, string fromPath, string toPath)
+        {
             Scene scene = EditorSceneManager.GetActiveScene();
             string sceneName = scene.name;
 
@@ -161,7 +166,7 @@ namespace wizardscode.plugin
                     string temp = fileName.Replace("\\", "/");
                     int index = temp.LastIndexOf("/");
                     string localPath = "Assets/" + fromPath;
-                    
+
                     if (index > 0)
                     {
                         localPath += temp.Substring(index);
@@ -174,6 +179,18 @@ namespace wizardscode.plugin
                         filename = filename.Replace("_Default", "_" + sceneName);
                         AssetDatabase.CopyAsset(localPath, toPath + "/" + AssetDatabaseUtility.dataFolderName + "/" + filename);
                     }
+
+                    // if AbstractPluginProfile copy it into Profile
+
+                    AbstractPluginProfile profile = (AbstractPluginProfile)AssetDatabase.LoadAssetAtPath(localPath, typeof(AbstractPluginProfile));
+                    if (profile != null)
+                    {
+                        string filename = Path.GetFileName(localPath);
+                        filename = filename.Replace("_Default", "_" + sceneName);
+                        AssetDatabase.CopyAsset(localPath, toPath + "/" + AssetDatabaseUtility.dataFolderName + "/" + filename);
+
+                        manager.Profile = profile;
+                    }
                 }
             }
             catch (Exception e)
@@ -181,8 +198,6 @@ namespace wizardscode.plugin
                 Debug.LogError("Unable to copy plugin default settings. Digital Painting expects to find the default settings in " + fromPath + " see following exception for more information", this);
                 Debug.LogException(e);
             }
-            //DigitalPaintingManager manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
-            //manager.m_pluginProfile = profile;
         }
 
         private static string GetPathToScene()
