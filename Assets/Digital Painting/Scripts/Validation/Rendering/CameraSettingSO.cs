@@ -37,11 +37,11 @@ namespace wizardscode.validation
                 PostProcessVolume volume = go.GetComponent<PostProcessVolume>();
                 if (volume == null)
                 {
-                    return GetErrorResult(TestName, "Camera does not have a post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessing));
+                    return GetWarningResult(TestName, "Camera does not have a post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessing));
                 }
 
                 if (volume.profile != postProcessingProfile) {
-                    return GetErrorResult(TestName, "Camera does not have the correct post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessingProfile));
+                    return GetWarningResult(TestName, "Camera does not have the correct post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessingProfile));
                 }
             }
             return GetPassResult(TestName, validationTest.Name);

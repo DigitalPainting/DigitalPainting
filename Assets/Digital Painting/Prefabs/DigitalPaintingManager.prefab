@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4451654348586044}
   - component: {fileID: 114192318843746294}
   - component: {fileID: 114467244445007254}
-  - component: {fileID: 114430713918459818}
   m_Layer: 0
   m_Name: DigitalPaintingManager
   m_TagString: Untagged
@@ -47,12 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a462e77d98d43043ba228a13db67c7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentObjectDefs:
-  - {fileID: 11400000, guid: 82c77e00c6679b3438dddc03dc028301, type: 2}
-  _agentWithFocus:
-    _useConstant: 0
-    _constantValue: {fileID: 0}
-    _variable: {fileID: 11400000, guid: d6cecf486ccca5c47b34c80234965838, type: 2}
+  m_pluginProfile: {fileID: 0}
+  agentObjectDefs: []
 --- !u!114 &114467244445007254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,19 +61,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allTheThings: []
---- !u!114 &114430713918459818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163264246283250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb0800dd61401504c86bb738a9a6ee78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  demoUI: {fileID: 1808907733917478, guid: 9c495122d1430c347ab9945831679e2b, type: 3}
 --- !u!1 &534104588618770187
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,12 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cb5ea655ef1be5479758c1adc3e03e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _agentWithFocus:
-    _useConstant: 0
-    _constantValue: {fileID: 0}
-    _variable: {fileID: 0}
   defaultCameraSetup: {fileID: 0}
-  defaultCameraRig: {fileID: 0}
 --- !u!114 &4228008670085889337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,9 +123,8 @@ MonoBehaviour:
   _showDebugFields: 0
   _enableGizmoDebugging: 1
   _debugColor: {r: 0, g: 1, b: 1, a: 1}
-  _previouslyRegisteredEvent: {fileID: 11400000, guid: 207794dad31c5df4abf2df624c7c70c0,
-    type: 2}
-  _event: {fileID: 11400000, guid: 207794dad31c5df4abf2df624c7c70c0, type: 2}
+  _previouslyRegisteredEvent: {fileID: 0}
+  _event: {fileID: 0}
   _response:
     m_PersistentCalls:
       m_Calls:
