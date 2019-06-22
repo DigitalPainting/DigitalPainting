@@ -27,9 +27,9 @@ namespace wizardscode.editor
         private EditorConfigScriptableObject m_config;
         private string defaultConfigSavePath = "Assets/Digital Painting Editor Config.asset";
 
-        Dictionary<string, List<AbstractPluginDefinition>> enabledPluginsCache = new Dictionary<string, List<AbstractPluginDefinition>>();
-        Dictionary<string, List<AbstractPluginDefinition>> availablePluginsCache = new Dictionary<string, List<AbstractPluginDefinition>>();
-        Dictionary<string, List<AbstractPluginDefinition>> supportedPluginsCache = new Dictionary<string, List<AbstractPluginDefinition>>();
+        Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>> enabledPluginsCache = new Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>>();
+        Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>> availablePluginsCache = new Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>>();
+        Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>> supportedPluginsCache = new Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>>();
         private float frequencyOfPluginRefresh = 5;
         private DateTime timeOfNextPluginRefresh = DateTime.Now;
         private string configAssetPath = "Assets/Digital Painting Editor Config.asset";
@@ -370,11 +370,13 @@ namespace wizardscode.editor
         {
             ShowStatusSummaryGUI();
 
-            IEnumerable<Type> types = GetAllPluginDefinitions();
+            UpdateAllPluginDefinitions();
 
-            foreach (Type type in types)
+            Array categories = Enum.GetValues(typeof(AbstractPluginDefinition.PluginCategory));
+
+            foreach (AbstractPluginDefinition.PluginCategory category in categories)
             {
-                PluginSelectionGUI(type);
+                PluginSelectionGUI(category);
             }
         }
 
@@ -427,29 +429,28 @@ namespace wizardscode.editor
         }
 
         /// <summary>
-        /// Get an Enumeration of all available plugins types known to the system.
-        /// This is a complete, unsorted list. However, we also cache the list of plugins 
-        /// by status. This cache is updated by this method:
+        /// Updates the list of plugins known to the system and updates their status .
+        /// (available, enabled or supported).
         /// 
         /// `avaiallbePluginsCache` - Available to be used, but not enabled in the scene.
         /// `enabledPluginsCache` - Available to be used and enabled in the scene.
         /// `supportedPluginsCache` - Known plugins that are not yet available for use (likely has a dependency on a missing asset)
         /// </summary>
-        /// <returns></returns>
-        private IEnumerable<Type> GetAllPluginDefinitions()
+        private void UpdateAllPluginDefinitions()
         {
-            IEnumerable<Type> types = ReflectionHelper.GetClassesWithBaseType<AbstractPluginDefinition>();
-
             if (DateTime.Now >= timeOfNextPluginRefresh)
             {
+                availablePluginsCache.Clear();
+                enabledPluginsCache.Clear();
+                supportedPluginsCache.Clear();
+
+                IEnumerable<Type> types = ReflectionHelper.GetClassesWithBaseType<AbstractPluginDefinition>();
                 foreach (Type type in types)
                 {
                     UpdatePluginStatus(type);
                 }
                 timeOfNextPluginRefresh = DateTime.Now.AddSeconds(frequencyOfPluginRefresh);
             }
-
-            return types;
         }
 
         /// <summary>
@@ -545,87 +546,132 @@ namespace wizardscode.editor
         /// Find all the plugins of a a given type known to the system and display
         /// a UI for working with them.
         /// </summary>
-        /// <param name="pluginDefinitionType">The type of plugin to display in the GUI</param>
-        private void PluginSelectionGUI (Type pluginDefinitionType)
+        /// <param name="category">The AbstractPluginDefinition.PluginCategory of plugins to display in the GUI</param>
+        private void PluginSelectionGUI (AbstractPluginDefinition.PluginCategory category)
         {
             GUILayout.BeginVertical("Box");
-            string categoryName = pluginDefinitionType.Name.Prettify();
-            categoryName = categoryName.Substring(categoryName.IndexOf(' '));
-            categoryName = categoryName.Substring(0, categoryName.Length - " Plugin Definition".Length);
+            string categoryName = category.ToString().Prettify();
 
             GUILayout.Label(categoryName + " Plugins", EditorStyles.boldLabel);
 
-            if (enabledPluginsCache[pluginDefinitionType.Name].Count + availablePluginsCache[pluginDefinitionType.Name].Count > 0)
+            GUILayout.BeginVertical("Box");
+
+            try
             {
-                GUILayout.BeginVertical("Box");
-                EnabledPluginsGUI(pluginDefinitionType);
-                AvailablePluginsGUI(pluginDefinitionType);
-                GUILayout.EndVertical();
+                EnabledPluginsGUI(category);
+            }
+            catch (KeyNotFoundException e)
+            {
+                // That's just fine, no enabled plugins in this category
             }
 
-            SuportedPluginsGUI(pluginDefinitionType);
+            try
+            {
+                AvailablePluginsGUI(category);
+            }
+                catch (KeyNotFoundException e)
+            {
+                // That's just fine, no enabled plugins in this category
+            }
+
+            try
+            {
+                SupportedPluginsGUI(category);
+            }
+            catch (KeyNotFoundException e)
+            {
+                // That's just fine, no enabled plugins in this category
+            }
+
+            GUILayout.EndVertical();
+
             GUILayout.EndVertical();
         }
 
-        private void SuportedPluginsGUI(Type pluginDefinitionType)
+        private void SupportedPluginsGUI(AbstractPluginDefinition.PluginCategory category)
         {
-            if (supportedPluginsCache[pluginDefinitionType.Name].Count > 0)
+            List<AbstractPluginDefinition> plugins;
+            try
             {
-                GUILayout.BeginVertical("Box");
-                GUILayout.Label("Supported but not installed");
-                foreach (AbstractPluginDefinition defn in supportedPluginsCache[pluginDefinitionType.Name])
+                plugins = supportedPluginsCache[category];
+            if (plugins.Count > 0)
+            {
+                EditorGUILayout.BeginVertical("Box");
+
+
+                float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                EditorGUILayout.LabelField("Supported but not installed");
+                foreach (AbstractPluginDefinition defn in supportedPluginsCache[category])
                 {
                     if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
                     {
                         Application.OpenURL(defn.GetURL());
                     }
                 }
-                GUILayout.EndVertical();
-            }
-        }
 
-        private void AvailablePluginsGUI(Type pluginDefinitionType)
-        {
-            if (availablePluginsCache[pluginDefinitionType.Name].Count > 0)
-            {
-                EditorGUILayout.LabelField("Available for use");
-                for (int i = availablePluginsCache[pluginDefinitionType.Name].Count - 1; i >= 0; i--)
-                {
-                    AbstractPluginDefinition defn = availablePluginsCache[pluginDefinitionType.Name][i];
-
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUI.indentLevel++;
-
-                    float columnWidth = EditorGUIUtility.currentViewWidth / 3;
-                    EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
-
-                    bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
-                    using (new EditorGUI.DisabledScope(hasManager))
-                    {
-                        if (GUILayout.Button("Enable"))
-                        {
-                            defn.Enable();
-                        }
-                        if (GUILayout.Button("Learn more"))
-                        {
-                            Application.OpenURL(defn.GetURL());
-                        }
-                    }
-
-                    EditorGUI.indentLevel--;
-                    EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
                 }
             }
+            catch (KeyNotFoundException e)
+            {
+                // That's just fine, no enabled plugins in this category
+            }
         }
 
-        private void EnabledPluginsGUI(Type pluginDefinitionType)
+        private void AvailablePluginsGUI(AbstractPluginDefinition.PluginCategory category)
         {
-            if (enabledPluginsCache[pluginDefinitionType.Name].Count > 0)
+            List<AbstractPluginDefinition> plugins;
+            try
+            {
+                plugins = availablePluginsCache[category];
+                if (plugins.Count > 0)
+                {
+                    if (plugins.Count > 0)
+                    {
+                        EditorGUILayout.LabelField("Available for use");
+                        for (int i = availablePluginsCache[category].Count - 1; i >= 0; i--)
+                        {
+                            AbstractPluginDefinition defn = availablePluginsCache[category][i];
+
+                            EditorGUILayout.BeginHorizontal();
+                            EditorGUI.indentLevel++;
+
+                            float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                            EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
+
+                            bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
+                            using (new EditorGUI.DisabledScope(hasManager))
+                            {
+                                if (GUILayout.Button("Enable"))
+                                {
+                                    defn.Enable();
+                                }
+                                if (GUILayout.Button("Learn more"))
+                                {
+                                    Application.OpenURL(defn.GetURL());
+                                }
+                            }
+
+                            EditorGUI.indentLevel--;
+                            EditorGUILayout.EndHorizontal();
+                        }
+                    }
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                // That's just fine, no enabled plugins in this category
+            }
+        }
+
+        private void EnabledPluginsGUI(AbstractPluginDefinition.PluginCategory category)
+        {
+            if (enabledPluginsCache[category].Count > 0)
             {
                 GUILayout.Label("Currently Enabled");
-                for (int i = enabledPluginsCache[pluginDefinitionType.Name].Count - 1; i >= 0; i--)
+                for (int i = enabledPluginsCache[category].Count - 1; i >= 0; i--)
                 {
-                    AbstractPluginDefinition defn = enabledPluginsCache[pluginDefinitionType.Name][i];
+                    AbstractPluginDefinition defn = enabledPluginsCache[category][i];
                     
                     EditorGUILayout.BeginHorizontal();
                     EditorGUI.indentLevel++;
@@ -636,8 +682,8 @@ namespace wizardscode.editor
                     if (GUILayout.Button("Disable"))
                     {
                         defn.Disable();
-                        enabledPluginsCache[pluginDefinitionType.Name].Remove(defn);
-                        availablePluginsCache[pluginDefinitionType.Name].Add(defn);
+                        enabledPluginsCache[category].Remove(defn);
+                        availablePluginsCache[category].Add(defn);
                     }
                     if (GUILayout.Button("Learn more"))
                     {
@@ -661,14 +707,6 @@ namespace wizardscode.editor
         /// <param name="T"></param>
         private void UpdatePluginStatus(Type T)
         {
-            List<AbstractPluginDefinition> availablePlugins = new List<AbstractPluginDefinition>();
-            List<AbstractPluginDefinition> enabledPlugins = new List<AbstractPluginDefinition>();
-            List<AbstractPluginDefinition> supportedPlugins = new List<AbstractPluginDefinition>();
-
-            availablePlugins = new List<AbstractPluginDefinition>();
-            enabledPlugins = new List<AbstractPluginDefinition>();
-            supportedPlugins = new List<AbstractPluginDefinition>();
-
             IEnumerable<Type> plugins = ReflectionHelper.GetEnumerableOfType(T);
             foreach (Type pluginType in plugins)
             {
@@ -681,27 +719,40 @@ namespace wizardscode.editor
                         AbstractPluginProfile pluginProfile = pluginManager.m_pluginProfile;
                         if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
                         {
-                            enabledPlugins.Add(pluginDef);
+                            AddToCache(enabledPluginsCache, pluginDef);
                         }
                         else
                         {
-                            availablePlugins.Add(pluginDef);
+                            AddToCache(availablePluginsCache, pluginDef);
                         }
                     }
                     else
                     {
-                        availablePlugins.Add(pluginDef);
+                        AddToCache(availablePluginsCache, pluginDef);
                     }
                 }
                 else
                 {
-                    supportedPlugins.Add(pluginDef);
+                    AddToCache(supportedPluginsCache, pluginDef);
                 }
             }
+        }
 
-            enabledPluginsCache[T.Name] = enabledPlugins;
-            availablePluginsCache[T.Name] = availablePlugins;
-            supportedPluginsCache[T.Name] = supportedPlugins;
+        /// <summary>
+        /// Add a plugin definition to a cache.
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="defn"></param>
+        private void AddToCache(Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>> cache, AbstractPluginDefinition defn) {
+            try
+            {
+                cache[defn.GetCategory()].Add(defn);
+            } catch (KeyNotFoundException e)
+            {
+                List<AbstractPluginDefinition> list = new List<AbstractPluginDefinition>();
+                list.Add(defn);
+                cache.Add(defn.GetCategory(), list);
+            }
         }
 
         private void NotImplementedTabGUI()

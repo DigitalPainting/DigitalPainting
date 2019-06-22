@@ -13,11 +13,11 @@ namespace wizardscode.plugin
     public abstract class AbstractPluginDefinition
     {
         public enum PluginCategory {
-            Other,
             Agent,
             DayNightCycle,
             Weather,
-            Terrain
+            Terrain,
+            Miscellaneous
         }
 
         /// <summary>
