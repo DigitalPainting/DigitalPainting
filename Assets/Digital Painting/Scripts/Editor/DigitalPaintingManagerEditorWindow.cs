@@ -33,18 +33,31 @@ namespace wizardscode.editor
         private float frequencyOfPluginRefresh = 5;
         private DateTime timeOfNextPluginRefresh = DateTime.Now;
         private string configAssetPath = "Assets/Digital Painting Editor Config.asset";
-        
-        protected static ValidationResultCollection Validations = new ValidationResultCollection();
+        private string iconAssetPath = "DigitalPainting/Assets/Digital Painting/icons/";
+        private string iconOKFile = "Silk/accept.png";
+        private string iconWarningFile = "Silk/bug.png";
+        private string iconErrorFile = "Silk/bug_error.png";
 
+        private Texture2D iconOK;
+        private Texture2D iconWarning;
+        private Texture2D iconError;
+
+        protected static ValidationResultCollection Validations = new ValidationResultCollection();
+        
         private void OnEnable()
         {
+            iconOK = EditorGUIUtility.Load("Assets/" + iconAssetPath + iconOKFile) as Texture2D;
+            iconWarning = EditorGUIUtility.Load("Assets/" + iconAssetPath + iconWarningFile) as Texture2D;
+            iconError = EditorGUIUtility.Load("Assets/" + iconAssetPath + iconErrorFile) as Texture2D;
+
             titleContent = new GUIContent("Digital Painting");
+            titleContent.image = iconOK;
         }
 
         [MenuItem("Window/Wizards Code/Open Digital Painting Manager")]
         public static void ShowWindow()
         {
-            EditorWindow.GetWindow(typeof(DigitalPaintingManagerEditorWindow));
+            EditorWindow window = GetWindow(typeof(DigitalPaintingManagerEditorWindow));
         }
 
         void OnGUI()
@@ -56,11 +69,15 @@ namespace wizardscode.editor
             }
             else
             {
+                Validate();
+
                 GameObject go = GameObject.Find(Config.ManagerName);
                 if (go)
                 {
                     manager = go.GetComponent<DigitalPaintingManager>();
                 }
+
+                ShowStatusSummaryGUI();
 
                 selectedTab = GUILayout.Toolbar(selectedTab, new string[] { "Status", "Standard", "Advanced", "Experimental", "More..." });
 
@@ -301,8 +318,6 @@ namespace wizardscode.editor
 
         private void ValidationResultsGUI()
         {
-            Validate();
-
             int okCount = Validations.Count;
             int warningCount = Validations.CountWarning;
             int errorCount = Validations.CountError;
@@ -368,8 +383,6 @@ namespace wizardscode.editor
 
         private void StandardTabGUI()
         {
-            ShowStatusSummaryGUI();
-
             UpdateAllPluginDefinitions();
 
             Array categories = Enum.GetValues(typeof(AbstractPluginDefinition.PluginCategory));
@@ -386,8 +399,6 @@ namespace wizardscode.editor
         /// </summary>
         private void ShowStatusSummaryGUI()
         {
-            Validate();
-
             int totalOKCount = Validations.CountOK;
             int notIgnoredOKCount = Validations.GetOKs(ignoredTests).Count();
 
@@ -408,15 +419,18 @@ namespace wizardscode.editor
             {
                 type = MessageType.Error;
                 result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
+                titleContent.image = iconError;
             } else if (notIgnoredWarningCount > 0)
             {
                 type = MessageType.Warning;
                 result = Validations.GetHighestPriorityErrorOrWarning(ignoredTests);
+                titleContent.image = iconWarning;
             } else
             {
                 title = "Everything looks to be set up correctly.\n";
                 title += (totalErrorCount - notIgnoredErrorCount) + " ignored errors.\n";
                 title += (totalWarningCount - notIgnoredWarningCount) + " ignored warnings.\n";
+                titleContent.image = iconOK;
                 result = null;
             }
             
@@ -539,7 +553,6 @@ namespace wizardscode.editor
         private void ExperimentalTabGUI()
         {
             EditorGUILayout.HelpBox("The features on this tab are experimental and in development. They may or may not work. Play with them if you wish, but back up your project first.", MessageType.Warning);
-            ShowStatusSummaryGUI();
         }
 
         /// <summary>
