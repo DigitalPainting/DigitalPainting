@@ -70,10 +70,10 @@ namespace wizardscode.extension
         {
             string fromPath = GetPathToDefaultDataCollection();
             string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + fromPath);
-            
             string fromProfilePath = "Assets/" + fromPath + "/" + defaultManagerProfileName;
             string toProfilePath = toPath + "/" + dataFolderName + "/" + defaultManagerProfileName.Replace("_Default", "_" + suffix);
             AssetDatabase.CopyAsset(fromProfilePath, toProfilePath);
+
             DigitalPaintingManagerProfile profile = AssetDatabase.LoadAssetAtPath<DigitalPaintingManagerProfile>(toProfilePath);
 
             foreach (string fileName in fileEntries)

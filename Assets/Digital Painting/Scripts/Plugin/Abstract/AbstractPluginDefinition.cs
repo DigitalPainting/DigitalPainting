@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using wizardscode.digitalpainting;
 using wizardscode.extension;
+using wizardscode.validation;
 
 namespace wizardscode.plugin
 {
     /// <summary>
     /// The abstract implementation of a plugin definition. All plugins should implement this class.
     /// </summary>
-    public abstract class AbstractPluginDefinition
+    public abstract class AbstractPluginDefinition : ScriptableObject
     {
         public enum PluginCategory {
             Agent,
@@ -133,6 +138,59 @@ namespace wizardscode.plugin
             GameObject go = new GameObject(GetManagerType().Name.ToString().Prettify());
             go.AddComponent(GetManagerType());
             go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
+
+            MonoScript script = MonoScript.FromScriptableObject(this);
+            string scriptPath = AssetDatabase.GetAssetPath(script);
+            int lastIndex = scriptPath.LastIndexOf("Scripts");
+            string fromPath = scriptPath.Substring("Assets/".Length, lastIndex - 7) + AssetDatabaseUtility.dataFolderName;
+            string toPath = GetPathToScene();
+
+            Scene scene = EditorSceneManager.GetActiveScene();
+            string sceneName = scene.name;
+
+            if (!AssetDatabase.IsValidFolder(toPath + "/" + AssetDatabaseUtility.dataFolderName))
+            {
+                AssetDatabase.CreateFolder(toPath, AssetDatabaseUtility.dataFolderName);
+            }
+
+            try
+            {
+                string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + fromPath);
+                foreach (string fileName in fileEntries)
+                {
+                    string temp = fileName.Replace("\\", "/");
+                    int index = temp.LastIndexOf("/");
+                    string localPath = "Assets/" + fromPath;
+                    
+                    if (index > 0)
+                    {
+                        localPath += temp.Substring(index);
+                    }
+
+                    UnityEngine.Object original = AssetDatabase.LoadAssetAtPath(localPath, typeof(ScriptableObject));
+                    if (original != null)
+                    {
+                        string filename = Path.GetFileName(localPath);
+                        filename = filename.Replace("_Default", "_" + sceneName);
+                        AssetDatabase.CopyAsset(localPath, toPath + "/" + AssetDatabaseUtility.dataFolderName + "/" + filename);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Unable to copy plugin default settings. Digital Painting expects to find the default settings in " + fromPath + " see following exception for more information", this);
+                Debug.LogException(e);
+            }
+            //DigitalPaintingManager manager = GameObject.FindObjectOfType<DigitalPaintingManager>();
+            //manager.m_pluginProfile = profile;
+        }
+
+        private static string GetPathToScene()
+        {
+            Scene scene = EditorSceneManager.GetActiveScene();
+            string sceneName = scene.name;
+            string path = scene.path.Substring(0, scene.path.Length - ("/" + sceneName + ".unity").Length);
+            return path;
         }
 
         public virtual void Disable()
