@@ -24,6 +24,11 @@ namespace wizardscode.plugin
             Terrain,
             Miscellaneous
         }
+        
+        public virtual bool MultipleAllowed
+        {
+            get { return false; }
+        }
 
         /// <summary>
         /// Get the Type of the plugin manager, that is the Type of the MonoBehaviour that
@@ -135,7 +140,13 @@ namespace wizardscode.plugin
         /// </summary>
         public virtual void Enable()
         {
-            GameObject go = new GameObject(GetManagerType().Name.ToString().Prettify());
+            string suffix = "";
+            if (MultipleAllowed)
+            {
+                suffix = " " + (DigitalPaintingManager.gameObject.GetComponentsInChildren(GetManagerType()).Count() + 1);
+            }
+
+            GameObject go = new GameObject(GetManagerType().Name.ToString().Prettify() + suffix);
             AbstractPluginManager manager = (AbstractPluginManager)go.AddComponent(GetManagerType());
             go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
 
@@ -211,7 +222,7 @@ namespace wizardscode.plugin
         public virtual void Disable()
         {
             GameObject go = DigitalPaintingManager.gameObject.GetComponentInChildren(GetManagerType()).gameObject;
-            GameObject.DestroyImmediate(go);
+            DestroyImmediate(go);
         }
     }
 }

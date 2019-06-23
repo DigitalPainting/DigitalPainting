@@ -653,11 +653,13 @@ namespace wizardscode.editor
                             EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
 
                             bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
-                            using (new EditorGUI.DisabledScope(hasManager))
+                            if (!hasManager || defn.MultipleAllowed)
                             {
                                 if (GUILayout.Button("Enable"))
                                 {
                                     defn.Enable();
+                                    timeOfNextPluginRefresh = DateTime.Now;
+                                    UpdateAllPluginDefinitions();
                                 }
                                 if (GUILayout.Button("Learn more"))
                                 {
@@ -685,18 +687,20 @@ namespace wizardscode.editor
                 for (int i = enabledPluginsCache[category].Count - 1; i >= 0; i--)
                 {
                     AbstractPluginDefinition defn = enabledPluginsCache[category][i];
-                    
+
+                    Component pluginManager = manager.gameObject.GetComponentsInChildren(defn.GetManagerType())[i];
+
                     EditorGUILayout.BeginHorizontal();
                     EditorGUI.indentLevel++;
 
                     float columnWidth = EditorGUIUtility.currentViewWidth / 3;
-                    EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
+                    EditorGUILayout.LabelField(pluginManager.name + " (" + defn.GetReadableName() + ")", GUILayout.Width(columnWidth));
 
                     if (GUILayout.Button("Disable"))
                     {
-                        defn.Disable();
-                        enabledPluginsCache[category].Remove(defn);
-                        availablePluginsCache[category].Add(defn);
+                        enabledPluginsCache[category][i].Disable();
+                        timeOfNextPluginRefresh = DateTime.Now;
+                        UpdateAllPluginDefinitions();
                     }
                     if (GUILayout.Button("Learn more"))
                     {
@@ -720,27 +724,37 @@ namespace wizardscode.editor
         /// <param name="T"></param>
         private void UpdatePluginStatus(Type T)
         {
+            // Iterate over all the known plugins of this type
             IEnumerable<Type> plugins = ReflectionHelper.GetEnumerableOfType(T);
             foreach (Type pluginType in plugins)
             {
+                // If any dependencies are present then provide enable/disable buttons, otherwise provide more info only
                 AbstractPluginDefinition pluginDef = Activator.CreateInstance(pluginType) as AbstractPluginDefinition;
                 if (pluginDef.AvailableForUse)
                 {
-                    AbstractPluginManager pluginManager = (AbstractPluginManager)manager.GetComponentInChildren(pluginDef.GetManagerType());
-                    if (pluginManager)
+                    bool isAvailable = true;
+                    // See if there are any existing instances of this plugin in the scene
+                    Component[] components = manager.GetComponentsInChildren(pluginDef.GetManagerType());
+                    AbstractPluginManager[] pluginManagers = Array.ConvertAll(components, item => (AbstractPluginManager)item);
+
+                    if (pluginManagers != null && pluginManagers.Count() != 0)
                     {
-                        AbstractPluginProfile pluginProfile = pluginManager.m_pluginProfile;
-                        if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
+                        for (int i = 0; i < pluginManagers.Count(); i++)
                         {
-                            AddToCache(enabledPluginsCache, pluginDef);
-                        }
-                        else
-                        {
-                            AddToCache(availablePluginsCache, pluginDef);
+                            AbstractPluginProfile pluginProfile = pluginManagers[i].m_pluginProfile;
+                            if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
+                            {
+                                AddToCache(enabledPluginsCache, pluginDef);
+                                if (!pluginDef.MultipleAllowed)
+                                {
+                                    isAvailable = false;
+                                }
+                            }
                         }
                     }
-                    else
-                    {
+                    
+                    if (isAvailable) {
+                        // There are no existing managers in the scene or multiple are allowed, show enable options
                         AddToCache(availablePluginsCache, pluginDef);
                     }
                 }
