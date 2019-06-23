@@ -742,7 +742,7 @@ namespace wizardscode.editor
                         for (int i = 0; i < pluginManagers.Count(); i++)
                         {
                             AbstractPluginProfile pluginProfile = pluginManagers[i].m_pluginProfile;
-                            if (pluginProfile != null && pluginProfile.GetType().Name == pluginDef.GetProfileTypeName())
+                            if (pluginProfile != null && pluginDef.GetProfileTypeName().EndsWith(pluginProfile.GetType().Name))
                             {
                                 AddToCache(enabledPluginsCache, pluginDef);
                                 if (!pluginDef.MultipleAllowed)
