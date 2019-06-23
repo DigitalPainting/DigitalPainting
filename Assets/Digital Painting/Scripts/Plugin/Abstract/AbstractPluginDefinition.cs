@@ -195,7 +195,10 @@ namespace wizardscode.plugin
                     {
                         string filename = Path.GetFileName(localPath);
                         filename = filename.Replace("_Default", "_" + sceneName);
-                        AssetDatabase.CopyAsset(localPath, fullToPath + "/" + filename);
+                        if (AssetDatabase.GetMainAssetTypeAtPath(fullToPath + "/" + filename) == null)
+                        {
+                            AssetDatabase.CopyAsset(localPath, fullToPath + "/" + filename);
+                        }
                     }
 
                     // if AbstractPluginProfile copy it into Profile
