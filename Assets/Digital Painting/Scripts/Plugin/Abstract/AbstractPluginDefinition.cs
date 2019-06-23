@@ -169,6 +169,13 @@ namespace wizardscode.plugin
                 AssetDatabase.CreateFolder(toPath, AssetDatabaseUtility.dataFolderName);
             }
 
+            string pluginFolder = fromPath.Split('/').First();
+            string fullToPath = toPath + "/" + AssetDatabaseUtility.dataFolderName + "/" + pluginFolder;
+            if (!AssetDatabase.IsValidFolder(fullToPath))
+            {
+                AssetDatabase.CreateFolder(toPath + "/" + AssetDatabaseUtility.dataFolderName, pluginFolder);
+            }
+
             try
             {
                 string[] fileEntries = Directory.GetFiles(Application.dataPath + "/" + fromPath);
@@ -188,7 +195,7 @@ namespace wizardscode.plugin
                     {
                         string filename = Path.GetFileName(localPath);
                         filename = filename.Replace("_Default", "_" + sceneName);
-                        AssetDatabase.CopyAsset(localPath, toPath + "/" + AssetDatabaseUtility.dataFolderName + "/" + filename);
+                        AssetDatabase.CopyAsset(localPath, fullToPath + "/" + filename);
                     }
 
                     // if AbstractPluginProfile copy it into Profile
