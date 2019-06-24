@@ -235,11 +235,5 @@ namespace wizardscode.plugin
             string path = scene.path.Substring(0, scene.path.Length - ("/" + sceneName + ".unity").Length);
             return path;
         }
-
-        public virtual void Disable()
-        {
-            GameObject go = DigitalPaintingManager.gameObject.GetComponentInChildren(GetManagerType()).gameObject;
-            DestroyImmediate(go);
-        }
     }
 }

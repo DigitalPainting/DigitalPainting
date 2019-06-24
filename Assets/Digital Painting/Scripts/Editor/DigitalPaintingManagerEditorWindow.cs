@@ -698,7 +698,7 @@ namespace wizardscode.editor
 
                     if (GUILayout.Button("Disable"))
                     {
-                        enabledPluginsCache[category][i].Disable();
+                        DestroyImmediate(pluginManager.gameObject);
                         timeOfNextPluginRefresh = DateTime.Now;
                         UpdateAllPluginDefinitions();
                     }
