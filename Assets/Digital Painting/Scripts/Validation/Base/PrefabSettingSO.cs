@@ -58,7 +58,7 @@ namespace wizardscode.validation
         {
             get
             {
-                return "Validate prefab setup : " + SettingName;
+                return "Check prefab setup defined in " + name + ":" + SettingName;
             }
         }
 

@@ -336,9 +336,6 @@ namespace wizardscode.editor
         
         /// <summary>
         /// Test to see if the Digital Painting is setup correctly in the current scene. 
-        /// Tests are discovered automatically as long as they implement the SingletonValidationTest
-        /// Results of all 
-        /// the validation tests are stored in an internal cache.
         /// </summary>
         //were found.</returns>
         public virtual void Validate()
@@ -347,37 +344,24 @@ namespace wizardscode.editor
             if (timeToNextValidation <= 0)
             {
                 Validations = new ValidationResultCollection();
-                List<Type> types = GetValidationTestsToRun();
 
-                foreach (Type type in types)
+                AbstractPluginManager[] pluginManagers = GameObject.FindObjectsOfType<AbstractPluginManager>();
+                for (int i = 0; i < pluginManagers.Length; i++)
                 {
-                    var test = Activator.CreateInstance(type);
-                    MethodInfo method = type.GetMethod("Validate");
-                    ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type });
+                    Type genericType = typeof(ValidationTest<>).MakeGenericType(new Type[] { pluginManagers[i].GetType() });
+                    IEnumerable<Type> validationTypes = Assembly.GetAssembly(genericType).GetTypes()
+                                        .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(genericType));
+                    foreach (Type type in validationTypes)
+                    {
+                        var test = Activator.CreateInstance(type);
+                        MethodInfo method = type.GetMethod("Validate");
+                        ValidationResultCollection results = (ValidationResultCollection)method.Invoke(test, new object[] { type, pluginManagers[i] });
 
-                    Validations.AddOrUpdateAll(results);
+                        Validations.AddOrUpdateAll(results);
+                    }
                 }
                 timeToNextValidation = frequencyOfValidation;
             }
-        }
-
-        private static List<Type> GetValidationTestsToRun()
-        {
-            List<Type> types = new List<Type>();
-
-            AbstractPluginManager[] pluginManagers = GameObject.FindObjectsOfType<AbstractPluginManager>();
-            for (int i = 0; i < pluginManagers.Length; i++)
-            {
-                Type genericType = typeof(ValidationTest<>).MakeGenericType(new Type[] { pluginManagers[i].GetType() });
-                IEnumerable<Type> validationTypes = Assembly.GetAssembly(genericType).GetTypes()
-                                    .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(genericType));
-                foreach (Type t in validationTypes)
-                {
-                    types.Add(t);
-                }
-            }           
-            
-            return types;
         }
 
         private void StandardTabGUI()

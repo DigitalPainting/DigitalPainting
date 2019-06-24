@@ -20,29 +20,17 @@ namespace wizardscode.validation
         private AbstractPluginManager m_manager;
         internal static ValidationResultCollection ResultCollection = new ValidationResultCollection();
 
-        private AbstractPluginManager Manager
-        {
-            get
-            {
-                if (m_manager == null)
-                {
-                    m_manager = GameObject.FindObjectOfType<T>(); ;
-                }
-                return m_manager;
-            }
-        }
-
         internal abstract Type ProfileType { get; }
 
         public abstract ValidationTest<T> Instance { get; }
 
-        public ValidationResultCollection Validate(Type validationTest)
+        public ValidationResultCollection Validate(Type validationTest, AbstractPluginManager pluginInstanceManager)
         {
             ResultCollection = new ValidationResultCollection();
             ValidationResult result;
             
             // Is plugin enabled, If not we don't need to test it
-            if (Manager == null)
+            if (pluginInstanceManager == null)
             {
                 return ResultCollection;
             }
@@ -53,10 +41,10 @@ namespace wizardscode.validation
             }
 
             // Is a plugin profile provided?
-            if (Manager.Profile == null)
+            if (pluginInstanceManager.Profile == null)
             {
-                result = ResultCollection.GetOrCreate(Manager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
-                result.Message = "You need to provide a plugin profile for " + Manager.GetType().Name.BreakCamelCase();
+                result = ResultCollection.GetOrCreate(pluginInstanceManager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
+                result.Message = "You need to provide a plugin profile for " + pluginInstanceManager.GetType().Name.BreakCamelCase();
                 result.ReportingTest.Add(validationTest.Name);
                 result.impact = ValidationResult.Level.Error;
                 result.RemoveCallbacks();
@@ -65,18 +53,18 @@ namespace wizardscode.validation
                 return ResultCollection;
             }
 
-            if (!ProfileType.Name.EndsWith(Manager.Profile.GetType().Name)) {
+            if (!ProfileType.Name.EndsWith(pluginInstanceManager.Profile.GetType().Name)) {
                 return ResultCollection;
             }
 
             // Get all the SettingSO fields
-            IEnumerable<FieldInfo> fields = Manager.Profile.GetType().GetFields()
+            IEnumerable<FieldInfo> fields = pluginInstanceManager.Profile.GetType().GetFields()
                 .Where(field => field.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
                 
             // Validate the fields
             foreach (FieldInfo field in fields)
             {
-                AbstractSettingSO fieldInstance = field.GetValue(Manager.Profile) as AbstractSettingSO;
+                AbstractSettingSO fieldInstance = field.GetValue(pluginInstanceManager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
                     AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");

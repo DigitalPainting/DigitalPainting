@@ -95,7 +95,7 @@ namespace wizardscode.validation
         /// </summary>
         public virtual string TestName
         {
-            get { return "Default Setting Test Suite (replace this name by overriding the TestName getter in you *SettingSO)"; }
+            get { return "Check setting defined in " + name + ":" + SettingName; }
         }
 
         /// <summary>
