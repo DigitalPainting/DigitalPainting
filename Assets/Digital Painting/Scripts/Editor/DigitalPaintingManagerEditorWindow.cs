@@ -363,21 +363,20 @@ namespace wizardscode.editor
 
         private static List<Type> GetValidationTestsToRun()
         {
-            Type baseType = typeof(ValidationTest<>);
-
-            IEnumerable<Type> candidates = from x in Assembly.GetAssembly(baseType).GetTypes()
-                                           where !x.IsAbstract && !x.IsInterface && x != baseType
-                                           select x;
-
             List<Type> types = new List<Type>();
-            foreach (Type candidate in candidates)
-            {
-                if (ReflectionHelper.IsAssignableToGenericType(candidate, baseType))
-                {
-                    types.Add(candidate);
-                }
-            }
 
+            AbstractPluginManager[] pluginManagers = GameObject.FindObjectsOfType<AbstractPluginManager>();
+            for (int i = 0; i < pluginManagers.Length; i++)
+            {
+                Type genericType = typeof(ValidationTest<>).MakeGenericType(new Type[] { pluginManagers[i].GetType() });
+                IEnumerable<Type> validationTypes = Assembly.GetAssembly(genericType).GetTypes()
+                                    .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(genericType));
+                foreach (Type t in validationTypes)
+                {
+                    types.Add(t);
+                }
+            }           
+            
             return types;
         }
 
