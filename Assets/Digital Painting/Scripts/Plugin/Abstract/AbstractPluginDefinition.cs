@@ -140,13 +140,20 @@ namespace wizardscode.plugin
         /// </summary>
         public virtual void Enable()
         {
+            string managerName = GetManagerType().Name.ToString().Prettify();
             string suffix = "";
             if (MultipleAllowed)
             {
-                suffix = " " + (DigitalPaintingManager.gameObject.GetComponentsInChildren(GetManagerType()).Count() + 1);
+                int index = (DigitalPaintingManager.gameObject.GetComponentsInChildren(GetManagerType()).Count() + 1);
+                suffix = " " + index;
+                while (GameObject.Find(managerName + suffix) != null)
+                {
+                    index++;
+                    suffix = " " + index;
+                }
             }
 
-            GameObject go = new GameObject(GetManagerType().Name.ToString().Prettify() + suffix);
+            GameObject go = new GameObject(managerName + suffix);
             AbstractPluginManager manager = (AbstractPluginManager)go.AddComponent(GetManagerType());
             go.transform.SetParent(DigitalPaintingManager.gameObject.transform);
 
