@@ -1,0 +1,13 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+namespace wizardscode.plugin {
+    public class CATEGORY_DESCRIPTIVENAME_Validation : ValidationTest<CATEGORY_PluginManager>
+    {
+        public override ValidationTest<AI_PluginManager> Instance => new CATEGORY_DESCRIPTIVENAME_Validation();
+
+        internal override Type ProfileType => typeof(CATEGORY_DESCRIPTIVENAME_Profile);
+    }
+}

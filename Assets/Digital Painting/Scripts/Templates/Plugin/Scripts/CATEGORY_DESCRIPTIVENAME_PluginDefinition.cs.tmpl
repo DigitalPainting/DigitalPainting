@@ -1,0 +1,42 @@
+﻿using System;
+using wizardscode.extension;
+
+namespace wizardscode.plugin
+{
+    public class CATEGORY_DESCRIPTIVENAME_PluginDefinition : AbstractPluginDefinition
+    {
+        public override PluginCategory GetCategory()
+        {
+            return PluginCategory.CATEGORY;
+        }
+
+        public override Type GetManagerType()
+        {
+            return typeof(CATEGORY_PluginManager);
+        }
+
+        public override string GetPluginImplementationClassName()
+        {
+            // Return a string representing a class that will be present when the dependent code is present
+            // e.g. my.dependent.asset.CoolBahaviour
+            // If no dependencies, return null
+            throw new NotImplementedException();
+        }
+
+        public override string GetProfileTypeName()
+        {
+            return typeof(CATEGORY_DESCRIPTIVENAME_Profile).ToString();
+        }
+
+        public override string GetReadableName()
+        {
+            return "DESCRIPTIVENAME".Prettify();
+        }
+
+        public override string GetURL()
+        {
+            // Return a URL for the asset store or similar place to get information about the plugin feature
+            return "http://wizardscode.com/plugins";
+        }
+    }
+}
