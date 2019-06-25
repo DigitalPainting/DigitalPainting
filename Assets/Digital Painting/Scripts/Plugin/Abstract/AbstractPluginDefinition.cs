@@ -19,6 +19,7 @@ namespace wizardscode.plugin
     {
         public enum PluginCategory {
             Agent,
+            AI,
             DayNightCycle,
             Weather,
             Terrain,
@@ -140,7 +141,7 @@ namespace wizardscode.plugin
         /// </summary>
         public virtual void Enable()
         {
-            string managerName = GetManagerType().Name.ToString().Prettify();
+            string managerName = GetReadableName() + " " + GetManagerType().Name.ToString().Prettify();
             string suffix = "";
             if (MultipleAllowed)
             {
