@@ -116,7 +116,7 @@ Install Post Processing 2
 --
 
 ## Prepare the Project
-Step 1 of 8
+Step 1 of 9
 
 ```bash
 cd Assets
@@ -125,7 +125,7 @@ cd Assets
 --
 
 ## Prepare the Project
-Step 2 of 8
+Step 2 of 9
 
 ```bash
 git submodule add git@github.com:DigitalPainting/DigitalPainting.git
@@ -134,7 +134,7 @@ git submodule add git@github.com:DigitalPainting/DigitalPainting.git
 --
 
 ## Prepare the Project
-Step 3 of 8
+Step 3 of 9
 
 ```bash
 git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
@@ -143,7 +143,7 @@ git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git
 --
 
 ## Prepare the Project
-Step 4 of 8
+Step 4 of 9
 
 ```bash
 git submodule add git@github.com:rgardler/ScriptableObject-Architecture.git
@@ -152,30 +152,40 @@ git submodule add git@github.com:rgardler/ScriptableObject-Architecture.git
 --
 
 ## Prepare the Project
-Step 5 of 8
+Step 5 of 9
 
 Open project in Unity
 
 --
 
 ## Prepare the Project
-Step 6 of 8
+Step 6 of 9
 
 Install Cinemachine
 
 --
 
 ## Prepare the Project
-Step 7 of 8
+Step 7 of 9
 
 Install Post Processing 2
 
 --
 
 ## Prepare the Project
-Step 8 of 8
+Step 8 of 9
 
-Create and open a new Scene called "Digitial Painting"
+Create and open a new Scene called "Demo"
+(or similar)
+
+--
+
+## Create Digital Painting Data Directory
+Step 9 of 9
+
+Create a folder `Digital Painting Data` in your plugin root.
+
+We won't be putting anything in here just yet.
 
 ---
 
@@ -358,7 +368,7 @@ Validation of the scene.
 
 Extends `ValidationTest<CATEGORY_[DESCRIPTIVENAME_]PluginManager>`
 
-Naming Convention: `CATEGORY_DESCRIPTIVENAME_PluginDefinition`
+Naming Convention: `CATEGORY_DESCRIPTIVENAME_PluginValidation`
 
 ---
 
@@ -385,45 +395,27 @@ public override ValidationTest<Terrain_PluginManager> Instance => new Terrain_Pr
 --
 
 ```cs
-internal override string ProfileType => typeof
-  (ProceduralTerrain_Terrain_Profile).ToString();
+internal override Type ProfileType => typeof
+  (ProceduralTerrain_Terrain_Profile);
 ```
 
 ---
 
-The base `ValidationTest<T>` class will validation many settings automatically.
+The base `ValidationTest<T>` class will validate many settings automatically.
 
 In some cases specific validation tests will be implemented in this class.
 
 ---
 
-## Digital Painting Configuration
+## Default Plugin Profile
 
-Provide default configuration for this plugin.
+Right Click on the `Digital Painting Data` folder
 
-Prevent accidental overwriting of settings for other plugins.
+Select `Create -> Wizards Code -> Terrain -> Procedural Generation Profile`
 
----
+Add `_Default` to the end of the created objects name,
 
-Create a directory called `Scenes/Digital Painting Data`
-
----
-
-Copy the contents of `Digital Painting/Data/Default Collection` into the `Scenes/Digital Painting Data` folder
-
----
-
-Rename all files in here:
-
-`s/_Default/_ProceduralTerrain_Default`
-
----
-
-Open `DigitalPaintingManagerProfile_ProceduralTerrain_Default` in this folder
-
----
-
-Update all settings to reflect the SOs in this folder
+This will be used as the default profile when the plugin is enabled in a scene.
 
 ---
 
@@ -454,20 +446,6 @@ New Game Object called "Terrain Plugin Manager" as a child of "Digital Painting 
 This does not have a plugin profile yet.
 
 Error reported in Digital Painting Manager Window
-
----
-
-Create a Profile `Scenes/Digital Painting Data` create a profile
-
-Use `Assets -> Create -> Wizards Code -> Terrain -> Procedural Generation Plugin Profile`
-
----
-
-Add this to the Terrain Plugin Manager
-
-There is nothing to edit, yet
-
-Error report has gone
 
 ---
 
@@ -544,6 +522,7 @@ else
     return;
 }
 ```   
+
 ---
 
 A button labelled "Generate Terrain" will be provided in the UI
