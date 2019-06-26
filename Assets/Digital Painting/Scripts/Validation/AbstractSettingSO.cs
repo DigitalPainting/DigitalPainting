@@ -67,7 +67,6 @@ namespace wizardscode.validation
                     if (SuggestedValue as UnityEngine.Object == null)
                     {
                         result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
-                        result.ReportingTest.Add(validationTest.Name);
                         return result;
                     }
                     else
@@ -78,7 +77,6 @@ namespace wizardscode.validation
                 else if (SuggestedValue == null)
                 {
                     result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
-                    result.ReportingTest.Add(validationTest.Name);
                     return result;
                 }
                 else

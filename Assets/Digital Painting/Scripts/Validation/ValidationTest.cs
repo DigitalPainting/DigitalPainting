@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
-using wizardscode.digitalpainting;
 using wizardscode.extension;
 using wizardscode.plugin;
-using wizardscode.utility;
 
 namespace wizardscode.validation
 {
@@ -56,60 +52,44 @@ namespace wizardscode.validation
             if (!ProfileType.Name.EndsWith(pluginInstanceManager.Profile.GetType().Name)) {
                 return ResultCollection;
             }
+            
+            if (!PreFieldCustomValidations())
+            {
+                return ResultCollection;
+            }
 
-            // Get all the SettingSO fields
+            //Validate SettingSO fields
             IEnumerable<FieldInfo> fields = pluginInstanceManager.Profile.GetType().GetFields()
                 .Where(field => field.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
-                
-            // Validate the fields
+            ValidateFields(validationTest, fields, pluginInstanceManager);
+            
+
+            if (!PostFieldCustomValidations())
+            {
+                return ResultCollection;
+            }
+
+            return ResultCollection;
+        }
+
+        private void ValidateFields(Type validationTest, IEnumerable<FieldInfo> fields, AbstractPluginManager pluginInstanceManager)
+        {
+            ValidationResult result;
+
             foreach (FieldInfo field in fields)
             {
                 AbstractSettingSO fieldInstance = field.GetValue(pluginInstanceManager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
                     AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");
-                    return ResultCollection;
+                    return;
                 }
 
                 ResultCollection.Remove(field.Name);
 
-                if (!PreFieldCustomValidations())
-                {
-                    return ResultCollection;
-                }
-
                 if (field.FieldType == typeof(GenericSettingSO<>))
                 {
-                    string className = ((GenericSettingSO<T>)fieldInstance).valueClassName;
-                    string accessorName = ((GenericSettingSO<T>)fieldInstance).valueName;
-
-                    if ((className != null && className.Length > 0)
-                        || (accessorName != null && accessorName.Length > 0))
-                    {
-                        IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                                                            from candidate in assembly.GetTypes()
-                                                            where candidate.Name == className
-                                                            select candidate);
-                        Type propertyType = propertyTypes.FirstOrDefault();
-
-                        if (propertyType == null)
-                        {
-                            string msg = "A property accessor is provided but the class identified, `"
-                                + className + "`, cannot be found in the Assembly.";
-                            AddOrUpdateAsError(field.Name, msg);
-                        }
-                        else
-                        {
-                            PropertyInfo accessorPropertyInfo = propertyType.GetProperty(accessorName);
-                            FieldInfo acessorFieldInfo = propertyType.GetField(accessorName);
-                            if (accessorPropertyInfo == null && acessorFieldInfo == null)
-                            {
-                                string msg = "A property accessor is provided but the accessor identified, `"
-                                    + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
-                                AddOrUpdateAsError(field.Name, msg);
-                            }
-                        }
-                    }
+                    ValidateGenericSettingField(field, fieldInstance);
                 }
 
                 Type type = field.FieldType;
@@ -117,21 +97,81 @@ namespace wizardscode.validation
                 result = (ValidationResult)type.InvokeMember("Validate",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
                     null, fieldInstance, new object[] { validationTest });
-                
+
                 ResultCollection.AddOrUpdate(result, validationTest.Name);
 
-                if (!PostFieldCustomValidations())
+                IEnumerable<FieldInfo> childFields = field.FieldType.GetFields()
+                    .Where(childField => childField.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
+                ValidateChildFields(validationTest, childFields, fieldInstance);
+            }
+        }
+
+        private void ValidateGenericSettingField(FieldInfo field, AbstractSettingSO fieldInstance)
+        {
+            string className = ((GenericSettingSO<T>)fieldInstance).valueClassName;
+            string accessorName = ((GenericSettingSO<T>)fieldInstance).valueName;
+
+            if ((className != null && className.Length > 0)
+                || (accessorName != null && accessorName.Length > 0))
+            {
+                IEnumerable<Type> propertyTypes = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                                                   from candidate in assembly.GetTypes()
+                                                   where candidate.Name == className
+                                                   select candidate);
+                Type propertyType = propertyTypes.FirstOrDefault();
+
+                if (propertyType == null)
                 {
-                    return ResultCollection;
+                    string msg = "A property accessor is provided but the class identified, `"
+                        + className + "`, cannot be found in the Assembly.";
+                    AddOrUpdateAsError(field.Name, msg);
+                }
+                else
+                {
+                    PropertyInfo accessorPropertyInfo = propertyType.GetProperty(accessorName);
+                    FieldInfo acessorFieldInfo = propertyType.GetField(accessorName);
+                    if (accessorPropertyInfo == null && acessorFieldInfo == null)
+                    {
+                        string msg = "A property accessor is provided but the accessor identified, `"
+                            + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
+                        AddOrUpdateAsError(field.Name, msg);
+                    }
                 }
             }
+        }
 
-            if (fields.Count() == 0)
+        private void ValidateChildFields(Type validationTest, IEnumerable<FieldInfo> fields, AbstractSettingSO parentFieldInstance)
+        {
+            ValidationResult result;
+
+            foreach (FieldInfo field in fields)
             {
-                PreFieldCustomValidations();
-            }
+                AbstractSettingSO fieldInstance = field.GetValue(parentFieldInstance) as AbstractSettingSO;
+                if (fieldInstance == null)
+                {
+                    AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");
+                    return;
+                }
 
-            return ResultCollection;
+                ResultCollection.Remove(field.Name);
+
+                if (field.FieldType == typeof(GenericSettingSO<>))
+                {
+                    ValidateGenericSettingField(field, fieldInstance);
+                }
+
+                Type type = field.FieldType;
+                // Validate the field according to the SO validation setting.
+                result = (ValidationResult)type.InvokeMember("Validate",
+                    BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
+                    null, fieldInstance, new object[] { validationTest });
+
+                ResultCollection.AddOrUpdate(result, validationTest.Name);
+
+                IEnumerable<FieldInfo> childFields = field.FieldType.GetFields()
+                    .Where(childField => childField.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
+                ValidateChildFields(validationTest, childFields, fieldInstance);
+            }
         }
 
         /// <summary>
