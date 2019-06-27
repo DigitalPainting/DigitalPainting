@@ -49,16 +49,18 @@ namespace wizardscode.validation
 
         void AddPostProcessing()
         {
-            GameObject go = (GameObject)ActualValue;
+            GameObject camera = (GameObject)ActualValue;
 
-            PostProcessVolume volume = go.AddComponent<PostProcessVolume>();
+            PostProcessVolume volume = camera.AddComponent<PostProcessVolume>();
             AddPostProcessingProfile();
 
-            PostProcessLayer postProcessLayer = go.AddComponent<PostProcessLayer>();
+            PostProcessLayer postProcessLayer = camera.AddComponent<PostProcessLayer>();
             postProcessLayer.volumeLayer = LayerMask.NameToLayer("PostProcessing");
             postProcessLayer.antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
 
             //postProcessLayer.Init(resources);
+
+            EditorUtility.SetDirty(camera);
         }
 
         private void AddPostProcessingProfile()
