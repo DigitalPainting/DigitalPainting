@@ -57,7 +57,8 @@ namespace wizardscode.validation
             PostProcessLayer postProcessLayer = camera.AddComponent<PostProcessLayer>();
             postProcessLayer.volumeLayer = LayerMask.NameToLayer("PostProcessing");
             postProcessLayer.antialiasingMode = PostProcessLayer.Antialiasing.TemporalAntialiasing;
-
+       
+            // when changing at runtime this is needed - not in the editor?
             //postProcessLayer.Init(resources);
 
             EditorUtility.SetDirty(camera);
