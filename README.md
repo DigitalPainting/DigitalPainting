@@ -71,6 +71,7 @@ Various resources in this asset come from one or more of the following and come 
   * [openclipart.org](https://openclipart.org) under a public domain license and can therefore be used without restriction.
   * [keijiro/PuppetTest ](https://github.com/keijiro/PuppetTest) and is under a [CC0 license](https://creativecommons.org/share-your-work/public-domain/).
   * [Silk Icons](http://www.famfamfam.com/lab/icons/silk/) by Mark James are under a [CC-BY 2.5](http://creativecommons.org/licenses/by/2.5/) license
+  * [FreeSFX](https://www.freesfx.co.uk) is a collection of free to use sound FX and music tracks
 
 Please see the license details within git submodules. Only permissively licensed code is included. Changes to these submodules should be submitted upstream for inclusion in the originating project (at the owners discretion).
 
