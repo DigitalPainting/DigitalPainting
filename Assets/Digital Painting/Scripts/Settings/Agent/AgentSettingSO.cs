@@ -8,7 +8,7 @@ namespace wizardscode.validation
     /// The AgentSettignSO class describes an agent in the game. This is a reasonably generic description,
     /// specific agent types might subclass this to provide more details that are exclusive to that type.
     /// </summary>
-    [CreateAssetMenu(fileName = "AgentSettingSO_DESCRIPTIVENAME", menuName = "Wizards Code/Validation/Game Objects/Agent")]
+    [CreateAssetMenu(fileName = "DESCRIPTIVENAME_AgentSettingSO_Default", menuName = "Wizards Code/Digital Painting/Settings/Agent")]
     public class AgentSettingSO : PrefabSettingSO
     {
         public enum CameraAimMode { Composer, GroupComposer, HardLookAt, POV, SameAsFollowTarget }
