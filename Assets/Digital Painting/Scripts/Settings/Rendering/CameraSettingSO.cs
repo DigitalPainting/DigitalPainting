@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using wizardscode.plugin;
 
 namespace wizardscode.validation
 {
@@ -23,9 +24,9 @@ namespace wizardscode.validation
             base.InstantiatePrefab();
         }
 
-        internal override ValidationResult ValidateSetting(Type validationTest)
+        internal override ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager)
         {
-            ValidationResult result = base.ValidateSetting(validationTest);
+            ValidationResult result = base.ValidateSetting(validationTest, pluginManager);
             if (result.impact != ValidationResult.Level.OK)
             {
                 return result;
@@ -37,14 +38,14 @@ namespace wizardscode.validation
                 PostProcessVolume volume = go.GetComponent<PostProcessVolume>();
                 if (volume == null)
                 {
-                    return GetWarningResult(TestName, "Camera does not have a post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessing));
+                    return GetWarningResult(TestName, pluginManager, "Camera does not have a post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessing));
                 }
 
                 if (volume.profile != postProcessingProfile) {
-                    return GetWarningResult(TestName, "Camera does not have the correct post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessingProfile));
+                    return GetWarningResult(TestName, pluginManager, "Camera does not have the correct post processing volume.", validationTest.Name, new ResolutionCallback(AddPostProcessingProfile));
                 }
             }
-            return GetPassResult(TestName, validationTest.Name);
+            return GetPassResult(TestName, pluginManager, validationTest.Name);
         }
 
         void AddPostProcessing()

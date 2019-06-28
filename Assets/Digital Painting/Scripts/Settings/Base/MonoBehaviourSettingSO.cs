@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using wizardscode.editor;
+using wizardscode.plugin;
 
 namespace wizardscode.validation
 {
@@ -63,20 +64,20 @@ namespace wizardscode.validation
             ActualValue = SuggestedValue;
         }
 
-        internal override ValidationResult ValidateSetting(Type validationTest)
+        internal override ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager)
         {
             if (Target.Instance == null)
             {
-                return GetErrorResult("Target is required.", Target.name, validationTest.Name, new ResolutionCallback(Target.InstantiatePrefab));
+                return GetErrorResult("Target is required.", pluginManager, Target.name, validationTest.Name, new ResolutionCallback(Target.InstantiatePrefab));
             }
 
             if (ActualValue != null)
             {
-                return GetPassResult("MonoBehaviour is required", validationTest.Name);
+                return GetPassResult("MonoBehaviour is required", pluginManager, validationTest.Name);
             }
             else
             {
-                return GetErrorResult("MonoBehaviour is required", SuggestedValue.name + " is not present " + Target.Instance.name, validationTest.Name);
+                return GetErrorResult("MonoBehaviour is required", pluginManager, SuggestedValue.name + " is not present " + Target.Instance.name, validationTest.Name);
             }
         }
     }

@@ -18,6 +18,7 @@ namespace wizardscode.validation
 
         public int id;
         public string name;
+        public AbstractPluginManager PluginManager;
         public HashSet<string> ReportingTest = new HashSet<string>();
         public Level impact;
         public List<ResolutionCallback> Callbacks = new List<ResolutionCallback>();
@@ -35,7 +36,7 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="name">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
-        internal ValidationResult(string name) : this(name, Level.Untested, null)
+        internal ValidationResult(string name, AbstractPluginManager pluginManager) : this(name, pluginManager, Level.Untested, null)
         {
         }
 
@@ -44,7 +45,7 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="name">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
-        internal ValidationResult(string name, Level impact) : this(name, impact, null)
+        internal ValidationResult(string name, AbstractPluginManager pluginManager, Level impact) : this(name, pluginManager, impact, null)
         {
         }
 
@@ -54,10 +55,11 @@ namespace wizardscode.validation
         /// <param name="name">A human readable message describing the validation state.</param>
         /// <param name="impact">The importance of the result from OK to Error.</param>
         /// <param name="callbackToFix">A callback method that will allow the result to be corrected if possible.</param>
-        internal ValidationResult(string name, Level impact, ProfileCallback callbackToFix)
+        internal ValidationResult(string name, AbstractPluginManager pluginManager, Level impact, ProfileCallback callbackToFix)
         {
             this.id = name.GetHashCode();
             this.name = name;
+            this.PluginManager = pluginManager;
             this.impact = impact;
             if (callbackToFix != null)
             {

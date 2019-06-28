@@ -6,6 +6,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using wizardscode.extension;
+using wizardscode.plugin;
 using wizardscode.validation;
 
 namespace wizardscode.digitalpainting
@@ -24,17 +25,18 @@ namespace wizardscode.digitalpainting
 
         internal override bool InitialCustomValidations()
         {
+            AbstractPluginManager pluginManager = GameObject.FindObjectOfType<DigitalPaintingManager>();
             bool isPass = base.InitialCustomValidations();
 
             string path = GetPathToScene();
             if (AssetDatabase.IsValidFolder(path + "/" + AssetDatabaseUtility.dataFolderName))
             {
-                AddOrUpdateAsPass("Data Directory Existence", "The Digital Painting Data exists.");
+                AddOrUpdateAsPass("Data Directory Existence", pluginManager, "The Digital Painting Data exists.");
             }
             else
             {
                 ResolutionCallback callback = new ResolutionCallback(new ProfileCallback(CreateDefaultSettingsData));
-                AddOrUpdateAsWarning("Data Directory Existence", "The Digital Painting Data folder does not exist.", callback);
+                AddOrUpdateAsWarning("Data Directory Existence", pluginManager, "The Digital Painting Data folder does not exist.", callback);
                 return false;
             }
 

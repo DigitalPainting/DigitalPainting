@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using wizardscode.plugin;
 
 namespace wizardscode.validation
 {
@@ -41,29 +42,16 @@ namespace wizardscode.validation
         /// <param name="settingTest">The name of the setting test this is a result for.</param>
         /// <param name="reportingTest">The name of the ValidationTest that this result is generated for.</param>
         /// <returns>An existing ValidationResult if the test has already been run, or a new validation result with an untested state.</returns>
-        public ValidationResult GetOrCreate(string settingTest, string reportingTest)
+        public ValidationResult GetOrCreate(string settingTest, AbstractPluginManager pluginManager, string reportingTest)
         {
             ValidationResult result;
             if (!collection.TryGetValue(settingTest.GetHashCode(), out result))
             {
-                result = new ValidationResult(settingTest);
+                result = new ValidationResult(settingTest, pluginManager);
                 result.ReportingTest.Add(reportingTest);
                 AddOrUpdate(result, reportingTest);
             }
             return result;
-        }
-
-        /// <summary>
-        /// Either updates a result or creates a new one with the given status.
-        /// </summary>
-        /// <param name="settingTest">The name of the setting test this is a result for.</param>
-        /// <param name="reportingTest">The name of the ValidationTest that this result is generated for.</param>
-        /// <param name="status">The status of the result.</param>
-        public void SetStatus(string settingTest, string reportingTest, ValidationResult.Level status)
-        {
-            ValidationResult result = GetOrCreate(settingTest, reportingTest);
-            result.impact = status;
-            AddOrUpdate(result, reportingTest);
         }
 
         public void AddOrUpdate(ValidationResult result, string reportingTest)
@@ -181,10 +169,10 @@ namespace wizardscode.validation
             get { return collection.Values.Where(x => x.impact == ValidationResult.Level.OK).ToList(); }
         }
 
-        internal void Pass(string testName, string reportingTest)
+        internal void Pass(string testName, AbstractPluginManager pluginManager, string reportingTest)
         {
             Remove(testName);
-            AddOrUpdate(new ValidationResult(testName, ValidationResult.Level.OK), reportingTest);
+            AddOrUpdate(new ValidationResult(testName, pluginManager, ValidationResult.Level.OK), reportingTest);
         }
     }
 }

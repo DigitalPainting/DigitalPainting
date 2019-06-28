@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using wizardscode.extension;
+using wizardscode.plugin;
 using wizardscode.utility;
 
 namespace wizardscode.validation
@@ -125,7 +126,7 @@ namespace wizardscode.validation
             ActualValue = SuggestedValue;
         }
 
-        internal override ValidationResult ValidateSetting(Type validationTest)
+        internal override ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager)
         {
             ValidationResult result = null;
             T value;
@@ -136,21 +137,21 @@ namespace wizardscode.validation
             }
             catch (Exception e)
             {
-                result = GetErrorResult(TestName, "Exception validating " + name + "\n" + e.Message + "\n" + e.StackTrace, validationTest.Name);
+                result = GetErrorResult(TestName, pluginManager, "Exception validating " + name + "\n" + e.Message + "\n" + e.StackTrace, validationTest.Name);
                 result.RemoveCallbacks();
                 return result;
             }
             
             if (!object.Equals(value, SuggestedValue))
             {
-                result = GetWarningResult(TestName, "The value set is not the same as the suggested value.\n"
+                result = GetWarningResult(TestName, pluginManager, "The value set is not the same as the suggested value.\n"
                     + "Suggested value = " + SuggestedValue + "\n"
                     + "Actual Value = " + value + "\n"
                     + "This may be OK, in which case click the ignore button.", validationTest.Name);
                 return result;
             }
 
-            return GetPassResult(TestName, validationTest.Name);
+            return GetPassResult(TestName, pluginManager, validationTest.Name);
         }
     }
 }

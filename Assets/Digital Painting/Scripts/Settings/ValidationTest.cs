@@ -20,13 +20,13 @@ namespace wizardscode.validation
 
         public abstract ValidationTest<T> Instance { get; }
 
-        public ValidationResultCollection Validate(Type validationTest, AbstractPluginManager pluginInstanceManager)
+        public ValidationResultCollection Validate(Type validationTest, AbstractPluginManager pluginManager)
         {
             ResultCollection = new ValidationResultCollection();
             ValidationResult result;
             
             // Is plugin enabled, If not we don't need to test it
-            if (pluginInstanceManager == null)
+            if (pluginManager == null)
             {
                 return ResultCollection;
             }
@@ -37,10 +37,10 @@ namespace wizardscode.validation
             }
 
             // Is a plugin profile provided?
-            if (pluginInstanceManager.Profile == null)
+            if (pluginManager.Profile == null)
             {
-                result = ResultCollection.GetOrCreate(pluginInstanceManager.GetType().Name.Prettify() + " - Missing Profile", validationTest.Name);
-                result.Message = "You need to provide a plugin profile for " + pluginInstanceManager.GetType().Name.BreakCamelCase();
+                result = ResultCollection.GetOrCreate(pluginManager.GetType().Name.Prettify() + " - Missing Profile", pluginManager, validationTest.Name);
+                result.Message = "You need to provide a plugin profile for " + pluginManager.GetType().Name.BreakCamelCase();
                 result.ReportingTest.Add(validationTest.Name);
                 result.impact = ValidationResult.Level.Error;
                 result.RemoveCallbacks();
@@ -49,22 +49,22 @@ namespace wizardscode.validation
                 return ResultCollection;
             }
 
-            if (!ProfileType.Name.EndsWith(pluginInstanceManager.Profile.GetType().Name)) {
+            if (!ProfileType.Name.EndsWith(pluginManager.Profile.GetType().Name)) {
                 return ResultCollection;
             }
             
-            if (!PreFieldCustomValidations())
+            if (!PreFieldCustomValidations(pluginManager))
             {
                 return ResultCollection;
             }
 
             //Validate SettingSO fields
-            IEnumerable<FieldInfo> fields = pluginInstanceManager.Profile.GetType().GetFields()
+            IEnumerable<FieldInfo> fields = pluginManager.Profile.GetType().GetFields()
                 .Where(field => field.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
-            ValidateFields(validationTest, fields, pluginInstanceManager);
+            ValidateFields(validationTest, fields, pluginManager);
             
 
-            if (!PostFieldCustomValidations())
+            if (!PostFieldCustomValidations(pluginManager))
             {
                 return ResultCollection;
             }
@@ -72,16 +72,16 @@ namespace wizardscode.validation
             return ResultCollection;
         }
 
-        private void ValidateFields(Type validationTest, IEnumerable<FieldInfo> fields, AbstractPluginManager pluginInstanceManager)
+        private void ValidateFields(Type validationTest, IEnumerable<FieldInfo> fields, AbstractPluginManager pluginManager)
         {
             ValidationResult result;
 
             foreach (FieldInfo field in fields)
             {
-                AbstractSettingSO fieldInstance = field.GetValue(pluginInstanceManager.Profile) as AbstractSettingSO;
+                AbstractSettingSO fieldInstance = field.GetValue(pluginManager.Profile) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
-                    AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");
+                    AddOrUpdateAsError(field.Name, pluginManager, "Must provide a Setting Scriptable Object");
                     return;
                 }
 
@@ -89,24 +89,24 @@ namespace wizardscode.validation
 
                 if (field.FieldType == typeof(GenericSettingSO<>))
                 {
-                    ValidateGenericSettingField(field, fieldInstance);
+                    ValidateGenericSettingField(field, pluginManager, fieldInstance);
                 }
 
                 Type type = field.FieldType;
                 // Validate the field according to the SO validation setting.
                 result = (ValidationResult)type.InvokeMember("Validate",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                    null, fieldInstance, new object[] { validationTest });
+                    null, fieldInstance, new object[] { validationTest, pluginManager });
 
                 ResultCollection.AddOrUpdate(result, validationTest.Name);
 
                 IEnumerable<FieldInfo> childFields = field.FieldType.GetFields()
                     .Where(childField => childField.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
-                ValidateChildFields(validationTest, childFields, fieldInstance);
+                ValidateChildFields(validationTest, pluginManager, childFields, fieldInstance);
             }
         }
 
-        private void ValidateGenericSettingField(FieldInfo field, AbstractSettingSO fieldInstance)
+        private void ValidateGenericSettingField(FieldInfo field, AbstractPluginManager pluginManager, AbstractSettingSO fieldInstance)
         {
             string className = ((GenericSettingSO<T>)fieldInstance).valueClassName;
             string accessorName = ((GenericSettingSO<T>)fieldInstance).valueName;
@@ -124,7 +124,7 @@ namespace wizardscode.validation
                 {
                     string msg = "A property accessor is provided but the class identified, `"
                         + className + "`, cannot be found in the Assembly.";
-                    AddOrUpdateAsError(field.Name, msg);
+                    AddOrUpdateAsError(field.Name, pluginManager, msg);
                 }
                 else
                 {
@@ -134,13 +134,13 @@ namespace wizardscode.validation
                     {
                         string msg = "A property accessor is provided but the accessor identified, `"
                             + accessorName + "`, cannot be found in the class specified, `" + className + "`.";
-                        AddOrUpdateAsError(field.Name, msg);
+                        AddOrUpdateAsError(field.Name, pluginManager, msg);
                     }
                 }
             }
         }
 
-        private void ValidateChildFields(Type validationTest, IEnumerable<FieldInfo> fields, AbstractSettingSO parentFieldInstance)
+        private void ValidateChildFields(Type validationTest, AbstractPluginManager pluginManager, IEnumerable<FieldInfo> fields, AbstractSettingSO parentFieldInstance)
         {
             ValidationResult result;
 
@@ -149,7 +149,7 @@ namespace wizardscode.validation
                 AbstractSettingSO fieldInstance = field.GetValue(parentFieldInstance) as AbstractSettingSO;
                 if (fieldInstance == null)
                 {
-                    AddOrUpdateAsError(field.Name, "Must provide a Setting Scriptable Object");
+                    AddOrUpdateAsError(field.Name, pluginManager, "Must provide a Setting Scriptable Object");
                     return;
                 }
 
@@ -157,20 +157,20 @@ namespace wizardscode.validation
 
                 if (field.FieldType == typeof(GenericSettingSO<>))
                 {
-                    ValidateGenericSettingField(field, fieldInstance);
+                    ValidateGenericSettingField(field, pluginManager, fieldInstance);
                 }
 
                 Type type = field.FieldType;
                 // Validate the field according to the SO validation setting.
                 result = (ValidationResult)type.InvokeMember("Validate",
                     BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.Public,
-                    null, fieldInstance, new object[] { validationTest });
+                    null, fieldInstance, new object[] { validationTest, pluginManager });
 
                 ResultCollection.AddOrUpdate(result, validationTest.Name);
 
                 IEnumerable<FieldInfo> childFields = field.FieldType.GetFields()
                     .Where(childField => childField.FieldType.IsSubclassOf(typeof(AbstractSettingSO)));
-                ValidateChildFields(validationTest, childFields, fieldInstance);
+                ValidateChildFields(validationTest, pluginManager, childFields, fieldInstance);
             }
         }
 
@@ -188,7 +188,7 @@ namespace wizardscode.validation
         /// field validations. Any successes or failures should be added to the `Collection`.
         /// </summary>
         /// <returns>True if validations passed. False if one ore more warning or error occurs.</returns>
-        internal virtual bool PreFieldCustomValidations() { return true; }
+        internal virtual bool PreFieldCustomValidations(AbstractPluginManager pluginManager) { return true; }
 
         /// <summary>
         /// If a plugin needs to perform any specific validations that are not expressed in the form of setting scriptable
@@ -196,7 +196,7 @@ namespace wizardscode.validation
         /// Any successes or failures should be added to the `Collection`.
         /// </summary>
         /// <returns>True if validations passed. False if one ore more warning or error occurs.</returns>
-        internal virtual bool PostFieldCustomValidations() { return true; }
+        internal virtual bool PostFieldCustomValidations(AbstractPluginManager pluginManager) { return true; }
 
         #region ValidationResult creation methods
 
@@ -206,10 +206,10 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="testName">Human readable test name.</param>
         /// <param name="message">Human readable message describing the test status.</param>
-        internal void AddOrUpdateAsPass(string testName, string message)
+        internal void AddOrUpdateAsPass(string testName, AbstractPluginManager pluginManager, string message)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetResult(testName, message, reportingTest);
+            ValidationResult result = GetResult(testName, pluginManager, message, reportingTest);
             result.impact = ValidationResult.Level.OK;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }
@@ -220,10 +220,10 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="testName">Human readable test name.</param>
         /// <param name="message">Human readable message describing the test status.</param>
-        internal void AddOrUpdateAsWarning(string testName, string message, ResolutionCallback callback = null)
+        internal void AddOrUpdateAsWarning(string testName, AbstractPluginManager pluginManager, string message, ResolutionCallback callback = null)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            ValidationResult result = GetResult(testName, pluginManager, message, reportingTest, callback);
             result.impact = ValidationResult.Level.Warning;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }
@@ -233,17 +233,17 @@ namespace wizardscode.validation
         /// </summary>
         /// <param name="testName">Human readable test name.</param>
         /// <param name="message">Human readable message describing the test status.</param>
-        internal void AddOrUpdateAsError(string testName, string message, ResolutionCallback callback = null)
+        internal void AddOrUpdateAsError(string testName, AbstractPluginManager pluginManager, string message, ResolutionCallback callback = null)
         {
             string reportingTest = this.GetType().Name;
-            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            ValidationResult result = GetResult(testName, pluginManager, message, reportingTest, callback);
             result.impact = ValidationResult.Level.Error;
             ResultCollection.AddOrUpdate(result, reportingTest);
         }
 
-        private ValidationResult GetResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        private ValidationResult GetResult(string testName, AbstractPluginManager pluginManager, string message, string reportingTest, ResolutionCallback callback = null)
         {
-            ValidationResult result = ResultCollection.GetOrCreate(testName, reportingTest);
+            ValidationResult result = ResultCollection.GetOrCreate(testName, pluginManager, reportingTest);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
             result.RemoveCallbacks();
@@ -251,30 +251,6 @@ namespace wizardscode.validation
             {
                 result.AddCallback(callback);
             }
-            return result;
-        }
-        
-        [Obsolete("Use AddOrUpdateAsError instead. This will also replace the subsequent call to AddOrUpdate.")]
-        internal ValidationResult GetErrorResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
-        {
-            ValidationResult result = GetResult(testName, message, reportingTest, callback);
-            result.impact = ValidationResult.Level.Error;
-            return result;
-        }
-
-        [Obsolete("Use AddOrUpdateAsWarning instead. This will also replace the subsequent call to AddOrUpdate.")]
-        internal ValidationResult GetWarningResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
-        {
-            ValidationResult result = GetResult(testName, message, reportingTest);
-            result.impact = ValidationResult.Level.Warning;
-            return result;
-        }
-        
-        [Obsolete("Use AddOrUpdateAsPass instead. This will also replace the subsequent call to AddOrUpdate.")]
-        internal ValidationResult GetPassResult(string testName, string message, string reportingTest)
-        {
-            ValidationResult result = GetResult(testName, message, reportingTest);
-            result.impact = ValidationResult.Level.OK;
             return result;
         }
         #endregion

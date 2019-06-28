@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using wizardscode.editor;
 using wizardscode.extension;
+using wizardscode.plugin;
 using wizardscode.utility;
 
 namespace wizardscode.validation
@@ -88,7 +89,7 @@ namespace wizardscode.validation
             return go;
         }
 
-        internal override ValidationResult ValidateSetting(Type validationTest)
+        internal override ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager)
         {
             ValidationResult result = null;
             
@@ -96,10 +97,10 @@ namespace wizardscode.validation
             {
                 if (AddToScene)
                 {
-                    result = GetErrorResult(TestName, SuggestedValue.name + " is required but doesn't currently exist in the scene", validationTest.Name);
+                    result = GetErrorResult(TestName, pluginManager, SuggestedValue.name + " is required but doesn't currently exist in the scene", validationTest.Name);
                 } else
                 {
-                    result = GetWarningResult(TestName, SuggestedValue.name + " doesn't currently exist in the scene. It is not required, if you don't want it then click the ignore button.", validationTest.Name);
+                    result = GetWarningResult(TestName, pluginManager, SuggestedValue.name + " doesn't currently exist in the scene. It is not required, if you don't want it then click the ignore button.", validationTest.Name);
                 }
                 List<ResolutionCallback> callbacks = new List<ResolutionCallback>();
                 ResolutionCallback callback = new ResolutionCallback(InstantiatePrefab);
@@ -108,7 +109,7 @@ namespace wizardscode.validation
                 return result;
             }
 
-            return GetPassResult(TestName, validationTest.Name);
+            return GetPassResult(TestName, pluginManager, validationTest.Name);
         }
     }
 }

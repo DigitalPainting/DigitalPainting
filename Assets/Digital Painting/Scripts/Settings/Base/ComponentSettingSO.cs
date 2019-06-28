@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using wizardscode.editor;
+using wizardscode.plugin;
 using wizardscode.validation;
 
 namespace WizardsCode.DigitalPainting.Core.Settings
@@ -55,20 +56,20 @@ namespace WizardsCode.DigitalPainting.Core.Settings
             ActualValue = SuggestedValue;
         }
 
-        internal override ValidationResult ValidateSetting(Type validationTest)
+        internal override ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager)
         {
             if (Target.Instance == null)
             {
-                return GetErrorResult("Target is required.", Target.name, validationTest.Name, new ResolutionCallback(Target.InstantiatePrefab));
+                return GetErrorResult("Target is required.", pluginManager, Target.name, validationTest.Name, new ResolutionCallback(Target.InstantiatePrefab));
             }
 
             if (ActualValue != null)
             {
-                return GetPassResult("Component is required", validationTest.Name);
+                return GetPassResult("Component is required", pluginManager, validationTest.Name);
             }
             else
             {
-                return GetErrorResult("Component is required", SuggestedValue.name + " is not present " + Target.Instance.name, validationTest.Name);
+                return GetErrorResult("Component is required", pluginManager, SuggestedValue.name + " is not present " + Target.Instance.name, validationTest.Name);
             }
         }
     }

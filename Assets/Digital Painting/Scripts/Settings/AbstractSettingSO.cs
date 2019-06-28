@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using wizardscode.extension;
+using wizardscode.plugin;
 
 namespace wizardscode.validation
 {
@@ -56,7 +57,7 @@ namespace wizardscode.validation
         /// Test to see if the setting is valid or not. 
         /// </summary>
         /// <returns>A ValidationResult. This will have an impact of "OK" if the setting is set to an acceptable value.</returns>
-        public virtual ValidationResult Validate(Type validationTest)
+        public virtual ValidationResult Validate(Type validationTest, AbstractPluginManager pluginManager)
         {
             ValidationResult result;
             if (!Nullable)
@@ -66,26 +67,26 @@ namespace wizardscode.validation
                 {
                     if (SuggestedValue as UnityEngine.Object == null)
                     {
-                        result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
+                        result = GetErrorResult(testName, pluginManager, "Suggested value cannot be null.", validationTest.Name);
                         return result;
                     }
                     else
                     {
-                        result = GetPassResult(testName, validationTest.Name);
+                        result = GetPassResult(testName, pluginManager, validationTest.Name);
                     }
                 }
                 else if (SuggestedValue == null)
                 {
-                    result = GetErrorResult(testName, "Suggested value cannot be null.", validationTest.Name);
+                    result = GetErrorResult(testName, pluginManager, "Suggested value cannot be null.", validationTest.Name);
                     return result;
                 }
                 else
                 {
-                    result = GetPassResult(testName, validationTest.Name);
+                    result = GetPassResult(testName, pluginManager, validationTest.Name);
                 }
             }
 
-            return ValidateSetting(validationTest);
+            return ValidateSetting(validationTest, pluginManager);
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace wizardscode.validation
         /// that is done automatically.
         /// </summary>
         /// <returns>True or false depending on whether the setting is correctly set (true) or not (false)</returns>
-        internal abstract ValidationResult ValidateSetting(Type validationTest);
+        internal abstract ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager);
 
         /// <summary>
         /// This method will be executed when the user clicks a button to automatically fix the setting.
@@ -110,9 +111,9 @@ namespace wizardscode.validation
         /// </summary>
         public abstract void Fix();
 
-        private ValidationResult GetResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        private ValidationResult GetResult(string testName, AbstractPluginManager pluginManager, string message, string reportingTest, ResolutionCallback callback = null)
         {
-            ValidationResult result = ValidationCollection.GetOrCreate(SettingName + " - " + testName, reportingTest);
+            ValidationResult result = ValidationCollection.GetOrCreate(SettingName + " - " + testName, pluginManager, reportingTest);
             result.Message = message;
             result.impact = ValidationResult.Level.Warning;
             result.Callbacks = new List<ResolutionCallback>();
@@ -133,23 +134,23 @@ namespace wizardscode.validation
             result.AddCallback(callback);
         }
 
-        internal ValidationResult GetErrorResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        internal ValidationResult GetErrorResult(string testName, AbstractPluginManager pluginManager, string message, string reportingTest, ResolutionCallback callback = null)
         {
-            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            ValidationResult result = GetResult(testName, pluginManager, message, reportingTest, callback);
             result.impact = ValidationResult.Level.Error;
             return result;
         }
 
-        internal ValidationResult GetWarningResult(string testName, string message, string reportingTest, ResolutionCallback callback = null)
+        internal ValidationResult GetWarningResult(string testName, AbstractPluginManager pluginManager, string message, string reportingTest, ResolutionCallback callback = null)
         {
-            ValidationResult result = GetResult(testName, message, reportingTest, callback);
+            ValidationResult result = GetResult(testName, pluginManager, message, reportingTest, callback);
             result.impact = ValidationResult.Level.Warning;
             return result;
         }
 
-        internal ValidationResult GetPassResult(string testName, string reportingTest)
+        internal ValidationResult GetPassResult(string testName, AbstractPluginManager pluginManager, string reportingTest)
         {
-            ValidationResult result = GetResult(testName, "Looks good.", reportingTest);
+            ValidationResult result = GetResult(testName, pluginManager, "Looks good.", reportingTest);
             result.impact = ValidationResult.Level.OK;
             return result;
         }

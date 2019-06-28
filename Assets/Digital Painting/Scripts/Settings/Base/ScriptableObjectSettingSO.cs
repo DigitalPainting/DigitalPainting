@@ -5,6 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using wizardscode.extension;
+using wizardscode.plugin;
 
 namespace wizardscode.validation
 {
@@ -80,17 +81,17 @@ namespace wizardscode.validation
             AssetDatabase.SaveAssets();
         }
 
-        internal override ValidationResult ValidateSetting(Type validationTest)
+        internal override ValidationResult ValidateSetting(Type validationTest, AbstractPluginManager pluginManager)
         {
             ValidationResult result = null;
             
             if (Instance == null)
             {
-                result = GetErrorResult(TestName, SuggestedValue.name + " is required but doesn't currently exist in the scene.", validationTest.Name, new ResolutionCallback(InstantiateScriptableObject));
+                result = GetErrorResult(TestName, pluginManager, SuggestedValue.name + " is required but doesn't currently exist in the scene.", validationTest.Name, new ResolutionCallback(InstantiateScriptableObject));
                 return result;
             }
 
-            return GetPassResult(TestName, validationTest.Name);
+            return GetPassResult(TestName, pluginManager, validationTest.Name);
         }
     }
 }
