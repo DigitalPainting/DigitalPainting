@@ -18,10 +18,6 @@ namespace wizardscode.environment
         [Tooltip("A prefab setting for the directional light that acts as the sun.")]
         [Expandable(isRequired: false, isRequiredMessage: "Must provide a suggested Sun setting.")]
         public PrefabSettingSO SunPrefab;
-        
-        [Tooltip("A setting that will ensure the Lighting is correctly setup for the Sun in the scene.")]
-        [Expandable(isRequired: true, isRequiredMessage: "Must provide a suggested Sun setting.")]
-        public SceneObjectSettingSO SunSource;
 
         [Header("Timing")]
         [Tooltip("Start time in seconds. 0 and 86400 is midnight.")]

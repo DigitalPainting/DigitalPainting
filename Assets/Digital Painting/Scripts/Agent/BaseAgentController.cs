@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ScriptableObjectArchitecture;
+using UnityEngine;
 using wizardscode.agent.movement;
 using wizardscode.editor;
 using wizardscode.validation;
@@ -23,11 +24,21 @@ namespace wizardscode.digitalpainting.agent
         [Expandable]
         public AgentSettingSO _Settings;
 
+        [Header("Base Animations")]
+        [Tooltip("The name of a boolean value that is used to trigger the Talking animations.")]
+        public StringReference TalkAnimationBoolName = new StringReference("IsTalking");
+        
         [Header("Overrides")]
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
 
         internal DigitalPaintingManager manager;
+        internal Animator animator;
+
+        private void Start()
+        {
+            animator = gameObject.GetComponentInChildren<Animator>();
+        }
 
         /// <summary>
         /// When an agent is instantiated through the Digital Painting Manager in the Editor it
@@ -65,5 +76,23 @@ namespace wizardscode.digitalpainting.agent
         }
 
         virtual internal void Update() { }
+
+        /// <summary>
+        /// Call this whenever the character starts to talk.
+        /// </summary>
+        public void StartTalking()
+        {
+            // TODO: use hash for animations
+            animator.SetBool(TalkAnimationBoolName.Value, true);
+        }
+        
+        /// <summary>
+        /// Call this whenever the character stops talking.
+        /// </summary>
+        public void StopTalking()
+        {
+            // TODO: use hash for animations
+            animator.SetBool(TalkAnimationBoolName.Value, false);
+        }
     }
 }

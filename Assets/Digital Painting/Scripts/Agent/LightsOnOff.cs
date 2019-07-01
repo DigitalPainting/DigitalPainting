@@ -17,7 +17,7 @@ namespace wizardscode.agent
         public Light[] lights;
         
         DayNightPluginManager dayNightManager;
-        public float[] maxIntensity;
+        private float[] maxIntensity;
 
         void Start()
         {
