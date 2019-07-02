@@ -24,22 +24,35 @@ namespace wizardscode.digitalpainting.agent
         [Expandable]
         public AgentSettingSO _Settings;
 
-        [Header("Base Animations")]
-        [Tooltip("The name of a boolean value that is used to trigger the Talking animations.")]
-        public StringReference TalkAnimationBoolName = new StringReference("IsTalking");
-        
+        [Header("Starting Animation State")]
+        [Tooltip("Check if you want the character to start the scene in the sitting position.")]
+        public bool InitiallySitting = false;
+        [Tooltip("Check if you want the character to start the scene talking position.")]
+        public bool InitiallyTalking = false;
+
         [Header("Overrides")]
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
 
         internal DigitalPaintingManager manager;
         internal Animator animator;
+        private bool isFirstFrame = true;
 
         private void Start()
         {
-            animator = gameObject.GetComponentInChildren<Animator>();
+            animator = gameObject.GetComponent<Animator>();
         }
 
+        internal virtual void Update()
+        {
+            if (isFirstFrame)
+            {
+                animator.SetBool(Settings.SittingAnimationParameter.Value, InitiallySitting);
+                animator.SetBool(Settings.TalkingAnimationParameter.Value, InitiallyTalking);
+                isFirstFrame = false;
+            }    
+        }
+    
         /// <summary>
         /// When an agent is instantiated through the Digital Painting Manager in the Editor it
         /// will record the Settings for the agent. These can then be used by game engine at
@@ -74,16 +87,14 @@ namespace wizardscode.digitalpainting.agent
                 home.transform.rotation = transform.rotation;
             }
         }
-
-        virtual internal void Update() { }
-
+        
         /// <summary>
         /// Call this whenever the character starts to talk.
         /// </summary>
         public void StartTalking()
         {
             // TODO: use hash for animations
-            animator.SetBool(TalkAnimationBoolName.Value, true);
+            animator.SetBool(Settings.TalkingAnimationParameter.Value, true);
         }
         
         /// <summary>
@@ -92,7 +103,7 @@ namespace wizardscode.digitalpainting.agent
         public void StopTalking()
         {
             // TODO: use hash for animations
-            animator.SetBool(TalkAnimationBoolName.Value, false);
+            animator.SetBool(Settings.TalkingAnimationParameter.Value, false);
         }
     }
 }

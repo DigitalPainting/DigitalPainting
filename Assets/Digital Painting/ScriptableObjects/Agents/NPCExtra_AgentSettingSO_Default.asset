@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c48f64a7d34ed4f96b048f63c5f2be, type: 3}
+  m_Name: NPCExtra_AgentSettingSO_Default
+  m_EditorClassIdentifier: 
+  SettingName: NPC Extra
+  Nullable: 0
+  m_suggestedValue: {fileID: 0}
+  AddToScene: 1
+  spawnPosition: {x: 0, y: 0, z: 0}
+  agentName: Extra
+  TalkingAnimationParameter:
+    _useConstant: 1
+    _constantValue: Talking
+    _variable: {fileID: 0}
+  SittingAnimationParameter:
+    _useConstant: 1
+    _constantValue: Sitting
+    _variable: {fileID: 0}
+  speedParameter: Speed
+  turnParameter: Direction
+  lookAtName: 
+  cameraAimMode: 0
+  cameraFollowOffset: {x: 0, y: 0, z: 0}

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ScriptableObjectArchitecture;
+using UnityEngine;
 
 using wizardscode.digitalpainting.agent;
 
@@ -17,9 +18,16 @@ namespace wizardscode.validation
         [Tooltip("The name of the game object for this UMA agent.")]
         public string agentName = "Agent";
 
-        [Header("Animation Settings")]
+        [Header("Animation Parameters")]
+        [Tooltip("The name of a boolean value that is used to play the Talking animations.")]
+        public StringReference TalkingAnimationParameter = new StringReference("Talking");
+
+        [Tooltip("The name of a boolean parameter that is used to indicate if the character is sitting down.")]
+        public StringReference SittingAnimationParameter = new StringReference("Sitting");
+
         [Tooltip("The Speed parameter in the animation controller. This will be changed to reflect the current move speed of the character.")]
         public string speedParameter = "Speed";
+
         [Tooltip("The Direction parameter in the animation controller. This will be changed to reflect the current move direction of the character.")]
         public string turnParameter = "Direction";
 
@@ -30,7 +38,7 @@ namespace wizardscode.validation
         public CameraAimMode cameraAimMode;
         [Tooltip("Camera offset from agent.")]
         public Vector3 cameraFollowOffset = Vector3.zero;
-
+        
         internal override void InstantiatePrefab()
         {
             base.InstantiatePrefab();

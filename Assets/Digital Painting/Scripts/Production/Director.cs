@@ -16,9 +16,9 @@ namespace wizardscode.production
     {
         [SerializeField] [Tooltip("Main Cinemachine camera rig. This can either be a rig in the scene, a prefab that will be instantiated or null. In the case of a null a Default follow camera setup will be created.")]
         private CinemachineVirtualCameraBase defaultCameraSetup;
-
+        
         private CinemachineVirtualCameraBase cameraRig;
-    private GameObject followClearshotGO;
+        private GameObject followClearshotGO;
 
         private BaseAgentController _agentWithFocus;
 
