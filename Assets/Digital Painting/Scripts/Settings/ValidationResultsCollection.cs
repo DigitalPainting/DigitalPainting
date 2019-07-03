@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using wizardscode.plugin;
+using WizardsCode.plugin;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
     public class ValidationResultCollection
     {

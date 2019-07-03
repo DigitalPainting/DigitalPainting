@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
-using wizardscode.agent;
-using wizardscode.digitalpainting.agent;
-using wizardscode.editor;
-using wizardscode.plugin;
-using wizardscode.production;
+using WizardsCode.Agent;
+using WizardsCode.digitalpainting.agent;
+using WizardsCode.editor;
+using WizardsCode.plugin;
+using WizardsCode.production;
 using Random = UnityEngine.Random;
 
-namespace wizardscode.digitalpainting
+namespace WizardsCode.digitalpainting
 {
     public class DigitalPaintingManager : AbstractPluginManager
     {

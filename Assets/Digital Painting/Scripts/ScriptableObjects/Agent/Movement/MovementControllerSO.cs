@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace wizardscode.agent.movement
+namespace WizardsCode.Agent.movement
 {
     /// <summary>
     /// Movement Controllers implement this class and can then be assigned to a Movement Brain.

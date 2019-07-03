@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using wizardscode.environment;
+using WizardsCode.environment;
 using System.Collections.Generic;
-using wizardscode.plugin;
+using WizardsCode.plugin;
 using System;
-using wizardscode.utility;
+using WizardsCode.utility;
 
-namespace wizardscode.editor {
+namespace WizardsCode.editor {
     [CustomEditor(typeof(DayNightPluginManager))]
     public class DayNightPluginManagerEditor : AbstractPluginManagerEditor
     {

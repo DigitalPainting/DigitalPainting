@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using wizardscode.plugin;
+using WizardsCode.plugin;
 
-namespace wizardscode.environment
+namespace WizardsCode.environment
 {
     /// <summary>
     /// The Day Night Cycle Manager is responsible for sharing transferring the Day Night settings to 

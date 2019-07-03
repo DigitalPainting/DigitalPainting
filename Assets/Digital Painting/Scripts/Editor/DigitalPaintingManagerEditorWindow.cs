@@ -8,12 +8,12 @@ using UnityEditor.PackageManager.Requests;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using wizardscode.digitalpainting;
-using wizardscode.extension;
-using wizardscode.plugin;
-using wizardscode.validation;
+using WizardsCode.digitalpainting;
+using WizardsCode.extension;
+using WizardsCode.plugin;
+using WizardsCode.validation;
 
-namespace wizardscode.editor
+namespace WizardsCode.editor
 {
     public class DigitalPaintingManagerEditorWindow : EditorWindow
     {

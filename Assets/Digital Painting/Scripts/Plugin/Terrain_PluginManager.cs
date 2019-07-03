@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-namespace wizardscode.plugin
+namespace WizardsCode.plugin
 {
     public class Terrain_PluginManager : AbstractPluginManager
     {

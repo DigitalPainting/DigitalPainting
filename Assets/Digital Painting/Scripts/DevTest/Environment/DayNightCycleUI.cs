@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using wizardscode.environment;
+using WizardsCode.environment;
 
-namespace wizardscode.digitalpainting.devtest {
+namespace WizardsCode.digitalpainting.devtest {
     public class DayNightCycleUI : MonoBehaviour {
         [Tooltip("Text label to display name of the Day Night Cycle Implementation being used.")]
         public Text implementatioNameLabel;

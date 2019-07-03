@@ -2,7 +2,7 @@
 using System.Reflection;
 using UnityEngine;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_SceneObject_SettingSO", menuName = "Wizards Code/Validation/Generic/Scene Object")]
     public class SceneObjectSettingSO : GenericSettingSO<GameObject>

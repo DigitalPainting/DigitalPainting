@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using wizardscode.digitalpainting.agent;
-using wizardscode.environment;
-using wizardscode.production;
+using WizardsCode.digitalpainting.agent;
+using WizardsCode.environment;
+using WizardsCode.production;
 
-namespace wizardscode.devtest
+namespace WizardsCode.devtest
 {
     public class InterestingThingsUI : MonoBehaviour
     {

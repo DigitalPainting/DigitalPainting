@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace wizardscode.plugin
+namespace WizardsCode.plugin
 {
     public abstract class AbstractWeatherPluginDefinition : AbstractPluginDefinition
     {

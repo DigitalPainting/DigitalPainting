@@ -4,10 +4,10 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using wizardscode.extension;
-using wizardscode.plugin;
+using WizardsCode.extension;
+using WizardsCode.plugin;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_ScriptableObjectSettingSO", menuName = "Wizards Code/Validation/Scriptable Object")]
     public class ScriptableObjectSettingSO : AbstractSettingSO<MonoScript>

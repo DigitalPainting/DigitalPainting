@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using wizardscode.editor;
-using wizardscode.plugin;
-using wizardscode.validation;
+using WizardsCode.editor;
+using WizardsCode.plugin;
+using WizardsCode.validation;
 
-namespace wizardscode.environment
+namespace WizardsCode.environment
 {
     /// <summary>
     /// Describes the common configuration of a Day Night plugin.

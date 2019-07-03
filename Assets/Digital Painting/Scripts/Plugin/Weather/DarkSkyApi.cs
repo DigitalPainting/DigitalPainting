@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using UnityEngine;
 
-namespace wizardscode.environment
+namespace WizardsCode.environment
 {
     /// <summary>
     /// Retrieves the weather (current or forecasted) from DarkSky and feeds it into a Digital Paintings weather system implementation.

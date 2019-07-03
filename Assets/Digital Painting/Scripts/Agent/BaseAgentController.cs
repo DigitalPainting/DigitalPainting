@@ -1,10 +1,10 @@
 ﻿using ScriptableObjectArchitecture;
 using UnityEngine;
-using wizardscode.agent.movement;
-using wizardscode.editor;
-using wizardscode.validation;
+using WizardsCode.Agent.movement;
+using WizardsCode.editor;
+using WizardsCode.validation;
 
-namespace wizardscode.digitalpainting.agent
+namespace WizardsCode.digitalpainting.agent
 {
     /// <summary>
     /// BaseAgentController provides the core parameters and a very basic manual controller for agents.
@@ -24,19 +24,13 @@ namespace wizardscode.digitalpainting.agent
         [Expandable]
         public AgentSettingSO _Settings;
 
-        [Header("Starting Animation State")]
-        [Tooltip("Check if you want the character to start the scene in the sitting position.")]
-        public bool InitiallySitting = false;
-        [Tooltip("Check if you want the character to start the scene talking position.")]
-        public bool InitiallyTalking = false;
-
         [Header("Overrides")]
         [Tooltip("Home location of the agent. If blank this will be the agents starting position.")]
         public GameObject home;
 
         internal DigitalPaintingManager manager;
         internal Animator animator;
-        private bool isFirstFrame = true;
+        internal bool isFirstFrame = true;
 
         private void Start()
         {
@@ -44,13 +38,7 @@ namespace wizardscode.digitalpainting.agent
         }
 
         internal virtual void Update()
-        {
-            if (isFirstFrame)
-            {
-                animator.SetBool(Settings.SittingAnimationParameter.Value, InitiallySitting);
-                animator.SetBool(Settings.TalkingAnimationParameter.Value, InitiallyTalking);
-                isFirstFrame = false;
-            }    
+        { 
         }
     
         /// <summary>
@@ -86,24 +74,6 @@ namespace wizardscode.digitalpainting.agent
                 home.transform.position = transform.position;
                 home.transform.rotation = transform.rotation;
             }
-        }
-        
-        /// <summary>
-        /// Call this whenever the character starts to talk.
-        /// </summary>
-        public void StartTalking()
-        {
-            // TODO: use hash for animations
-            animator.SetBool(Settings.TalkingAnimationParameter.Value, true);
-        }
-        
-        /// <summary>
-        /// Call this whenever the character stops talking.
-        /// </summary>
-        public void StopTalking()
-        {
-            // TODO: use hash for animations
-            animator.SetBool(Settings.TalkingAnimationParameter.Value, false);
         }
     }
 }

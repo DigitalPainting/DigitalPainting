@@ -8,11 +8,11 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using wizardscode.extension;
-using wizardscode.plugin;
-using wizardscode.utility;
+using WizardsCode.extension;
+using WizardsCode.plugin;
+using WizardsCode.utility;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
 
     /// <summary>

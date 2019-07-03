@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using wizardscode.editor;
-using wizardscode.plugin;
-using wizardscode.validation;
+using WizardsCode.editor;
+using WizardsCode.plugin;
+using WizardsCode.validation;
 
-namespace wizardscode.environment
+namespace WizardsCode.environment
 {
     public abstract class AbstractWeatherProfile : AbstractPluginProfile
     {

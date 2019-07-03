@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.environment
+namespace WizardsCode.environment
 {
     public abstract class AbstractDayNightCycle : ScriptableObject
     {

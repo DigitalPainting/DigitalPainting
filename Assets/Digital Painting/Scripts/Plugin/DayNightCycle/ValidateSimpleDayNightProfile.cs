@@ -1,7 +1,7 @@
 ﻿using System;
-using wizardscode.environment;
+using WizardsCode.environment;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
     public class ValidateSimpleDayNightProfile : ValidationTest<DayNightPluginManager>
     {

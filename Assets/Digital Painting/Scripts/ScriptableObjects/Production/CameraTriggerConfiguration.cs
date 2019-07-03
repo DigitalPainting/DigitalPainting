@@ -1,9 +1,9 @@
 ﻿using Cinemachine;
 using UnityEngine;
-using wizardscode.agent.movement;
-using wizardscode.digitalpainting.agent;
+using WizardsCode.Agent.movement;
+using WizardsCode.digitalpainting.agent;
 
-namespace wizardscode.production
+namespace WizardsCode.production
 {
     /// <summary>
     /// CameraTriggerConfiguration is a ScriptableObject that is used to define the behaviour of a camera when

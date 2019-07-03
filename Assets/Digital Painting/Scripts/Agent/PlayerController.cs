@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.digitalpainting.agent;
+using WizardsCode.digitalpainting.agent;
 
-namespace wizardscode.agent
+namespace WizardsCode.Agent
 {
     public class PlayerController : BaseAgentController
     {

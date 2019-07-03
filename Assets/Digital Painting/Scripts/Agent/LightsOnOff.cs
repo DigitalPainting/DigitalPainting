@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.environment;
+using WizardsCode.environment;
 
-namespace wizardscode.agent
+namespace WizardsCode.Agent
 {
     /// <summary>
     /// Turn the lights on around sunset and off around sunrise. If there is no DayNightCycleManager

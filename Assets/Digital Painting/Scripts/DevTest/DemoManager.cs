@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using wizardscode.digitalpainting;
+using WizardsCode.digitalpainting;
 
-namespace wizardscode.devtest
+namespace WizardsCode.devtest
 {
     public class DemoManager : MonoBehaviour
     {

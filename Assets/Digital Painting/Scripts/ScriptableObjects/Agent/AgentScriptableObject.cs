@@ -1,8 +1,8 @@
 ﻿using Cinemachine;
 using UnityEngine;
-using wizardscode.agent.movement;
+using WizardsCode.Agent.movement;
 
-namespace wizardscode.agent
+namespace WizardsCode.Agent
 {
     [CreateAssetMenu(fileName = "Agent", menuName = "Wizards Code/Agent/Agent Definition")]
     public class AgentScriptableObject : ScriptableObject

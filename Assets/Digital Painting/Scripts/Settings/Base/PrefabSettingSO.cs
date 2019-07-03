@@ -8,12 +8,12 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using wizardscode.editor;
-using wizardscode.extension;
-using wizardscode.plugin;
-using wizardscode.utility;
+using WizardsCode.editor;
+using WizardsCode.extension;
+using WizardsCode.plugin;
+using WizardsCode.utility;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_PrefabSettingSO", menuName = "Wizards Code/Validation/Prefab")]
     public class PrefabSettingSO : AbstractSettingSO<UnityEngine.Object>

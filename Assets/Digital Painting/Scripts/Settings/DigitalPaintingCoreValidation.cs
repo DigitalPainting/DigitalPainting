@@ -5,11 +5,11 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using wizardscode.extension;
-using wizardscode.plugin;
-using wizardscode.validation;
+using WizardsCode.extension;
+using WizardsCode.plugin;
+using WizardsCode.validation;
 
-namespace wizardscode.digitalpainting
+namespace WizardsCode.digitalpainting
 {
     public class DigitalPaintingCoreValidation : ValidationTest<DigitalPaintingManager>
     {

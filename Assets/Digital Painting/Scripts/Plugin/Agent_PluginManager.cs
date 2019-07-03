@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace wizardscode.plugin
+namespace WizardsCode.plugin
 {
     public class Agent_PluginManager : AbstractPluginManager
     {

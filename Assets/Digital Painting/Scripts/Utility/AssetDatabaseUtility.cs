@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using wizardscode.digitalpainting;
-using wizardscode.validation;
+using WizardsCode.digitalpainting;
+using WizardsCode.validation;
 
-namespace wizardscode.extension
+namespace WizardsCode.extension
 {
 
     public static class AssetDatabaseUtility

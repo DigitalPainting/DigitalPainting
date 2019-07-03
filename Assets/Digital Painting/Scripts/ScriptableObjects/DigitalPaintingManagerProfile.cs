@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using wizardscode.editor;
-using wizardscode.plugin;
-using wizardscode.validation;
+using WizardsCode.editor;
+using WizardsCode.plugin;
+using WizardsCode.validation;
 
-namespace wizardscode.digitalpainting
+namespace WizardsCode.digitalpainting
 {
     /// <summary>
     /// The profile for configuring the core parts of the Digital Painting.

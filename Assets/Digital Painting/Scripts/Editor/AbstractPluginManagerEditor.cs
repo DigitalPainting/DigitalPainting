@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using wizardscode.plugin;
-using wizardscode.utility;
+using WizardsCode.plugin;
+using WizardsCode.utility;
 
-namespace wizardscode.editor
+namespace WizardsCode.editor
 {
     public abstract class AbstractPluginManagerEditor : Editor
     {

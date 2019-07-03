@@ -1,11 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using wizardscode.digitalpainting.agent;
-
-namespace wizardscode.agent
+﻿namespace WizardsCode.Agent
 {
-    public class NPCController : BaseAgentController
+    public class NPCController : HumanoidAgentController
     {
     }
 }

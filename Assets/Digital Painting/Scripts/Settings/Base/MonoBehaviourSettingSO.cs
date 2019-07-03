@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using wizardscode.editor;
-using wizardscode.plugin;
+using WizardsCode.editor;
+using WizardsCode.plugin;
 
-namespace wizardscode.validation
+namespace WizardsCode.validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_MonoBehaviour_SettingSO", menuName = "Wizards Code/Validation/Generic/MonoBehaviour")]
     public class MonoBehaviourSettingSO : AbstractSettingSO<MonoScript>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace wizardscode.environment.test
+namespace WizardsCode.environment.test
 {
     public class WeatherUI : MonoBehaviour
     {

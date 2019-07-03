@@ -3,9 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.digitalpainting;
+using WizardsCode.digitalpainting;
 
-namespace wizardscode.production
+namespace WizardsCode.production
 {
     /// <summary>
     /// CameraTrigger should be attached to any object that has a trigger collider that is designed
