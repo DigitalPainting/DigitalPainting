@@ -1,26 +1,22 @@
-﻿using Cinemachine;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using wizardscode.agent;
-using wizardscode.digitalpainting.agent;
-using wizardscode.production;
+﻿using UnityEngine;
+using WizardsCode.Agent;
+using WizardsCode.digitalpainting.agent;
+using WizardsCode.editor;
+using WizardsCode.plugin;
+using WizardsCode.production;
 using Random = UnityEngine.Random;
 
-namespace wizardscode.digitalpainting
+namespace WizardsCode.digitalpainting
 {
-    public class DigitalPaintingManager : MonoBehaviour
+    public class DigitalPaintingManager : AbstractPluginManager
     {
         [Tooltip("The agents that exist in the world. These agents will act autonomously in the world, doing interesting things. The first agent in the list will be the first one in the list is the one that the camera will initially be viewing.")]
         public AgentScriptableObject[] agentObjectDefs;
-
-        private Octree octree;
+        
         private Director director;
 
         void Awake()
         {
-            octree = GameObject.FindObjectOfType<Octree>();
             director = GameObject.FindObjectOfType<Director>();
         }
 
@@ -53,10 +49,6 @@ namespace wizardscode.digitalpainting
             }
 
             Vector3 position = GetSpawnPositionCandidate(controller);
-            while(!octree.IsTraversableCell(position))
-            {
-                position = GetSpawnPositionCandidate(controller);
-            }
             agent.transform.position = position;
 
             return controller;

@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b301109953c40c446a3f2973fec87cd6, type: 3}
   m_Name: Manual Movement Controller
   m_EditorClassIdentifier: 
+  minimumReachDistance: 3
   normalMovementSpeed: 1
   fastMovementFactor: 4
   slowMovementFactor: 0.2
   climbSpeed: 1
-  heightOffset: 0.5
+  heightOffset: 0
   rotationSpeed: 90
+  CanFly: 1
+  ToFly: 8
+  minimumFlyHeight: 1
+  maximumFlyHeight: 50

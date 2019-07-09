@@ -1,10 +1,10 @@
 ﻿using Cinemachine;
 using ScriptableObjectArchitecture;
 using UnityEngine;
-using wizardscode.agent.movement;
-using wizardscode.digitalpainting.agent;
+using WizardsCode.Agent.movement;
+using WizardsCode.digitalpainting.agent;
 
-namespace wizardscode.production
+namespace WizardsCode.production
 {
     /// <summary>
     /// TriggerConfiguration enables GameEvents to be fired in response to a Collider being Triggered. It

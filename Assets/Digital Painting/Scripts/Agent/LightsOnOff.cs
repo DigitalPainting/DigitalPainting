@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.environment;
+using WizardsCode.environment;
 
-namespace wizardscode.agent
+namespace WizardsCode.Agent
 {
     /// <summary>
     /// Turn the lights on around sunset and off around sunrise. If there is no DayNightCycleManager
@@ -16,12 +16,12 @@ namespace wizardscode.agent
         [Tooltip("The lights to control")]
         public Light[] lights;
         
-        DayNightCycleManager dayNightManager;
-        public float[] maxIntensity;
+        DayNightPluginManager dayNightManager;
+        private float[] maxIntensity;
 
         void Start()
         {
-            dayNightManager = FindObjectOfType<DayNightCycleManager>();
+            dayNightManager = FindObjectOfType<DayNightPluginManager>();
             if (dayNightManager == null)
             {
                 Debug.LogWarning("There is an active LightsOnOff script in the scene, but no DayNightCycleManager. Disabling the LightsOnOff script on " + gameObject.name);
@@ -50,14 +50,14 @@ namespace wizardscode.agent
 
         private void switchLights()
         {
-            if (dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Dusk || dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Dawn)
+            if (dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Dusk || dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Dawn)
             {
                 for (int i = 0; i < lights.Length; i++)
                 {
                     lights[i].intensity = maxIntensity[i] * 0.5f;
                 }
             }
-            else if (dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Night)
+            else if (dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Night)
             {
                 for (int i = 0; i < lights.Length; i++)
                 {
@@ -77,21 +77,21 @@ namespace wizardscode.agent
         {
             for (int i = 0; i < lights.Length; i++)
             {
-                if (dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Dawn)
+                if (dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Dawn)
                 {
                     float relativeTime = dayNightManager.CurrentTime - dayNightManager.dawnStartTime;
-                    lights[i].intensity = maxIntensity[i] * ((DayNightCycleManager.QUARTER_DAY_AS_SECONDS - relativeTime) / DayNightCycleManager.QUARTER_DAY_AS_SECONDS);
+                    lights[i].intensity = maxIntensity[i] * ((DayNightPluginManager.QUARTER_DAY_AS_SECONDS - relativeTime) / DayNightPluginManager.QUARTER_DAY_AS_SECONDS);
                 }
-                else if (dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Dusk)
+                else if (dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Dusk)
                 {
                     float relativeTime = dayNightManager.CurrentTime - dayNightManager.duskStartTime;
-                    lights[i].intensity = maxIntensity[i] * (relativeTime / DayNightCycleManager.QUARTER_DAY_AS_SECONDS);
+                    lights[i].intensity = maxIntensity[i] * (relativeTime / DayNightPluginManager.QUARTER_DAY_AS_SECONDS);
                 }
-                else if (dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Dusk)
+                else if (dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Dusk)
                 {
                     lights[i].intensity = maxIntensity[i];
                 }
-                else if (dayNightManager.CurrentPhase == DayNightCycleManager.Phase.Day)
+                else if (dayNightManager.CurrentPhase == DayNightPluginManager.Phase.Day)
                 {
                     lights[i].intensity = 0;
                 }

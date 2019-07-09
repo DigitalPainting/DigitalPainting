@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using wizardscode.digitalpainting;
-using wizardscode.utility;
+using WizardsCode.digitalpainting;
+using WizardsCode.utility;
 
-namespace wizardscode.agent.movement
+namespace WizardsCode.Agent.movement
 {
     /// <summary>
     /// The movement brain controls movement of an agent. Through the configuration of various settings

@@ -1,30 +1,200 @@
-﻿# Building a Plugin or Scene
+﻿The Digital Painting supports a number of assets as integrated plugins and, since it is open source, it is relateively easy for you to add your own plugins. The Plugin system provides a unified way to easily configure the basic features of plugin assets of similar type, while the full asset is still accessible through the editor for power users. This document describes how to create a plugin and integrate it into the Editor UI.
 
-The Digital Painting asset can be extended using plugins, for example, you can add support for your favorite Weather asset. It's also possible to package Scenes using this same mechanism. Plugins and Scenes can be built to use paid for assets without redistributing those assets. Of course users will need to install those assets before using the plugin or scene. These plugins and scenes are distributed as Unity Packages in the `Plugins` folder.
+To create a plugin you need to create a number of scripts, the following sections describe each. None of them are particularly complicated so the best way to learn is to look at examples provided by the Digital Painting asset. In this document we describe the creationg a Flying Camera Agent that can be used to explore the scene. You can find others to inspect in the [Digital Painting code repository](https://github.com/digitalpainting/).
 
-To create a new plugin you need to consult the documentation for that kind of plugin, for example [Weather](Weather.md), [Day Night Cycle](DayNightCycle.md) or [Scene](CreatingAScene.md).
+TODO: push the camera agent plugin to GitHub
 
-In order to build a Unity Package for your plugin you should provide a menu command. The Digital Painting provides a easy way to do this. Basically create a script in your plugins `Scripts/Editor` folder called `PULUINNAMEPackageBuild`. This script should extend the `PackageBuilder` class and provide a new implementation of the static `Build` method. This method will use the `MoveExcludedFiles` method to move everything that should not be packaged out of the way, then it will Build the package, finally it will use the `RecoverExcludedFiles` method to restore the previous state.
+# Plugin Project
 
-Be sure to update the `MenuItem` line to create a new Build menu item.
+Each plugin should be in a new project folder and Git repository.
+
+## Summary
+
+  * Create a Unity project called `Plugin_CATEGORY_DESCRIPTIVENAME` (where `CATEGORY` is one of the categories identified below).
+  * Create a new repository in your preferred location, Digital Painting plugins are always in `https://github.com/DigitalPainting`
+  * `git clone git@github.com:DigitalPainting/Plugin_CATEGORY_DESCRIPTIVENAME.git`
+  
+## Details
+
+Plugins are built as separate Unity projects to be imported into your Digital Painting application. For convenience we use a naming convention to make it easy to identify different components in the Digital Painting setup. You are not forced to use these conventions but it is advisable.
+
+Plugin projects are named `Plugin_CATEGORY_DESCRIPTIVENAME`, where `Plugin` identifies this is a plugin project. `CATEGORY` is one of the values that describe what kind of plugin this is (listed below) and NAME is any name you want to use to uniquely identify this plugin.
+
+Known categories (at the time of writing) are listed below. If there is no suitable category label already you can create your own. Please issue a pull request against this document and against the `PluginCategory` enum in `AbstractPluginDefinition`.
+
+  * `Agent` - agents are things that move about in the world and interact with it.
+  * `DayNightCycle` - these plugins control the day night cycle in the world
+  * `Terrain` - generation and handling of terrains
+  * `Weather` - plugins to control the weather in the world
+  * `Other` - plugins that do not fit neatly into any other category
+
+We will call our example plugin `Plugin_Agent_ManualFlyingCamera`.
+
+TODO: Rename existing plugins to conform to this naming convention.
+
+# Create a Submodule for Digital Painting
+
+It is easier to develop the plugin if the Digital Painting source is in the project. This enables you to make changes to the Digital Painting code to accomodate new features needed by your plugin. You can, of course, simply import the Digital Paintin asset, but I always like to use the source when developing plugins.
+
+## Summary
+
+  * `cd Assets`
+  * `git submodule add git@github.com:DigitalPainting/DigitalPainting.git`
+  * `git submodule add git@github.com:DigitalPainting/Flying-Pathfinding.git`
+  * `git submodule add git@github.com:rgardler/ScriptableObject-Architecture.git`
+  * Open project in Unity
+  * Install Cinemachine
+  * Install Post Processing 2
+
+FIXME: the Flying-Pathfinding submodill be moved to a plugin and thus will not be needed in the future (6/13/2019)
+
+# Plugin Manager
+
+The Plugin Manager provides the integration code between the Digital Painting core and the asset code.
+
+## Summary
+
+In simple cases you will not need a custom plugin manager, but if you need tight integration between Digital Painting and the plugin asset you may need to write one. In which case:
+
+  * Create a new class `CATEGORY_DESCRIPTIVENAME_PluginManager`
+  * Edit the script and make it implement `AbstractPluginManager`
+  * Write code to provide your integration (often none is needed)
+
+## Details
+
+Each type of plugin must have an implementation of `AbstractPluginManager`, this is a `MonoBehavior` that manages the plugin implementation. When the plugin is installed into a scene, this is added as a component on a manager game object. The plugin managers role is to communicate between the Digital Painting engine and the plugin implementation, passing appropriate values back and forth. That is the plugin manager is the glue between the external asset and the Digital Painting asset.
+
+The Digital Painting asset provides a number of these managers "out of the box". In some cases this will be all you need. However, more complex plugins will require you to implement one. In our example we will be using the `Agent_PluginManager`, you can find the source for this in `Scripts/Plugin/CATEGORY`, where CATEGORY is as described in the naming convention above. 
+
+Implementing the plugin manager is, usually, the most complicated part of building a plugin. It is MonoBehavior that provides the interface between the Digital Painting core and the implementation of that feature.
+
+TODO: Rename all plugin manager implementations to match the naming convention of `Type_PluginManager`
+
+# Plugin Profile
+
+The plugin profile is a scriptable object that contains the configuration for the Plugin. Users will set values in this profile when adopting the plugin.
+
+## Summary
+
+  * Create a script called `CATEGORY_DESCRIPTIVENAME_Profile`
+  * Edit the script and make it implement `AbstractPluginProfile`
+  * Add `[CreateAssetMenu(fileName = "CATEGORY_DESCRIPTIVENAME_Profile", menuName = "Wizards Code/CATEGORY/DESCRIPTIVENAME")]` before the class declaration
+  * To get started you will not need any plugin specific configuration, but you will likely need to add some details as you start testing. See the Details section for more.
+
+## Details
+
+Plugins are designed to have a consistent configuration across all differing implementations. This configuration is stored in a Profile Scriptable Object that implements `AbstractPluginProfile`. To create a plugin profile create a file in your plugin scripts directory called `CATEGORY_DESCRIPTIVENAME_Profile`. 
+
+This class should provide a menu option for creating different profiles for the plugin:
 
 ```
-using UnityEditor;
-using UnityEngine;
-
-public class RainMakerPackageBuilder : PackageBuilder {
-    [MenuItem("Digital Painting/Build/Build RainMaker Plugin")]
-    new public static void Build()
-    {
-        string rootDir = "Assets\\Digital Painting\\Plugins\\Weather_RainMaker";
-        string packageName = "Weather_RainMaker.unitypackage";
-
-        MoveExcludedFiles(rootDir);
-
-        AssetDatabase.ExportPackage(rootDir, packageName, ExportPackageOptions.Interactive | ExportPackageOptions.Recurse);
-        Debug.Log("Exported " + packageName);
-
-        RecoverExcludedFiles(rootDir);
-    }
-}
+[CreateAssetMenu(fileName = "Agent_ManuallyControlledFlyingCamera_Profile", menuName = "Wizards Code/Agent/Manually Controller Flying Camera")]
 ```
+
+The plugin profile will provide 0 or more parameters defined by a ScriptableObject that implements the abstract generic class `GenericSettingSO<T>`. These parameters provide the code needed to configure the plugin and validate everything is setup correctly. Each setting will carry a suggested value that will be used to configure the plugin. They are used to provide feedback to the designer on how their Digital Painting should be configured and highlight places within which different plugins expect different settings.
+
+For our plugin we will, for example, set the movement speed of our agent. To do this we will create a settings such as `NormalSpeedSettingSO`. For plugin types that the Digital Painting core asset are aware of you will find pre-existing implementations of these settings in the `ScriptableObjects/Validation/TYPE` folder. If there are settings that are unique to your plugin you can create them by creating classes that extend `GenericSettingSO`, see the next section for more details. 
+
+The naming convention for Setting Scriptable Objects is `CATEGORY_DESCRIPTIVENAME_Setting`.
+
+Parameters are defined in the profile scriptable object as follows:
+
+```
+[Tooltip("The speed the camera should move under normal circumstances.")]
+[Expandable(isRequired: true)]
+public NormalSpeedSettingSO normalSpeed;
+```
+
+Note the use of the \[Expandable\] attribute here. This is a useful attribute that does two things. Firstly, it makes the attribute in the Inspecter expadandable, when expanded it will display the editor for this attribute type. Secondly it optionally marks the attribute as required. If `isRequired` is set to true then Digital Painting will display an error in the inspector if no value is provided.
+
+## Creating new Setting Scriptable Objects
+
+Settings are defined by defined by a ScriptableObject that implements the abstract generic class `GenericSettingSO<T>`. In it's simplest for this is all you need to do, the validation check will simply ensure that there is a value for this setting if it is marked as required.
+
+It is possible to override a number of methods to change the settings behaviour, such as:
+
+`TestName`: returns a human readable name for the setting that will be used in the UI, we will use `Normal Speed`
+
+`ActualValue`: a getter and setter for the value that is set in Unity. By default the `GenericSettingSO` will use the accessor defined in the `Value Accessor Class` and `Value Accessor Name`. For example, you can retrieve and set the value `Graphics.ShadowSettings` without any additional code. Often, however, you will need to override this method to work with values not so easily accessible.
+
+`Fix`: a default method used to fix the plugin setup to use the suggested value provided in the profile. The default implementation of this will simply set the desired value by using the `ActualValue` setter and the provided `SuggestedValue` in the profile.
+
+`ValidateSetting(Type validationTest)`: This checks to see if the value is correctly set. If not it will report an error or warning in the editor and (optionally) offer a button to fix the issue. The default implementation will work in cases where we only need to check that a setting matches the selected value (using the `ActualValue` getter) or, if the suggested value is a prefab, this value will check whether it has been instantiated in the scene (when required). For more complex validation steps override this method.
+
+# Plugin Definition
+
+A plugin definition script describes the plugin to the Digital Painting core system. It provides information useful in the UI, e.g. a human readable name as well as how to detect if the asset(s) needed are present.
+
+## Summary
+
+  * Create a `scripts` directory in your plugin project folder
+  * Create a new Script called `CATEGORY_DESCRIPTIVENAME_PluginDefinition`
+  * Edit the file and make it implement `AbstractPluginDefinition`
+  * Implement the methods in the Abstract Class
+
+## Details
+
+A plugin definition script describes the plugin to the Digital Painting core system. Create a new script (in the `Scripts` folder of your plugin project) following the naming convention of `Agent_ManualFlyingCamera_PluginDefinition`. Open the file up and make it implement the Abstract class `AbstractPluginDefinition`. 
+
+This definition provides information useful in the UI, e.g. a human readable name, and information useful for enabling the plugin, e.g. the class that must be present in the Assembly for the plugin to be available. The `AbstractPluginDefinition` file should be well commented. Simply implement each of the methods and properties required. 
+
+Note that at this stage you won't have created some of the scripts you need in order to fully implement this class, don't worry..
+
+The existience of a plugin definition class, whether provided by the core Digital Painting asset or by an external plugin project will result in the Digital Painting Manager Window in the editor displaying athe plugin in the list of available plugins. The UI will also provide buttons to enable a plugin from each available group.
+
+# ValidationTest<T> implementation
+
+The ValidationTest<T> class is used by the Digital Painting core to ensure the plugin is correctly setup.
+
+## Summary
+
+  * Create a new script called `CATEGORY_DESCRIPTIVENAME_PluginValidation`
+  * Edit the script and make it a generic class `CATEGORY_DESCRIPTIVENAME_PluginValidation`
+  * Make the class extend `ValidationTest<CATEGORY_[DESCRIPTIVENAME_]PluginManager>`
+  * Implement the abstract methods in this class
+
+## Details
+
+Through the plugin profile the Digital Painting core code attempts to ensure everything is setup correctly. The profile defines what correctly looks like while a class that extends the `ValidationTest<T>` class is used to perform the necessary tests. The goal is to make it as easy as possible to setup key assets to get started, without preventing the user from dropping into the advanced configuration offered by the assets themselves.
+
+In order to trigger this validation (and make the plugin available in the editor window) we ned to extend `ValidationTest<T>` where T is an implementation of `AbstractPluginManager` as `TYPE_DESCRIPTIVENAME_PluginValidation`. In our agent example we will create `Agent_ManualFlyingCamera_PluginValidation` which implements `ValidationTest<Agent_PluginManager>` in our plugin project. This requires us to implement a small number of methods:
+
+`Instance`: this simply needs to return an instance of the class, in our example case `new Agent_ManualFlyingCamera_PluginValidation();`
+`ProfileType`:  this returns the name of the profile type we created earlier, in the example case `"Agent_ManualFlyingCamera_PluginProfile"`
+
+At this point you should see your plugin in the editor window and you can use the tooling to add it and to configure it as described below.
+
+# Create Default Configuration
+
+Once all this is done it's almost time test your work, but first we need to configure the Digital Painting asset. For convenience we'll provide a set of defaults for this plugin.
+
+## Summary
+
+  * Create a directory called `Scenes/Digital Painting Data`, this will hold all the Digital Painting configuration data for your scene
+  * Copy the contents of `Digital Painting/Data/Default Collection` into the `Scenes/Digital Painting Data` folder
+  * Rename all files in here by changing the trailing `_Default` to `_DESCRIPTIVENAME_Default`
+  * Open `DigitalPaintingManagerProfile_DESCRIPTIVENAME_Default` in this folder
+  * Change all settings to reflect the SOs in this folder
+
+# Testing the plugin
+  
+## Summary
+
+  * Open the Digital Painting Manager Window using `Window -> Wizards Code -> Digital Painting Manager`
+  * Click `Add Digital Painting Manager`
+  * Fix the setup errors that occur using the data in the `Scenes/Digital Painting Data` folder
+  * If the plugin has a dependency on another asset there will be a button to take you to the location where you can obtain the asset. This location is defined in the plugin profile `GetURL()` method.
+  * Install the dependent asset
+  * The button on the plugin should update to allow it to be enabled. If the enable button is visible, but disabled, then it is most commonly an error in the ` GetManagerType()` method of the plugin definition.
+  * Clicking enable should add the plugin manager to your scene under the Wizards Code
+  * If you already have a suitable plugin profile defined assign that to the Plugin Manager created in the previous step. If no such profile exists then create one in `Scenes/Digital Painting Data` using `Assets -> Create -> Wizards Code -> TYPE -> DESCRIPTIVENAME Plugin Profile` (if the option is not available it is because you forgot to add `[CreateAssetMenu(...)])` to the Plugin Profile script (see above).
+  * Drag the chosen profile into the `Plugin Profile` slot of the plugin manager created in step 2
+  * At this point, if you added any configuration options to the profile class above, they will be exposed in the Inspector
+  * Resolve any issues reported in the Digital Painting editor window (the editor for each setting is displayed in the inspector).
+  * Play the Scene and ensure everything works.
+
+FIXME: make selecting a profile asssited default profile if one is available or offer to create a new one in a location of convention 
+
+# Creating Setting Scriptable Object instances
+
+It can be a little laborious to create the settings initially. Rather than simply setting a value we need to create a Scriptable Object that will hold this value. However, it is worth the effort, as these values can be shared across many different implementations of the plugin and game objects provided by the plugin. This means that we only need to edit the value once for it to take effect across the whole Digital Painting. To create an SO use `Assets -> Create -> Wizards Code -> Validation -> TYPE -> SETTING_TYPE`.

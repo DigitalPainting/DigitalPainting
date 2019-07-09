@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace wizardscode.environment
+namespace WizardsCode.environment
 {
     public class SimpleSpawner : MonoBehaviour
     {

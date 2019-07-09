@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c48f64a7d34ed4f96b048f63c5f2be, type: 3}
+  m_Name: ThirdPerson_AgentSettingSO_Default
+  m_EditorClassIdentifier: 
+  SettingName: Default Third Party
+  Nullable: 0
+  m_suggestedValue: {fileID: 3499297650445676225, guid: cd001c1b4a9eb334a92011d475a2fd9b,
+    type: 3}
+  AddToScene: 1
+  spawnPosition: {x: 500, y: 0, z: 500}
+  agentName: Agent
+  speedParameter: Speed
+  turnParameter: Direction
+  lookAtName: Look At Target
+  cameraAimMode: 0
+  cameraFollowOffset: {x: 0, y: 5, z: -20}

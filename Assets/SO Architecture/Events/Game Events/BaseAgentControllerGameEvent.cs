@@ -1,6 +1,6 @@
 using ScriptableObjectArchitecture;
 using UnityEngine;
-using wizardscode.digitalpainting.agent;
+using WizardsCode.digitalpainting.agent;
 
 [System.Serializable]
 [CreateAssetMenu(

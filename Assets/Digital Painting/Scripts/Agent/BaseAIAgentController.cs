@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using wizardscode.agent.movement;
-using wizardscode.digitalpainting.agent;
-using wizardscode.environment;
-using wizardscode.utility;
+using WizardsCode.Agent.movement;
+using WizardsCode.digitalpainting.agent;
+using WizardsCode.environment;
+using WizardsCode.utility;
 using Random = UnityEngine.Random;
 
-namespace wizardscode.agent
+namespace WizardsCode.Agent
 {
     public class BaseAIAgentController : BaseAgentController
     {
