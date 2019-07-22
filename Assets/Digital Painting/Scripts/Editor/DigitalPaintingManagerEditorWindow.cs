@@ -558,32 +558,14 @@ namespace WizardsCode.editor
             GUILayout.Label(categoryName + " Plugins", EditorStyles.boldLabel);
 
             GUILayout.BeginVertical("Box");
+            bool displayedAtLeastOne = EnabledPluginsGUI(category);
+            displayedAtLeastOne |= AvailablePluginsGUI(category);
+            displayedAtLeastOne |= SupportedPluginsGUI(category);
+            
 
-            try
+            if (!displayedAtLeastOne)
             {
-                EnabledPluginsGUI(category);
-            }
-            catch (KeyNotFoundException e)
-            {
-                // That's just fine, no enabled plugins in this category
-            }
-
-            try
-            {
-                AvailablePluginsGUI(category);
-            }
-                catch (KeyNotFoundException e)
-            {
-                // That's just fine, no enabled plugins in this category
-            }
-
-            try
-            {
-                SupportedPluginsGUI(category);
-            }
-            catch (KeyNotFoundException e)
-            {
-                // That's just fine, no enabled plugins in this category
+                EditorGUILayout.LabelField("Cannot find any plugins in this category.");
             }
 
             GUILayout.EndVertical();
@@ -591,7 +573,7 @@ namespace WizardsCode.editor
             GUILayout.EndVertical();
         }
 
-        private void SupportedPluginsGUI(AbstractPluginDefinition.PluginCategory category)
+        private bool SupportedPluginsGUI(AbstractPluginDefinition.PluginCategory category)
         {
             List<AbstractPluginDefinition> plugins;
             try
@@ -613,15 +595,19 @@ namespace WizardsCode.editor
                     }
 
                     EditorGUILayout.EndVertical();
+                    return true;
+                } else
+                {
+                    return false;
                 }
             }
             catch (KeyNotFoundException e)
             {
-                // That's just fine, no enabled plugins in this category
+                return false;
             }
         }
 
-        private void AvailablePluginsGUI(AbstractPluginDefinition.PluginCategory category)
+        private bool AvailablePluginsGUI(AbstractPluginDefinition.PluginCategory category)
         {
             List<AbstractPluginDefinition> plugins;
             try
@@ -629,77 +615,90 @@ namespace WizardsCode.editor
                 plugins = availablePluginsCache[category];
                 if (plugins.Count > 0)
                 {
-                    if (plugins.Count > 0)
+                    EditorGUILayout.LabelField("Available for use");
+                    for (int i = availablePluginsCache[category].Count - 1; i >= 0; i--)
                     {
-                        EditorGUILayout.LabelField("Available for use");
-                        for (int i = availablePluginsCache[category].Count - 1; i >= 0; i--)
+                        AbstractPluginDefinition defn = availablePluginsCache[category][i];
+
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUI.indentLevel++;
+
+                        float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                        EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
+
+                        bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
+                        if (!hasManager || defn.MultipleAllowed)
                         {
-                            AbstractPluginDefinition defn = availablePluginsCache[category][i];
-
-                            EditorGUILayout.BeginHorizontal();
-                            EditorGUI.indentLevel++;
-
-                            float columnWidth = EditorGUIUtility.currentViewWidth / 3;
-                            EditorGUILayout.LabelField(defn.GetReadableName(), GUILayout.Width(columnWidth));
-
-                            bool hasManager = manager.gameObject.GetComponentInChildren(defn.GetManagerType()) != null;
-                            if (!hasManager || defn.MultipleAllowed)
+                            if (GUILayout.Button("Enable"))
                             {
-                                if (GUILayout.Button("Enable"))
-                                {
-                                    defn.Enable();
-                                    timeOfNextPluginRefresh = DateTime.Now;
-                                    UpdateAllPluginDefinitions();
-                                }
-                                if (GUILayout.Button("Learn more"))
-                                {
-                                    Application.OpenURL(defn.GetURL());
-                                }
+                                defn.Enable();
+                                timeOfNextPluginRefresh = DateTime.Now;
+                                UpdateAllPluginDefinitions();
                             }
-
-                            EditorGUI.indentLevel--;
-                            EditorGUILayout.EndHorizontal();
+                            if (GUILayout.Button("Learn more"))
+                            {
+                                Application.OpenURL(defn.GetURL());
+                            }
                         }
+
+                        EditorGUI.indentLevel--;
+                        EditorGUILayout.EndHorizontal();
                     }
+                    return true;
+                }
+                else
+                {
+                    return false;
                 }
             }
             catch (KeyNotFoundException e)
             {
-                // That's just fine, no enabled plugins in this category
+                return false;
             }
         }
 
-        private void EnabledPluginsGUI(AbstractPluginDefinition.PluginCategory category)
+        private bool EnabledPluginsGUI(AbstractPluginDefinition.PluginCategory category)
         {
-            if (enabledPluginsCache[category].Count > 0)
-            {
-                GUILayout.Label("Currently Enabled");
-                for (int i = enabledPluginsCache[category].Count - 1; i >= 0; i--)
+            try { 
+                if (enabledPluginsCache[category].Count > 0)
                 {
-                    AbstractPluginDefinition defn = enabledPluginsCache[category][i];
-
-                    Component pluginManager = manager.gameObject.GetComponentsInChildren(defn.GetManagerType())[i];
-
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUI.indentLevel++;
-
-                    float columnWidth = EditorGUIUtility.currentViewWidth / 3;
-                    EditorGUILayout.LabelField(pluginManager.name + " (" + defn.GetReadableName() + ")", GUILayout.Width(columnWidth));
-
-                    if (GUILayout.Button("Disable"))
+                    GUILayout.Label("Currently Enabled");
+                    for (int i = enabledPluginsCache[category].Count - 1; i >= 0; i--)
                     {
-                        DestroyImmediate(pluginManager.gameObject);
-                        timeOfNextPluginRefresh = DateTime.Now;
-                        UpdateAllPluginDefinitions();
-                    }
-                    if (GUILayout.Button("Learn more"))
-                    {
-                        Application.OpenURL(defn.GetURL());
-                    }
+                        AbstractPluginDefinition defn = enabledPluginsCache[category][i];
 
-                    EditorGUI.indentLevel--;
-                    EditorGUILayout.EndHorizontal();
+                        Component pluginManager = manager.gameObject.GetComponentsInChildren(defn.GetManagerType())[i];
+
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUI.indentLevel++;
+
+                        float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                        EditorGUILayout.LabelField(pluginManager.name + " (" + defn.GetReadableName() + ")", GUILayout.Width(columnWidth));
+
+                        if (GUILayout.Button("Disable"))
+                        {
+                            DestroyImmediate(pluginManager.gameObject);
+                            timeOfNextPluginRefresh = DateTime.Now;
+                            UpdateAllPluginDefinitions();
+                        }
+                        if (GUILayout.Button("Learn more"))
+                        {
+                            Application.OpenURL(defn.GetURL());
+                        }
+
+                        EditorGUI.indentLevel--;
+                        EditorGUILayout.EndHorizontal();
+                    }
+                    return true;
                 }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (KeyNotFoundException e)
+            {
+                return false;
             }
         }
 
