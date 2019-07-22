@@ -25,7 +25,6 @@ namespace WizardsCode.editor
         int selectedTab = 0;
         private GUIStyle m_LinkStyle;
         private EditorConfigScriptableObject m_config;
-        private string defaultConfigSavePath = "Assets/Digital Painting Editor Config.asset";
 
         Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>> enabledPluginsCache = new Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>>();
         Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>> availablePluginsCache = new Dictionary<AbstractPluginDefinition.PluginCategory, List<AbstractPluginDefinition>>();
@@ -801,7 +800,7 @@ namespace WizardsCode.editor
             {
                 if (!m_config)
                 {
-                    m_config = AssetDatabase.LoadAssetAtPath<EditorConfigScriptableObject>(defaultConfigSavePath);
+                    m_config = AssetDatabase.LoadAssetAtPath<EditorConfigScriptableObject>(configAssetPath);
                     if (!m_config)
                     {
                         m_config = ScriptableObject.CreateInstance("EditorConfigScriptableObject") as EditorConfigScriptableObject;
