@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using WizardsCode.extension;
-using WizardsCode.plugin;
+using WizardsCode.Extension;
+using WizardsCode.Plugin;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     /// <summary>
     /// A test that can be executed in order to validate that the DigitalPainting system and/or its plugins are setup correctly.

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using WizardsCode.plugin;
-using WizardsCode.utility;
+using WizardsCode.Plugin;
+using WizardsCode.Utility;
 
 namespace WizardsCode.editor
 {

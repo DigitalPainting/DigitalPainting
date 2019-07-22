@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace WizardsCode.extension
+namespace WizardsCode.Extension
 {
     public static class LayerMaskExtension
     {

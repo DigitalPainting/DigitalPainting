@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c97578dd625743247ba5b96407687cec, type: 3}
   m_Name: DigitalPaintingManagerProfile_Default
   m_EditorClassIdentifier: 
-  DefaultCameraPrefab: {fileID: 11400000, guid: 3ff57546b87291c45a94d0d20e5e97b8,
+  CameraSettings: {fileID: 11400000, guid: 3ff57546b87291c45a94d0d20e5e97b8, type: 2}
+  TerrainSettings: {fileID: 11400000, guid: ac9bd176701996549b36fb568b146fe2, type: 2}
+  ColorSpaceSettings: {fileID: 11400000, guid: 94d311f0c8c865f4898ee0ce5c87b32b, type: 2}
+  ScreenSpaceSettings: {fileID: 11400000, guid: 329b8b3884287d840bac5fde06ce6b31,
     type: 2}
-  DefaultTerrainPrefab: {fileID: 11400000, guid: ac9bd176701996549b36fb568b146fe2,
-    type: 2}
-  colorSpace: {fileID: 11400000, guid: 94d311f0c8c865f4898ee0ce5c87b32b, type: 2}
-  screenSpace: {fileID: 11400000, guid: 329b8b3884287d840bac5fde06ce6b31, type: 2}
-  DefaultAgentPrefab: {fileID: 11400000, guid: 7fdb0932f4d7c344e9755f705a4e546e, type: 2}
+  AgentSettings: {fileID: 11400000, guid: 7fdb0932f4d7c344e9755f705a4e546e, type: 2}

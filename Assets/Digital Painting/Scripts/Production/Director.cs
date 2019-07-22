@@ -1,9 +1,9 @@
 ﻿using Cinemachine;
 using UnityEngine;
-using WizardsCode.digitalpainting.agent;
-using WizardsCode.validation;
+using WizardsCode.DigitalPainting.Agent;
+using WizardsCode.Validation;
 
-namespace WizardsCode.production
+namespace WizardsCode.Production
 {
     /// <summary>
     /// The Director manages cameras. Each camera will have a priority indicating how important they think

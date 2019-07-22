@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WizardsCode.utility;
+using WizardsCode.Utility;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     public class WaypointPool : ObjectPool
     {

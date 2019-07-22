@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     public class ThingsManager : MonoBehaviour
     {

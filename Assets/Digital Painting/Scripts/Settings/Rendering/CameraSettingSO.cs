@@ -2,9 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using WizardsCode.plugin;
+using WizardsCode.Plugin;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_CameraSettingSO", menuName = "Wizards Code/Validation/Camera")]
     public class CameraSettingSO : PrefabSettingSO

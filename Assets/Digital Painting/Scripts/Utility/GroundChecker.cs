@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 
-namespace WizardsCode.utility {
+namespace WizardsCode.Utility {
     /// <summary>
     /// Finds the slope/grade/incline angle of ground underneath an agent.
     /// 

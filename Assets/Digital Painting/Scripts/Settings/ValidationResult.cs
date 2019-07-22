@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using WizardsCode.extension;
-using WizardsCode.plugin;
+using WizardsCode.Extension;
+using WizardsCode.Plugin;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     /// <summary>
     /// A ValidationResult captures the results of a validation test.

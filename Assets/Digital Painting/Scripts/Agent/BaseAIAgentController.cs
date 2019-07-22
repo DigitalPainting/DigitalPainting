@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WizardsCode.Agent.movement;
-using WizardsCode.digitalpainting.agent;
-using WizardsCode.environment;
-using WizardsCode.utility;
+using WizardsCode.DigitalPainting.Agent;
+using WizardsCode.Environment;
+using WizardsCode.Utility;
 using Random = UnityEngine.Random;
 
 namespace WizardsCode.Agent

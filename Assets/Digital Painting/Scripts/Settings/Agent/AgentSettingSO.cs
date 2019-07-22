@@ -1,9 +1,9 @@
 ﻿using ScriptableObjectArchitecture;
 using UnityEngine;
 
-using WizardsCode.digitalpainting.agent;
+using WizardsCode.DigitalPainting.Agent;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     /// <summary>
     /// The AgentSettignSO class describes an agent in the game. This is a reasonably generic description,

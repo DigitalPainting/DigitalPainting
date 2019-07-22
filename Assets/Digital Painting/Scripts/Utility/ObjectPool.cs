@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.utility
+namespace WizardsCode.Utility
 {
     /// <summary>
     /// A general object pool.

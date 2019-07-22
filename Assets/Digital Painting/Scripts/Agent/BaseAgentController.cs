@@ -1,10 +1,9 @@
-﻿using ScriptableObjectArchitecture;
-using UnityEngine;
+﻿using UnityEngine;
 using WizardsCode.Agent.movement;
 using WizardsCode.editor;
-using WizardsCode.validation;
+using WizardsCode.Validation;
 
-namespace WizardsCode.digitalpainting.agent
+namespace WizardsCode.DigitalPainting.Agent
 {
     /// <summary>
     /// BaseAgentController provides the core parameters and a very basic manual controller for agents.

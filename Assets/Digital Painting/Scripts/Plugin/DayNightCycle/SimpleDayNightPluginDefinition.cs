@@ -1,7 +1,7 @@
 ﻿using System;
-using WizardsCode.environment;
+using WizardsCode.Environment;
 
-namespace WizardsCode.plugin
+namespace WizardsCode.Plugin
 {
     /// <summary>
     /// Defines the basic Day Night plugin that is included with the Digital Painting asset.

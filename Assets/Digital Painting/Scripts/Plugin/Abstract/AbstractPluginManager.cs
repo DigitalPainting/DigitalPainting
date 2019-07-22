@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using WizardsCode.editor;
-using WizardsCode.extension;
+using WizardsCode.Extension;
 
-namespace WizardsCode.plugin
+namespace WizardsCode.Plugin
 {
     /// <summary>
     /// A Plugin Manager is a component that is added into the scene to manage interactions between the 

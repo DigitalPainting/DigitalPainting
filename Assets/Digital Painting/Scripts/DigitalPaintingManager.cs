@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using WizardsCode.Agent;
-using WizardsCode.digitalpainting.agent;
-using WizardsCode.editor;
-using WizardsCode.plugin;
-using WizardsCode.production;
+using WizardsCode.DigitalPainting.Agent;
+using WizardsCode.Plugin;
+using WizardsCode.Production;
 using Random = UnityEngine.Random;
 
-namespace WizardsCode.digitalpainting
+namespace WizardsCode.DigitalPainting
 {
     public class DigitalPaintingManager : AbstractPluginManager
     {

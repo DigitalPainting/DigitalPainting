@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using WizardsCode.extension;
-using WizardsCode.plugin;
+using WizardsCode.Extension;
+using WizardsCode.Plugin;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     /// <summary>
     /// Implementations of the AbstractSettingsSO define a desired setting for a 

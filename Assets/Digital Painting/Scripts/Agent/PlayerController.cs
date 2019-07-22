@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WizardsCode.digitalpainting.agent;
+using WizardsCode.DigitalPainting.Agent;
 
 namespace WizardsCode.Agent
 {

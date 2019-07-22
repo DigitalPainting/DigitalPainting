@@ -2,8 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 using WizardsCode.editor;
-using WizardsCode.plugin;
-using WizardsCode.validation;
+using WizardsCode.Plugin;
+using WizardsCode.Validation;
 
 namespace WizardsCode.DigitalPainting.Core.Settings
 {

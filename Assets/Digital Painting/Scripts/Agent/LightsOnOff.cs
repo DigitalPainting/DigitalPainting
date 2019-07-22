@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WizardsCode.environment;
+using WizardsCode.Environment;
 
 namespace WizardsCode.Agent
 {

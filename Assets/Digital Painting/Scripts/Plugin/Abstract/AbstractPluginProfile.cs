@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using WizardsCode.utility;
-using WizardsCode.validation;
+using WizardsCode.Utility;
+using WizardsCode.Validation;
 
-namespace WizardsCode.plugin
+namespace WizardsCode.Plugin
 {
     public abstract class AbstractPluginProfile : ScriptableObject
     {

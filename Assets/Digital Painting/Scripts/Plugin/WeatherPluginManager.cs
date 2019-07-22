@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WizardsCode.plugin;
+using WizardsCode.Plugin;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     /// <summary>
     /// The Profile for the scenes Weather implementation.

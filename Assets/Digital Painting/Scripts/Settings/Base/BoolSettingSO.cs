@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_Bool_SettingSO", menuName = "Wizards Code/Validation/Generic/Bool")]
     public class BoolSettingSO : GenericSettingSO<bool>

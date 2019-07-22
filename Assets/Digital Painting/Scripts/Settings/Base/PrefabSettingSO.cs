@@ -9,11 +9,11 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 using WizardsCode.editor;
-using WizardsCode.extension;
-using WizardsCode.plugin;
-using WizardsCode.utility;
+using WizardsCode.Extension;
+using WizardsCode.Plugin;
+using WizardsCode.Utility;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     [CreateAssetMenu(fileName = "DESCRIPTIVENAME_PrefabSettingSO", menuName = "Wizards Code/Validation/Prefab")]
     public class PrefabSettingSO : AbstractSettingSO<UnityEngine.Object>

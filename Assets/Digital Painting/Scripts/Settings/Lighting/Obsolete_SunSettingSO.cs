@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace WizardsCode.validation
+namespace WizardsCode.Validation
 {
     [Obsolete("Use PrefabSettingSO instead")]
     public class SunSettingSO : PrefabSettingSO
