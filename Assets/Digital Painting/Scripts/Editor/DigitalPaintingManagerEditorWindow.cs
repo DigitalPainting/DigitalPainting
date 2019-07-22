@@ -597,22 +597,22 @@ namespace WizardsCode.editor
             try
             {
                 plugins = supportedPluginsCache[category];
-            if (plugins.Count > 0)
-            {
-                EditorGUILayout.BeginVertical("Box");
-
-
-                float columnWidth = EditorGUIUtility.currentViewWidth / 3;
-                EditorGUILayout.LabelField("Supported but not installed");
-                foreach (AbstractPluginDefinition defn in supportedPluginsCache[category])
+                if (plugins.Count > 0)
                 {
-                    if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
-                    {
-                        Application.OpenURL(defn.GetURL());
-                    }
-                }
+                    EditorGUILayout.BeginVertical("Box");
 
-                EditorGUILayout.EndVertical();
+
+                    float columnWidth = EditorGUIUtility.currentViewWidth / 3;
+                    EditorGUILayout.LabelField("Supported but not installed");
+                    foreach (AbstractPluginDefinition defn in supportedPluginsCache[category])
+                    {
+                        if (GUILayout.Button("Learn more about " + defn.GetReadableName() + "... "))
+                        {
+                            Application.OpenURL(defn.GetURL());
+                        }
+                    }
+
+                    EditorGUILayout.EndVertical();
                 }
             }
             catch (KeyNotFoundException e)
