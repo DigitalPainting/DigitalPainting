@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: de4b81939a3fbc24d80126d9349f651b
+=======
+guid: 316d3791b38554f42bd667bc81db6785
+>>>>>>> Add UnitDocGen generrated docs
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
