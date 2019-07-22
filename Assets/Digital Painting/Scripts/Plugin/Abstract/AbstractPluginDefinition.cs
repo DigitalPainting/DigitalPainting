@@ -6,11 +6,10 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using WizardsCode.digitalpainting;
-using WizardsCode.extension;
-using WizardsCode.validation;
+using WizardsCode.DigitalPainting;
+using WizardsCode.Extension;
 
-namespace WizardsCode.plugin
+namespace WizardsCode.Plugin
 {
     /// <summary>
     /// The abstract implementation of a plugin definition. All plugins should implement this class.

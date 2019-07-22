@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using WizardsCode.digitalpainting;
-using WizardsCode.utility;
+using WizardsCode.DigitalPainting;
+using WizardsCode.Utility;
 
 namespace WizardsCode.Agent.movement
 {

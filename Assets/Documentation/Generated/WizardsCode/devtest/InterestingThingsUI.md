@@ -1,4 +1,4 @@
-# wizardscode.devtest.InterestingThingsUI
+# WizardsCode.DevTest.InterestingThingsUI
 
 ## Thing Of Interest Dropdown (Dropdown)
 

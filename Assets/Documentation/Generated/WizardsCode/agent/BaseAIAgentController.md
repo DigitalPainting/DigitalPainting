@@ -1,10 +1,15 @@
-# wizardscode.agent.BaseAIAgentController
+# WizardsCode.Agent.BaseAIAgentController
 
 ## Detection Range (Single)
 
 The range the agent will use to detect things in its environment
 
 Default Value     : 50
+
+
+## _ Settings (AgentSettingSO)
+
+The settings for this agent that are used by the Digital Painting.
 
 
 ## Home (GameObject)

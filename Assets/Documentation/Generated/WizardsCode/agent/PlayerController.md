@@ -1,4 +1,4 @@
-# wizardscode.agent.PlayerController
+# WizardsCode.Agent.PlayerController
 
 ## Mouse Look Mode (MouseLookModeType)
 
@@ -12,6 +12,11 @@ Default Value     : WithRightMouseButton
 Mouse look sensitivity.
 
 Default Value     : 100
+
+
+## _ Settings (AgentSettingSO)
+
+The settings for this agent that are used by the Digital Painting.
 
 
 ## Home (GameObject)

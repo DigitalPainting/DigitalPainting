@@ -1,4 +1,4 @@
-# wizardscode.environment.Waypoint
+# WizardsCode.Environment.Waypoint
 
 ## Final Destination (Boolean)
 

@@ -1,4 +1,4 @@
-# wizardscode.environment.SpawnableObject
+# WizardsCode.Environment.SpawnableObject
 
 ## Prefab (GameObject)
 

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 
-namespace WizardsCode.extension
+namespace WizardsCode.Extension
 {
     public static class StringExtension
     {

@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using WizardsCode.digitalpainting;
-using WizardsCode.digitalpainting.agent;
-using WizardsCode.production;
+using WizardsCode.DigitalPainting;
+using WizardsCode.DigitalPainting.Agent;
+using WizardsCode.Production;
 
-namespace WizardsCode.devtest
+namespace WizardsCode.DevTest
 {
     public class AgentsUI : MonoBehaviour
     {

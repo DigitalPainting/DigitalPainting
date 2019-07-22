@@ -1,4 +1,4 @@
-# wizardscode.production.CameraTriggerConfiguration
+# WizardsCode.Production.CameraTriggerConfiguration
 
 ## _Base Priority Boost (Int32)
 

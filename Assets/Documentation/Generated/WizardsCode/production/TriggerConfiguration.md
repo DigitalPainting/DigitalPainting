@@ -1,4 +1,4 @@
-# wizardscode.production.TriggerConfiguration
+# WizardsCode.Production.TriggerConfiguration
 
 ## _On Enter Event (GameEvent)
 

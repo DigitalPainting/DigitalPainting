@@ -1,4 +1,9 @@
-# wizardscode.digitalpainting.agent.BaseAgentController
+# WizardsCode.DigitalPainting.Agent.BaseAgentController
+
+## _ Settings (AgentSettingSO)
+
+The settings for this agent that are used by the Digital Painting.
+
 
 ## Home (GameObject)
 

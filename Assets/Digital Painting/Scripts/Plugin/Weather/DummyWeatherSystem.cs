@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     [CreateAssetMenu(fileName = "DummyWeatherSystem", menuName = "Wizards Code/Weather/Dummy Weather System (for testing only)")]
     public class DummyWeatherSystem : AbstractWeatherProfile

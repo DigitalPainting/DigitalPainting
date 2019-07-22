@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     /// <summary>
     /// A Waypoint represents a destination for an agent.

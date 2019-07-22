@@ -1,4 +1,4 @@
-# wizardscode.devtest.AgentsUI
+# WizardsCode.DevTest.AgentsUI
 
 ## Agent Dropdown (Dropdown)
 

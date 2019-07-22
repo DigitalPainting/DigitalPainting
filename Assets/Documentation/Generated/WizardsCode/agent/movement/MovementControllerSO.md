@@ -1,4 +1,4 @@
-# wizardscode.agent.movement.MovementControllerSO
+# WizardsCode.Agent.movement.MovementControllerSO
 
 ## Minimum Reach Distance (Single)
 
@@ -7,21 +7,21 @@ The minimum distance from a waypoint before it is considered to have been reache
 Default Value     : 3
 
 
-## Normal Movement Speed (Single)
+## Normal Movement Multiplier (Single)
 
 Walking speed under normal circumstances
+
+Default Value     : 0.5
+
+
+## Fast Movement Multiplier (Single)
+
+The factor by which to multiply the walking speed when moving fast.
 
 Default Value     : 1
 
 
-## Fast Movement Factor (Single)
-
-The factor by which to multiply the walking speed when moving fast.
-
-Default Value     : 4
-
-
-## Slow Movement Factor (Single)
+## Slow Movement Multiplier (Single)
 
 The factor by which to multiply the walking speed when moving slowly.
 
@@ -37,16 +37,23 @@ Default Value     : 1
 
 ## Height Offset (Single)
 
-The height above the terrain this agent should be.
+If you model does not have the origin at the base then the height offset will enable you to position it higher or lower.
 
 Default Value     : 0
 
 
-## Rotation Speed (Single)
+## Max Rotation Speed (Single)
 
 Speed at which the agent will rotate.
 
-Default Value     : 90
+Default Value     : 360
+
+
+## Can Fly (Boolean)
+
+Allow character to fly.
+
+Default Value     : False
 
 
 ## To Fly (Single)

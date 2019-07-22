@@ -1,6 +1,6 @@
-# wizardscode.environment.DummyWeatherSystem
+# WizardsCode.Environment.DummyWeatherSystem
 
-## Skybox Material (Material)
+## Skybox (SkyBoxSettingsSO)
 
-Skybox material
+No tooltip provided.
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     [CreateAssetMenu(fileName = "Spawnable Object", menuName = "Wizards Code/Environment/Spawnable Object")]
     public class SpawnableObject : ScriptableObject

@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using WizardsCode.environment;
+using WizardsCode.Environment;
 using System.Collections.Generic;
-using WizardsCode.plugin;
+using WizardsCode.Plugin;
 using System;
-using WizardsCode.utility;
+using WizardsCode.Utility;
 
 namespace WizardsCode.editor {
     [CustomEditor(typeof(WeatherPluginManager))]

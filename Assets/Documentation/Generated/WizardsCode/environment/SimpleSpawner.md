@@ -1,4 +1,4 @@
-# wizardscode.environment.SimpleSpawner
+# WizardsCode.Environment.SimpleSpawner
 
 ## Objects (SpawnableObject[])
 

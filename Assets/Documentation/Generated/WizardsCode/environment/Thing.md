@@ -1,4 +1,4 @@
-# wizardscode.environment.Thing
+# WizardsCode.Environment.Thing
 
 ## Is Grounded (Boolean)
 

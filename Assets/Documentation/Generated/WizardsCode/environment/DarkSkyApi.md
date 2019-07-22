@@ -1,4 +1,4 @@
-# wizardscode.environment.DarkSkyApi
+# WizardsCode.Environment.DarkSkyApi
 
 ## Api Key (String)
 
@@ -40,12 +40,12 @@ Units that the time offset (below) uses
 Default Value     : Minutes
 
 
-## Delegate Weather System (AbstractWeatherSystem)
+## Delegate Weather System (AbstractWeatherProfile)
 
 The Weather System to delegate rendering of the weather to. If left blank then the weather will simply be logged to the console.
 
 
-## Skybox Material (Material)
+## Skybox (SkyBoxSettingsSO)
 
-Skybox material
+No tooltip provided.
 

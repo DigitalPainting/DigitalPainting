@@ -1,4 +1,4 @@
-# wizardscode.environment.test.WeatherUI
+# WizardsCode.Environment.test.WeatherUI
 
 ## Is Auto (Toggle)
 

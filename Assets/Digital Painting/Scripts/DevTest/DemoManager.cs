@@ -1,11 +1,7 @@
-﻿using ScriptableObjectArchitecture;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using WizardsCode.digitalpainting;
 
-namespace WizardsCode.devtest
+namespace WizardsCode.DevTest
 {
     public class DemoManager : MonoBehaviour
     {

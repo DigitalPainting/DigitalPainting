@@ -1,4 +1,4 @@
-# wizardscode.utility.ObjectPool
+# WizardsCode.Utility.ObjectPool
 
 ## Instance (ObjectPool)
 

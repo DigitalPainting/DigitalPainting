@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WizardsCode.environment
+namespace WizardsCode.Environment
 {
     /// <summary>
     /// A simple day/night controller inspired by wiki.unity3d.com/index.php/DayNightController

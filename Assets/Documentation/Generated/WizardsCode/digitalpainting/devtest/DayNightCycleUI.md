@@ -1,4 +1,4 @@
-# wizardscode.digitalpainting.devtest.DayNightCycleUI
+# WizardsCode.DigitalPainting.devtest.DayNightCycleUI
 
 ## Implementatio Name Label (Text)
 
@@ -25,7 +25,7 @@ Time of Day text object.
 Label for speed of day.
 
 
-## Day Night Cycle (DayNightCycleManager)
+## Day Night Manager (DayNightPluginManager)
 
 The DayNightCycle object that we are using. If null then the first one found in the scene will be used. This is usually sufficient.
 

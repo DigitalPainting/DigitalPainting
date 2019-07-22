@@ -1,4 +1,4 @@
-# wizardscode.agent.AgentScriptableObject
+# WizardsCode.Agent.AgentScriptableObject
 
 ## Prefab (GameObject)
 

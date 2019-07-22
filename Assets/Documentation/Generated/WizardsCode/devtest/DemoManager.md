@@ -1,4 +1,4 @@
-# wizardscode.devtest.DemoManager
+# WizardsCode.DevTest.DemoManager
 
 ## Demo U I (GameObject)
 

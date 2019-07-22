@@ -1,9 +1,5 @@
-﻿using ScriptableObjectArchitecture;
-using UnityEngine;
-using WizardsCode.Agent.movement;
-using WizardsCode.digitalpainting.agent;
-using WizardsCode.editor;
-using WizardsCode.validation;
+﻿using UnityEngine;
+using WizardsCode.DigitalPainting.Agent;
 
 namespace WizardsCode.Agent
 {

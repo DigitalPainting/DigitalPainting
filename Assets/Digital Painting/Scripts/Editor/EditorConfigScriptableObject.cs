@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using WizardsCode.plugin;
+using WizardsCode.Plugin;
 
-namespace WizardsCode.digitalpainting
+namespace WizardsCode.DigitalPainting
 {
     public class EditorConfigScriptableObject : ScriptableObject
     {

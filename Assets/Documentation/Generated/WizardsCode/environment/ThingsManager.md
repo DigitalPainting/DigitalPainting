@@ -1,4 +1,4 @@
-# wizardscode.environment.ThingsManager
+# WizardsCode.Environment.ThingsManager
 
 ## All The Things (List`1)
 

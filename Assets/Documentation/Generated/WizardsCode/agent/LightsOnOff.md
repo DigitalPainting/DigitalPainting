@@ -1,4 +1,4 @@
-# wizardscode.agent.LightsOnOff
+# WizardsCode.Agent.LightsOnOff
 
 ## Is Fade (Boolean)
 
@@ -10,9 +10,4 @@ Default Value     : True
 ## Lights (Light[])
 
 The lights to control
-
-
-## Max Intensity (Single[])
-
-No tooltip provided.
 

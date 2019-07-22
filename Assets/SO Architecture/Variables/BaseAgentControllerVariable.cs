@@ -1,11 +1,13 @@
 using ScriptableObjectArchitecture;
 using UnityEngine;
-using WizardsCode.digitalpainting.agent;
 
-[CreateAssetMenu(
-    fileName = "BaseAgentControllerVariable.asset",
-    menuName = SOArchitecture_Utility.VARIABLE_SUBMENU + "Base Agent Controller",
-    order = 120)]
-public class BaseAgentControllerVariable : BaseVariable<BaseAgentController>
+namespace WizardsCode.DigitalPainting.Agent
 {
+    [CreateAssetMenu(
+        fileName = "BaseAgentControllerVariable.asset",
+        menuName = SOArchitecture_Utility.VARIABLE_SUBMENU + "Base Agent Controller",
+        order = 120)]
+    public class BaseAgentControllerVariable : BaseVariable<BaseAgentController>
+    {
+    }
 }

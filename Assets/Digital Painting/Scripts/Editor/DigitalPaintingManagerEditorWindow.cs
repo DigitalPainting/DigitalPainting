@@ -8,10 +8,10 @@ using UnityEditor.PackageManager.Requests;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using WizardsCode.digitalpainting;
-using WizardsCode.extension;
-using WizardsCode.plugin;
-using WizardsCode.validation;
+using WizardsCode.DigitalPainting;
+using WizardsCode.Extension;
+using WizardsCode.Plugin;
+using WizardsCode.Validation;
 
 namespace WizardsCode.editor
 {

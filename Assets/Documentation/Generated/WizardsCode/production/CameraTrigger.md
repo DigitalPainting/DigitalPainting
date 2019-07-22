@@ -1,4 +1,4 @@
-# wizardscode.production.CameraTrigger
+# WizardsCode.Production.CameraTrigger
 
 ## _Virtual Camera (CinemachineVirtualCameraBase)
 

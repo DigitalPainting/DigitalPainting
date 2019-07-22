@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace WizardsCode.plugin
+namespace WizardsCode.Plugin
 {
     /// <summary>
     /// An abstract definition for a Day Night Cycle plugin.

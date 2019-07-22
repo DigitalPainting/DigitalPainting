@@ -1,4 +1,4 @@
-# wizardscode.environment.WaypointPool
+# WizardsCode.Environment.WaypointPool
 
 ## Pooled Object Prefab (GameObject)
 
