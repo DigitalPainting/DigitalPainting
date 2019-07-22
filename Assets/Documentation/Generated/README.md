@@ -2,7 +2,6 @@
 
 ## MonoBehaviours in DigitalPaintingn
 
-  * [WizardsCode.Tools.DocGen.ExampleMonoBehaviour](./WizardsCode/Tools/DocGen/ExampleMonoBehaviour.md)
   * [WizardsCode.Utility.ObjectPool](./WizardsCode/Utility/ObjectPool.md)
   * [WizardsCode.Production.CameraTrigger](./WizardsCode/Production/CameraTrigger.md)
   * [WizardsCode.Production.Director](./WizardsCode/Production/Director.md)
@@ -33,19 +32,6 @@
 
 ## ScriptableObjects in DigitalPaintingn
 
-  * [LightControlClip](./LightControlClip.md)
-  * [LightControlTrack](./LightControlTrack.md)
-  * [NavMeshAgentControlClip](./NavMeshAgentControlClip.md)
-  * [NavMeshAgentControlTrack](./NavMeshAgentControlTrack.md)
-  * [ScreenFaderClip](./ScreenFaderClip.md)
-  * [ScreenFaderTrack](./ScreenFaderTrack.md)
-  * [TextSwitcherClip](./TextSwitcherClip.md)
-  * [TextSwitcherTrack](./TextSwitcherTrack.md)
-  * [TimeDilationClip](./TimeDilationClip.md)
-  * [TimeDilationTrack](./TimeDilationTrack.md)
-  * [TransformTweenClip](./TransformTweenClip.md)
-  * [TransformTweenTrack](./TransformTweenTrack.md)
-  * [WizardsCode.Tools.DocGen.ExampleScriptableObject](./WizardsCode/Tools/DocGen/ExampleScriptableObject.md)
   * [WizardsCode.Production.CameraTriggerConfiguration](./WizardsCode/Production/CameraTriggerConfiguration.md)
   * [WizardsCode.Production.TriggerConfiguration](./WizardsCode/Production/TriggerConfiguration.md)
   * [WizardsCode.Validation.AgentSettingSO](./WizardsCode/Validation/AgentSettingSO.md)
@@ -76,5 +62,3 @@
   * [WizardsCode.DigitalPainting.Core.Settings.ComponentSettingSO](./WizardsCode/DigitalPainting/Core/Settings/ComponentSettingSO.md)
   * [WizardsCode.DigitalPainting.Agent.BaseAgentControllerGameEvent](./WizardsCode/DigitalPainting/Agent/BaseAgentControllerGameEvent.md)
   * [WizardsCode.DigitalPainting.Agent.BaseAgentControllerVariable](./WizardsCode/DigitalPainting/Agent/BaseAgentControllerVariable.md)
-  * [UnityEngine.Timeline.VideoScriptPlayableAsset](./UnityEngine/Timeline/VideoScriptPlayableAsset.md)
-  * [UnityEngine.Timeline.VideoScriptPlayableTrack](./UnityEngine/Timeline/VideoScriptPlayableTrack.md)
