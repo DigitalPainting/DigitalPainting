@@ -13,9 +13,9 @@ namespace WizardsCode.Plugin
             return "SimpleDayNightProfile";
         }
 
-        public override String GetProfileTypeName()
+        public override Type GetProfileType()
         {
-            return "SimpleDayNightProfile";
+            return typeof(SimpleDayNightProfile);
         }
 
         public override string GetReadableName()

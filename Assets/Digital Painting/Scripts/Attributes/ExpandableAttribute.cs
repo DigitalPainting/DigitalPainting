@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace WizardsCode.editor
+namespace WizardsCode.Editor
 {
     /// <summary>
     /// Use this property on a ScriptableObject type to allow the editors drawing the field to draw an expandable

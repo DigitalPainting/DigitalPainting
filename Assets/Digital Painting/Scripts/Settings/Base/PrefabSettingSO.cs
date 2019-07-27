@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using WizardsCode.editor;
+using WizardsCode.Editor;
 using WizardsCode.Extension;
 using WizardsCode.Plugin;
 using WizardsCode.Utility;

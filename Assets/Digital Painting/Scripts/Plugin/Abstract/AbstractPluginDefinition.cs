@@ -38,12 +38,12 @@ namespace WizardsCode.Plugin
         public abstract Type GetManagerType();
 
         /// <summary>
-        /// Get the name of the type of the profile for this plugin implementation. This allows
+        /// Get the type of the profile for this plugin implementation. This allows
         /// us to check that a profile exists and also to check whether a plugin implementation
         /// is enabled in the scene.
         /// </summary>
         /// <returns></returns>
-        public abstract String GetProfileTypeName();
+        public abstract Type GetProfileType();
 
         /// <summary>
         /// The name of a class that we know exists in the plugin implementation. This is used to verify that

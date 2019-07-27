@@ -13,7 +13,7 @@ using WizardsCode.Extension;
 using WizardsCode.Plugin;
 using WizardsCode.Validation;
 
-namespace WizardsCode.editor
+namespace WizardsCode.Editor
 {
     public class DigitalPaintingManagerEditorWindow : EditorWindow
     {
@@ -731,7 +731,7 @@ namespace WizardsCode.editor
                         for (int i = 0; i < pluginManagers.Count(); i++)
                         {
                             AbstractPluginProfile pluginProfile = pluginManagers[i].m_pluginProfile;
-                            if (pluginProfile != null && pluginDef.GetProfileTypeName().EndsWith(pluginProfile.GetType().Name))
+                            if (pluginProfile != null && pluginDef.GetProfileType().ToString().EndsWith(pluginProfile.GetType().Name))
                             {
                                 AddToCache(enabledPluginsCache, pluginDef);
                                 if (!pluginDef.MultipleAllowed)

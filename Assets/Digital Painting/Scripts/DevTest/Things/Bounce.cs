@@ -19,7 +19,7 @@ namespace WizardsCode.Animation
         void Update()
         {
             Vector3 position = gameObject.transform.position;
-            float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+            float terrainHeight = UnityEngine.Terrain.activeTerrain.SampleHeight(position);
             if (position.y < terrainHeight + minY)
             {
                 isRising = true;

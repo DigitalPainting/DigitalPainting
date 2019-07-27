@@ -75,7 +75,7 @@ namespace WizardsCode.Environment
             if (isGrounded)
             {
                 Vector3 position = gameObject.transform.position;
-                position.y = Terrain.activeTerrain.SampleHeight(position) + yOffset;
+                position.y = UnityEngine.Terrain.activeTerrain.SampleHeight(position) + yOffset;
                 gameObject.transform.position = position;
             }
         }

@@ -6,7 +6,7 @@ using WizardsCode.Plugin;
 using System;
 using WizardsCode.Utility;
 
-namespace WizardsCode.editor {
+namespace WizardsCode.Editor {
     [CustomEditor(typeof(WeatherPluginManager))]
     public class WeatherPluginManagerEditor : AbstractPluginManagerEditor
     {

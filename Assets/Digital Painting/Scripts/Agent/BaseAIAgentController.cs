@@ -57,13 +57,13 @@ namespace WizardsCode.Agent
 
                         if (thing.isGrounded)
                         {
-                            pos.y = Terrain.activeTerrain.SampleHeight(pos);
+                            pos.y = UnityEngine.Terrain.activeTerrain.SampleHeight(pos);
                         }
                     }
                     else
                     {
                         pos = value.transform.position;
-                        float height = Terrain.activeTerrain.SampleHeight(pos);
+                        float height = UnityEngine.Terrain.activeTerrain.SampleHeight(pos);
 
                         if (height < MovementController.minimumReachDistance * 0.75)
                         {
@@ -212,7 +212,7 @@ namespace WizardsCode.Agent
             position = transform.position + randAng * Vector3.forward * Random.Range(minDistance, maxDistance);
 
             // calculate the new height 
-            float terrainHeight = Terrain.activeTerrain.SampleHeight(position);
+            float terrainHeight = UnityEngine.Terrain.activeTerrain.SampleHeight(position);
             float newY = Mathf.Clamp(position.y, terrainHeight + MovementController.minimumFlyHeight, terrainHeight + MovementController.maximumFlyHeight);
             position.y = newY;
 
@@ -311,7 +311,7 @@ namespace WizardsCode.Agent
         /// <returns></returns>
         virtual internal bool IsValidWaypoint(Vector3 position)
         {
-            Bounds bounds = Terrain.activeTerrain.terrainData.bounds;
+            Bounds bounds = UnityEngine.Terrain.activeTerrain.terrainData.bounds;
             return bounds.Contains(position);
         }
 

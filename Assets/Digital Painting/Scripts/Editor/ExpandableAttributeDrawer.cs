@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
-namespace WizardsCode.editor
+namespace WizardsCode.Editor
 {
 #if UNITY_EDITOR
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
-using WizardsCode.editor;
+using WizardsCode.Editor;
 using WizardsCode.Plugin;
 using WizardsCode.Validation;
 

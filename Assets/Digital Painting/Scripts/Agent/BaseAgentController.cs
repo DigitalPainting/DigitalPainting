@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using WizardsCode.Agent.movement;
-using WizardsCode.editor;
+using WizardsCode.Editor;
 using WizardsCode.Validation;
 
 namespace WizardsCode.DigitalPainting.Agent

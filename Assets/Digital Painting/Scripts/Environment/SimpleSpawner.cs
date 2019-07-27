@@ -15,7 +15,7 @@ namespace WizardsCode.Environment
             {
                 GameObject parent = null;
                 Vector3 realCenter = objects[i].center;
-                realCenter.y = Terrain.activeTerrain.SampleHeight(objects[i].center);
+                realCenter.y = UnityEngine.Terrain.activeTerrain.SampleHeight(objects[i].center);
 
                 if (objects[i].createParent)
                 {
@@ -30,7 +30,7 @@ namespace WizardsCode.Environment
 
                         GameObject view = new GameObject("Agent Viewing Position for " + parent.name);
                         Vector3 pos = new Vector3(realCenter.x + objects[i].radius, 0, realCenter.z + objects[i].radius);
-                        pos.y = Terrain.activeTerrain.SampleHeight(pos) + objects[i].radius / 3;
+                        pos.y = UnityEngine.Terrain.activeTerrain.SampleHeight(pos) + objects[i].radius / 3;
                         view.transform.position = pos;
                         view.transform.LookAt(parent.transform.position);
                         view.transform.SetParent(parent.transform, true);
@@ -59,7 +59,7 @@ namespace WizardsCode.Environment
                     Vector3 pos = (Random.insideUnitSphere * objects[i].radius) + realCenter;
                     if (objects[i].isGrounded)
                     {
-                        pos.y = Terrain.activeTerrain.SampleHeight(pos) + (objects[i].yOffset * size);
+                        pos.y = UnityEngine.Terrain.activeTerrain.SampleHeight(pos) + (objects[i].yOffset * size);
                     }
                     Quaternion angle = Quaternion.Euler(0, Random.Range(0, objects[i].randomAngle), 0);
                     GameObject obj = Instantiate(objects[i].prefab);

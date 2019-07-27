@@ -53,7 +53,7 @@ namespace WizardsCode.Validation
 
         internal void PositionOnGround(Vector3 pos)
         {
-            float terrainHeight = Terrain.activeTerrain.SampleHeight(pos);
+            float terrainHeight = UnityEngine.Terrain.activeTerrain.SampleHeight(pos);
             pos.y = terrainHeight;
             Instance.transform.position = pos;
         }

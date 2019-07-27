@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using WizardsCode.editor;
+using WizardsCode.Editor;
 using WizardsCode.Extension;
 
 namespace WizardsCode.Plugin

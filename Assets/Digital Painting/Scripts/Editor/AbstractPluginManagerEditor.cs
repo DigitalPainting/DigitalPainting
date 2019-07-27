@@ -5,9 +5,9 @@ using UnityEngine;
 using WizardsCode.Plugin;
 using WizardsCode.Utility;
 
-namespace WizardsCode.editor
+namespace WizardsCode.Editor
 {
-    public abstract class AbstractPluginManagerEditor : Editor
+    public abstract class AbstractPluginManagerEditor : UnityEditor.Editor
     {
         internal SerializedProperty pluginProfile;
 
